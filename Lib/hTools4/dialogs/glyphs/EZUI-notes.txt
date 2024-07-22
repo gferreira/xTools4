@@ -1,0 +1,21 @@
+EZUI notes
+==========
+
+- ColorWell is not supported?                                               --> SOLVED [Discord] not included in docs
+
+- how to make items as wide as container (100%) (centered buttons)          --> SOLVED [Discord] width='fill'
+
+- adjusting vertical whitespace to group items
+- LabelTextFieldAndStepper
+- horizontal radio buttons
+- horizontal checkboxes
+
+escape characters
+
+Table needs a height otherwise it's not displayed (not in the Docs)
+
+DOCS: all items on a single page is too much (I prefer one item per page like vanilla)
+
+reduce lineHeight and margins of ezui.Table (like I did with List2)
+
+list of all {{icons}} available and their names?
