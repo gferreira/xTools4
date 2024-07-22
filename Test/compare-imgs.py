@@ -45,3 +45,8 @@ for dialogsGroup in dialogGroups:
 
         fontSize(36)
         text(dialogName, (20, 20))
+
+
+folder = os.getcwd()
+pdfPath = os.path.join(folder, 'compare-hTools4-hTools3.pdf')
+saveImage(pdfPath)
