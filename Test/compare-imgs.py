@@ -2,7 +2,7 @@ import os, glob
 
 folder = os.getcwd()
 imgsFolder = os.path.join(folder, 'images')
-dialogGroups = ['glyphs', 'glyph', 'font']
+dialogGroups = ['glyphs', 'glyph', 'font', 'batch']
 
 ignore = [
     'layersLock',
@@ -28,7 +28,7 @@ for dialogsGroup in dialogGroups:
 
         imgPath2 = imgPath.replace('images/hTools4', 'images/hTools3')
 
-        newPage('A3')
+        newPage('A2Landscape')
     
         w1, h1 = imageSize(imgPath)
         image(imgPath, (0, height()-h1))
@@ -47,6 +47,6 @@ for dialogsGroup in dialogGroups:
         text(dialogName, (20, 20))
 
 
-folder = os.getcwd()
-pdfPath = os.path.join(folder, 'compare-hTools4-hTools3.pdf')
-saveImage(pdfPath)
+# folder = os.getcwd()
+# pdfPath = os.path.join(folder, 'compare-hTools4-hTools3.pdf')
+# saveImage(pdfPath)

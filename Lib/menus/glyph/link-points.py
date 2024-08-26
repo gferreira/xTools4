@@ -5,6 +5,6 @@ import hTools4.dialogs.glyph.linkPoints
 reload(hTools4.dialogs.glyph.linkPoints)
 
 from mojo.roboFont import OpenWindow
-from hTools4.dialogs.glyph.linkPoints import LinkPointsTool
+from hTools4.dialogs.glyph.linkPoints import LinkPointsController
 
-OpenWindow(LinkPointsTool)
+OpenWindow(LinkPointsController)

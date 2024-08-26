@@ -1,7 +1,7 @@
 import ezui
 
 
-class InterpolationPreviewDialog(ezui.WindowController):
+class InterpolationPreviewDialog_EZUI(ezui.WindowController):
 
     title   = 'interpolation'
     width   = 123
@@ -59,4 +59,4 @@ class InterpolationPreviewDialog(ezui.WindowController):
 
 if __name__ == '__main__':
 
-    InterpolationPreviewDialog()
+    InterpolationPreviewDialog_EZUI()

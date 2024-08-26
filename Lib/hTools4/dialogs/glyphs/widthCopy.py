@@ -3,7 +3,7 @@ import ezui
 
 class CopyWidthDialog(ezui.WindowController):
 
-    title = 'width'
+    title   = 'width'
     width   = 123
     margins = 10
 

@@ -1,7 +1,7 @@
 import ezui
 
 
-class MeasureHandlesTool(ezui.WindowController):
+class MeasureHandlesTool_EZUI(ezui.WindowController):
 
     title   = 'measure'
     width   = 123
@@ -44,4 +44,4 @@ class MeasureHandlesTool(ezui.WindowController):
 
 if __name__ == '__main__':
 
-    MeasureHandlesTool()
+    MeasureHandlesTool_EZUI()

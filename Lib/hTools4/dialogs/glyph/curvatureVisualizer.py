@@ -1,7 +1,7 @@
 import ezui
 
 
-class CurvatureVisualizerDialog(ezui.WindowController):
+class CurvatureVisualizerDialog_EZUI(ezui.WindowController):
 
     title   = 'curvature'
     width   = 123
@@ -41,4 +41,4 @@ class CurvatureVisualizerDialog(ezui.WindowController):
 
 if __name__ == '__main__':
 
-    CurvatureVisualizerDialog()
+    CurvatureVisualizerDialog_EZUI()

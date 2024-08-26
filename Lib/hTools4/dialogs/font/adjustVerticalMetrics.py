@@ -3,9 +3,9 @@ import ezui
 
 class AdjustVerticalMetricsDialog(ezui.WindowController):
 
-    title    = "dimensions"
-    width    = 123
-    margins  = 10
+    title   = "dimensions"
+    width   = 123
+    margins = 10
 
     def build(self):
         content = """

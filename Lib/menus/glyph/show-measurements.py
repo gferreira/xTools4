@@ -5,6 +5,6 @@ import hTools4.dialogs.glyph.measureHandles
 reload(hTools4.dialogs.glyph.measureHandles)
 
 from mojo.roboFont import OpenWindow
-from hTools4.dialogs.glyph.measureHandles import MeasureHandlesTool
+from hTools4.dialogs.glyph.measureHandles import MeasureHandlesTool_EZUI
 
-OpenWindow(MeasureHandlesTool)
+OpenWindow(MeasureHandlesTool_EZUI)
