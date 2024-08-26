@@ -1,4 +1,3 @@
-from math import hypot
 import ezui
 from mojo.subscriber import Subscriber, registerGlyphEditorSubscriber, registerSubscriberEvent, roboFontSubscriberEventRegistry, unregisterGlyphEditorSubscriber
 from mojo.roboFont import OpenWindow, CurrentGlyph
@@ -151,21 +150,29 @@ class LinkPoints(Subscriber):
         self._drawLinks()
 
     def _drawLinks(self):
+        self.linksLayer.clearSublayers()
+
         showPreview = self.controller.w.getItem("preview").get()
         if not showPreview:
-            self.linksLayer.clearSublayers()
             return
 
         links = getLinks(self.glyph)
 
-        linkColorLine   = self.controller.w.getItem("colorButton").get()
-        linkStrokeWidth = 3
-
+        linkColor   = self.controller.w.getItem("colorButton").get()
         captionMode = self.controller.w.getItem("captionMode").get()
         captionSize = self.controller.w.getItem("captionSize").get()
         projections = self.controller.w.getItem("projections").get()
 
         def _drawMeasurement(p1, p2, captionMode):
+            # draw line
+            self.linksLayer.appendLineSublayer(
+                startPoint=p1,
+                endPoint=p2,
+                strokeColor=linkColor,
+                strokeWidth=3,
+                strokeCap='round',
+            )
+            # draw caption
             distance, angle = getVector((p1[0], p1[1]), (p2[0], p2[1]))
             value = angle if captionMode else distance
             txt = f'{int(value)}' if (projections and not captionMode) else f'{value:.2f}'
@@ -175,7 +182,7 @@ class LinkPoints(Subscriber):
             y = p1[1] + (p2[1] - p1[1]) * 0.5
             self.linksLayer.appendTextLineSublayer(
                 position=(x, y),
-                backgroundColor=linkColorLine,
+                backgroundColor=linkColor,
                 text=txt,
                 font="system",
                 weight="bold",
@@ -187,39 +194,14 @@ class LinkPoints(Subscriber):
                 verticalAlignment='center',
             )
 
-        self.linksLayer.clearSublayers()
-
         with self.linksLayer.sublayerGroup():
             for ID1, ID2 in links:
                 pt1 = getPoint(self.glyph, ID1)
                 pt2 = getPoint(self.glyph, ID2)
-
-                # draw link
                 if captionMode == 0 and projections:
-                    self.linksLayer.appendLineSublayer(
-                        startPoint=(pt1.x, pt1.y),
-                        endPoint=(pt2.x, pt1.y),
-                        strokeColor=linkColorLine,
-                        strokeWidth=linkStrokeWidth,
-                        strokeCap='round',
-                    )
-                    self.linksLayer.appendLineSublayer(
-                        startPoint=(pt2.x, pt1.y),
-                        endPoint=(pt2.x, pt2.y),
-                        strokeColor=linkColorLine,
-                        strokeWidth=linkStrokeWidth,
-                        strokeCap='round',
-                    )
                     _drawMeasurement((pt1.x, pt1.y), (pt2.x, pt1.y), captionMode)
                     _drawMeasurement((pt2.x, pt1.y), (pt2.x, pt2.y), captionMode)
                 else:
-                    self.linksLayer.appendLineSublayer(
-                        startPoint=(pt1.x, pt1.y),
-                        endPoint=(pt2.x, pt2.y),
-                        strokeColor=linkColorLine,
-                        strokeWidth=linkStrokeWidth,
-                        strokeCap='round',
-                    )
                     _drawMeasurement((pt1.x, pt1.y), (pt2.x, pt2.y), captionMode)
 
 
