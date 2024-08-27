@@ -1,10 +1,10 @@
-# menuTitle : show measurements
+# menuTitle : measure handles
 
 from importlib import reload
 import hTools4.dialogs.glyph.measureHandles
 reload(hTools4.dialogs.glyph.measureHandles)
 
 from mojo.roboFont import OpenWindow
-from hTools4.dialogs.glyph.measureHandles import MeasureHandlesTool_EZUI
+from hTools4.dialogs.glyph.measureHandles import MeasureHandlesController
 
-OpenWindow(MeasureHandlesTool_EZUI)
+OpenWindow(MeasureHandlesController)
