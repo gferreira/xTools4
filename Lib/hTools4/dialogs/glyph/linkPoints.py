@@ -1,7 +1,6 @@
 import ezui
 from mojo.subscriber import Subscriber, registerGlyphEditorSubscriber, registerSubscriberEvent, roboFontSubscriberEventRegistry, unregisterGlyphEditorSubscriber
 from mojo.roboFont import OpenWindow, CurrentGlyph
-from mojo.UI import UpdateCurrentGlyphView
 from mojo.events import postEvent
 from hTools3.modules.linkPoints import *
 from hTools3.modules.measureHandles import getVector

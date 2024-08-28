@@ -30,7 +30,6 @@ def measureSegmentsFactory(glyph):
     return M.positions, M.lengths, M.angles
 
 
-
 class MeasureHandlesController(ezui.WindowController):
 
     title   = 'measure'
