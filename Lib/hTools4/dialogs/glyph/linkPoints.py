@@ -6,7 +6,7 @@ from hTools3.modules.linkPoints import *
 from hTools3.modules.measureHandles import getVector
 
 
-DEFAULT_KEY = 'com.hipertipo.hTools4.dialogs.glyphs.linkPoints'
+DEFAULT_KEY = 'com.hipertipo.hTools4.dialogs.glyph.linkPoints'
 
 
 class LinkPointsController(ezui.WindowController):

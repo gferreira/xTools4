@@ -1,4 +1,4 @@
-# menuTitle : show curvature
+# menuTitle : visualize curvature
 
 from importlib import reload
 import hTools4.dialogs.glyph.curvatureVisualizer

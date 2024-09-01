@@ -5,6 +5,6 @@ import hTools4.dialogs.glyph.interpolationPreview
 reload(hTools4.dialogs.glyph.interpolationPreview)
 
 from mojo.roboFont import OpenWindow
-from hTools4.dialogs.glyph.interpolationPreview import InterpolationPreviewDialog_EZUI
+from hTools4.dialogs.glyph.interpolationPreview import InterpolationPreviewController
 
-OpenWindow(InterpolationPreviewDialog_EZUI)
+OpenWindow(InterpolationPreviewController)

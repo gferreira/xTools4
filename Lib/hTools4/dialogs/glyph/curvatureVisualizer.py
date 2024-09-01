@@ -6,7 +6,7 @@ from mojo.events import postEvent
 from hTools3.modules.curvatureVisualizer import *
 
 
-DEFAULT_KEY = 'com.hipertipo.hTools4.dialogs.glyphs.curvatureVisualizer'
+DEFAULT_KEY = 'com.hipertipo.hTools4.dialogs.glyph.curvatureVisualizer'
 
 
 def curvatureCombFactory(glyph, steps, scale):

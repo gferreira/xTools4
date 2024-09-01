@@ -6,7 +6,7 @@ from mojo.events import postEvent
 from hTools3.modules.measureHandles import MeasureHandlesMaker, MeasureSegmentsMaker
 
 
-DEFAULT_KEY = 'com.hipertipo.hTools4.dialogs.glyphs.measureHandles'
+DEFAULT_KEY = 'com.hipertipo.hTools4.dialogs.glyph.measureHandles'
 
 
 def measureHandlesFactory(glyph):
@@ -113,6 +113,7 @@ class MeasureHandlesController(ezui.WindowController):
 
 
 class MeasureHandles(Subscriber):
+
     controller = None
 
     def build(self):
