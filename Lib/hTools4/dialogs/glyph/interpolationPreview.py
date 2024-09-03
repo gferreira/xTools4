@@ -1,7 +1,9 @@
 import ezui
+from merz import MerzView
 from mojo.subscriber import Subscriber, registerGlyphEditorSubscriber, unregisterGlyphEditorSubscriber, registerRoboFontSubscriber, unregisterRoboFontSubscriber, registerSubscriberEvent, roboFontSubscriberEventRegistry
 from mojo.roboFont import OpenWindow, CurrentGlyph, CurrentFont, AllFonts, RGlyph
 from mojo.events import postEvent
+from mojo.UI import UpdateCurrentGlyphView
 
 
 DEFAULT_KEY = 'com.hipertipo.hTools4.dialogs.glyph.interpolationPreview'
@@ -27,12 +29,14 @@ class InterpolationPreviewController(ezui.WindowController):
         [__]              @otherGlyph
 
         --X-----          @steps
+        --X-----          @captionSize
 
         * ColorWell       @color
 
-        [X] show lines    @showLines
-        [X] show steps    @showSteps
         [X] align center  @alignCenter
+        [X] show steps    @showSteps
+        [X] show lines    @showLines
+        [X] show report   @showReport
         [X] show preview  @showPreview
 
         ----------------------------------
@@ -66,6 +70,14 @@ class InterpolationPreviewController(ezui.WindowController):
                 tickMarks=11,
                 stopOnTickMarks=True,
             ),
+            captionSize=dict(
+                callback='settingsChangedCallback',
+                minValue=11,
+                maxValue=16,
+                value=11,
+                tickMarks=6,
+                stopOnTickMarks=True,
+            ),
             color=dict(
                 color=(1, 0, 1, 0.65),
                 callback='settingsChangedCallback',
@@ -96,7 +108,7 @@ class InterpolationPreviewController(ezui.WindowController):
         registerGlyphEditorSubscriber(InterpolationPreviewGlyphEditor)
         registerRoboFontSubscriber(InterpolationPreviewRoboFont)
         self.font1  = CurrentFont()
-        # self.glyph1 = CurrentGlyph()
+        self.settingsChangedCallback(None)
 
     def destroy(self):
         unregisterGlyphEditorSubscriber(InterpolationPreviewGlyphEditor)
@@ -113,13 +125,16 @@ class InterpolationPreviewController(ezui.WindowController):
 
     # callbacks
 
+    def alignCenterCallback(self, sender):
+        self.settingsChangedCallback(None)
+
     def showLinesCallback(self, sender):
         self.settingsChangedCallback(None)
 
     def showStepsCallback(self, sender):
         self.settingsChangedCallback(None)
 
-    def alignCenterCallback(self, sender):
+    def showReportCallback(self, sender):
         self.settingsChangedCallback(None)
 
     def showPreviewCallback(self, sender):
@@ -130,11 +145,13 @@ class InterpolationPreviewController(ezui.WindowController):
         if not g:
             return
         direction = sender.get()
+        g.prepareUndo('changed starting points')
         for contour in g.selectedContours:
             if direction: # next
                 contour.setStartSegment(+1)
             else: # previous
                 contour.setStartSegment(-1)
+        g.performUndo()
 
     def contourIndexCallback(self, sender):
         g = CurrentGlyph()
@@ -158,9 +175,11 @@ class InterpolationPreviewController(ezui.WindowController):
                 contours.insert(newIndex, contours.pop(ci))
 
         # update glyph contours
+        g.prepareUndo('changed contour order')
         g.clearContours()
         for c in contours:
             g.appendContour(c)
+        g.performUndo()
 
         # restore contour selection
         # DOES NOT WORK IF NEW INDEX WRAPS AROUND
@@ -185,22 +204,47 @@ class InterpolationPreviewGlyphEditor(Subscriber):
 
     def build(self):
         glyphEditor = self.getGlyphEditor()
+        
+        # create preview layer 
         container = glyphEditor.extensionContainer(
             identifier=DEFAULT_KEY,
             location="foreground",
         )
         self.interpolationPreviewLayer = container.appendBaseSublayer()
+
+        # create report layer
+        size = 10000
+        self.merzView = MerzView((0, 0, size, size))
+        merzContainer = self.merzView.getMerzContainer()
+        color = self.controller.w.getItem('color').get()
+        self.reportLayer = merzContainer.appendTextBoxSublayer(
+            name=f'{DEFAULT_KEY}.report',
+            position=(0, 0),
+            size=(size, size),
+            padding=(10, 10),
+            fillColor=color,
+            font='Menlo-Bold',
+            pointSize=13,
+            lineHeight=18,
+            horizontalAlignment="left",
+        )
+        glyphEditor.addGlyphEditorSubview(self.merzView)
+
+        # initialize preview
         self.controller.glyph1 = CurrentGlyph()
         self._drawInterpolationPreview()
 
     def destroy(self):
         glyphEditor = self.getGlyphEditor()
+
+        # remove preview layer
         container = glyphEditor.extensionContainer(DEFAULT_KEY)
         container.clearSublayers()
 
+        # remove report layer
+        glyphEditor.removeGlyphEditorSubview(self.merzView)
+
     def interpolationPreviewDidChange(self, info):
-        if self.debug:
-            print('interpolationPreviewDidChange')
         self._drawInterpolationPreview()
 
     def glyphEditorDidSetGlyph(self, info):
@@ -212,97 +256,90 @@ class InterpolationPreviewGlyphEditor(Subscriber):
         self._drawInterpolationPreview()
 
     def _drawInterpolationPreview(self):
-        self.interpolationPreviewLayer.clearSublayers()
-
         showPreview = self.controller.w.getItem('showPreview').get()
+        showReport  = self.controller.w.getItem('showReport').get()
+        self.interpolationPreviewLayer.clearSublayers()
+        self.reportLayer.setVisible(showPreview and showReport)
         if not showPreview:
             return
 
         glyph1 = self.controller.glyph1
+        font2 = self.controller.font2
+        glyphName2 = glyph1.name
+
         if glyph1 is None:
             return
 
-        font2 = self.controller.font2
         if font2 is None:
             return
 
-        glyphName2 = glyph1.name
         if glyphName2 not in font2:
             return
 
         glyph2 = font2[glyphName2]
-
         isCompatible, report = glyph1.isCompatible(glyph2)
 
         steps       = int(self.controller.w.getItem('steps').get())
+        captionSize = int(self.controller.w.getItem('captionSize').get())
         color       = self.controller.w.getItem('color').get()
+        alignCenter = self.controller.w.getItem('alignCenter').get() 
         showSteps   = self.controller.w.getItem('showSteps').get()
         showLines   = self.controller.w.getItem('showLines').get()
-        alignCenter = self.controller.w.getItem('alignCenter').get() 
 
         g1, g2 = glyph1, glyph2.copy()
         if alignCenter:
             delta = -(g2.width - g1.width) * 0.5
             g2.moveBy((delta, 0))
 
-        if isCompatible:
-            # draw interpolation steps
-            if showSteps:
-                steps += 2
-                step = 1.0 / (steps - 1)
-                with self.interpolationPreviewLayer.sublayerGroup():
-                    for i in range(0, steps):
-                        factor = 1.0 - i * step
-                        g = RGlyph()
-                        g.interpolate(factor, g1, g2)
+        # draw interpolation steps
+        if showSteps:
+            steps += 2
+            step = 1.0 / (steps - 1)
+            with self.interpolationPreviewLayer.sublayerGroup():
+                for i in range(0, steps):
+                    factor = 1.0 - i * step
+                    g = RGlyph()
+                    g.interpolate(factor, g1, g2)
+                    sw = 2 if (i == 0 or i == steps-1) else 1
+                    glyphsLayer = self.interpolationPreviewLayer.appendPathSublayer(
+                        fillColor=None,
+                        strokeColor=color,
+                        strokeWidth=sw,
+                    )
+                    glyphPath = g.getRepresentation("merz.CGPath")
+                    glyphsLayer.setPath(glyphPath)
 
-                        sw = 2 if (i == 0 or i == steps-1) else 1
-
-                        glyphsLayer = self.interpolationPreviewLayer.appendPathSublayer(
-                            fillColor=None,
+        # draw lines between points
+        if showLines:
+            with self.interpolationPreviewLayer.sublayerGroup():
+                for c1, c2 in zip(g1.contours, g2.contours):
+                    for p1, p2 in zip(c1.points, c2.points):
+                        dash = (2, 2) if p1.type == 'offcurve' else None
+                        linesLayer = self.interpolationPreviewLayer.appendLineSublayer(
+                            startPoint=(p1.x, p1.y),
+                            endPoint=(p2.x, p2.y),
+                            strokeWidth=1,
                             strokeColor=color,
-                            strokeWidth=sw,
+                            strokeDash=dash,
                         )
-                        glyphPath = g.getRepresentation("merz.CGPath")
-                        glyphsLayer.setPath(glyphPath)
+            # draw glyph2 points
+            with self.interpolationPreviewLayer.sublayerGroup():
+                r = 5 # get bezier point size from RF preferences?
+                for c in g2:
+                    for pt in c.points:
+                        self.interpolationPreviewLayer.appendOvalSublayer(
+                            position=(pt.x-r, pt.y-r),
+                            size=(r*2, r*2),
+                            strokeWidth=1,
+                            strokeColor=color,
+                            fillColor=None,
+                        )
 
-            # draw lines between points
-            if showLines:
-                with self.interpolationPreviewLayer.sublayerGroup():
-                    for c1, c2 in zip(g1.contours, g2.contours):
-                        for p1, p2 in zip(c1.points, c2.points):
-                            dash = (2, 2) if p1.type == 'offcurve' else None
-                            linesLayer = self.interpolationPreviewLayer.appendLineSublayer(
-                                startPoint=(p1.x, p1.y),
-                                endPoint=(p2.x, p2.y),
-                                strokeWidth=1,
-                                strokeColor=color,
-                                strokeDash=dash,
-                            )
-                # draw glyph2 points
-                with self.interpolationPreviewLayer.sublayerGroup():
-                    r = 5 # get bezier point size from RF preferences?
-                    for c in g2:
-                        for pt in c.points:
-                            self.interpolationPreviewLayer.appendOvalSublayer(
-                                position=(pt.x-r, pt.y-r),
-                                size=(r*2, r*2),
-                                strokeWidth=1,
-                                strokeColor=color,
-                                fillColor=None,
-                            )
-
-        else:
-            # display interpolation errors
-            reportLayer = self.interpolationPreviewLayer.appendTextLineSublayer(
-                position=(0, g1.font.info.xHeight),
-                fillColor=color,
-                text=report.report(),
-                font='Menlo-Bold',
-                pointSize=13,
-                lineHeight=18,
-                horizontalAlignment="left",
-            )
+        # display report 
+        with self.reportLayer.propertyGroup():
+            self.reportLayer.setText(report.report())
+            self.reportLayer.setFillColor(color)
+            self.reportLayer.setPointSize(captionSize)
 
 class InterpolationPreviewRoboFont(Subscriber):
 
@@ -344,29 +381,21 @@ class InterpolationPreviewRoboFont(Subscriber):
         self.controller.w.getItem("fontLayers").setItems(layerNames)
 
     def fontDocumentDidBecomeCurrent(self, info):
-        if self.debug:
-            print('InterpolationPreviewRoboFont.fontDocumentDidBecomeCurrent')
         self.controller.font1 = CurrentFont()
         self._updateFonts()
         self._updateLayers()
 
     def fontDocumentDidOpen(self, info):
-        if self.debug:
-            print('InterpolationPreviewRoboFont.fontDocumentDidOpen')
         self.controller.font1 = CurrentFont()
         self._updateFonts()
         self._updateLayers()
 
     def fontDocumentDidClose(self, info):
-        if self.debug:
-            print('InterpolationPreviewRoboFont.fontDocumentDidClose')
         self.controller.font1 = CurrentFont()
         self._updateFonts()
         self._updateLayers()
 
     def roboFontDidSwitchCurrentGlyph(self, info):
-        if self.debug:
-            print('InterpolationPreviewRoboFont.roboFontDidSwitchCurrentGlyph')
         self._updateFonts()
         self._updateLayers()
 
