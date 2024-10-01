@@ -1,10 +1,10 @@
 # menuTitle : find & replace
 
 from importlib import reload
-import hTools4.dialogs.glyphs.namesFindReplace
-reload(hTools4.dialogs.glyphs.namesFindReplace)
+import xTools4.dialogs.glyphs.namesFindReplace
+reload(xTools4.dialogs.glyphs.namesFindReplace)
 
 from mojo.roboFont import OpenWindow
-from hTools4.dialogs.glyphs.namesFindReplace import FindReplaceGlyphNamesDialog
+from xTools4.dialogs.glyphs.namesFindReplace import FindReplaceGlyphNamesDialog
 
 OpenWindow(FindReplaceGlyphNamesDialog)

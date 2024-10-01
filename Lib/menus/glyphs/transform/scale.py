@@ -1,10 +1,10 @@
 # menuTitle : scale
 
 from importlib import reload
-import hTools4.dialogs.glyphs.scale
-reload(hTools4.dialogs.glyphs.scale)
+import xTools4.dialogs.glyphs.scale
+reload(xTools4.dialogs.glyphs.scale)
 
 from mojo.roboFont import OpenWindow
-from hTools4.dialogs.glyphs.scale import ScaleGlyphsDialog
+from xTools4.dialogs.glyphs.scale import ScaleGlyphsDialog
 
 OpenWindow(ScaleGlyphsDialog)

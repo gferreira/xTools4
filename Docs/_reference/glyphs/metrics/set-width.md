@@ -1,0 +1,66 @@
+---
+title  : set width
+layout : page
+---
+
+Set the advance width in selected glyphs.
+{: .lead }
+
+
+<div class='row'>
+
+<div class='col-sm-4' markdown='1'>
+![]({{"images/glyphs/widthSet.png" | relative_url }}){: .img-fluid}
+</div>
+
+<div class='col-sm-8' markdown='1'>
+width
+: value for width adjustment
+
+mode
+: how the value will be applied to the width
+
+position
+: choose the positioning mode for the glyph’s contours
+
+apply
+: set width value in the selected glyphs
+
+preview
+: show a preview of the result in the background
+</div>
+
+</div>
+
+
+<div class="card bg-light my-3">
+<div class="card-header">note</div>
+<div class="card-body" markdown='1'>
+Supports setting widths in multiple layers using the [layers] selector.
+{: .card-text }
+</div>
+</div>
+
+[layers]: ../../modifiers/layers/
+
+
+Positioning modes
+-----------------
+
+do not move
+: keeps the glyph’s left margin unchanged, whitespace is added/removed in the right margin
+
+center glyph
+: divides the glyph’s total whitespace equally between left and right margins
+
+split margins
+: splits the added/removed whitespace equally between left and right margins
+
+relative split
+: splits the added/removed whitespace proportionally between left and right margins
+
+
+Preview
+-------
+
+![]({{"images/glyphs/widthSet_preview.png" | relative_url }}){: .img-fluid}

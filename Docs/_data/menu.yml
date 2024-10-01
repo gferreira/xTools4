@@ -1,0 +1,99 @@
+- title: xTools4
+  submenu:
+  - title: batch
+    submenu:
+    - title: build glyphs
+    - title: clear data
+    - title: copy data
+    - title: find replace
+    - title: glyph actions
+    - title: set data
+    - title: set style data
+  - title: font
+    submenu:
+    - title: adjust dimensions
+    - title: clear font data
+    - title: export layers
+    - title: find replace components
+    - title: invert selection
+    - title: new glyphs from templates
+    - title: set glyph order
+  - title: glyphs
+    submenu:
+    - title: anchors
+      submenu:
+      - title: clear
+      - title: copy
+      - title: create
+    - title: components
+      submenu:
+      - title: build constructions
+      - title: decompose
+    - title: contours
+      submenu:
+      - title: actions
+      - title: gridfit
+      - title: outline
+      - title: shift
+    - title: encoding
+      submenu:
+      - title: auto unicodes
+      - title: clear unicodes
+    - title: glyph names
+      submenu:
+      - title: add prefix suffix
+      - title: find replace
+      - title: print list
+      - title: skip export
+    - title: guidelines
+      submenu:
+      - title: clear
+      - title: new from selection
+    - title: interpolation
+      submenu:
+      - title: condense
+      - title: interpolate
+    - title: layers
+      submenu:
+      - title: import
+      - title: lock widths
+      - title: mask
+    - title: mark colors
+      submenu:
+      - title: mark select
+    - title: metrics
+      submenu:
+      - title: center
+      - title: copy margins
+      - title: copy width
+      - title: set margins
+      - title: set width
+    - title: modifiers
+      submenu:
+      - title: layers
+    - title: transform
+      submenu:
+      - title: move
+      - title: rotate
+      - title: scale
+      - title: skew
+  - title: glyph
+    submenu:
+    - title: display options
+    - title: interpolation preview
+    - title: link points
+    - title: show curvature
+    - title: show measurements
+  - title: variable
+    submenu:
+    - title: GlyphGauge
+    - title: GlyphValidator
+    - title: GlyphSetProofer
+    - title: Measurements
+    - title: ProjectController
+    - title: TempEdit
+    - title: TempGlyphs
+    - title: VarFontAssistant
+    - title: VarGlyphAssistant
+    - title: VarGlyphViewer
+  - title: preferences

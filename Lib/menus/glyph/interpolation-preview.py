@@ -1,10 +1,10 @@
 # menuTitle : interpolation preview
 
 from importlib import reload
-import hTools4.dialogs.glyph.interpolationPreview
-reload(hTools4.dialogs.glyph.interpolationPreview)
+import xTools4.dialogs.glyph.interpolationPreview
+reload(xTools4.dialogs.glyph.interpolationPreview)
 
 from mojo.roboFont import OpenWindow
-from hTools4.dialogs.glyph.interpolationPreview import InterpolationPreviewController
+from xTools4.dialogs.glyph.interpolationPreview import InterpolationPreviewController
 
 OpenWindow(InterpolationPreviewController)

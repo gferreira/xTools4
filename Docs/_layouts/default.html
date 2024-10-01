@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  {% if page.name == 'index.md' %}
+    <title>{{ page.title }}</title>
+  {% else %}
+    <title>{% if page.title %}{{ page.title }} · {% endif %}xTools4</title>
+  {% endif %}
+  <link rel="icon" href="{{ site.url }}/favicon.ico"/>
+  {% include bootstrap.html %}
+  <link rel="stylesheet" href="{{ site.url }}/css/style.css" type="text/css" />
+  <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js" integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
+  {% if page.layout == 'page' %}
+    <script>
+    // add toc toggler
+    $(function(){
+      $('#markdown-toc').click(function(e){
+        $(this).children('li').toggle();
+        $(this).toggleClass('toc-collapse');
+      });
+      $("#markdown-toc li").click(function(e){
+        e.stopPropagation();
+      });
+    });
+    // add header links
+    $(document).ready(function () {
+      $("h2, h3, h4, h5, h6").each(function() {
+        el = $(this)
+        id = el.attr('id')
+        icon = '<span></span>'
+        if (id) {
+          el.append($("<a />").addClass("header-link").attr("href", "#" + id).html(icon));
+        }
+      })
+    })
+    </script>
+  {% endif %}
+  {% include tracker.html %}
+</head>
+
+{% if page.collection %}
+  {% capture all_pages %}{{ page.collection }}{% endcapture %}
+  {% if page.collection == 'reference' %}
+    {% assign pages = site[all_pages] | sort: "url" | reversed %}
+  {% else %}
+    {% assign pages = site[all_pages] | sort: "order" %}
+  {% endif %}
+  {% for nav_page in pages %}
+    {% if nav_page.title == page.title %}
+      {% unless forloop.first %}
+        {% assign prev_url = prev.url %}
+        {% assign prev_title = prev.title %}
+      {% endunless %}
+      {% unless forloop.last %}
+        {% assign next = pages[forloop.index] %}
+        {% assign next_url = next.url %}
+        {% assign next_title = next.title %}
+      {% endunless %}
+    {% endif %}
+    {% assign prev = nav_page %}
+  {% endfor %}
+{% endif %}
+
+<body {% if page.class %}class='{{page.class}}'{% endif %}>
+  {% include nav_main.html %}
+  <main class='home mt-5'>
+    <div class="container mx-auto px-md-4 py-4 bg-white">
+      <div class='row'>
+        <h1 class='col-sm-9 mt-sm-1'>{{ page.title }}</h1>
+        {% if page.collection %}
+          {% if prev_url or next_url %}
+            <nav class='col-sm-3 mt-sm-2'>
+              <ul class="pagination pagination-sm float-end">
+                {% if prev_url %}
+                  <li class="page-item">
+                    <a class="page-link px-3 prev" href="{{ site.url }}/{{prev_url}}" title='{{ prev_title }}'>&laquo;</a>
+                  </li>
+                {% endif %}
+                {% if next_url %}
+                  <li class="page-item">
+                    <a class="page-link px-3 next" href="{{ site.url }}/{{next_url}}" title='{{ next_title }}'>&raquo;</a>
+                  </li>
+                {% endif %}
+              </ul>
+            </nav>
+          {% endif %}
+        {% endif %}
+      </div>
+      {% comment %}{% include breadcrumb.html %}{% endcomment %}
+      {{ content }}
+    </div>
+  </main>
+  <footer class="container mx-auto px-auto px-md-4 my-4">
+    <p class='small text-muted'>
+      This work is licensed under <a href='http://creativecommons.org/licenses/by-sa/4.0/'>Creative Commons Attribution-ShareAlike 4.0 International</a>.
+      <i class="bi bi-arrow-counterclockwise"></i> Last updated on {{ site.time | date_to_string }} {{ site.time | date: '%H:%M:%S' }}.
+    </p>
+  </footer>
+</body>
+
+</html>

@@ -1,0 +1,168 @@
+---
+sitemap: false
+excludeSearch: true
+excludeNavigation: true
+---
+
+@import "highlights"
+
+// @mixin no-select
+//   -webkit-touch-callout: none
+//   -webkit-user-select: none
+//   -khtml-user-select: none
+//   -moz-user-select: none
+//   -ms-user-select: none
+//   user-select: none
+
+/* --- base html --- */
+
+body
+  background-color: rgba(0, 0, 0, .125)
+  position: relative
+
+img
+  user-select: none
+
+main
+  a
+    text-decoration: none
+    &:hover
+      border-bottom: dotted 1px
+
+  a[href*="//"]:not([href*="localhost:4000"]),
+  a[href*="//"]:not([href*="hipertipo.gitlab.io/htools3-extension"])
+    &:not(.page-link)
+      &:hover
+        // border-bottom-width: 3px !important
+        border-bottom-style: solid
+
+footer
+  user-select: none
+  a
+    text-decoration: none
+    color: #6C757D !important
+    &:hover
+      border-bottom-width: 1px !important
+      border-color: #6C757D !important
+      border-bottom-style: dotted !important
+
+ul
+  padding-left: 1.5em
+
+::selection
+  background-color: #EFEFEF
+
+.breadcrumb
+  text-transform: lowercase
+
+/* --- custom markers --- */
+
+#logo
+  padding: 0 14px 7px 0
+  svg
+    border: none !important
+    transform-origin: 0px 5px
+    transform: scale(3)
+    #front
+      fill: white
+    #flat
+      fill: #BBB
+    #side
+      fill: #AAA
+    #bottom
+      fill: #777
+    &:hover
+      #front
+        fill: rgb(1.0*255, 0.8*255, 0.0)
+      #flat 
+        fill: #018432
+      #side
+        fill: rgb(0.0, 0.6*255, 0.2*255)
+      #bottom
+        fill: #016b28
+
+  &:hover
+    background-color: none
+    border: none
+
+.__changelog
+  .badge
+    background-color: #DFDFDF !important
+    color: #6c757d
+    width: 7em
+    height: 1.6em
+    margin-right: 0.5em
+    display: none
+    user-select: none
+
+@media (min-width: 768px)
+  .__changelog
+    ul
+      padding-left: 0
+      list-style: none
+    .badge
+      display: inline-block
+
+/* --- override bootstrap defaults --- */
+
+.container
+  max-width: 960px
+
+.carousel
+  // max-width: 768px
+  // margin: 0 auto
+  .carousel-control-prev, .carousel-control-next
+    background-color: transparent
+    border-color: transparent
+
+.navbar, footer
+  background-color: #DFDFDF !important
+
+// use bootstrap utility instead
+// .badge, .next, .prev
+//   @include no-select
+
+.highlight
+  background-color: rgba(0, 0, 0, .03)
+
+/* --- collapsible kramdown toc --- */
+
+#markdown-toc
+  margin: 1em 0
+  padding: 1em
+  background-color: #EFEFEF
+  border-radius: 0
+  list-style-position: inside
+  ul
+    margin: 0
+    padding-left: 1em
+  li
+    list-style-type: none
+    position: relative
+    &:before 
+      content: "· "
+  &::before
+    content: "Table of Contents «"
+    display: block
+
+.toc-collapse
+  &::before
+    content: "Table of Contents »" !important
+
+/* --- header links --- */
+
+.header-link
+  opacity: 0
+  text-decoration: none
+
+h2:hover .header-link,
+h3:hover .header-link,
+h4:hover .header-link,
+h5:hover .header-link,
+h6:hover .header-link,
+dt:hover .header-link
+  opacity: 1
+
+.header-link span:after 
+    content: "¶"
+    position: absolute
