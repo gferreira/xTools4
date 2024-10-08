@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>outline · xTools4</title>
+    <link rel="icon" href="http://localhost:4000/favicon.ico"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="http://localhost:4000/css/style.css" type="text/css" />
+    <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js" integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
+    <script>
+      // add toc toggler
+      $(function(){
+        $('#markdown-toc').click(function(e){
+          $(this).children('li').toggle();
+          $(this).toggleClass('toc-collapse');
+        });
+        $("#markdown-toc li").click(function(e){
+          e.stopPropagation();
+        });
+      });
+      // add header links
+      $(document).ready(function () {
+        $("h2, h3, h4, h5, h6").each(function() {
+          el = $(this)
+          id = el.attr('id')
+          icon = '<span></span>'
+          if (id) {
+            el.append($("<a />").addClass("header-link").attr("href", "#" + id).html(icon));
+          }
+        })
+      })
+    </script>
+  </head>
+  <body >
+    <nav id='navbar-main' class="navbar fixed-top navbar-expand-sm"> <!-- navbar-dark bg-secondary -->
+      <div class="container mx-auto px-md-4">
+        <a class="navbar-brand" id='logo' href="http://localhost:4000/">
+          <i class="bi bi-tools fs-2"></i>
+        </a>
+        <button class="navbar-toggler navbar-light" type="button" data-bs-toggle="collapse" data-bs-target="#navbarItems" aria-controls="navbarItems" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse user-select-none" id="navbarItems">
+          <ul class="navbar-nav me-auto">
+            <li class="nav-item"><a class="nav-link" href="http://localhost:4000/explanations/">explanations</a></li>
+            <li class="nav-item"><a class="nav-link" href="http://localhost:4000/tutorials/">tutorials</a></li>
+            <li class="nav-item"><a class="nav-link" href="http://localhost:4000/how-tos/">how-tos</a></li>
+            <li class="nav-item"><a class="nav-link" href="http://localhost:4000/reference/">reference</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <main class='home mt-5'>
+      <div class="container mx-auto px-md-4 py-4 bg-white">
+        <div class='row mt-2'>
+          <h1 class='col-sm-9 mt-sm-1'>outline</h1>
+          <nav class='col-sm-3 mt-sm-2'>
+            <ul class="pagination pagination-sm float-end">
+              <li class="page-item">
+                <a class="page-link px-3 rounded-0 prev" href="http://localhost:4000//reference/dialogs/glyphs/contours/gridfit" title='gridfit'>&laquo;</a>
+              </li>
+              <li class="page-item">
+                <a class="page-link px-3 rounded-0 next" href="http://localhost:4000//reference/dialogs/glyphs/contours/shift" title='shift'>&raquo;</a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+        <nav aria-label="breadcrumb">
+          <ol class='breadcrumb'>
+            <li class='breadcrumb-item small'>
+              <a href="/">Index</a>
+            </li>
+            <li class='breadcrumb-item small'>
+              <a href="/reference/">
+                Reference
+              </a>
+            </li>
+            <li class='breadcrumb-item small'>
+              <a href="/reference/dialogs/">
+                Dialogs
+              </a>
+            </li>
+            <li class='breadcrumb-item small'>
+              <a href="/reference/dialogs/glyphs/">
+                Glyphs
+              </a>
+            </li>
+            <li class='breadcrumb-item small'>outline</li>
+          </ol>
+        </nav>
+        <p class="lead">Expand glyph contours outwards and/or inwards by a given offset distance.</p>
+        <div class="row">
+          <div class="col-sm-4">
+            <p><img src="/images/glyphs/outline.png" alt="" class="img-fluid" /></p>
+          </div>
+          <div class="col-sm-8">
+            <dl>
+              <dt>source layer</dt>
+              <dd>layer containing the source glyph contours</dd>
+              <dt>target layer</dt>
+              <dd>layer where the resulting outlined contours will be drawn</dd>
+              <dt>stroke</dt>
+              <dd>total width of the applied stroke</dd>
+              <dt>join style</dt>
+              <dd>style of the stroke joins: square, round, or bevel</dd>
+              <dt>cap style</dt>
+              <dd>style of the stroke caps: square, round, or butt</dd>
+              <dt>edges</dt>
+              <dd>choose whether to expand contours inwards and/or outwards</dd>
+              <dt>apply</dt>
+              <dd>expand outlines in the selected glyphs</dd>
+              <dt>preview</dt>
+              <dd>show a preview of the result in the background</dd>
+            </dl>
+          </div>
+        </div>
+        <h2 id="preview">preview</h2>
+        <p><img src="/images/glyphs/outline_preview.png" alt="" class="img-fluid" /></p>
+        <div class="card bg-light my-3 rounded-0">
+          <div class="card-header">note</div>
+          <div class="card-body">
+            <p class="card-text">This dialog is a simple wrapper around the stroke expansion functions from the <a href="http://github.com/typemytype/outlinerRoboFontExtension">Outliner</a> extension.</p>
+          </div>
+        </div>
+      </div>
+    </main>
+    <footer class="container mx-auto px-auto px-md-4 my-4">
+      <p class='small text-muted'>
+        This work is licensed under <a href='http://creativecommons.org/licenses/by-sa/4.0/'>Creative Commons Attribution-ShareAlike 4.0 International</a>.
+        <i class="bi bi-arrow-counterclockwise"></i> Last updated on 08 Oct 2024 07:22:42.
+      </p>
+    </footer>
+  </body>
+</html>

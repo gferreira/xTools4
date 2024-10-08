@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>History of xTools4 · xTools4</title>
+    <link rel="icon" href="http://localhost:4000/favicon.ico"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="http://localhost:4000/css/style.css" type="text/css" />
+    <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js" integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
+    <script>
+      // add toc toggler
+      $(function(){
+        $('#markdown-toc').click(function(e){
+          $(this).children('li').toggle();
+          $(this).toggleClass('toc-collapse');
+        });
+        $("#markdown-toc li").click(function(e){
+          e.stopPropagation();
+        });
+      });
+      // add header links
+      $(document).ready(function () {
+        $("h2, h3, h4, h5, h6").each(function() {
+          el = $(this)
+          id = el.attr('id')
+          icon = '<span></span>'
+          if (id) {
+            el.append($("<a />").addClass("header-link").attr("href", "#" + id).html(icon));
+          }
+        })
+      })
+    </script>
+  </head>
+  <body >
+    <nav id='navbar-main' class="navbar fixed-top navbar-expand-sm"> <!-- navbar-dark bg-secondary -->
+      <div class="container mx-auto px-md-4">
+        <a class="navbar-brand" id='logo' href="http://localhost:4000/">
+          <i class="bi bi-tools fs-2"></i>
+        </a>
+        <button class="navbar-toggler navbar-light" type="button" data-bs-toggle="collapse" data-bs-target="#navbarItems" aria-controls="navbarItems" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse user-select-none" id="navbarItems">
+          <ul class="navbar-nav me-auto">
+            <li class="nav-item"><a class="nav-link" href="http://localhost:4000/explanations/">explanations</a></li>
+            <li class="nav-item"><a class="nav-link" href="http://localhost:4000/tutorials/">tutorials</a></li>
+            <li class="nav-item"><a class="nav-link" href="http://localhost:4000/how-tos/">how-tos</a></li>
+            <li class="nav-item"><a class="nav-link" href="http://localhost:4000/reference/">reference</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <main class='home mt-5'>
+      <div class="container mx-auto px-md-4 py-4 bg-white">
+        <div class='row mt-2'>
+          <h1 class='col-sm-9 mt-sm-1'>History of xTools4</h1>
+          <nav class='col-sm-3 mt-sm-2'>
+            <ul class="pagination pagination-sm float-end">
+              <li class="page-item">
+                <a class="page-link px-3 rounded-0 prev" href="http://localhost:4000//explanations/overview" title='Overview'>&laquo;</a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+        <nav aria-label="breadcrumb">
+          <ol class='breadcrumb'>
+            <li class='breadcrumb-item small'>
+              <a href="/">Index</a>
+            </li>
+            <li class='breadcrumb-item small'>
+              <a href="/explanations/">
+                Explanations
+              </a>
+            </li>
+            <li class='breadcrumb-item small'>History of xTools4</li>
+          </ol>
+        </nav>
+        <p class="lead">xTools4 is a fusion of <a href="http://hipertipo.gitlab.io/htools3-extension/">hTools3</a> and <a href="http://gferreira.github.io/fb-variable-values/">variableValues</a> extensions, updated to the new <a href="http://robofont.com/announcements/RoboFont-4.0/">RoboFont 4</a> APIs: <a href="http://robofont.com/documentation/topics/merz/">Merz</a>, <a href="http://robofont.com/documentation/topics/subscriber/">Subscriber</a>, and <a href="http://typesupply.github.io/ezui/">EZUI</a>.</p>
+        <ul id="markdown-toc">
+          <li><a href="#history-of-xtools4" id="markdown-toc-history-of-xtools4">History of xTools4</a></li>
+          <li><a href="#history-of-variablevalues" id="markdown-toc-history-of-variablevalues">History of variableValues</a></li>
+          <li><a href="#history-of-htools" id="markdown-toc-history-of-htools">History of hTools</a>    
+            <ul>
+              <li><a href="#htools" id="markdown-toc-htools">hTools</a></li>
+              <li><a href="#htools2" id="markdown-toc-htools2">hTools2</a></li>
+              <li><a href="#htools3" id="markdown-toc-htools3">hTools3</a></li>
+              <li><a href="#htools4" id="markdown-toc-htools4">hTools4</a></li>
+            </ul>
+          </li>
+        </ul>
+        <h2 id="history-of-xtools4">History of xTools4</h2>
+        <p>…</p>
+        <h2 id="history-of-variablevalues">History of variableValues</h2>
+        <p>…</p>
+        <h2 id="history-of-htools">History of hTools</h2>
+        <h3 id="htools">hTools</h3>
+        <p>hTools started in 2005/06 while I was still a student at <a href="http://typemedia.org/">TypeMedia</a>. We all used <a href="http://www.fontlab.com/font-editor/fontlab-studio-5/">FontLab Studio 5</a> at the time. At first, <em>hTools</em> was just the name of a folder where I started to collect <a href="http://robofab.org/">RoboFab</a> scripts while working and studying. At some point I learned how to create modules, and the <em>hTools</em> folder became a Python module from which I could <code class="language-plaintext highlighter-rouge">import</code> things. That was super useful, so I kept working on making it better.</p>
+        <p>This first version of hTools was never made public. The name of the module was inspired by the naming scheme used in RoboFab, with a letter prefix for object names (ex: <code class="language-plaintext highlighter-rouge">RFont</code>, <code class="language-plaintext highlighter-rouge">RGlyph</code>, etc). The <em>H</em> in hTools stands for <a href="http://hipertipo.com/">Hipertipo</a>, as the tools were originally intended for my personal use only.</p>
+        <h3 id="htools2">hTools2</h3>
+        <p>RoboFont 1 was released in September 2011. I switched to it right away, and began (re)writing small tools which I needed for my work. A first version of hTools2 was made available under an open-source license in December. Nikola Djurek of <a href="http://typonine.com/">Typonine</a> commissioned me to create new tools and scripts which were added to the toolkit. The following year I was invited to make a <a href="https://vimeo.com/38502559">presentation</a> about hTools2 at the RoboThon conference – this motivated me to improve the code and write some documentation for users.</p>
+        <p>Over the next years, I continued to use hTools2 extensively in my own type design work, and kept adding new features as I needed them. Some designers and foundries (Typonine, <a href="http://underware.com/">Underware</a>, <a href="http://abcdinamo.com/">Dinamo</a>) funded the development of individual new tools, others made donations to support the project (<a href="http://klim.co.nz/">Klim</a>, <a href="http://blackletra.com/">Blackletra</a>). I also received several contributions in the form of pull requests, bug reports and issues. <!-- *A big thanks to everyone who contributed to hTools2!* --></p>
+        <h3 id="htools3">hTools3</h3>
+        <p><a href="http://robofont.com/documentation/RF3-changes/">RoboFont 3</a> was released in July 2018. It introduced two big changes: switch from Python 2 to Python 3, and switch from the RoboFab API to the FontParts API. Most existing RF1 tools required small changes to work on RF3. I started making changes to hTools2 code in order to make it compatible with RF3, while still keeping it backwards-compatible with RF1. This involved adding a lot of conditionals to check for the current version – it worked, but the code became ugly and hard to maintain. At this point I decided to start over and work on a new future-oriented version of hTools, dropping support for RF1. The hTools2 code was declared ‘frozen’ and hTools3 development was initiated.</p>
+        <p>Nikola Djurek (now of <a href="http://typotheque.com/">Typotheque</a>) contributed greatly to the initial work on hTools3. In a meeting at the KABK during the RoboThon conference in 2018, we made a long list of tools which should be included in the kit. Most <a href="../font">font</a> and <a href="../glyphs">glyphs</a> tools were based on existing hTools2 tools, while the <a href="../batch">batch</a> tools were all created from scratch using a new accordion-based interface. Nikola/Typotheque funded initial development and provided helpful testing and feedback.</p>
+        <p>I continued to work on hTools3 independently, improving the code and adding new tools as I needed them. A new set of <a href="../glyph">glyph</a> tools was included, containing tools to display special kinds of data while drawing – distances, angles, curvatures, etc. A lot of time was dedicated to making the code clear and maintainable, and to writing documentation. There are now two separate docs for hTools3: a high-level <a href="http://hipertipo.gitlab.io/htools3-extension/">user documentation</a> and a low-level <a href="http://hipertipo.gitlab.io/hTools3/">API documentation</a> for developers. Both docs are built automatically from the source code and are served through <a href="http://docs.gitlab.com/ee/user/project/pages/">GitLab Pages</a>.</p>
+        <p>A beta version of hTools3 was made public in March 2020 as a compiled trial extension. The trial extension period, which was initially set for 3 months, was extended until the end of the year. Version 0.6.0, released on 31/12/2020, marked the start of the commercial distribution of hTools3. <!-- *Huge thanks to all users who bought a license!* --></p>
+        <h3 id="htools4">hTools4</h3>
+        <ul>
+          <li><a href="http://www.hipertipo.com/en/log/2021-09-20-hTools4-roadmap/">A roadmap for hTools4 (20 September 2021)</a></li>
+          <li><a href="http://www.hipertipo.com/en/log/2022-01-01-hTools4-postponed/">hTools4 development postponed (01 January 2022)</a></li>
+        </ul>
+      </div>
+    </main>
+    <footer class="container mx-auto px-auto px-md-4 my-4">
+      <p class='small text-muted'>
+        This work is licensed under <a href='http://creativecommons.org/licenses/by-sa/4.0/'>Creative Commons Attribution-ShareAlike 4.0 International</a>.
+        <i class="bi bi-arrow-counterclockwise"></i> Last updated on 08 Oct 2024 07:22:42.
+      </p>
+    </footer>
+  </body>
+</html>
