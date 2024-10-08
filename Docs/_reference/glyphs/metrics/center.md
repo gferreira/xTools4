@@ -1,13 +1,14 @@
 ---
-title  : center glyph
-layout : page
+title     : center glyph
+layout    : page
+permalink : /reference/dialogs/glyphs/metrics/center-glyph
 ---
 
 Center glyph contours by equalizing left and right margins.
 {: .lead }
 
 
-<div class="card bg-light my-3">
+<div class="card bg-light my-3 rounded-0">
 <div class="card-header">note</div>
 <div class="card-body" markdown='1'>
 - Uses the font’s *slant angle* to center glyphs in oblique and italic fonts.

@@ -1,6 +1,7 @@
 ---
-title  : mask
-layout : page
+title     : mask
+layout    : page
+permalink : /reference/dialogs/glyphs/layers/mask
 ---
 
 Copy and flip between a main layer and a mask layer in the selected glyphs.

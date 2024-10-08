@@ -1,7 +1,7 @@
 ---
 title     : TempEdit
 layout    : default
-permalink : /variable/tempedit
+permalink : /reference/dialogs/variable/temp-edit
 ---
 
 A tool to edit glyphs from multiple designspace sources using temporary font(s).
@@ -13,7 +13,7 @@ Options
 
 <div class='row'>
 <div class='col' markdown='1'>
-  <img class='img-fluid' src='{{ site.url }}/images/TempEdit.png' />
+  <img class='img-fluid' src='{{ site.url }}/images/variable/TempEdit.png' />
 </div>
 <div class='col' markdown='1'>
 designspaces
@@ -48,17 +48,17 @@ TempEdit offers 3 different import modes:
 
 Import glyph(s) from each source into a separate font.
 
-<img class='img-fluid' src='{{ site.url }}/images/TempEdit_fonts.png' />
+<img class='img-fluid' src='{{ site.url }}/images/variable/TempEdit_fonts.png' />
 
 #### fonts → glyphs  
 
 Import each glyph source into a separate glyph of a single font
 
-<img class='img-fluid' src='{{ site.url }}/images/TempEdit_glyphs.png' />
+<img class='img-fluid' src='{{ site.url }}/images/variable/TempEdit_glyphs.png' />
 
 #### fonts → layers  
 
 Import glyph sources as layers of a single font.
 
-<img class='img-fluid' src='{{ site.url }}/images/TempEdit_layers.png' />
+<img class='img-fluid' src='{{ site.url }}/images/variable/TempEdit_layers.png' />
 

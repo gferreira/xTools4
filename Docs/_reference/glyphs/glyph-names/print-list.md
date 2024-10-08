@@ -1,6 +1,7 @@
 ---
-title  : print glyphs list
-layout : page
+title     : print glyphs list
+layout    : page
+permalink : /reference/dialogs/glyphs/glyph-names/print-list
 ---
 
 Print the selected glyphs in multiple modes and formats.
@@ -35,19 +36,19 @@ sort names
 Examples
 --------
 
-### plain string (glyph names)
+### plain string / glyph names
 
 ```
 A B C D a b c d zero one two three
 ```
 
-### plain string (characters)
+### plain string / characters
 
 ```
 A B C D a b c d 0 1 2 3
 ```
 
-### plain list (glyph names)
+### plain list / glyph names
 
 ```
 A
@@ -64,13 +65,13 @@ two
 three
 ```
 
-### Python string (glyph names)
+### Python string / glyph names
 
 ```
 "A B C D a b c d zero one two three"
 ```
 
-### Python list (glyph names)
+### Python list / glyph names
 
 ```
 ["A", "B", "C", "D", "a", "b", "c", "d", "zero", "one", "two", "three"]

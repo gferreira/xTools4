@@ -1,6 +1,7 @@
 ---
-title  : create anchors
-layout : page
+title     : create anchors
+layout    : page
+permalink : /reference/dialogs/glyphs/anchors/create-anchors
 ---
 
 Create anchor in the selected glyphs.

@@ -38,6 +38,7 @@ class VarGlyphViewer(ezui.WindowController):
     width   = 123
     margins = 10
 
+    glyph       = None
     defaultPath = None
     defaultFont = None
 
@@ -96,6 +97,14 @@ class VarGlyphViewer(ezui.WindowController):
         unregisterGlyphEditorSubscriber(VarGlyphViewerSubscriberGlyphEditor)
         VarGlyphViewerSubscriberGlyphEditor.controller = None
 
+    @property
+    def defaultGlyph(self):
+        if self.glyph is None or self.defaultFont is None:
+            return
+        if self.glyph.name not in self.defaultFont:
+            return
+        return self.defaultFont[self.glyph.name]
+
     # callbacks
 
     def getDefaultButtonCallback(self, sender):
@@ -126,7 +135,18 @@ class VarGlyphViewer(ezui.WindowController):
 
     def addSubtractButtonCallback(self, sender):
         mode = ['subtract', 'add'][sender.get()]
-        print(f'{mode} the default')
+        if self.glyph is None or self.defaultGlyph is None:
+            return
+        if mode == 'subtract':
+            self.glyph.prepareUndo('subtract default glyph')
+            diffGlyph = self.glyph - self.defaultGlyph
+        else:
+            self.glyph.prepareUndo('add default glyph')
+            diffGlyph = self.glyph + self.defaultGlyph
+        self.glyph.clearContours()
+        self.glyph.clearAnchors()
+        self.glyph.appendGlyph(diffGlyph)
+        self.glyph.performUndo()
 
 
 class VarGlyphViewerSubscriberGlyphEditor(Subscriber):
@@ -145,7 +165,7 @@ class VarGlyphViewerSubscriberGlyphEditor(Subscriber):
         self.displayLayer.clearSublayers()
 
     def glyphEditorDidSetGlyph(self, info):
-        self.glyph = info["glyph"]
+        self.controller.glyph = info["glyph"]
         self._drawVarGlyphViewer()
 
     def glyphEditorGlyphDidChange(self, info):
@@ -163,10 +183,10 @@ class VarGlyphViewerSubscriberGlyphEditor(Subscriber):
         if self.controller.defaultFont is None:
             return
 
-        if self.glyph.name not in self.controller.defaultFont:
+        if self.controller.glyph.name not in self.controller.defaultFont:
             return
 
-        defaultGlyph  = self.controller.defaultFont[self.glyph.name]
+        defaultGlyph  = self.controller.defaultGlyph
         selectionOnly = self.controller.w.getItem('selectionOnly').get()
         showEqual     = self.controller.w.getItem('showEqual').get()
         showDeltas    = self.controller.w.getItem('showDeltas').get()
@@ -185,12 +205,12 @@ class VarGlyphViewerSubscriberGlyphEditor(Subscriber):
         dash = 2, 2
         dotSize = 4
 
-        selectedPoints = getImplicitSelectedPoints(self.glyph)
+        selectedPoints = getImplicitSelectedPoints(self.controller.glyph)
 
         with self.displayLayer.sublayerGroup():
             
             # draw points
-            for ci, c in enumerate(self.glyph):
+            for ci, c in enumerate(self.controller.glyph):
                 for pi, p in enumerate(c.points):
                     if selectionOnly and p not in selectedPoints:
                         continue
@@ -231,7 +251,7 @@ class VarGlyphViewerSubscriberGlyphEditor(Subscriber):
                             )
 
             # draw anchors
-            for ai, a in enumerate(self.glyph.anchors):
+            for ai, a in enumerate(self.controller.glyph.anchors):
                 if selectionOnly and not a.selected:
                     continue
                 a2 = defaultGlyph.anchors[ai]

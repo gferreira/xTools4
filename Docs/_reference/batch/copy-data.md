@@ -1,6 +1,7 @@
 ---
-title  : batch copy data
-layout : page
+title     : batch copy data
+layout    : page
+permalink : /reference/dialogs/batch/copy-data
 ---
 
 Copy data from one source font to all selected fonts.

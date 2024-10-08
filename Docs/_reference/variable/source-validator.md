@@ -1,19 +1,19 @@
 ---
 title     : SourceValidator
 layout    : default
-permalink : /variable/sourcevalidator
+permalink : /reference/dialogs/variable/source-validator
 ---
 
 A tool to validate glyphs from one or more fonts against glyphs from another font.
 {: .lead}
 
 
-Fonts
+fonts
 -----
 
 Use the **fonts** tab to check a set of font sources against a reference font in batch.
 
-![]({{ site.url }}/images/SourceValidator-1.png){: .img-fluid}
+![]({{ site.url }}/images/variable/SourceValidator-1.png){: .img-fluid}
 
 reference font
 : ^
@@ -33,12 +33,12 @@ validate
   The check results are printed to the Output Window.
 
 
-Glyphs
+glyphs
 ------
 
 Use the **glyphs** tab to check individual glyphs in the selected fonts against a reference font.
 
-![]({{ site.url }}/images/SourceValidator-2.png){: .img-fluid}
+![]({{ site.url }}/images/variable/SourceValidator-2.png){: .img-fluid}
 
 load
 : Click to load the names of all glyphs in the reference font into the list.

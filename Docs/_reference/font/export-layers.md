@@ -1,6 +1,7 @@
 ---
-title  : export layers
-layout : page
+title     : export layers
+layout    : page
+permalink : /reference/dialogs/font/export-layers
 ---
 
 Export single layers in the current font as separate UFO fonts.

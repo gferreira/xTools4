@@ -2,6 +2,7 @@
 title     : curvature visualizer
 menutitle : curvature
 layout    : page
+permalink : /reference/dialogs/glyph/show-curvature
 ---
 
 Visualize the curvature along curve segments.

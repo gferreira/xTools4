@@ -1,13 +1,14 @@
 ---
-title  : decompose
-layout : page
+title     : decompose
+layout    : page
+permalink : /reference/dialogs/glyphs/components/decompose
 ---
 
 Decompose all components in the selected glyphs.
 {: .lead }
 
 
-<div class="card bg-light my-3">
+<div class="card bg-light my-3 rounded-0">
 <div class="card-header">note</div>
 <div class="card-body" markdown='1'>
 Supports decomposing in multiple layers using the [layers] selector.
@@ -17,5 +18,10 @@ Supports decomposing in multiple layers using the [layers] selector.
 
 [layers]: ../../modifiers/layers/
 
-
-see also [glyphs > transform > actions](../../transform/actions/)
+<div class="card bg-light my-3 rounded-0">
+<div class="card-header">see also</div>
+<div class="card-body" markdown='1'>
+[glyphs > transform > actions](../../transform/actions/)
+{: .card-text }
+</div>
+</div>

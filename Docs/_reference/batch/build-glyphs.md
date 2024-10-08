@@ -1,6 +1,7 @@
 ---
-title  : batch build glyphs
-layout : page
+title     : batch build glyphs
+layout    : page
+permalink : /reference/dialogs/batch/build-glyphs
 ---
 
 Create new glyphs in the selected fonts.

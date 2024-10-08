@@ -5,7 +5,7 @@ from mojo.roboFont import OpenWindow, OpenFont
 from fontTools.designspaceLib import DesignSpaceDocument
 
 
-def _sourceName(src):
+def getSourceName(src):
     return os.path.splitext(src.filename)[0]
 
 
@@ -122,12 +122,12 @@ class DesignSpaceSelector_EZUI(ezui.WindowController):
             src.font = Font(src.path)
 
         # source name is UFO file name without .ufo extension
-        self.sources =  { _sourceName(src): src for src in self.designspace.sources }
+        self.sources =  { getSourceName(src): src for src in self.designspace.sources }
 
         sourcesTable = self.w.getItem("sources")
         sourcesItems = []
         for i, src in enumerate(self.designspace.sources):
-            sourcesItems.append(dict(name=_sourceName(src)))
+            sourcesItems.append(dict(name=getSourceName(src)))
 
         sourcesTable.set(sourcesItems)
 

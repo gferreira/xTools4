@@ -1,6 +1,7 @@
 ---
-title  : select layers
-layout : page
+title     : select layers
+layout    : page
+permalink : /reference/dialogs/glyphs/modifiers/layers
 ---
 
 A palette to select which layers should be affected by actions from other tools.
@@ -21,7 +22,6 @@ layers
 : ^
   a list of all layers in the current font  
   select which layers to use when applying actions from other tools
-
 </div>
 
 </div>

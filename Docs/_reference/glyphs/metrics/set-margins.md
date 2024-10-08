@@ -1,6 +1,7 @@
 ---
-title  : set margins
-layout : page
+title     : set margins
+layout    : page
+permalink : /reference/dialogs/glyphs/metrics/set-margins
 ---
 
 Set left / right margins in the selected glyphs.
@@ -36,7 +37,7 @@ preview
 </div>
 
 
-<div class="card bg-light my-3">
+<div class="card bg-light my-3 rounded-0">
 <div class="card-header">note</div>
 <div class="card-body" markdown='1'>
 Supports setting margins in multiple layers using the [layers] selector.
@@ -47,7 +48,7 @@ Supports setting margins in multiple layers using the [layers] selector.
 [layers]: ../../modifiers/layers/
 
 
-Preview
+preview
 -------
 
 ![]({{"images/glyphs/marginsSet_preview.png" | relative_url }}){: .img-fluid}

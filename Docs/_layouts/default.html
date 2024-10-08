@@ -38,7 +38,6 @@
     })
     </script>
   {% endif %}
-  {% include tracker.html %}
 </head>
 
 {% if page.collection %}
@@ -68,7 +67,7 @@
   {% include nav_main.html %}
   <main class='home mt-5'>
     <div class="container mx-auto px-md-4 py-4 bg-white">
-      <div class='row'>
+      <div class='row mt-2'>
         <h1 class='col-sm-9 mt-sm-1'>{{ page.title }}</h1>
         {% if page.collection %}
           {% if prev_url or next_url %}
@@ -76,12 +75,12 @@
               <ul class="pagination pagination-sm float-end">
                 {% if prev_url %}
                   <li class="page-item">
-                    <a class="page-link px-3 prev" href="{{ site.url }}/{{prev_url}}" title='{{ prev_title }}'>&laquo;</a>
+                    <a class="page-link px-3 rounded-0 prev" href="{{ site.url }}/{{prev_url}}" title='{{ prev_title }}'>&laquo;</a>
                   </li>
                 {% endif %}
                 {% if next_url %}
                   <li class="page-item">
-                    <a class="page-link px-3 next" href="{{ site.url }}/{{next_url}}" title='{{ next_title }}'>&raquo;</a>
+                    <a class="page-link px-3 rounded-0 next" href="{{ site.url }}/{{next_url}}" title='{{ next_title }}'>&raquo;</a>
                   </li>
                 {% endif %}
               </ul>
@@ -89,7 +88,7 @@
           {% endif %}
         {% endif %}
       </div>
-      {% comment %}{% include breadcrumb.html %}{% endcomment %}
+      {% include breadcrumb.html %}
       {{ content }}
     </div>
   </main>

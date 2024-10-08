@@ -1,7 +1,7 @@
 ---
 title     : BatchValidator
 layout    : default
-permalink : /variable/batchvalidator
+permalink : /reference/dialogs/variable/batch-validator
 ---
 
 A tool to batch validate glyphs in a set of fonts against glyphs from another font.

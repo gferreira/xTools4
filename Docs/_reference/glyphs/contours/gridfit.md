@@ -1,6 +1,7 @@
 ---
-title  : gridfit
-layout : page
+title     : gridfit
+layout    : page
+permalink : /reference/dialogs/glyphs/contours/gridfit
 ---
 
 Align different glyph parts to a grid.

@@ -1,10 +1,10 @@
 # menuTitle: VarGlyphViewer
 
 from importlib import reload
-import variableValues.dialogs.RF4.VarGlyphViewer
-reload(variableValues.dialogs.RF4.VarGlyphViewer)
+import xTools4.dialogs.variable.VarGlyphViewer
+reload(xTools4.dialogs.variable.VarGlyphViewer)
 
 from mojo.roboFont import OpenWindow
-from variableValues.dialogs.RF4.VarGlyphViewer import VarGlyphViewer
+from xTools4.dialogs.variable.VarGlyphViewer import VarGlyphViewer
 
 OpenWindow(VarGlyphViewer)

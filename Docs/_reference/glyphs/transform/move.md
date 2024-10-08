@@ -1,6 +1,7 @@
 ---
-title  : select layers
-layout : page
+title     : move
+layout    : page
+permalink : /reference/dialogs/glyphs/transform/move
 ---
 
 Move the contents of the selected glyphs.
@@ -27,7 +28,7 @@ preview
 </div>
 
 
-<div class="card bg-light my-3">
+<div class="card bg-light my-3 rounded-0">
 <div class="card-header">note</div>
 <div class="card-body" markdown='1'>
 Supports moving multiple layers using the [layers] selector.
@@ -38,7 +39,7 @@ Supports moving multiple layers using the [layers] selector.
 [layers]: ../../modifiers/layers/
 
 
-Preview
+preview
 -------
 
 ![]({{"images/glyphs/move_preview.png" | relative_url }}){: .img-fluid}

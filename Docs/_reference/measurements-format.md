@@ -1,11 +1,14 @@
 ---
 title     : Measurements format
 layout    : default
-permalink : /variable/measurements-format
+permalink : /reference/measurements-format
 ---
 
 A data format to store definitions of font-level and glyph-level measurements.
 {: .lead}
+
+* Table of Contents
+{:toc}
 
 
 Data structure
@@ -157,4 +160,3 @@ The same set of measurement definitions can be used to measure all sources in a 
   },
 }
 ```
-

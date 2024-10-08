@@ -1,6 +1,7 @@
 ---
-title  : set width
-layout : page
+title     : set width
+layout    : page
+permalink : /reference/dialogs/glyphs/metrics/set-width
 ---
 
 Set the advance width in selected glyphs.
@@ -33,7 +34,7 @@ preview
 </div>
 
 
-<div class="card bg-light my-3">
+<div class="card bg-light my-3 rounded-0">
 <div class="card-header">note</div>
 <div class="card-body" markdown='1'>
 Supports setting widths in multiple layers using the [layers] selector.
@@ -44,23 +45,30 @@ Supports setting widths in multiple layers using the [layers] selector.
 [layers]: ../../modifiers/layers/
 
 
-Positioning modes
+positioning modes
 -----------------
 
-do not move
-: keeps the glyph’s left margin unchanged, whitespace is added/removed in the right margin
+<table class='table table-hover'>
+<tr>
+  <th>do not move</th>
+  <td>keeps the glyph’s left margin unchanged, whitespace is added/removed in the right margin</td>
+</tr>
+<tr>
+  <th>center glyph</th>
+  <td>divides the glyph’s total whitespace equally between left and right margins</td>
+</tr>
+<tr>
+  <th>split margins</th>
+  <td>splits the added/removed whitespace equally between left and right margins</td>
+</tr>
+<tr>
+  <th>relative split</th>
+  <td>splits the added/removed whitespace proportionally between left and right margins</td>
+</tr>
+</table>
 
-center glyph
-: divides the glyph’s total whitespace equally between left and right margins
 
-split margins
-: splits the added/removed whitespace equally between left and right margins
-
-relative split
-: splits the added/removed whitespace proportionally between left and right margins
-
-
-Preview
+preview
 -------
 
 ![]({{"images/glyphs/widthSet_preview.png" | relative_url }}){: .img-fluid}

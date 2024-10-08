@@ -1,7 +1,7 @@
 ---
 title     : find (and replace) components
-menuTitle : find replace components
 layout    : page
+permalink : /reference/dialogs/font/find-replace-components
 ---
 
 Find all components of a given glyph, and optionally replace it by another glyph.

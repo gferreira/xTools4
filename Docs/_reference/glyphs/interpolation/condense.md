@@ -1,9 +1,10 @@
 ---
-title  : condensomatic
-layout : page
+title     : condensomatic
+layout    : page
+permalink : /reference/dialogs/glyphs/interpolation/condense
 ---
 
-Generate condensed glyphs into the current font by interpolating between Regular and Bold masters.
+Generate condensed glyphs into the current font by interpolating Regular and Bold sources.
 {: .lead }
 
 
@@ -30,7 +31,7 @@ preview
 </div>
 
 
-Preview
+preview
 -------
 
 ![]({{"images/glyphs/interpolationCondense_preview.png" | relative_url }}){: .img-fluid}

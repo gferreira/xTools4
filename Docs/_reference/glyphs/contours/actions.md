@@ -1,6 +1,7 @@
 ---
-title  : actions
-layout : page
+title     : actions
+layout    : page
+permalink : /reference/dialogs/glyphs/contours/actions
 ---
 
 Apply the selected actions to the selected glyphs.
@@ -29,7 +30,13 @@ preview
 </div>
 
 
-<div class="card bg-light my-3">
+preview
+-------
+
+![]({{"images/glyphs/actions_preview.png" | relative_url }}){: .img-fluid}
+
+
+<div class="card bg-light my-3 rounded-0">
 <div class="card-header">note</div>
 <div class="card-body" markdown='1'>
 Supports applying actions to multiple layers using the [layers] selector.
@@ -38,9 +45,3 @@ Supports applying actions to multiple layers using the [layers] selector.
 </div>
 
 [layers]: ../../modifiers/layers/
-
-
-preview
--------
-
-![]({{"images/glyphs/actions_preview.png" | relative_url }}){: .img-fluid}

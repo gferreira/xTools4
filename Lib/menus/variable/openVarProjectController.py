@@ -1,4 +1,4 @@
-# menuTitle: VarProject Controller
+# menuTitle: ProjectController
 
 from importlib import reload
 import variableValues.dialogs.VarProject

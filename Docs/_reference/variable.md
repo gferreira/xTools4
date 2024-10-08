@@ -1,19 +1,19 @@
 ---
-title  : variable
-layout : default
+title     : variable
+layout    : default
+permalink : /reference/dialogs/variable
 ---
 
 Tools to visualize and edit variable font sources.
 {: .lead }
 
-<ul>
-  {% for item in site.data.menu %}
-    {% for subitem in item.submenu %}
-      {% if subitem.title == 'variable' %}
-        {% for subsubitem in subitem.submenu %}
-          <li><a href='{{ subsubitem.title | slugify }}'>{{ subsubitem.title }}</a></li>
-        {% endfor %}
-      {% endif %}
-    {% endfor %}
-  {% endfor %}
-</ul>
+- <span class="badge text-bg-success">RF4</span> [GlyphGauge](glyph-gauge)
+- <span class="badge text-bg-success">RF4</span> [GlyphValidator](glyph-validator)
+- <span class="badge text-bg-warning">RF3</span> [GlyphSetProofer](glyphset-proofer)
+- <span class="badge text-bg-success">RF4</span> [Measurements](measurements)
+- <span class="badge text-bg-danger" >RF3</span> [ProjectController](project-controller)
+- <span class="badge text-bg-warning">RF3</span> [TempEdit](temp-edit)
+- <span class="badge text-bg-warning">RF3</span> [TempGlyphs](temp-glyphs)
+- <span class="badge text-bg-warning">RF3</span> [VarFontAssistant](varfont-assistant)
+- <span class="badge text-bg-success">RF4</span> [VarGlyphAssistant](varglyph-assistant)
+- <span class="badge text-bg-success">RF4</span> [VarGlyphViewer](varglyph-viewer)

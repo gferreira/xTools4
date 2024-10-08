@@ -1,6 +1,7 @@
 ---
-title  : batch glyph actions
-layout : page
+title     : batch glyph actions
+layout    : page
+permalink : /reference/dialogs/batch/glyph-actions
 ---
 
 Apply glyph-level actions to selected fonts.

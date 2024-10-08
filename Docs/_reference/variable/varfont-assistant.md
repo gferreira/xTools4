@@ -1,7 +1,7 @@
 ---
 title     : VarFontAssistant
 layout    : default
-permalink : /variable/varfontassistant
+permalink : /reference/dialogs/variable/varfont-assistant
 ---
 
 A tool to view and edit font-level values in multiple designspace sources.
@@ -13,7 +13,7 @@ Designspace
 
 Define which designspaces and font sources to look into.
 
-![]({{ site.url }}/images/VarFontAssistant-designspace.png){: .img-fluid}
+![]({{ site.url }}/images/variable/VarFontAssistant-designspace.png){: .img-fluid}
 
 designspaces
 : Drag one or more `.designspace` files into the list.
@@ -36,7 +36,7 @@ Font info
 
 Visualize and edit font values in selected sources.
 
-![]({{ site.url }}/images/VarFontAssistant-fontinfo.png){: .img-fluid}
+![]({{ site.url }}/images/variable/VarFontAssistant-fontinfo.png){: .img-fluid}
 
 load
 : Click on the button to collect values from the fonts and display them in the UI.
@@ -58,7 +58,7 @@ Kerning
 
 Visualize and edit kerning values in selected sources.
 
-![]({{ site.url }}/images/VarFontAssistant-kerning.png){: .img-fluid}
+![]({{ site.url }}/images/variable/VarFontAssistant-kerning.png){: .img-fluid}
 
 load
 : Click on the button to collect values from the fonts and display them in the UI.
@@ -83,7 +83,7 @@ Measurements
 
 Collect custom measurements from the selected sources.
 
-![]({{ site.url }}/images/VarFontAssistant-measurements.png){: .img-fluid}
+![]({{ site.url }}/images/variable/VarFontAssistant-measurements.png){: .img-fluid}
 
 measurement files
 : Drag one or more `.json` files containing [measurement definitions] into the list.

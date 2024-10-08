@@ -1,9 +1,10 @@
 ---
-title  : linked points
-layout : page
+title     : linked points
+layout    : page
+permalink : /reference/dialogs/glyph/link-points
 ---
 
-Link pairs of points and show the distance or angle between them.
+Create permanent links between pairs of points and show the distance or angle between them.
 {: .lead }
 
 

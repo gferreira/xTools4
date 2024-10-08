@@ -1,7 +1,7 @@
 ---
 title     : VarGlyphAssistant
 layout    : default
-permalink : /variable/varglyphassistant
+permalink : /reference/dialogs/variable/varglyph-assistant
 ---
 
 A tool to view and edit glyph-level values in multiple designspace sources.
@@ -11,7 +11,7 @@ A tool to view and edit glyph-level values in multiple designspace sources.
 {:toc}
 
 
-Designspace
+designspace
 -----------
 
 Use the **designspace** tab to define which designspaces and font sources to look into.
@@ -34,7 +34,7 @@ sources
   Double-click a source to open the font in the UI.
 
 
-Glyph sets
+glyph sets
 ----------
 
 Use the **glyph sets** tab to define which glyphs to look into in the selected sources.
@@ -53,7 +53,7 @@ glyph names
 : A list of glyph names in the selected glyph sets.
 
 
-Attributes
+attributes
 ----------
 
 Use the **attributes** tab to visualize and edit glyph attributes in the selected glyphs of selected sources.
@@ -72,7 +72,7 @@ attributes
   Click on the column headers to sort the list based on a specific attribute.
 
 
-Compatibility
+compatibility
 -------------
 
 Use the **compatibility** tab to visualize and edit contour segments in the selected glyphs of selected sources.

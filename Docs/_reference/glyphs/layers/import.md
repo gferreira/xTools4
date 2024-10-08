@@ -1,6 +1,7 @@
 ---
-title  : import layer
-layout : page
+title     : import layer
+layout    : page
+permalink : /reference/dialogs/glyphs/layers/import
 ---
 
 Import glyphs from an external UFO font into a new layer of the current font.

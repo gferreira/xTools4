@@ -8,13 +8,19 @@ collections:
   reference:
     output: true
     permalink: /:path/
-  topics:
+  explanations:
+    output: true
+    permalink: /:path/
+  howtos:
+    output: true
+    permalink: /:path/
+  tutorials:
     output: true
     permalink: /:path/
 
 markdown: kramdown
 
-version: 0.6.5
+version: 0.1.0
 
 exclude:
   - .sass-cache/

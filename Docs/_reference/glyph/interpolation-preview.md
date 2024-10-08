@@ -2,6 +2,7 @@
 title     : interpolation preview
 menutitle : interpolation
 layout    : page
+permalink : /reference/dialogs/glyph/interpolation-preview
 ---
 
 Preview interpolation steps with another font.

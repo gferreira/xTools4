@@ -1,19 +1,19 @@
 ---
 title     : Measurements
 layout    : default
-permalink : /variable/measurements
+permalink : /reference/dialogs/variable/measurements
 ---
 
 A tool to create and visualize font- and glyph-level measurements.
 {: .lead}
 
 
-Font measurements
+font measurements
 -----------------
 
 Use the **font** tab to create and edit font-level measurements.
 
-![]({{ site.url }}/images/Measurements_font.png){: .img-fluid}
+![]({{ site.url }}/images/variable/Measurements_font.png){: .img-fluid}
 
 new
 : Click to add a new empty font-level measurement to the list.  
@@ -25,12 +25,12 @@ For more information about each column see [Measurements format > Font-level mea
 </div>
 
 
-Glyph measurements
+glyph measurements
 ------------------
 
 Use the **glyph** tab to create and edit glyph-level measurements.
 
-![]({{ site.url }}/images/Measurements_glyph.png){: .img-fluid}
+![]({{ site.url }}/images/variable/Measurements_glyph.png){: .img-fluid}
 
 new
 : Select two points and click on the button to add a new empty glyph-level measurement to the list.
@@ -47,18 +47,18 @@ For more information about each column see [Measurements format > Glyph-level me
 </div>
 
 
-Glyph measurements preview
+glyph measurements preview
 --------------------------
 
 The Glyph View displays a visualization of the measurements in the current glyph:
 
-![]({{ site.url }}/images/Measurements_preview.png){: .img-fluid}
+![]({{ site.url }}/images/variable/Measurements_preview.png){: .img-fluid}
 
 - Dotted lines indicate a measurement between pairs of points.
 - Select one or more measurements in the dialog to highlight and show their name, direction and distance.
 
 
-Loading and saving
+loading and saving
 ------------------
 
 Reading and writing measurement data to external files.

@@ -1,6 +1,7 @@
 ---
-title  : interpolate masters
-layout : page
+title     : interpolate glyphs
+layout    : page
+permalink : /reference/dialogs/glyphs/interpolation/interpolate
 ---
 
 Interpolate two fonts into the selected glyphs of the current font.
@@ -33,10 +34,17 @@ preview
 </div>
 
 
-Preview
+preview
 -------
 
 ![]({{"images/glyphs/interpolationMasters_preview.png" | relative_url }}){: .img-fluid}
 
 
-see also [glyph > interpolation preview](../../../glyph/interpolation-preview/)
+
+<div class="card bg-light my-3 rounded-0">
+<div class="card-header">see also</div>
+<div class="card-body" markdown='1'>
+[glyph > interpolation preview](../../../glyph/interpolation-preview/)
+{: .card-text }
+</div>
+</div>

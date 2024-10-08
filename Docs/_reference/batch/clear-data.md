@@ -1,6 +1,7 @@
 ---
-title  : batch clear data
-layout : page
+title     : batch clear data
+layout    : page
+permalink : /reference/dialogs/batch/clear-data
 ---
 
 Clear different kinds of font data in the selected fonts.

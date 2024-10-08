@@ -2,6 +2,7 @@
 title     : show measurements
 menuTitle : measurements
 layout    : page
+permalink : /reference/dialogs/glyph/show-measurements
 ---
 
 Visualize angle and length of bezier handles and line segments.

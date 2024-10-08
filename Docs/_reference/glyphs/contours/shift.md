@@ -1,6 +1,8 @@
 ---
-title  : shift
-layout : page
+title     : shift
+layout    : page
+permalink : /reference/dialogs/glyphs/contours/shift
+
 ---
 
 Select and shift all points with coordinates smaller / bigger than a given treshold value.

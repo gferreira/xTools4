@@ -107,11 +107,11 @@ class MeasurementsController(ezui.WindowController):
     >> [__](±)      @tresholdFontDefault
 
     * Tab: glyph @glyphsTab
-    > |-------------------------------------------------------------------------------------------|
-    > | name | direction | point1 | point2 | units | permill | font | f-scale | default | d-scale |  @glyphMeasurements
-    > |------|-----------|--------|--------|-------|---------|------|---------|---------|---------|
-    > |      |           |        |        |       |         |      |         |         |         |
-    > |-------------------------------------------------------------------------------------------|
+    > |-----------------------------------------------------------------------------------------------------|
+    > | name | direction | point1 | point2 | units | permill | font | f-scale | f-glyph | default | d-scale |  @glyphMeasurements
+    > |------|-----------|--------|--------|-------|---------|------|---------|---------|---------|---------|
+    > |      |           |        |        |       |         |      |         |         |         |         |
+    > |-----------------------------------------------------------------------------------------------------|
     >> (+-)         @glyphMeasurementsAddRemoveButton
     >> f-treshold
     >> [__](±)      @tresholdGlyphFont
@@ -338,6 +338,19 @@ class MeasurementsController(ezui.WindowController):
                     ),
                 ),
                 dict(
+                    identifier="glyph_f",
+                    title="f-glyph",
+                    width=colWidth,
+                    editable=False,
+                    cellDescription=dict(
+                        # valueToCellConverter=scaleValueToCellConverter,
+                        # cellToValueConverter=scaleCellToValueConverter,
+                        # stringFormatter=fontScaleColorFormatter,
+                        cellType='TextField',
+                        valueType='string',
+                    ),
+                ),
+                dict(
                     identifier="default",
                     title="default",
                     width=colWidth,
@@ -366,10 +379,11 @@ class MeasurementsController(ezui.WindowController):
                 point2=None,
                 units=None,
                 permill=None,
-                default=None,
-                scale_d=None,
                 font=None,
                 scale_f=None,
+                glyph_f=None,
+                default=None,
+                scale_d=None,
             ),
         ),
         colorButton=dict(
@@ -595,7 +609,6 @@ class MeasurementsController(ezui.WindowController):
         postEvent(f"{self.key}.changed")
 
     def flipButtonCallback(self, sender):
-
         table = self.w.getItem("glyphMeasurements")
         selectedItems = table.getSelectedItems()
         if not selectedItems:
@@ -727,6 +740,7 @@ class MeasurementsController(ezui.WindowController):
                 permill=None,
                 font=measurements[key].get('parent'),
                 scale_f=None,
+                glyph_f=None,
                 default=None,
                 scale_d=None,
             )
@@ -743,6 +757,7 @@ class MeasurementsController(ezui.WindowController):
         # get font-level values
         fontMeasurements = self.w.getItem("fontMeasurements").get()
         fontValues       = { i['name']: i['units'] for i in fontMeasurements }
+        fontGlyphs       = { i['name']: i['glyph1'] for i in fontMeasurements }
 
         needReload = []
         for itemIndex, item in enumerate(items):
@@ -771,6 +786,7 @@ class MeasurementsController(ezui.WindowController):
                 item['permill'] = None
                 item['font']    = None
                 item['scale_f'] = None
+                item['glyph_f'] = None
 
             else:
                 item['units'] = distanceUnits
@@ -788,6 +804,7 @@ class MeasurementsController(ezui.WindowController):
                 if name in fontValues:
                     distanceFont = fontValues.get(name)
                     item['font'] = distanceFont
+                    item['glyph_f'] = fontGlyphs.get(name)
                     # calculate f-scale
                     if distanceUnits and distanceFont:
                         item['scale_f'] = distanceUnits / distanceFont

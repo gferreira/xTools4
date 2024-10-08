@@ -1,6 +1,7 @@
 ---
-title  : rotate
-layout : page
+title     : rotate
+layout    : page
+permalink : /reference/dialogs/glyphs/transform/rotate
 ---
 
 Rotate selected glyphs.
@@ -28,7 +29,7 @@ preview
 
 </div>
 
-<div class="card bg-light my-3">
+<div class="card bg-light my-3 rounded-0">
 <div class="card-header">note</div>
 <div class="card-body" markdown='1'>
 Supports rotating multiple layers using the [layers] selector.
@@ -39,7 +40,7 @@ Supports rotating multiple layers using the [layers] selector.
 [layers]: ../../modifiers/layers/
 
 
-Preview
+preview
 -------
 
 ![]({{"images/glyphs/rotate_preview.png" | relative_url }}){: .img-fluid}

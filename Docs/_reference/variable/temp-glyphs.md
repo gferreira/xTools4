@@ -1,7 +1,7 @@
 ---
 title     : TempGlyphs
 layout    : default
-permalink : /reference/tempglyphs
+permalink : /reference/dialogs/reference/temp-glyphs
 ---
 
 A tool to import glyphs from another font into a sparse source, and easily keep or discard them.
@@ -13,7 +13,7 @@ Options
 
 <div class='row'>
 <div class='col' markdown='1'>
-![]({{ site.url }}/images/TempGlyphs.png){: .img-fluid}
+![]({{ site.url }}/images/variable/TempGlyphs.png){: .img-fluid}
 </div>
 <div class='col' markdown='1'>
 sources
@@ -36,7 +36,7 @@ Workflow
 
 1\. Open a sparse source, and open the TempGlyphs window. The sparse source should have empty template glyphs in place of missing glyphs.
 
-![]({{ site.url }}/images/TempGlyphs_font-sparse.png){: .img-fluid}
+![]({{ site.url }}/images/variable/TempGlyphs_font-sparse.png){: .img-fluid}
 
 2\. Define a full source to import glyphs from: select a UFO file in Finder, and drag and drop it into the sources list.
 
@@ -44,7 +44,7 @@ Workflow
 
 4\. Click on the *import* button to copy glyphs from the selected full source into the selected template glyphs of the current font. The imported glyphs are added to the `skipExport` list, as indicated by the red cross in their glyph cells.
 
-![]({{ site.url }}/images/TempGlyphs_font-temp.png){: .img-fluid}
+![]({{ site.url }}/images/variable/TempGlyphs_font-temp.png){: .img-fluid}
 
 5\. You can now edit the non-imported glyphs using the imported glyphs as context.
 

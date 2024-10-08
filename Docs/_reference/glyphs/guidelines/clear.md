@@ -1,13 +1,14 @@
 ---
-title  : clear guidelines
-layout : page
+title     : clear guidelines
+layout    : page
+permalink : /reference/dialogs/glyphs/guidelines/clear
 ---
 
 Delete all glyph-level guidelines in the selected glyphs.
 {: .lead }
 
 
-<div class="card bg-light my-3">
+<div class="card bg-light my-3 rounded-0">
 <div class="card-header">note</div>
 <div class="card-body" markdown='1'>
 Supports multiple layers using the [layers] selector.

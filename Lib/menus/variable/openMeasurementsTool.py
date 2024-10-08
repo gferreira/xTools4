@@ -1,10 +1,10 @@
 # menuTitle: Measurements
 
 from importlib import reload
-import variableValues.dialogs.RF4.Measurements
-reload(variableValues.dialogs.RF4.Measurements)
+import xTools4.dialogs.variable.Measurements
+reload(xTools4.dialogs.variable.Measurements)
 
 from mojo.roboFont import OpenWindow
-from variableValues.dialogs.RF4.Measurements import MeasurementsController
+from xTools4.dialogs.variable.Measurements import MeasurementsController
 
 OpenWindow(MeasurementsController)

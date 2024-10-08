@@ -1,6 +1,7 @@
 ---
-title  : clear font data
-layout : page
+title     : clear font data
+layout    : page
+permalink : /reference/dialogs/font/clear-font-data
 ---
 
 Clear different kinds of data in the current font.

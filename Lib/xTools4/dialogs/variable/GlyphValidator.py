@@ -215,15 +215,12 @@ class GlyphValidatorRoboFont(Subscriber):
     controller = None
 
     def fontDocumentDidBecomeCurrent(self, info):
-        # print('font became current')
         self.controller.updateFontViewCallback(None)
 
     def fontDocumentDidOpen(self, info):
-        # print('open font')
         self.controller.updateFontViewCallback(None)
 
     def fontDocumentDidClose(self, info):
-        # print('close font')
         self.controller.updateFontViewCallback(None)
 
 

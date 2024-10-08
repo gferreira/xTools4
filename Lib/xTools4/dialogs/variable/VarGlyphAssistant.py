@@ -10,7 +10,8 @@ from defcon import Font
 from mojo.roboFont import OpenWindow, OpenFont, CurrentFont, CurrentGlyph
 from mojo.UI import GetFile
 from mojo.subscriber import Subscriber, registerGlyphEditorSubscriber, unregisterGlyphEditorSubscriber, registerRoboFontSubscriber, unregisterRoboFontSubscriber # , registerSubscriberEvent, roboFontSubscriberEventRegistry
-from xTools4.dialogs.variable.DesignSpaceSelector import DesignSpaceSelector_EZUI
+from xTools4.dialogs.variable.DesignSpaceSelector import DesignSpaceSelector_EZUI, getSourceName
+from xTools4.dialogs.variable.Measurements import scaleValueToCellConverter, scaleCellToValueConverter, fontScaleColorFormatter, defaultScaleColorFormatter
 from xTools4.modules.linkPoints2 import readMeasurements, getPointAtIndex, getIndexForPoint, getAnchorPoint
 from xTools4.modules.measurements import Measurement
 
@@ -18,7 +19,9 @@ from xTools4.modules.measurements import Measurement
 tresholdFont    = 0.1
 tresholdDefault = 0.1
 
+
 DEBUG = False
+
 
 class VarGlyphAssistantController(DesignSpaceSelector_EZUI):
 
@@ -110,42 +113,70 @@ class VarGlyphAssistantController(DesignSpaceSelector_EZUI):
                     title="L",
                     width=columnValueAttrs,
                     sortable=True,
+                    # cellDescription=dict(
+                    #     cellType='TextField',
+                    #     valueType='integer',
+                    # ),
                 ),
                 dict(
                     identifier="right",
                     title="R",
                     width=columnValueAttrs,
                     sortable=True,
+                    # cellDescription=dict(
+                    #     cellType='TextField',
+                    #     valueType='integer',
+                    # ),
                 ),
                 dict(
                     identifier="contours",
                     title="C",
                     width=columnValueAttrs,
                     sortable=True,
+                    cellDescription=dict(
+                        cellType='TextField',
+                        valueType='integer',
+                    ),
                 ),
                 dict(
                     identifier="segments",
                     title="S",
                     width=columnValueAttrs,
                     sortable=True,
+                    cellDescription=dict(
+                        cellType='TextField',
+                        valueType='integer',
+                    ),
                 ),
                 dict(
                     identifier="points",
                     title="P",
                     width=columnValueAttrs,
                     sortable=True,
+                    cellDescription=dict(
+                        cellType='TextField',
+                        valueType='integer',
+                    ),
                 ),
                 dict(
                     identifier="components",
                     title="C",
                     width=columnValueAttrs,
                     sortable=True,
+                    cellDescription=dict(
+                        cellType='TextField',
+                        valueType='integer',
+                    ),
                 ),
                 dict(
                     identifier="anchors",
                     title="A",
                     width=columnValueAttrs,
                     sortable=True,
+                    cellDescription=dict(
+                        cellType='TextField',
+                        valueType='integer',
+                    ),
                 ),
             ]
         ),
@@ -220,31 +251,39 @@ class VarGlyphAssistantController(DesignSpaceSelector_EZUI):
                     identifier="units",
                     title="units",
                     width=columnMeasurements,
+                    cellDescription=dict(
+                        cellType='TextField',
+                        valueType='integer',
+                    ),
                 ),
                 dict(
                     identifier="permill",
                     title="permill",
                     width=columnMeasurements,
+                    cellDescription=dict(
+                        cellType='TextField',
+                        valueType='integer',
+                    ),
                 ),
                 dict(
                     identifier="scale_f",
                     title="f-scale",
                     width=columnMeasurements,
-                    # cellDescription=dict(
-                    #     valueToCellConverter=scaleValueToCellConverter,
-                    #     cellToValueConverter=scaleCellToValueConverter,
-                    #     stringFormatter=fontScaleColorFormatter,
-                    # ),
+                    cellDescription=dict(
+                        valueToCellConverter=scaleValueToCellConverter,
+                        cellToValueConverter=scaleCellToValueConverter,
+                        stringFormatter=fontScaleColorFormatter,
+                    ),
                 ),
                 dict(
                     identifier="scale_d",
                     title="d-scale",
                     width=columnMeasurements,
-                    # cellDescription=dict(
-                    #     valueToCellConverter=scaleValueToCellConverter,
-                    #     cellToValueConverter=scaleCellToValueConverter,
-                    #     stringFormatter=defaultScaleColorFormatter,
-                    # ),
+                    cellDescription=dict(
+                        valueToCellConverter=scaleValueToCellConverter,
+                        cellToValueConverter=scaleCellToValueConverter,
+                        stringFormatter=defaultScaleColorFormatter,
+                    ),
                 ),
             ],
         ),
@@ -536,13 +575,10 @@ class VarGlyphAssistantController(DesignSpaceSelector_EZUI):
 
                 # measure glyph
                 valueUnits = M.measure(font)
-
                 if valueUnits is None:
-                    valueUnits = valuePermill = '-'
-
+                    valuePermill = None
                 elif valueUnits == 0:
                     valuePermill = 0
-
                 else:
                     valuePermill = round(valueUnits*1000 / font.info.unitsPerEm)
 
@@ -551,22 +587,25 @@ class VarGlyphAssistantController(DesignSpaceSelector_EZUI):
                 if fontMeasurements is not None:
                     if measurementName in fontMeasurements:
                         measurement = fontMeasurements.get(measurementName)
-                        M = Measurement(measurementName,
+                        M2 = Measurement(measurementName,
                             measurement['direction'],
                             measurement['glyph 1'], measurement['point 1'],
                             measurement['glyph 2'], measurement['point 2']
                         )
-                        valueFont = M.measure(font)
+                        valueFont = M2.measure(font)
                         # calculate f-scale
                         if valueUnits and valueFont:
                             scale_f = valueUnits / valueFont
 
                 # get default value
                 scale_d = None
-                print(self.designspace.default)
-
-                print('scale_f', scale_f)
-                print('scale_d', scale_d)
+                if self.designspace.default is not None:
+                    defaultName = getSourceName(self.designspace.default)
+                    defaultFont = self.sources[defaultName].font
+                    valueDefault = M.measure(defaultFont)
+                    # calculate d-scale
+                    if valueUnits and valueDefault:
+                        scale_d = valueUnits / valueDefault
 
                 self._measurementsUnits[srcName].append(valueUnits)
                 self._measurementsPermill[srcName].append(valuePermill)

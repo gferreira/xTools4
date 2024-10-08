@@ -1,6 +1,7 @@
 ---
-title  : build constructions
-layout : page
+title     : build constructions
+layout    : page
+permalink : /reference/dialogs/glyphs/components/build-constructions
 ---
 
 Build selected glyphs from components using [Glyph Construction] language.

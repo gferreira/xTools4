@@ -1,6 +1,7 @@
 ---
-title  : mark select
-layout : page
+title     : mark select
+layout    : page
+permalink : /reference/dialogs/glyphs/mark-colors/mark-select
 ---
 
 Apply mark colors to selected glyphs, and select glyphs based on their mark color.

@@ -1,6 +1,7 @@
 ---
-title  : batch set data
-layout : page
+title     : batch set data
+layout    : page
+permalink : /reference/dialogs/batch/set-data
 ---
 
 Set data in all selected fonts.

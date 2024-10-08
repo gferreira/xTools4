@@ -1,7 +1,7 @@
 ---
 title     : GlyphGauge
 layout    : default
-permalink : /variable/glyphgauge
+permalink : /reference/dialogs/variable/glyph-gauge
 ---
 
 A tool to to display and validate parametric measurements in the current glyph window.
@@ -9,7 +9,7 @@ A tool to to display and validate parametric measurements in the current glyph w
 
 <div class='row'>
 <div class='col-4' markdown='1'>
-![]({{ site.url }}/images/GlyphGauge.png){: .img-fluid }
+![]({{ site.url }}/images/variable/GlyphGauge.png){: .img-fluid }
 </div>
 <div class='col-8' markdown='1'>
 get default…
@@ -45,7 +45,7 @@ Check results
 
 ##### Glyph window
 
-![]({{ site.url }}/images/GlyphGauge_glyph-window.png){: .img-fluid}
+![]({{ site.url }}/images/variable/GlyphGauge_glyph-window.png){: .img-fluid}
 
 
 

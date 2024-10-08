@@ -1,16 +1,16 @@
 ---
 title     : GlyphValidator
 layout    : default
-permalink : /variable/glyphvalidator
+permalink : /reference/dialogs/variable/glyph-validator
 ---
 
-A tool to validate glyphs in the _current font_ that is open and selected against glyphs from a selected source.
+A tool to validate glyphs in the current font against glyphs from another source.
 {: .lead}
 
 
 <div class='row'>
 <div class='col-4' markdown='1'>
-![]({{ site.url }}/images/GlyphValidator.png){: .img-fluid}
+![]({{ site.url }}/images/variable/GlyphValidator.png){: .img-fluid}
 </div>
 <div class='col-8' markdown='1'>
 get default…
@@ -42,13 +42,13 @@ Check results
 
 Labels with check results are shown in the Font Overview’s glyph cells if the option *font window* is activated.
 
-![]({{ site.url }}/images/GlyphValidator_font-window.png){: .img-fluid}
+![]({{ site.url }}/images/variable/GlyphValidator_font-window.png){: .img-fluid}
 
 ##### Glyph window
 
 Labels with check results are shown in the Glyph View if the option *glyph window* is activated.
 
-![]({{ site.url }}/images/GlyphValidator_glyph-window.png){: .img-fluid}
+![]({{ site.url }}/images/variable/GlyphValidator_glyph-window.png){: .img-fluid}
 
 
 Validation details

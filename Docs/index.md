@@ -1,40 +1,109 @@
 ---
-title  : xTools4 documentation
+title  : xTools4 user documentation
 layout : default
 ---
 
-<span class='badge bg-secondary'>version {{ site.version }}</span>
+<span class='badge bg-warning text-dark rounded-0'>version {{ site.version }}</span>
 
-xTools4 is a collection of tools for typeface design and font production in [RoboFont 4].
+xTools4 is a collection of expert tools for typeface design and font production in [RoboFont 4].
 {: .lead}
 
 [RoboFont 4]: http://robofont.com/
 
 <div class='row'>
 
-<div class='col' markdown='1'>
+<div class='col-12 col-md-6 col-xl-3' markdown='1'>
+explanations
+------------
+
+- [overview](explanations/overview)
+- [history](explanations/history)
+</div>
+
+<div class='col-12 col-md-6 col-xl-3' markdown='1'>
+tutorials
+---------
+
+...
+</div>
+
+<div class='col-12 col-md-6 col-xl-3' markdown='1'>
 reference
 ---------
 
-- [glyph](glyph)
-- [glyphs](glyphs)
-- [font](font)
-- [batch](batch)
-- [variable](variable)
-- [preferences](preferences)
+##### dialogs
+
+- [glyph](reference/dialogs/glyph)
+- [glyphs](reference/dialogs/glyphs)
+- [font](reference/dialogs/font)
+- [batch](reference/dialogs/batch)
+- [variable](reference/dialogs/variable)
+- [preferences](reference/dialogs/preferences)
+
+##### formats
+
+- [measurements format](reference/measurements-format)
 </div>
 
-<div class='col' markdown='1'>
-links
------
+<div class='col-12 col-md-6 col-xl-3' markdown='1'>
+how-tos
+-------
 
-- [release notes](changelog)
+- [installing xTools4](how-tos/installing-xtools4)
+- [assigning short keys to tools](#)
+</div>
+
+</div>
+
+
+{% comment %}
+
+<div class="alert alert-light my-4 rounded-0" role="alert" markdown=1>
+The structure of this documentation is based on [The Documentation System]:
+
+<table class='table'>
+  <tr>
+    <td width='30%'></td>
+    <th width='35%' class='text-body-secondary'>useful when studying</th>
+    <th width='35%' class='text-body-secondary'>useful when working</th>
+  </tr>
+  <tr>
+    <th class='text-body-secondary'>theoretical knowledge</th>
+    <td>
+      <strong><a href='explanations'>explanations</a></strong><br/>
+      <em>understanding-oriented</em>
+    </td>
+    <td>
+      <strong><a href='reference'>reference</a></strong><br/>
+      <em>information-oriented</em>
+    </td>
+  </tr>
+  <tr>
+    <th class='text-body-secondary'>practical steps</th>
+    <td>
+      <strong><a href='tutorials'>tutorials</a></strong><br/>
+      <em>learning-oriented</em>
+    </td>
+    <td>
+      <strong><a href='how-tos'>how tos</a></strong><br/>
+      <em>problem-oriented</em>
+    </td>
+  </tr>
+</table>
+
+</div>
+
+[The Documentation System]: http://docs.divio.com/documentation-system/
+
+{% endcomment %}
+
+
+development
+-----------
+
 - [source code](http://github.com/gferreira/xTools4)
 - [issues](http://github.com/gferreira/xTools4/issues)
-- [documentation](http://gferreira.github.io/xTools4)
- </div>
-
-</div>
+- [changelog](changelog)
 
 {% comment %}
 <script>

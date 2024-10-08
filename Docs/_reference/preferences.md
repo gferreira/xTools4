@@ -1,9 +1,10 @@
 ---
-title  : preferences
-layout : default
+title     : preferences
+layout    : default
+permalink : /reference/dialogs/preferences
 ---
 
-A dialog to edit global hTools3 settings.
+A dialog to edit global xTools4 settings.
 {: .lead }
 
 

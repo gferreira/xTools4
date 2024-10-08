@@ -1,6 +1,7 @@
 ---
-title  : Scale
+title  : scale
 layout : page
+permalink : /reference/dialogs/glyphs/transform/scale
 ---
 
 Scale the selected glyphs.
@@ -39,7 +40,7 @@ preview
 </div>
 
 
-<div class="card bg-light my-3">
+<div class="card bg-light my-3 rounded-0">
 <div class="card-header">note</div>
 <div class="card-body" markdown='1'>
 Supports scaling multiple layers using the [layers] selector.
@@ -50,7 +51,7 @@ Supports scaling multiple layers using the [layers] selector.
 [layers]: ../../modifiers/layers/
 
 
-Preview
+preview
 -------
 
 ![]({{"images/glyphs/scale_preview.png" | relative_url }}){: .img-fluid}

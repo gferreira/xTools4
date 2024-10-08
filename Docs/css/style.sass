@@ -5,18 +5,13 @@ excludeNavigation: true
 ---
 
 @import "highlights"
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,400;8..144,600&display=swap')
 
-// @mixin no-select
-//   -webkit-touch-callout: none
-//   -webkit-user-select: none
-//   -khtml-user-select: none
-//   -moz-user-select: none
-//   -ms-user-select: none
-//   user-select: none
 
 /* --- base html --- */
 
 body
+  font-family: 'Roboto Flex', sans-serif !important
   background-color: rgba(0, 0, 0, .125)
   position: relative
 
@@ -30,7 +25,7 @@ main
       border-bottom: dotted 1px
 
   a[href*="//"]:not([href*="localhost:4000"]),
-  a[href*="//"]:not([href*="hipertipo.gitlab.io/htools3-extension"])
+  a[href*="//"]:not([href*="hipertipo.gitlab.io/xTools4"])
     &:not(.page-link)
       &:hover
         // border-bottom-width: 3px !important
@@ -57,34 +52,6 @@ ul
 
 /* --- custom markers --- */
 
-#logo
-  padding: 0 14px 7px 0
-  svg
-    border: none !important
-    transform-origin: 0px 5px
-    transform: scale(3)
-    #front
-      fill: white
-    #flat
-      fill: #BBB
-    #side
-      fill: #AAA
-    #bottom
-      fill: #777
-    &:hover
-      #front
-        fill: rgb(1.0*255, 0.8*255, 0.0)
-      #flat 
-        fill: #018432
-      #side
-        fill: rgb(0.0, 0.6*255, 0.2*255)
-      #bottom
-        fill: #016b28
-
-  &:hover
-    background-color: none
-    border: none
-
 .__changelog
   .badge
     background-color: #DFDFDF !important
@@ -105,9 +72,6 @@ ul
 
 /* --- override bootstrap defaults --- */
 
-.container
-  max-width: 960px
-
 .carousel
   // max-width: 768px
   // margin: 0 auto
@@ -117,10 +81,6 @@ ul
 
 .navbar, footer
   background-color: #DFDFDF !important
-
-// use bootstrap utility instead
-// .badge, .next, .prev
-//   @include no-select
 
 .highlight
   background-color: rgba(0, 0, 0, .03)

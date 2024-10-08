@@ -1,6 +1,7 @@
 ---
-title  : outline
-layout : page
+title     : outline
+layout    : page
+permalink : /reference/dialogs/glyphs/contours/outline
 ---
 
 Expand glyph contours outwards and/or inwards by a given offset distance.
@@ -50,7 +51,7 @@ preview
 [Outliner]: http://github.com/typemytype/outlinerRoboFontExtension
 
 
-<div class="card bg-light my-3">
+<div class="card bg-light my-3 rounded-0">
 <div class="card-header">note</div>
 <div class="card-body" markdown='1'>
 This dialog is a simple wrapper around the stroke expansion functions from the [Outliner] extension.
