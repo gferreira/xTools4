@@ -8,6 +8,8 @@ permalink : /reference/dialogs/glyph/show-curvature
 Visualize the curvature along curve segments.
 {: .lead }
 
+<span class="badge text-bg-success rounded-0">RF4</span> Rewritten using the new RoboFont 4 APIs.
+
 
 <div class='row'>
 
@@ -35,9 +37,16 @@ selection only
 </div>
 
 
-Preview
+preview
 -------
 
 ![]({{"images/glyph/curvature_preview.png" | relative_url }}){: .img-fluid}
 
 
+<div class="card text-dark bg-light my-3 rounded-0">
+<div class="card-header">note</div>
+<div class="card-body" markdown='1'>
+Does not work correctly with quadratic contours yet.
+{: .card-text }
+</div>
+</div>

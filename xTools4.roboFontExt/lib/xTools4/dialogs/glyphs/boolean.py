@@ -1,13 +1,9 @@
-from importlib import reload
-import hTools3.dialogs.glyphs.base
-reload(hTools3.dialogs.glyphs.base)
-
 from vanilla import *
 from mojo import drawingTools as ctx
 from mojo.UI import getDefault
 from mojo.events import removeObserver
 from defcon import Glyph, registerRepresentationFactory, unregisterRepresentationFactory
-from hTools3.dialogs.glyphs.base import GlyphsDialogBase
+from xTools4.dialogs.glyphs.old.base import GlyphsDialogBase
 
 
 def booleanGlyphFactory(glyph, glyph1, glyph2, operation):
@@ -34,7 +30,7 @@ class BooleanOperationsDialog(GlyphsDialogBase):
 
     ::
 
-        from hTools3.dialogs.glyphs.boolean import BooleanOperationsDialog
+        from xTools4.dialogs.glyphs.boolean import BooleanOperationsDialog
         BooleanOperationsDialog()
 
     '''

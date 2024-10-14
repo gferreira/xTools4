@@ -15,7 +15,7 @@ except:
         print('installing glyphConstruction module…')
         sys.path.append(modulePath)
 
-from hTools3.modules.unicode import autoUnicode
+from xTools4.modules.unicode import autoUnicode
 
 #: A basic default list of latin diacritics.
 ACCENTS = ['acute', 'grave', 'circumflex', 'dieresis', 'tilde', 'macron', 'breve', 'dotaccent', 'ring', 'cedilla', 'hungarumlaut', 'ogonek', 'caron']
@@ -82,7 +82,7 @@ def buildGlyphConstruction(font, construction, clear=True, verbose=False, indent
 
     ::
 
-        from hTools3.modules.accents import buildGlyphConstruction
+        from xTools4.modules.accents import buildGlyphConstruction
         construction = "agrave = a + grave@center,`top+100`"
         f = CurrentFont()
         buildGlyphConstruction(f, construction, clear=True, verbose=False, indentLevel=0, autoUnicodes=True)
@@ -117,7 +117,7 @@ def buildAccentedGlyphs(font, glyphNames, glyphConstructions, clear=True, markCo
 
     ::
 
-        from hTools3.modules.accents import buildAccentedGlyphs
+        from xTools4.modules.accents import buildAccentedGlyphs
 
         f = CurrentFont()
 
@@ -171,7 +171,7 @@ def buildGlyphConstructions(font, glyphConstructions, clear=True, markColor=None
 
     ::
 
-        from hTools3.modules.accents import buildGlyphConstructions
+        from xTools4.modules.accents import buildGlyphConstructions
 
         f = CurrentFont()
 
@@ -218,7 +218,7 @@ def extractGlyphConstructions(font, glyphNames=None, accents=ACCENTS):
 
     ::
 
-        >>> from hTools3.modules.accents import buildGlyphConstructions
+        >>> from xTools4.modules.accents import buildGlyphConstructions
         >>> f = CurrentFont()
         >>> constructions = extractGlyphConstructions(f, glyphNames=['agrave', 'aacute'])
         >>> print(constructions)
@@ -256,7 +256,7 @@ def extractGlyphConstruction(glyph, accents=ACCENTS):
 
     ::
 
-        >>> from hTools3.modules.accents import extractGlyphConstruction
+        >>> from xTools4.modules.accents import extractGlyphConstruction
         >>> g = CurrentGlyph()
         >>> construction = extractGlyphConstruction(g)
         >>> print(construction)

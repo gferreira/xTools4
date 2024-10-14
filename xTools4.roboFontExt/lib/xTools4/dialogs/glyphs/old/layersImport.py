@@ -2,9 +2,9 @@ import os
 from mojo.roboFont import OpenFont
 from vanilla import Button, TextBox, PopUpButton, RadioGroup, EditText, CheckBox
 from vanilla.dialogs import getFile
-from hTools3.modules.anchors import copyAnchors
-from hTools3.modules.pens import DecomposePointPen
-from hTools3.dialogs import hDialog
+from xTools4.modules.anchors import copyAnchors
+from xTools4.modules.pens import DecomposePointPen
+from xTools4.dialogs.old import hDialog
 
 
 class ImportGlyphsIntoLayerDialog(hDialog):

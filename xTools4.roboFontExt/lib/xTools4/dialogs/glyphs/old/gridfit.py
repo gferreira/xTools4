@@ -9,8 +9,8 @@ from mojo.events import removeObserver
 from mojo.roboFont import RGlyph
 from lib.tools.notifications import PostNotification
 from defcon import Glyph, registerRepresentationFactory, unregisterRepresentationFactory
-from hTools3.dialogs.glyphs.base import GlyphsDialogBase
-from hTools3.modules.glyphutils import roundPoints, roundBPoints, roundMargins, roundWidth, roundAnchors, roundComponents
+from xTools4.dialogs.glyphs.old.base import GlyphsDialogBase
+from xTools4.modules.glyphutils import roundPoints, roundBPoints, roundMargins, roundWidth, roundAnchors, roundComponents
 
 
 def gridfitGlyphFactory(glyph, gridsize, points=False, bPoints=True, margins=False, width=True, anchors=False, components=False):

@@ -1,8 +1,8 @@
 from vanilla import Button, CheckBox
 from mojo.roboFont import CurrentFont
-from hTools3.dialogs import hDialog
-from hTools3.modules.messages import noFontOpen, showMessage
-from hTools3.modules.fontutils import markGlyphs
+from xTools4.dialogs.old import hDialog
+from xTools4.modules.messages import noFontOpen, showMessage
+from xTools4.modules.fontutils import markGlyphs
 
 class ClearFontDataDialog(hDialog):
 

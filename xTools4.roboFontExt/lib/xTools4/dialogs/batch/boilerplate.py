@@ -1,6 +1,6 @@
 from vanilla import *
 from mojo.UI import AccordionView
-from hTools3.dialogs.batch.base import BatchDialogBase
+from xTools4.dialogs.batch.base import BatchDialogBase
 
 
 class BoilerplateBatchDialog(BatchDialogBase):
@@ -10,7 +10,7 @@ class BoilerplateBatchDialog(BatchDialogBase):
 
     ::
 
-        from hTools3.dialogs.batch.boilerplate import BoilerplateBatchDialog
+        from xTools4.dialogs.batch.boilerplate import BoilerplateBatchDialog
         BoilerplateBatchDialog()
 
     '''

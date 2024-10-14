@@ -13,7 +13,7 @@ def mm2pt(mm):
 
     ::
 
-        >>> from hTools3.modules.units import mm2pt
+        >>> from xTools4.modules.units import mm2pt
         >>> mm2pt(10)
         28.34645669291339
 
@@ -32,7 +32,7 @@ def pt2mm(pt):
 
     ::
 
-        >>> from hTools3.modules.units import pt2mm
+        >>> from xTools4.modules.units import pt2mm
         >>> pt2mm(10)
         35.27777777777778
 
@@ -51,7 +51,7 @@ def mm2inch(mm):
 
     :: 
 
-        >>> from hTools3.modules.units import mm2inch
+        >>> from xTools4.modules.units import mm2inch
         >>> mm2inch(10)
         3.9370000000000003
 
@@ -71,7 +71,7 @@ def inch2mm(inch):
 
     :: 
 
-        >>> from hTools3.modules.units import mm2inch
+        >>> from xTools4.modules.units import mm2inch
         >>> inch2mm(10)
         254.0
 
@@ -94,7 +94,7 @@ def pt2scale(font, pt):
 
     ::
 
-        from hTools3.modules.units import pt2scale
+        from xTools4.modules.units import pt2scale
 
         size('A4Landscape')
 

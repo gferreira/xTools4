@@ -1,12 +1,12 @@
-from importlib import reload
-import hTools3.dialogs.batch.base
-reload(hTools3.dialogs.batch.base)
+# from importlib import reload
+# import xTools4.dialogs.batch.base
+# reload(xTools4.dialogs.batch.base)
 
 import AppKit
 from vanilla import Group, CheckBox, Button, List, RadioGroup, EditText, ColorWell
 from mojo.UI import AccordionView
-from hTools3.modules.color import rgb2nscolor, nscolor2rgb
-from hTools3.dialogs.batch.base import BatchDialogBase
+from xTools4.modules.color import rgb2nscolor, nscolor2rgb
+from xTools4.dialogs.batch.base import BatchDialogBase
 
 
 # TODO: add a new section with transformations (scale, move, rotate, skew)
@@ -18,13 +18,13 @@ class BatchActionsDialog(BatchDialogBase):
 
     ::
 
-        from hTools3.dialogs.batch.actions import BatchActionsDialog
+        from xTools4.dialogs.batch.actions import BatchActionsDialog
         BatchActionsDialog()
 
     '''
 
     title = 'batch glyph actions'
-    key = '%s.actions' % BatchDialogBase.key
+    key   = f'{BatchDialogBase.key}.actions'
 
     #: A list of available glyph actions.
     actions = [

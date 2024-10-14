@@ -1,11 +1,7 @@
-from importlib import reload
-import variableValues.validation
-reload(variableValues.validation)
-
 import os, glob, datetime
 import drawBot as DB
 from fontParts.world import OpenFont
-from variableValues.validation import *
+from xTools4.modules.validation import *
 
 
 def drawGlyph(glyph):

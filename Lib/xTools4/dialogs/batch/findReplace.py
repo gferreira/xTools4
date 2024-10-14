@@ -1,11 +1,11 @@
-from importlib import reload
-import hTools3.dialogs.batch.base
-reload(hTools3.dialogs.batch.base)
+# from importlib import reload
+# import xTools4.dialogs.batch.base
+# reload(xTools4.dialogs.batch.base)
 
 from vanilla import TextBox, EditText, CheckBox, Button, Group, List
 from mojo.roboFont import CurrentFont
 from mojo.UI import AccordionView
-from hTools3.dialogs.batch.base import BatchDialogBase
+from xTools4.dialogs.batch.base import BatchDialogBase
 
 
 def findFontInfo(font, txtFind, attributes):

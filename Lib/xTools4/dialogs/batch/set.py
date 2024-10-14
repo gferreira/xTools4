@@ -1,16 +1,16 @@
-from importlib import reload
-import hTools3.dialogs.batch.base
-reload(hTools3.dialogs.batch.base)
+# from importlib import reload
+# import xTools4.dialogs.batch.base
+# reload(xTools4.dialogs.batch.base)
 
 import os
 import json
 import plistlib
 from vanilla import Group, Button, List, CheckBox, EditText
 from mojo.UI import AccordionView, PutFile, GetFile
-from hTools3.modules.fontinfo import FontInfoAttributes, FontInfoAttributesIgnorePrefix
-from hTools3.modules.fontutils import getFontID
-from hTools3.modules.unicode import unicodeHexToInt, unicodeIntToHex, clearUnicodes, autoUnicode
-from hTools3.dialogs.batch.base import BatchDialogBase
+from xTools4.modules.fontinfo import FontInfoAttributes, FontInfoAttributesIgnorePrefix
+from xTools4.modules.fontutils import getFontID
+from xTools4.modules.unicode import unicodeHexToInt, unicodeIntToHex, clearUnicodes, autoUnicode
+from xTools4.dialogs.batch.base import BatchDialogBase
 
 
 class BatchSetDialog(BatchDialogBase):
@@ -20,7 +20,7 @@ class BatchSetDialog(BatchDialogBase):
 
     ::
 
-        from hTools3.dialogs.batch.set import BatchSetDialog
+        from xTools4.dialogs.batch.set import BatchSetDialog
         BatchSetDialog()
 
     '''

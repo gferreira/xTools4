@@ -7,8 +7,8 @@ from fontParts.base.bPoint import absoluteBCPIn, absoluteBCPOut
 from mojo.roboFont import AllFonts, CurrentFont, CurrentGlyph, RGlyph
 from mojo.events import addObserver, removeObserver
 from mojo.UI import UpdateCurrentGlyphView, getDefault, CurrentGlyphWindow
-from hTools3.dialogs.glyphs.base import GlyphsDialogBase
-from hTools3.modules.color import rgb2nscolor, nscolor2rgb
+from xTools4.modules.color import rgb2nscolor, nscolor2rgb
+from xTools4.dialogs.glyphs.old.base import GlyphsDialogBase
 
 
 class InterpolationPreviewDialog(GlyphsDialogBase):

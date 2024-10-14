@@ -11,7 +11,7 @@ class LinePen(BasePen):
 
     ::
 
-        from hTools3.modules.pens import LinePen
+        from xTools4.modules.pens import LinePen
 
         dstGlyph = RGlyph()
         dstPen = dstGlyph.getPen()
@@ -63,7 +63,7 @@ class DecomposePointPen:
 
     ::
 
-        from hTools3.modules.pens import DecomposePointPen
+        from xTools4.modules.pens import DecomposePointPen
 
         # get srcGlyph from current font or closed ufo
 

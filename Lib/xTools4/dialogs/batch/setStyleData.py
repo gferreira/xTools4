@@ -2,7 +2,7 @@ import os
 import json
 from vanilla import Button, CheckBox, Group
 from mojo.UI import AccordionView, PutFile, GetFile, CodeEditor
-from hTools3.dialogs.batch.base import BatchDialogBase
+from xTools4.dialogs.batch.base import BatchDialogBase
 
 
 def getStyleMapStyle(isBold, isItalic):

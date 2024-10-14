@@ -1,9 +1,9 @@
 from vanilla import *
 from mojo.roboFont import CurrentFont
 from mojo.UI import GetFile
-from hTools3.dialogs import hDialog
-from hTools3.modules.encoding import importEncoding, setGlyphOrder, psname2char, importGroupsFromEncoding, paintGroups
-from hTools3.modules.fontutils import clearMarkColors
+from xTools4.dialogs.old import hDialog
+from xTools4.modules.encoding import importEncoding, setGlyphOrder, psname2char, importGroupsFromEncoding, paintGroups
+from xTools4.modules.fontutils import clearMarkColors
 
 
 class SetGlyphOrderDialog(hDialog):

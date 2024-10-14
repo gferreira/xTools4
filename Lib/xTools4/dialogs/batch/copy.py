@@ -1,19 +1,19 @@
-from importlib import reload
-import hTools3.modules.fontutils
-reload(hTools3.modules.fontutils)
-import hTools3.dialogs.batch.base
-reload(hTools3.dialogs.batch.base)
+# from importlib import reload
+# import xTools4.modules.fontutils
+# reload(xTools4.modules.fontutils)
+# import xTools4.dialogs.batch.base
+# reload(xTools4.dialogs.batch.base)
 
 from AppKit import NSFilenamesPboardType, NSDragOperationCopy
 from vanilla import List, CheckBox, Button, TextBox, EditText, PopUpButton, Group, RadioGroup, ColorWell
 from mojo.events import addObserver, removeObserver
 from mojo.roboFont import CurrentFont
 from mojo.UI import AccordionView
-from hTools3.modules.fontinfo import FontInfoAttributes, FontInfoAttributesIgnorePrefix
-from hTools3.modules.fontutils import getFontID
-from hTools3.modules.anchors import copyAnchors
-from hTools3.modules.color import rgb2nscolor, nscolor2rgb
-from hTools3.dialogs.batch.base import BatchDialogBase
+from xTools4.modules.fontinfo import FontInfoAttributes, FontInfoAttributesIgnorePrefix
+from xTools4.modules.fontutils import getFontID
+from xTools4.modules.anchors import copyAnchors
+from xTools4.modules.color import rgb2nscolor, nscolor2rgb
+from xTools4.dialogs.batch.base import BatchDialogBase
 
 
 class BatchCopyDialog(BatchDialogBase):
@@ -23,13 +23,13 @@ class BatchCopyDialog(BatchDialogBase):
 
     .. code-block:: python
 
-        from hTools3.dialogs.batch.copy import BatchCopyDialog
+        from xTools4.dialogs.batch.copy import BatchCopyDialog
         BatchCopyDialog()
 
     '''
 
     title = 'batch copy'
-    key = '%s.copy' % BatchDialogBase.key
+    key   = f'{BatchDialogBase.key}.copy'
 
     fontInfo = dict(FontInfoAttributes)
     del fontInfo['WOFF']

@@ -7,7 +7,10 @@ permalink : /reference/dialogs/glyph/display-options
 A floating palette to quickly toggle the [display options] in the Glyph Editor.
 {: .lead }
 
-[Display options]: https://www.robofont.com/documentation/workspace/glyph-editor/display-options/
+<span class="badge text-bg-danger rounded-0">RF3</span> RoboFont 3 code which does no longer work in RoboFont 4.  
+
+[Display options]: http://www.robofont.com/documentation/reference/workspace/glyph-editor/display-options/#options
+
 
 <div class='row'>
 
@@ -97,8 +100,12 @@ Preview
 </button>
 
 </div>
- 
- 
- 
- 
 
+
+<div class="card text-dark bg-light my-3 rounded-0">
+<div class="card-header"> note</div>
+<div class="card-body" markdown='1'>
+This tool will be rewritten and improved for RF4. The user will be able to store different combinations of display settings, and to quickly switch between them.
+{: .card-text }
+</div>
+</div>

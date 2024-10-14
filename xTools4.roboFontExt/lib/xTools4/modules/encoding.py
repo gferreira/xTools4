@@ -6,8 +6,8 @@ Tools to work with encoding files, glyph sets, groups of glyphs etc.
 import os
 from fontParts.fontshell import RFont
 from fontTools.agl import UV2AGL, AGL2UV
-from hTools3.modules.fontutils import clearMarkColors
-from hTools3.modules.unicode import unicodeIntToHex, unicodeHexToInt, unicodesExtra
+from xTools4.modules.fontutils import clearMarkColors
+from xTools4.modules.unicode import unicodeIntToHex, unicodeHexToInt, unicodesExtra
 from colorsys import hls_to_rgb
 
 
@@ -23,7 +23,7 @@ def importEncoding(encPath):
 
     ::
 
-        >>> from hTools3.modules.encoding import importEncoding
+        >>> from xTools4.modules.encoding import importEncoding
         >>> encPath = '/myFolder/example.enc'
         >>> enc = importEncoding(encPath)
         >>> print(enc)
@@ -54,7 +54,7 @@ def extractEncoding(ufoPath, encPath=None):
 
     ::
 
-        >>> from hTools3.modules.encoding import extractEncoding
+        >>> from xTools4.modules.encoding import extractEncoding
         >>> ufoPath = '/myFolder/example.ufo'
         >>> enc = extractEncoding(ufoPath)
         >>> print(enc)
@@ -91,7 +91,7 @@ def importGroupsFromEncoding(encPath):
 
     ::
 
-        >>> from hTools3.modules.encoding import importGroupsFromEncoding
+        >>> from xTools4.modules.encoding import importGroupsFromEncoding
         >>> encPath = '/myFolder/example.enc'
         >>> groups = importGroupsFromEncoding(encPath)
         >>> print(groups.keys())
@@ -138,7 +138,7 @@ def setGlyphOrder(font, encPath, verbose=False, createTemplates=True, createGlyp
 
     ::
 
-        from hTools3.modules.encoding import setGlyphOrder
+        from xTools4.modules.encoding import setGlyphOrder
         encPath = '/myFolder/example.enc'
         font = CurrentFont()
         setGlyphOrder(font, encPath, verbose=True)
@@ -197,7 +197,7 @@ def paintGroups(font, groups, crop=False):
 
     ::
 
-        from hTools3.modules.encoding import importGroupsFromEncoding
+        from xTools4.modules.encoding import importGroupsFromEncoding
         encPath = '/myFolder/example.enc'
         groups = importGroupsFromEncoding(encPath)
         font = CurrentFont()
@@ -235,7 +235,7 @@ def cropGlyphset(font, glyphNames):
 
     ::
 
-        from hTools3.modules.encoding import cropGlyphset
+        from xTools4.modules.encoding import cropGlyphset
         font = CurrentFont()
         cropGlyphset(font, ['space', 'a', 'b', 'c'])
 
@@ -272,7 +272,7 @@ def char2psname(char, unicodesExtra={}):
 
     ::
 
-        >>> from hTools3.modules.encoding import char2psname
+        >>> from xTools4.modules.encoding import char2psname
         >>> char2psname('&')
         ampersand
 
@@ -306,7 +306,7 @@ def psname2char(glyphName, unicodesExtra={}):
 
     ::
 
-        >>> from hTools3.modules.encoding import psname2char
+        >>> from xTools4.modules.encoding import psname2char
         >>> psname2char('seven')
         7
         >>> psname2char('uni013B')
@@ -349,7 +349,7 @@ def psname2unicode(glyphName, unicodesExtra={}):
 
     ::
 
-        >>> from hTools3.modules.encoding import psname2unicode
+        >>> from xTools4.modules.encoding import psname2unicode
         >>> psname2unicode('zero')
         0030
 
@@ -472,7 +472,7 @@ def autoOS2unicodeRanges(ufo):
 
     ::
 
-        >>> from hTools3.modules.encoding import autoOS2unicodeRanges
+        >>> from xTools4.modules.encoding import autoOS2unicodeRanges
         >>> f = CurrentFont()
         >>> print(f.info.openTypeOS2UnicodeRanges)
         None

@@ -22,8 +22,8 @@ class InterpolationPreviewController(ezui.WindowController):
 
     content = """
     (_ ...)           @font2
-    (_ ...)           @fontLayers
-    [__]              @otherGlyph
+    (_ ...)           @layers2
+    [__]              @glyph2
 
     --X-----          @steps
 
@@ -52,11 +52,11 @@ class InterpolationPreviewController(ezui.WindowController):
             callback='settingsChangedCallback',
             width='fill'
         ),
-        fontLayers=dict(
+        layers2=dict(
             callback='settingsChangedCallback',
             width='fill'
         ),
-        otherGlyph=dict(
+        glyph2=dict(
             callback='settingsChangedCallback',
         ),
         steps=dict(
@@ -113,6 +113,18 @@ class InterpolationPreviewController(ezui.WindowController):
     def font2(self):
         fontName2 = self.w.getItem("font2").getItem()
         return self.allFonts.get(fontName2)
+
+    @property
+    def layer2(self):
+        return self.w.getItem("layers2").getItem()
+
+    @property
+    def layer2(self):
+        return self.w.getItem("layers2").getItem()
+
+    @property
+    def glyphName2(self):
+        return self.w.getItem("glyph2").get().strip()
 
     # callbacks
 
@@ -237,24 +249,31 @@ class InterpolationPreviewGlyphEditor(Subscriber):
         self._drawInterpolationPreview()
 
     def glyphEditorDidSetGlyph(self, info):
+        # print('glyphEditorDidSetGlyph')
         self.controller.glyph1 = info["glyph"]
         self._drawInterpolationPreview()
 
     def glyphEditorGlyphDidChangeOutline(self, info):
-        self.controller.glyph1 = info["glyph"]
+        # print('glyphEditorGlyphDidChangeOutline')
         self._drawInterpolationPreview()
 
     def _drawInterpolationPreview(self):
         showPreview = self.controller.w.getItem('showPreview').get()
         showReport  = self.controller.w.getItem('showReport').get()
+
         self.interpolationPreviewLayer.clearSublayers()
         self.reportLayer.setVisible(showPreview and showReport)
         if not showPreview:
             return
 
         glyph1 = self.controller.glyph1
-        font2 = self.controller.font2
-        glyphName2 = glyph1.name
+
+        font2      = self.controller.font2
+        layerName2 = self.controller.layer2
+        glyphName2 = self.controller.glyphName2
+
+        if not glyphName2:
+            glyphName2 = glyph1.name
 
         if glyph1 is None:
             return
@@ -265,7 +284,7 @@ class InterpolationPreviewGlyphEditor(Subscriber):
         if glyphName2 not in font2:
             return
 
-        glyph2 = font2[glyphName2]
+        glyph2 = font2[glyphName2].getLayer(layerName2)
         isCompatible, report = glyph1.isCompatible(glyph2)
 
         steps       = int(self.controller.w.getItem('steps').get())
@@ -342,6 +361,7 @@ class InterpolationPreviewRoboFont(Subscriber):
         self._updateLayers()
 
     def _updateFonts(self):
+        # print('_updateFonts')
         self.controller.font1 = CurrentFont()
         allFonts = AllFonts()
         # no fonts open
@@ -355,10 +375,11 @@ class InterpolationPreviewRoboFont(Subscriber):
         self.controller.w.getItem("font2").setItems(allFontNames)
 
     def _updateLayers(self):
+        # print('_updateLayers')
         # glyph1 = CurrentGlyph()
 
         if self.controller.font1 is None or self.controller.font2 is None: # or not glyph1:
-            self.controller.w.getItem("fontLayers").setItems([])
+            self.controller.w.getItem("layers2").setItems([])
             return
 
         # 1. switching glyphs in same layer/font: don't change layers list
@@ -372,26 +393,30 @@ class InterpolationPreviewRoboFont(Subscriber):
         # if self.font1 == self.font2:
         #     layers.remove(glyph1.layer.name)
 
-        self.controller.w.getItem("fontLayers").setItems(layerNames)
+        self.controller.w.getItem("layers2").setItems(layerNames)
 
     def fontDocumentDidBecomeCurrent(self, info):
+        # print('fontDocumentDidBecomeCurrent')
         self.controller.font1 = CurrentFont()
         self._updateFonts()
         self._updateLayers()
 
-    def fontDocumentDidOpen(self, info):
-        self.controller.font1 = CurrentFont()
-        self._updateFonts()
-        self._updateLayers()
+    # def fontDocumentDidOpen(self, info):
+    #     self.controller.font1 = CurrentFont()
+    #     self._updateFonts()
+    #     self._updateLayers()
 
     def fontDocumentDidClose(self, info):
+        # print('fontDocumentDidClose')
         self.controller.font1 = CurrentFont()
         self._updateFonts()
         self._updateLayers()
 
     def roboFontDidSwitchCurrentGlyph(self, info):
-        self._updateFonts()
-        self._updateLayers()
+        # print('roboFontDidSwitchCurrentGlyph')
+        # self._updateFonts()
+        # self._updateLayers()
+        pass
 
 
 interpolationPreviewEvent = f"{KEY}.changed"

@@ -333,7 +333,7 @@ def clearUnicodes(font):
 
     ::
     
-        from hTools3.modules.unicode import clearUnicodes
+        from xTools4.modules.unicode import clearUnicodes
         f = CurrentFont()
         clearUnicodes(f)
 
@@ -352,7 +352,7 @@ def autoUnicodes(font, customUnicodes={}):
 
     ::
 
-        from hTools3.modules.unicode import autoUnicodes
+        from xTools4.modules.unicode import autoUnicodes
         uniExtras = {
             'uhornacute' : 7913,
             'uhorngrave' : 7915,
@@ -379,7 +379,7 @@ def autoUnicode(glyph, customUnicodes=unicodesExtra, verbose=False, indent=0):
 
     ::
 
-        from hTools3.modules.unicode import autoUnicode
+        from xTools4.modules.unicode import autoUnicode
         uniExtras = {
             'uhornacute' : 7913,
             'uhorngrave' : 7915,
@@ -444,7 +444,7 @@ def unicodeIntToHex(intUnicode):
 
     ::
 
-        from hTools3.modules.unicode import unicodeIntToHex
+        from xTools4.modules.unicode import unicodeIntToHex
         >>> glyph = CurrentGlyph()
         >>> unicodeIntToHex(glyph.unicode)
         0061
@@ -468,7 +468,7 @@ def unicodeHexToInt(hexUnicode, stripUni=False):
 
     ::
 
-        from hTools3.modules.unicode import unicodeHexToInt
+        from xTools4.modules.unicode import unicodeHexToInt
         glyph = CurrentGlyph()
         glyph.unicode = unicodeHexToInt('0061')
 

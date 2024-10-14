@@ -1,12 +1,8 @@
-from importlib import reload
-import hTools3.dialogs
-reload(hTools3.dialogs)
-
 from vanilla import TextBox, List
 from mojo.events import addObserver, removeObserver
 from mojo.roboFont import CurrentFont
 from defconAppKit.windows.baseWindow import BaseWindowController
-from hTools3.dialogs import hDialog
+from xTools4.dialogs.old import hDialog
 
 
 class SelectLayersDialog(hDialog, BaseWindowController):

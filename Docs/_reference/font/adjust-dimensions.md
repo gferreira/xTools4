@@ -7,6 +7,9 @@ permalink : /reference/dialogs/font/adjust-dimensions
 Edit dimensions in the current font.
 {: .lead }
 
+<span class="badge text-bg-warning rounded-0">RF3</span> RoboFont 3 code which still works in RoboFont 4. Not updated to the new RoboFont 4 APIs yet.
+
+
 <div class='row'>
 
 <div class='col-sm-4' markdown='1'>
@@ -20,7 +23,7 @@ Edit dimensions in the current font.
 
 </div>
 
-<div class="card text-dark bg-light my-3">
+<div class="card text-dark bg-light my-3 rounded-0">
 <div class="card-header">note</div>
 <div class="card-body" markdown='1'>
 Input all values as *positive integers* – the tool converts `descender` and `italicAngle` to negative values automatically.

@@ -1,9 +1,9 @@
 from vanilla import CheckBox, TextBox, EditText, Button, ColorWell, Group, List
 from mojo.roboFont import CurrentFont
 from mojo.UI import AccordionView
-from hTools3.modules.color import rgb2nscolor, nscolor2rgb
-from hTools3.modules.fontutils import *
-from hTools3.dialogs.batch.base import BatchDialogBase
+from xTools4.modules.color import rgb2nscolor, nscolor2rgb
+from xTools4.modules.fontutils import *
+from xTools4.dialogs.batch.base import BatchDialogBase
 
 
 class BatchMarkGlyphsDialog(BatchDialogBase):
@@ -13,7 +13,7 @@ class BatchMarkGlyphsDialog(BatchDialogBase):
 
     ::
 
-        from hTools3.dialogs.batch.mark import BatchMarkGlyphsDialog
+        from xTools4.dialogs.batch.mark import BatchMarkGlyphsDialog
         BatchMarkGlyphsDialog()
 
     '''

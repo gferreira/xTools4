@@ -7,6 +7,9 @@ permalink : /reference/dialogs/glyphs/encoding/clear-unicodes
 Clear all unicode values in the selected glyphs.
 {: .lead }
 
+<span class="badge text-bg-primary rounded-0">RF4</span> RoboFont 3 code which does not need to change for RoboFont 4.  
+
+
 <div class="card bg-light my-3 rounded-0">
 <div class="card-header">note</div>
 <div class="card-body" markdown='1'>

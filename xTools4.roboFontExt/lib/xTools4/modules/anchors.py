@@ -15,7 +15,7 @@ def copyAnchors(sourceGlyph, targetGlyph, clear=True, proportional=False):
 
     ::
 
-        from hTools3.modules.anchors import copyAnchors
+        from xTools4.modules.anchors import copyAnchors
         font = CurrentFont()
         g1 = font['a']
         g2 = font['o']

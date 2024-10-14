@@ -1,13 +1,9 @@
-from importlib import reload
-import hTools3.dialogs
-reload(hTools3.dialogs)
-
 from vanilla import TextBox, PopUpButton, Button, List
 from defconAppKit.windows.baseWindow import BaseWindowController
 from mojo.roboFont import AllFonts
 from mojo.UI import UpdateCurrentGlyphView
 from mojo.events import addObserver, removeObserver
-from hTools3.dialogs import hDialog
+from xTools4.dialogs.old import hDialog
 
 
 class GlyphsDialogBase(hDialog, BaseWindowController):

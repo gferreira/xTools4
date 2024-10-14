@@ -2,9 +2,9 @@ import os
 import AppKit
 from vanilla import *
 from mojo.UI import AccordionView
-from variableValues.designspacePlus import DesignSpacePlus
-from variableValues.measurements import FontMeasurements
-from variableValues.validation import applyValidationColors
+from xTools4.modules.designspacePlus import DesignSpacePlus
+from xTools4.modules.measurements import FontMeasurements
+from xTools4.modules.validation import applyValidationColors
 
 
 def setNamesFromMeasurements(font, familyName, measurementsPath, ignoreTags=['wght', 'wdth', 'opsz', 'GRAD', 'BARS']):

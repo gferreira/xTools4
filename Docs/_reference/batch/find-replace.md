@@ -7,6 +7,8 @@ permalink : /reference/dialogs/batch/find-replace
 Find and replace font data in the selected fonts.
 {: .lead}
 
+<span class="badge text-bg-warning rounded-0">RF3</span> RoboFont 3 code which still works in RoboFont 4. Not updated to the new RoboFont 4 APIs yet.
+
 
 find & replace
 --------------
@@ -77,16 +79,12 @@ preflight
 
 </div>
 
-
-<div class="card text-dark bg-light my-3">
-<div class="card-header">note</div>
-<div class="card-body" markdown='1'>
+{% comment %}
 consider adding support for find & replace in other places:
 
 - glyph names
 - OpenType features
 - groups
 - components
-{: .card-text }
-</div>
-</div>
+{% endcomment %}
+

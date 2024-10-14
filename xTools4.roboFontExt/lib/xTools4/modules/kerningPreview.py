@@ -1,7 +1,3 @@
-from importlib import reload
-import variableValues.kerningPairPlus 
-reload(variableValues.kerningPairPlus)
-
 import os
 import drawBot as DB
 from fontParts.world import OpenFont, NewFont, RGlyph
@@ -9,8 +5,8 @@ from fontTools.pens.transformPen import TransformPointPen
 from fontTools.designspaceLib import DesignSpaceDocument
 from defcon import Font
 from defcon.objects.component import _defaultTransformation
-from variableValues.designspacePlus import DesignSpacePlus
-from variableValues.kerningPairPlus import KerningPairPlus
+from xTools4.modules.designspacePlus import DesignSpacePlus
+from xTools4.modules.kerningPairPlus import KerningPairPlus
 
 
 def drawGlyph(g):
@@ -228,7 +224,7 @@ if __name__ == '__main__':
 
     # run in RF DrawBot extension
 
-    designspacePath = '/Users/gferreira/hipertipo/fonts/roboto-flex/sources/RobotoFlex.designspace'
+    designspacePath = 'RobotoFlex.designspace'
 
     V = VariableKerningPreview(designspacePath)
     V.showMetrics  = True

@@ -7,6 +7,8 @@ permalink : /reference/dialogs/batch/build-glyphs
 Create new glyphs in the selected fonts.
 {: .lead}
 
+<span class="badge text-bg-warning rounded-0">RF3</span> RoboFont 3 code which still works in RoboFont 4. Not updated to the new RoboFont 4 APIs yet.
+
 
 fonts
 -----
@@ -63,10 +65,11 @@ preflight
 
 </div>
 
-<div class="card bg-light my-3">
+<div class="card bg-light my-3 rounded-0">
 <div class="card-header">note</div>
 <div class="card-body" markdown='1'>
 The default width for new glyphs is defined in RoboFont’s [Font Overview preferences].
+{: .card-text }
 </div>
 </div>
 

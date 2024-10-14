@@ -3,10 +3,10 @@ from mojo import drawingTools as ctx
 from mojo.roboFont import CurrentGlyph
 from mojo.UI import UpdateCurrentGlyphView
 from mojo.events import addObserver, removeObserver
-from hTools3.dialogs.glyphs.base import GlyphsDialogBase
-from hTools3.modules.color import rgb2nscolor, nscolor2rgb
-from hTools3.modules.linkPoints import *
-from hTools3.modules.measureHandles import getVector
+from xTools4.modules.color import rgb2nscolor, nscolor2rgb
+from xTools4.modules.linkPoints import *
+from xTools4.modules.measureHandles import getVector
+from xTools4.dialogs.glyphs.old.base import GlyphsDialogBase
 
 
 class LinkPointsTool(GlyphsDialogBase):

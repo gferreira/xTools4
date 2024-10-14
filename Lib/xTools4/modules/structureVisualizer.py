@@ -40,7 +40,7 @@ class BezierStructureVisualizer:
 
     '''
     import drawBot
-    from hTools3.modules.structureVisualizer import BezierStructureVisualizer
+    from xTools4.modules.structureVisualizer import BezierStructureVisualizer
 
     g = CurrentGlyph()
     B = BezierStructureVisualizer(drawBot)

@@ -7,6 +7,8 @@ permalink : /reference/dialogs/glyphs/interpolation/condense
 Generate condensed glyphs into the current font by interpolating Regular and Bold sources.
 {: .lead }
 
+<span class="badge text-bg-warning rounded-0">RF3</span> RoboFont 3 code which still works in RoboFont 4. Not updated to the new RoboFont 4 APIs yet.
+
 
 <div class='row'>
 
@@ -31,7 +33,7 @@ preview
 </div>
 
 
-preview
+Preview
 -------
 
 ![]({{"images/glyphs/interpolationCondense_preview.png" | relative_url }}){: .img-fluid}

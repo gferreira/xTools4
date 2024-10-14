@@ -6,7 +6,7 @@
     </li>
     {% for crumb in crumbs offset: 1 %}
       {% if forloop.last %}
-        <li class='breadcrumb-item small'>{{ page.title }}</li>
+        <li class='breadcrumb-item small'>{{ page.slug | replace: "-", " " }}</li>
       {% else %}
         {% if forloop.index < 4 %} {% comment %} don't show glyphs subfolders {% endcomment %}
           <li class='breadcrumb-item small'>

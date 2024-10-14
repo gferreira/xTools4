@@ -4,8 +4,8 @@ from mojo.UI import GetFile
 from mojo.roboFont import OpenWindow, OpenFont
 from mojo.subscriber import Subscriber, registerSubscriberEvent, roboFontSubscriberEventRegistry, registerGlyphEditorSubscriber, unregisterGlyphEditorSubscriber
 from mojo.events import postEvent
-from variableValues.linkPoints import readMeasurements
-from variableValues.measurements import Measurement
+from xTools4.modules.linkPoints2 import readMeasurements
+from xTools4.modules.measurements import Measurement
 
 
 class GlyphGauge_EZUI(ezui.WindowController):

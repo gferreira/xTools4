@@ -7,6 +7,8 @@ permalink : /reference/dialogs/glyphs/mark-colors/mark-select
 Apply mark colors to selected glyphs, and select glyphs based on their mark color.
 {: .lead }
 
+<span class="badge text-bg-warning rounded-0">RF3</span> RoboFont 3 code which still works in RoboFont 4. Not updated to the new RoboFont 4 APIs yet.
+
 
 <div class='row'>
 

@@ -6,10 +6,10 @@ from mojo.events import removeObserver
 from mojo.roboFont import RGlyph
 from mojo.pens import DecomposePointPen
 from defcon import Glyph, registerRepresentationFactory, unregisterRepresentationFactory
-from hTools3.modules.color import rgb2nscolor, nscolor2rgb
-from hTools3.modules.optimize import equalizeCurves
-from hTools3.modules.fontutils import isQuadratic
-from hTools3.dialogs.glyphs.base import GlyphsDialogBase
+from xTools4.modules.color import rgb2nscolor, nscolor2rgb
+from xTools4.modules.optimize import equalizeCurves
+from xTools4.modules.fontutils import isQuadratic
+from xTools4.dialogs.glyphs.old.base import GlyphsDialogBase
 
 
 def actionsGlyphFactory(glyph, actions=None):

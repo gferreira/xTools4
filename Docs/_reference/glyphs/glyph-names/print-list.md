@@ -7,6 +7,8 @@ permalink : /reference/dialogs/glyphs/glyph-names/print-list
 Print the selected glyphs in multiple modes and formats.
 {: .lead }
 
+<span class="badge text-bg-warning rounded-0">RF3</span> RoboFont 3 code which still works in RoboFont 4. Not updated to the new RoboFont 4 APIs yet.  
+
 
 <div class='row'>
 
@@ -76,4 +78,3 @@ three
 ```
 ["A", "B", "C", "D", "a", "b", "c", "d", "zero", "one", "two", "three"]
 ```
-

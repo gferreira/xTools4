@@ -1,11 +1,7 @@
-from importlib import reload
-import hTools3.dialogs.glyphs.base
-reload(hTools3.dialogs.glyphs.base)
-
 from vanilla import TextBox, EditText, Button, RadioGroup, CheckBox, PopUpButton
 from mojo import drawingTools as ctx
 from mojo.UI import NumberEditText
-from hTools3.dialogs.glyphs.base import GlyphsDialogBase
+from xTools4.dialogs.glyphs.old.base import GlyphsDialogBase
 
 
 class CreateAnchorsDialog(GlyphsDialogBase):

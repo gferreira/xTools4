@@ -1,7 +1,3 @@
-from importlib import reload
-import hTools3.modules.accents
-reload(hTools3.modules.accents)
-
 from vanilla import Button, CheckBox
 from mojo import drawingTools as ctx
 from mojo.UI import GetFile, CodeEditor, getDefault
@@ -10,8 +6,8 @@ from mojo.roboFont import RGlyph, CurrentFont
 from mojo.pens import DecomposePointPen
 from defcon import Glyph, registerRepresentationFactory, unregisterRepresentationFactory
 from glyphConstruction import ParseGlyphConstructionListFromString, GlyphConstructionBuilder
-from hTools3.dialogs.glyphs.base import GlyphsDialogBase
-from hTools3.modules.accents import buildGlyphConstruction
+from xTools4.dialogs.glyphs.old.base import GlyphsDialogBase
+from xTools4.modules.accents import buildGlyphConstruction
 
 
 class BuildConstructionDialog(GlyphsDialogBase):

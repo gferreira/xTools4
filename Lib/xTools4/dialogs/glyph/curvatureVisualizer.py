@@ -44,8 +44,8 @@ class CurvatureVisualizerController(ezui.WindowController):
             scale=dict(
                 callback='settingsChangedCallback',
                 value=1,
-                minValue=5,
-                maxValue=50,
+                minValue=0.5,
+                maxValue=20,
             ),
             steps=dict(
                 callback='settingsChangedCallback',

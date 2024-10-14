@@ -4,8 +4,8 @@ from vanilla import *
 from mojo import drawingTools as ctx
 from mojo.UI import UpdateCurrentGlyphView, getDefault
 from mojo.events import addObserver, removeObserver
-from hTools3.dialogs.glyphs.base import GlyphsDialogBase
-from hTools3.modules.color import rgb2nscolor, nscolor2rgb
+from xTools4.modules.color import rgb2nscolor, nscolor2rgb
+from xTools4.dialogs.glyphs.old.base import GlyphsDialogBase
 
 
 class BoxMarginsTool(GlyphsDialogBase):

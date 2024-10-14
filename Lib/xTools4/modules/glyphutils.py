@@ -39,7 +39,7 @@ def getOriginPosition(glyph, posName):
 
     ::
 
-        >>> from hTools3.modules.glyphutils import getOriginPosition
+        >>> from xTools4.modules.glyphutils import getOriginPosition
         >>> getOriginPosition(CurrentGlyph(), 'middleCenter')
         (243.5, 237.5)
 
@@ -85,7 +85,7 @@ def selectPointsLine(glyph, pos, axis='x', side=0):
 
     ::
 
-        from hTools3.modules.glyphutils import selectPointsLine
+        from xTools4.modules.glyphutils import selectPointsLine
         glyph = CurrentGlyph()
         selectPointsLine(glyph, 300, axis='x', side=1)
 
@@ -367,7 +367,7 @@ def setGlyphWidth(glyph, widthValue, positionMode='do not move'):
 
     ::
 
-        from hTools3.modules.glyphutils import setGlyphWidth
+        from xTools4.modules.glyphutils import setGlyphWidth
         g = CurrentGlyph()
         setGlyphWidth(g, 700, 'relative split')
 
@@ -418,7 +418,7 @@ def centerGlyph(glyph, useSlantAngle=True, verbose=False):
 
     ::
 
-        from hTools3.modules.glyphutils import centerGlyph
+        from xTools4.modules.glyphutils import centerGlyph
         g = CurrentGlyph()
         centerGlyph(g)
 
@@ -463,7 +463,7 @@ def getPointFromBPoint(bPoint):
 
     ::
 
-        >>> from hTools3.modules.glyphutils import getPointFromBPoint
+        >>> from xTools4.modules.glyphutils import getPointFromBPoint
         >>> glyph = CurrentGlyph()
         >>> bPoint = glyph.contours[0].bPoints[0]
         >>> print(bPoint)
@@ -481,7 +481,7 @@ def getBPointFromPoint(point):
 
     ::
 
-        >>> from hTools3.modules.glyphutils import getBPointFromPoint
+        >>> from xTools4.modules.glyphutils import getBPointFromPoint
         >>> glyph = CurrentGlyph()
         >>> pt = glyph.contours[0].points[0]
         >>> print(pt)

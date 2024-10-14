@@ -3,7 +3,7 @@ import ezui
 
 class ImportGlyphsIntoLayerDialog(ezui.WindowController):
 
-    title = 'layers'
+    title   = 'layers'
     width   = 123
     margins = 10
 

@@ -17,7 +17,7 @@ def interpolateValues(value1, value2, factor):
         value2 (int or float): Another numerical value.
         factor (float): The interpolation factor.
 
-    >>> from hTools3.modules.interpolation import interpolateValues
+    >>> from xTools4.modules.interpolation import interpolateValues
     >>> interpolateValues(20, 120, 0.5)
     70.0
 
@@ -36,7 +36,7 @@ def interpolateTuples(tuple1, tuple2, steps):
     Returns:
         A list of interpolation steps between the two input tuples.
 
-    >>> from hTools3.modules.interpolation import interpolateTuples
+    >>> from xTools4.modules.interpolation import interpolateTuples
     >>> interpolateTuples((20, 50), (120, 100), 3))
     [(20.0, 50.0), (70.0, 75.0), (120.0, 100.0)]
 
@@ -62,7 +62,7 @@ def calculateFactorLinear(steps, step):
 
     ::
 
-        >>> from hTools3.modules.interpolation import calculateFactorLinear
+        >>> from xTools4.modules.interpolation import calculateFactorLinear
         >>> steps = 5
         >>> for i in range(steps):
         >>>     print(i, calculateFactorLinear(steps, i))
@@ -91,7 +91,7 @@ def calculateStemLinear(v1, v2, steps, step):
 
     ::
     
-        from hTools3.modules.interpolation import calculateStemLinear
+        from xTools4.modules.interpolation import calculateStemLinear
 
         stem1 = 30
         stem2 = 170
@@ -119,7 +119,7 @@ def calculateStemLucas(v1, v2, steps, step):
 
     ::
     
-        from hTools3.modules.interpolation import calculateStemLucas
+        from xTools4.modules.interpolation import calculateStemLucas
 
         stem1 = 30
         stem2 = 170
@@ -146,7 +146,7 @@ def getStem(glyph, beamY):
 
     ::
 
-        >>> from hTools3.modules.interpolation import getStem
+        >>> from xTools4.modules.interpolation import getStem
         >>> g = CurrentGlyph()
         >>> getStem(g, 200)
         95
@@ -217,7 +217,7 @@ def interpolateGlyphsLinear(g1, g2, steps, step):
 
     ::
 
-        from hTools3.modules.interpolation import interpolateGlyphsLinear
+        from xTools4.modules.interpolation import interpolateGlyphsLinear
 
         f1 = AllFonts().getFontsByStyleName('555A')[0]
         f2 = AllFonts().getFontsByStyleName('955A')[0]
@@ -273,7 +273,7 @@ def condenseGlyph(glyph1, glyph2, glyph3, stem1, stem2, factor):
 
     ::
 
-        from hTools3.modules.interpolation import condenseGlyph
+        from xTools4.modules.interpolation import condenseGlyph
         f1 = AllFonts().getFontsByStyleName('Roman')[0]
         f2 = AllFonts().getFontsByStyleName('Bold')[0]
         f3 = NewFont()
@@ -314,7 +314,7 @@ def condenseGlyphs(font1, font2, font3, stem1, stem2, factor, glyphNames):
 
     ::
 
-        from hTools3.modules.interpolation import condenseGlyphs
+        from xTools4.modules.interpolation import condenseGlyphs
         f1 = AllFonts().getFontsByStyleName('Roman')[0]
         f2 = AllFonts().getFontsByStyleName('Bold')[0]
         f3 = NewFont()
@@ -366,7 +366,7 @@ def interpolateStepsInFont(font, g1, g2, interSteps, extraSteps, prefix='result'
 
     ::
 
-        from hTools3.modules.interpolation import interpolateStepsInFont
+        from xTools4.modules.interpolation import interpolateStepsInFont
         f = CurrentFont()
         g1 = f['o']
         g2 = f['O']
@@ -407,7 +407,7 @@ def interpolateGlyphsInFont(font, glyphName1, glyphName2, factors, prefix='resul
 
     ::
 
-        from hTools3.modules.interpolation import interpolateGlyphsInFont
+        from xTools4.modules.interpolation import interpolateGlyphsInFont
         f = CurrentFont()
         interpolateGlyphsInFont(f, 'b', 'a', [0.3, 0.4, 0.5], prefix='result')
 

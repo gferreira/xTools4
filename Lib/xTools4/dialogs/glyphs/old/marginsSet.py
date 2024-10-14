@@ -1,13 +1,9 @@
-# from importlib import reload
-# import hTools3.dialogs.glyphs.base
-# reload(hTools3.dialogs.glyphs.base)
-
 import math
 from vanilla import RadioGroup, Button, CheckBox, EditText, TextBox
 from mojo import drawingTools as ctx
 from mojo.UI import NumberEditText
 from mojo.tools import IntersectGlyphWithLine
-from hTools3.dialogs.glyphs.base import GlyphsDialogBase
+from xTools4.dialogs.glyphs.old.base import GlyphsDialogBase
 
 
 class SetMarginsDialog(GlyphsDialogBase):

@@ -1,6 +1,6 @@
 from vanilla import RadioGroup, Button, CheckBox
-from hTools3.dialogs import hDialog
-from hTools3.modules.encoding import psname2char
+from xTools4.dialogs.old import hDialog
+from xTools4.modules.encoding import psname2char
 
 
 class PrintGlyphNamesDialog(hDialog):

@@ -1,8 +1,9 @@
 from vanilla import SquareButton, List, CheckBox, ColorWell
 from mojo.UI import PutFile, GetFile
 from mojo.roboFont import CurrentFont
-from hTools3.dialogs import hDialog
-from hTools3.modules.color import rgb2nscolor, nscolor2rgb
+from xTools4.dialogs.old import hDialog
+from xTools4.modules.color import rgb2nscolor, nscolor2rgb
+
 
 class DuplicateRenameGlyphsDialog(hDialog):
 

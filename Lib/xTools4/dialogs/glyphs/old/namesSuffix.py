@@ -1,10 +1,6 @@
-from importlib import reload
-import hTools3.modules.glyphutils
-reload(hTools3.modules.glyphutils)
-
 from vanilla import TextBox, EditText, CheckBox, Button, RadioGroup
-from hTools3.dialogs import hDialog
-from hTools3.modules.glyphutils import findReplaceGlyphName, addToGlyphName
+from xTools4.dialogs.old import hDialog
+from xTools4.modules.glyphutils import findReplaceGlyphName, addToGlyphName
 
 
 class PrefixSuffixGlyphNamesDialog(hDialog):

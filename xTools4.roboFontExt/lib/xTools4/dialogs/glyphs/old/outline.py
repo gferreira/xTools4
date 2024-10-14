@@ -1,18 +1,12 @@
-from importlib import reload
-import hTools3.dialogs.glyphs.base
-reload(hTools3.dialogs.glyphs.base)
-import hTools3.modules.outline
-reload(hTools3.modules.outline)
-
 from vanilla import TextBox, RadioGroup, Button, CheckBox, PopUpButton
 from mojo import drawingTools as ctx
 from mojo.roboFont import RGlyph
 from mojo.events import addObserver, removeObserver
 from mojo.UI import getDefault, UpdateCurrentGlyphView
 from defcon import Glyph, registerRepresentationFactory, unregisterRepresentationFactory
-from hTools3.dialogs.glyphs.base import GlyphsDialogBase
-from hTools3.modules.outline import expandGlyph
-from hTools3.dialogs.misc.numberEditText01 import NumberEditText_01
+from xTools4.modules.outline import expandGlyph
+from xTools4.dialogs.glyphs.old.base import GlyphsDialogBase
+from xTools4.dialogs.old.misc.numberEditText01 import NumberEditText_01
 
 
 def outlineGlyphFactory(glyph, layerName, distance, join, cap, inner, outer):

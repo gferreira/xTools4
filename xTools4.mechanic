@@ -1,0 +1,10 @@
+extensionName: xTools4
+description:   A collection of expert tools for typeface design and font production in RoboFont 4.
+developer:     Gustavo Ferreira
+developerURL:  http://github.com/gferreira
+repository:    http://github.com/gferreira/xTools4
+extensionPath: xTools4.roboFontExt
+icon:          http://raw.githubusercontent.com/gferreira/xTools4/main/icon.png
+infoPath:      http://raw.githubusercontent.com/gferreira/xTools4/main/xTools4.roboFontExt/info.plist
+zipPath:       http://github.com/gferreira/xTools4/archive/main.zip
+tags:          [design helpers, variable fonts]

@@ -1,5 +1,5 @@
 from vanilla import *
-from hTools3.dialogs import hDialog
+from xTools4.dialogs.old import hDialog
 
 
 class SelectGlyphDataDialog(hDialog):

@@ -1,6 +1,6 @@
 from vanilla import *
 from mojo.UI import AccordionView
-from hTools3.dialogs.batch.base import BatchDialogBase
+from xTools4.dialogs.batch.base import BatchDialogBase
 
 
 class BatchGenerateDialog(BatchDialogBase):

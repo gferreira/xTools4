@@ -1,6 +1,6 @@
-from importlib import reload
-import hTools3.dialogs
-reload(hTools3.dialogs)
+# from importlib import reload
+# import xTools4.dialogs
+# reload(xTools4.dialogs)
 
 import os
 from AppKit import NSFilenamesPboardType, NSDragOperationCopy
@@ -9,8 +9,8 @@ from defconAppKit.windows.baseWindow import BaseWindowController
 from mojo.UI import AccordionView, GetFolder
 from mojo.roboFont import AllFonts, CurrentFont, RFont, OpenFont
 from mojo.events import addObserver, removeObserver
-from hTools3.dialogs import hDialog
-from hTools3.modules.fontutils import getFontID
+from xTools4.dialogs.old import hDialog
+from xTools4.modules.fontutils import getFontID
 
 
 class BatchDialogBase(hDialog, BaseWindowController):
@@ -21,7 +21,7 @@ class BatchDialogBase(hDialog, BaseWindowController):
     '''
 
     title = 'batch'
-    key = '%s.batch' % hDialog.key
+    key   = f'{hDialog.key}.batch'
 
     #: The type of the window.
     #: 

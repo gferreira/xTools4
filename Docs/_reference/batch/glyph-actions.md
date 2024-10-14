@@ -7,6 +7,8 @@ permalink : /reference/dialogs/batch/glyph-actions
 Apply glyph-level actions to selected fonts.
 {: .lead}
 
+<span class="badge text-bg-warning rounded-0">RF3</span> RoboFont 3 code which still works in RoboFont 4. Not updated to the new RoboFont 4 APIs yet.
+
 
 fonts
 -----
@@ -94,10 +96,6 @@ preflight
 </div>
 
 
-<div class="card text-dark bg-light my-3">
-<div class="card-header">note</div>
-<div class="card-body" markdown='1'>
+{% comment %}
 - add a new section with *transform* actions (move, scale, skew, rotate, etc.)
-{: .card-text }
-</div>
-</div>
+{% endcomment %}

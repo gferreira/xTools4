@@ -3,7 +3,7 @@ title  : xTools4 user documentation
 layout : default
 ---
 
-<span class='badge bg-warning text-dark rounded-0'>version {{ site.version }}</span>
+<span class='badge bg-secondary rounded-0'>version {{ site.version }}</span>
 
 xTools4 is a collection of expert tools for typeface design and font production in [RoboFont 4].
 {: .lead}

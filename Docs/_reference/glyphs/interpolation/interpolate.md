@@ -7,6 +7,8 @@ permalink : /reference/dialogs/glyphs/interpolation/interpolate
 Interpolate two fonts into the selected glyphs of the current font.
 {: .lead }
 
+<span class="badge text-bg-warning rounded-0">RF3</span> RoboFont 3 code which still works in RoboFont 4. Not updated to the new RoboFont 4 APIs yet.
+
 
 <div class='row'>
 
@@ -34,11 +36,10 @@ preview
 </div>
 
 
-preview
+Preview
 -------
 
 ![]({{"images/glyphs/interpolationMasters_preview.png" | relative_url }}){: .img-fluid}
-
 
 
 <div class="card bg-light my-3 rounded-0">

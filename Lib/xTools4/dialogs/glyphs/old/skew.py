@@ -1,13 +1,9 @@
-# from importlib import reload
-# import hTools3.dialogs.glyphs.base
-# reload(hTools3.dialogs.glyphs.base)
-
 import math
 from vanilla import CheckBox, Button, TextBox
 from mojo import drawingTools as ctx
 from mojo.UI import getDefault, NumberEditText
-from hTools3.dialogs.glyphs.base import GlyphsDialogBase
-from hTools3.dialogs.misc.numberEditText01 import NumberEditText_01
+from xTools4.dialogs.glyphs.old.base import GlyphsDialogBase
+from xTools4.dialogs.old.misc.numberEditText01 import NumberEditText_01
 
 
 def skewGlyphFactory():

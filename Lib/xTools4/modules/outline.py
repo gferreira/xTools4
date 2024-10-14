@@ -5,7 +5,7 @@ Some helper functions around Frederik Berlaen's `OutlinePen`_.
 
 '''
 
-from hTools3.extras.outline import *
+from xTools4.extras.outline import *
 from fontParts.world import NewFont
 
 def makeOutline(glyph, distance, join, cap, inner=True, outer=True, miter=None):
@@ -25,7 +25,7 @@ def makeOutline(glyph, distance, join, cap, inner=True, outer=True, miter=None):
 
     ::
 
-        from hTools3.modules.outline import makeOutline
+        from xTools4.modules.outline import makeOutline
         sourceGlyph = CurrentGlyph()
         outlinePen = makeOutline(sourceGlyph, 20, 0, 0)
         targetGlyph = sourceGlyph.getLayer('outline')
@@ -65,7 +65,7 @@ def expandGlyph(sourceGlyph, targetGlyph, distance, join=1, cap=1, inner=True, o
 
     ::
 
-        from hTools3.modules.outline import expandGlyph
+        from xTools4.modules.outline import expandGlyph
         f = CurrentFont()
         sourceGlyph = f['O']
         targetGlyph = f['space']
@@ -103,7 +103,7 @@ def expandFont(sourceFont, distance, join=1, cap=1):
 
     ::
 
-        from hTools3.modules.outline import expandFont
+        from xTools4.modules.outline import expandFont
         f = CurrentFont()
         distance = 20
         expandFont(f, distance, join=1, cap=1).openInterface()

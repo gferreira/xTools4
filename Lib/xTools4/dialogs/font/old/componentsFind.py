@@ -1,11 +1,10 @@
-from importlib import reload
-
 from vanilla import FloatingWindow, EditText, List, Button, TextBox, ColorWell
 from mojo.UI import OpenGlyphWindow
 from mojo.roboFont import CurrentFont
-from hTools3.dialogs import hDialog
-from hTools3.modules.color import rgb2nscolor, nscolor2rgb
-from hTools3.modules.fontutils import findGlyphComponents
+from xTools4.modules.color import rgb2nscolor, nscolor2rgb
+from xTools4.modules.fontutils import findGlyphComponents
+from xTools4.dialogs.old import hDialog
+
 
 class FindGlyphComponentsDialog(hDialog):
 

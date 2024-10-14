@@ -1,16 +1,12 @@
-from importlib import reload
-import hTools3.modules.optimize
-reload(hTools3.modules.optimize)
-
 from vanilla import ColorWell, Button, CheckBox, RadioGroup
 from mojo import drawingTools as ctx
 from mojo.UI import UpdateCurrentGlyphView, NumberEditText
 from mojo.events import addObserver, removeObserver
 from mojo.roboFont import RGlyph
 from defcon import Glyph, registerRepresentationFactory, unregisterRepresentationFactory
-from hTools3.dialogs.glyphs.base import GlyphsDialogBase
-from hTools3.modules.color import rgb2nscolor, nscolor2rgb
-from hTools3.modules.optimize import equalizeCurves
+from xTools4.dialogs.glyphs.old.base import GlyphsDialogBase
+from xTools4.modules.color import rgb2nscolor, nscolor2rgb
+from xTools4.modules.optimize import equalizeCurves
 
 
 def optimizeContoursFactory(glyph, equalize=True, addExtremes=False, simplify=False, treshold=10):

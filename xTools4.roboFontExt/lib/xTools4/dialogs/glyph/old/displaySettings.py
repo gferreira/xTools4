@@ -1,6 +1,7 @@
 from vanilla import *
 from mojo.UI import getGlyphViewDisplaySettings, setGlyphViewDisplaySettings, AccordionView
-from hTools3.dialogs import hDialog
+from xTools4.dialogs.old import hDialog
+
 
 #: A dictionary of section names and checkbox descriptions. Checkboxes are defined by their UI title, and the optional option name (when they differ).
 treeTitles = {

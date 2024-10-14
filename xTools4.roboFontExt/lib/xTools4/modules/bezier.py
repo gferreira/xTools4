@@ -81,7 +81,6 @@ def lerp(p1, p2, t):
     return p1 * (1 - t) + p2 * t
 
 def glyphToBezierSegments(glyph):
-
     '''
     Convert an RGlyph into lists of ``BezierSegment`` objects.
 
@@ -115,7 +114,6 @@ def glyphToBezierSegments(glyph):
     return contours
 
 class Point:
-
     '''
     A basic Bezier Point object with support for math operations and normalization.
 
@@ -209,7 +207,6 @@ class Point:
         return self * (1.0 / self.mag())
 
 class BezierSegment:
-
     '''
     A basic Bezier Segment object with support for point and curvature calculations.
 

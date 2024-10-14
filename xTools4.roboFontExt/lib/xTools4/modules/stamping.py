@@ -6,9 +6,9 @@ Create synthetic glyphs to insert when generating fonts.
 from fontTools.ttLib import TTFont
 from fontTools.pens.transformPen import TransformPen
 from fontTools.misc.transform import Transform
-from hTools3.modules.encoding import char2psname
-from hTools3.modules.unicode import autoUnicode as setAutoUnicode
-from hTools3.modules.primitives import drawRectInGlyph
+from xTools4.modules.encoding import char2psname
+from xTools4.modules.unicode import autoUnicode as setAutoUnicode
+from xTools4.modules.primitives import drawRectInGlyph
 
 def makeVersionGlyph(font, captionFontPath, versionNumber, timestamp, glyphName='apple', scale=0.3, padding=120, lineHeight=1.2, autoUnicode=True):
 

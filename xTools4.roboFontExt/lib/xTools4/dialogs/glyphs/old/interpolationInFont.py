@@ -1,13 +1,9 @@
-from importlib import reload
-import hTools3.dialogs.misc.spinnerSlider
-reload(hTools3.dialogs.misc.spinnerSlider)
-
 from vanilla import TextBox, EditText, CheckBox, SquareButton, PopUpButton
 from mojo.UI import EditStepper
-from hTools3.dialogs import hDialog
-from hTools3.dialogs.misc.spinner import Spinner
-from hTools3.dialogs.misc.spinnerSlider import SpinnerSlider
-from hTools3.modules.interpolation import interpolateStepsInFont
+from xTools4.dialogs.old import hDialog
+from xTools4.dialogs.old.misc.spinner import Spinner
+from xTools4.dialogs.old.misc.spinnerSlider import SpinnerSlider
+from xTools4.modules.interpolation import interpolateStepsInFont
 
 
 class InterpolateGlyphsInFontDialog(hDialog):

@@ -1,14 +1,8 @@
-from importlib import reload
-import hTools3.dialogs.glyphs.base
-reload(hTools3.dialogs.glyphs.base)
-import hTools3.modules.glyphutils
-reload(hTools3.modules.glyphutils)
-
 from vanilla import RadioGroup, TextBox, CheckBox, Button
 from mojo import drawingTools as ctx
 from mojo.UI import NumberEditText
-from hTools3.dialogs.glyphs.base import GlyphsDialogBase
-from hTools3.modules.glyphutils import setGlyphWidth
+from xTools4.dialogs.glyphs.old.base import GlyphsDialogBase
+from xTools4.modules.glyphutils import setGlyphWidth
 
 
 class SetWidthDialog(GlyphsDialogBase):

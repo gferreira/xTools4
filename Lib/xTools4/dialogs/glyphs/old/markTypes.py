@@ -1,8 +1,8 @@
 from vanilla import CheckBox, Button, ColorWell
 from mojo.roboFont import CurrentFont
-from hTools3.dialogs import hDialog
-from hTools3.modules.color import rgb2nscolor, nscolor2rgb
-from hTools3.modules.fontutils import markGlyphs, findMarkColor
+from xTools4.dialogs.old import hDialog
+from xTools4.modules.color import rgb2nscolor, nscolor2rgb
+from xTools4.modules.fontutils import markGlyphs, findMarkColor
 
 
 def markGlyphType(g, colorsDict):

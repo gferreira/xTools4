@@ -1,14 +1,10 @@
-# from importlib import reload
-# import hTools3.dialogs.glyphs.base
-# reload(hTools3.dialogs.glyphs.base)
-
 from vanilla import TextBox, PopUpButton, CheckBox, Button
 from mojo import drawingTools as ctx
 from mojo.roboFont import AllFonts
 from mojo.events import addObserver, removeObserver
 from mojo.UI import getDefault, UpdateCurrentGlyphView
-from hTools3.dialogs.glyphs.base import GlyphsDialogBase
-from hTools3.dialogs.misc.numberEditText001 import NumberEditText_001
+from xTools4.dialogs.glyphs.old.base import GlyphsDialogBase
+from xTools4.dialogs.old.misc.numberEditText001 import NumberEditText_001
 
 
 class InterpolateGlyphsDialog(GlyphsDialogBase):

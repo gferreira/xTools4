@@ -1,6 +1,7 @@
 from vanilla import Button, CheckBox
 from mojo.roboFont import CurrentFont
-from hTools3.dialogs import hDialog
+from xTools4.dialogs.old import hDialog
+
 
 class ImportGroupsDialog(hDialog):
 

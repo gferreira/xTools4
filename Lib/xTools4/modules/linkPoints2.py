@@ -5,7 +5,7 @@ from fontParts.fontshell.point import RPoint
 '''
 Tools to make various kinds of measurements in a font.
 
-# based on hTools3.modules.linkPoints
+# based on xTools4.modules.linkPoints
 
 '''
 

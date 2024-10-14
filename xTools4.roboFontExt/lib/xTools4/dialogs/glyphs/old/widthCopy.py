@@ -1,12 +1,8 @@
-from importlib import reload
-import hTools3.dialogs
-reload(hTools3.dialogs)
-
 from vanilla import TextBox, PopUpButton, Button, List
 from mojo.roboFont import AllFonts
 from mojo.events import addObserver, removeObserver
 from defconAppKit.windows.baseWindow import BaseWindowController
-from hTools3.dialogs import hDialog
+from xTools4.dialogs.old import hDialog
 
 
 class CopyWidthDialog(hDialog, BaseWindowController):

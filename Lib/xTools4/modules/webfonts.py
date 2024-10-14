@@ -30,7 +30,7 @@ def subsetOTF(srcFontPath, dstFontPath, glyphNames=[], obfuscateNames=False, rem
 
     ::
 
-        from hTools3.modules.webfonts import subsetOTF
+        from xTools4.modules.webfonts import subsetOTF
 
         srcFont = '/path/to/myFont.otf'
         dstFont = srcFont.replace('.otf', '_subset.otf')
@@ -103,7 +103,7 @@ def encodeBase64(fontPath):
 
     ::
     
-        from hTools3.modules.webfonts import encodeBase64
+        from xTools4.modules.webfonts import encodeBase64
 
         ttfPath = '/path/to/myFont.ttf'
         fontData = encodeBase64(ttfPath)
@@ -131,7 +131,7 @@ def fontFaceBase64Woff(fontName, fontData, fontWeight='normal', fontStyle='norma
 
     ::
     
-        from hTools3.modules.webfonts import encodeBase64, fontFaceBase64Woff
+        from xTools4.modules.webfonts import encodeBase64, fontFaceBase64Woff
 
         fontPath = '/path/to/myFont.woff'
         fontData = encodeBase64(fontPath)
@@ -171,7 +171,7 @@ def sfnt2woff(fontPath, woffPath=None):
 
     ::
 
-        from hTools3.modules.webfonts import sfnt2woff
+        from xTools4.modules.webfonts import sfnt2woff
 
         fontPath = '/path/to/myFont.ttf'
         woffPath = fontPath.replace('.ttf', '.woff')
@@ -191,7 +191,7 @@ def sfnt2woff2(fontPath, woff2Path=None):
 
     ::
 
-        from hTools3.modules.webfonts import sfnt2woff2
+        from xTools4.modules.webfonts import sfnt2woff2
 
         fontPath = '/path/to/myFont.ttf'
         woff2Path = fontPath.replace('.ttf', '.woff2')

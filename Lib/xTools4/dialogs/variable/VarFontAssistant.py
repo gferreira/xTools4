@@ -3,7 +3,7 @@
 # reload(variableValues.dialogs.RF4.DesignSpaceSelector)
 
 from mojo.roboFont import OpenWindow, OpenFont
-from variableValues.dialogs.RF4.DesignSpaceSelector import DesignSpaceSelector_EZUI
+from xTools4.dialogs.variable.DesignSpaceSelector import DesignSpaceSelector_EZUI
 
 
 class VarFontAssistant_EZUI(DesignSpaceSelector_EZUI):

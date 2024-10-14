@@ -1,14 +1,10 @@
-from importlib import reload
-import hTools3.dialogs.glyphs.base
-reload(hTools3.dialogs.glyphs.base)
-
 from vanilla import CheckBox, Button, RadioGroup, TextBox
 from mojo import drawingTools as ctx
 from mojo.UI import getDefault
-from hTools3.dialogs.glyphs.base import GlyphsDialogBase
-from hTools3.dialogs.misc.origin import OriginPoint
-from hTools3.modules.glyphutils import getOriginPosition
-from hTools3.dialogs.misc.numberEditText0001 import NumberEditText_0001
+from xTools4.modules.glyphutils import getOriginPosition
+from xTools4.dialogs.glyphs.old.base import GlyphsDialogBase
+from xTools4.dialogs.old.misc.origin import OriginPoint
+from xTools4.dialogs.old.misc.numberEditText0001 import NumberEditText_0001
 
 
 def scaleGlyphFactory():

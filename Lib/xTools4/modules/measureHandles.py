@@ -148,7 +148,7 @@ class MeasureHandles(object):
         .. code-block:: python
 
             import drawBot
-            from hTools3.modules.measureHandles import MeasureHandles
+            from xTools4.modules.measureHandles import MeasureHandles
 
             parameters = {
                 'angleDraw'           : True,

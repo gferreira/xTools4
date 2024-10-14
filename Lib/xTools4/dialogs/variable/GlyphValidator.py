@@ -6,7 +6,7 @@ from mojo.subscriber import Subscriber, registerGlyphEditorSubscriber, unregiste
 from mojo.UI import UpdateCurrentGlyphView, GetFile
 from mojo.roboFont import OpenFont, CurrentFont, CurrentGlyph, RGlyph, OpenWindow
 from mojo.events import postEvent, addObserver, removeObserver
-from variableValues.validation import *
+from xTools4.modules.validation import *
 
 
 KEY = 'com.fontBureau.glyphValidator'

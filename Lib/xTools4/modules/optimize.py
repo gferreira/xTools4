@@ -1,11 +1,11 @@
-from importlib import reload
-import hTools3.modules.pens
-reload(hTools3.modules.pens)
+# from importlib import reload
+# import xTools4.modules.pens
+# reload(xTools4.modules.pens)
 
 # from fontPens.thresholdPen import thresholdGlyph
 from fontParts.world import RGlyph
-from hTools3.extras.equalize import *
-from hTools3.modules.pens import LinePen
+from xTools4.extras.equalize import *
+from xTools4.modules.pens import LinePen
 
 
 def equalizeCurves(glyph, roundPos=False):
@@ -14,7 +14,7 @@ def equalizeCurves(glyph, roundPos=False):
 
     ::
 
-        from hTools3.modules.optimize import equalizeCurves
+        from xTools4.modules.optimize import equalizeCurves
         g = CurrentGlyph()
         equalizeCurves(g)
         g.changed()
@@ -38,7 +38,7 @@ def curvesToLines(glyph):
 
     ::
 
-        from hTools3.modules.optimize import curvesToLines
+        from xTools4.modules.optimize import curvesToLines
         g = CurrentGlyph()
         curvesToLines(g)
 

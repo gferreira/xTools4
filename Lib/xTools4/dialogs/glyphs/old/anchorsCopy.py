@@ -1,14 +1,10 @@
-from importlib import reload
-import hTools3.dialogs.glyphs.base
-reload(hTools3.dialogs.glyphs.base)
-
 from vanilla import TextBox, PopUpButton, Button, List
 # from mojo.roboFont import AllFonts
 from mojo.events import addObserver, removeObserver
 # from defconAppKit.windows.baseWindow import BaseWindowController
 # from hTools3.dialogs import hDialog
-from hTools3.modules.anchors import copyAnchors
-from hTools3.dialogs.glyphs.base import GlyphsCopyDataDialogBase
+from xTools4.modules.anchors import copyAnchors
+from xTools4.dialogs.glyphs.old.base import GlyphsCopyDataDialogBase
 
 
 class CopyAnchorsDialog(GlyphsCopyDataDialogBase):

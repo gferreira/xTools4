@@ -4,7 +4,6 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>GlyphValidator · xTools4</title>
-    <link rel="icon" href="http://localhost:4000/favicon.ico"/>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
@@ -65,10 +64,11 @@
                 Variable
               </a>
             </li>
-            <li class='breadcrumb-item small'>GlyphValidator</li>
+            <li class='breadcrumb-item small'>glyph validator</li>
           </ol>
         </nav>
         <p class="lead">A tool to validate glyphs in the current font against glyphs from another source.</p>
+        <p><span class="badge text-bg-success rounded-0">RF4</span> Rewritten using the new RoboFont 4 APIs.</p>
         <div class="row">
           <div class="col-4">
             <p><img src="http://localhost:4000/images/variable/GlyphValidator.png" alt="" class="img-fluid" /></p>
@@ -90,15 +90,15 @@
             </dl>
           </div>
         </div>
-        <h2 id="check-results">Check results</h2>
-        <h5 id="font-window">Font window</h5>
+        <h2 id="check-results">check results</h2>
+        <h5 id="font-window">font window</h5>
         <p>Labels with check results are shown in the Font Overview’s glyph cells if the option <em>font window</em> is activated.</p>
         <p><img src="http://localhost:4000/images/variable/GlyphValidator_font-window.png" alt="" class="img-fluid" /></p>
-        <h5 id="glyph-window">Glyph window</h5>
+        <h5 id="glyph-window">glyph window</h5>
         <p>Labels with check results are shown in the Glyph View if the option <em>glyph window</em> is activated.</p>
         <p><img src="http://localhost:4000/images/variable/GlyphValidator_glyph-window.png" alt="" class="img-fluid" /></p>
-        <h2 id="validation-details">Validation details</h2>
-        <h5 id="color-codes">Color codes</h5>
+        <h2 id="validation-details">validation details</h2>
+        <h5 id="color-codes">color codes</h5>
         <p>Check results are displayed as a string of colored labels. Label colors have the following meaning:</p>
         <!--
 | color                                                 | meaning        |
@@ -166,7 +166,7 @@
             <td>–</td>
           </tr>
         </table>
-        <h5 id="compatibility-checks">Compatibility checks</h5>
+        <h5 id="compatibility-checks">compatibility checks</h5>
         <p>Glyph attributes are considered <strong>compatible</strong> if the following conditions are met:</p>
         <table class="table table-hover">
           <tr>
@@ -209,7 +209,7 @@
             </td>
           </tr>
         </table>
-        <h5 id="equality-checks">Equality checks</h5>
+        <h5 id="equality-checks">equality checks</h5>
         <p>Glyph attributes are considered <strong>identical</strong> if the following conditions are met:</p>
         <table class="table table-hover">
           <tr>
@@ -220,75 +220,47 @@
           <tr>
             <td>width</td>
             <td>W</td>
-            <td>
-              <ul>
-                <li>same advance width</li>
-              </ul>
-            </td>
+            <td>same advance width</td>
           </tr>
           <tr>
             <td>left margin</td>
             <td>L</td>
-            <td>
-              <ul>
-                <li>same left margin (rounded)</li>
-              </ul>
-            </td>
+            <td>same left margin (rounded)</td>
           </tr>
           <tr>
             <td>right margin</td>
             <td>R</td>
-            <td>
-              <ul>
-                <li>same right margin (rounded)</li>
-              </ul>
-            </td>
+            <td>same right margin (rounded)</td>
           </tr>
           <tr>
             <td>points</td>
             <td>P</td>
-            <td>
-              <ul>
-                <li>same point positions</li>
-              </ul>
-            </td>
+            <td>same point positions</td>
           </tr>
           <tr>
             <td>components</td>
             <td>C</td>
-            <td>
-              <ul>
-                <li>same point positions (flattened)</li>
-              </ul>
-            </td>
+            <td>same point positions (flattened)</td>
           </tr>
           <tr>
             <td>anchors</td>
             <td>A</td>
-            <td>
-              <ul>
-                <li>same anchor positions</li>
-              </ul>
-            </td>
+            <td>same anchor positions</td>
           </tr>
           <tr>
             <td>unicodes</td>
             <td>U</td>
-            <td>
-              <ul>
-                <li>same unicode value(s)</li>
-              </ul>
-            </td>
+            <td>same unicode value(s)</td>
           </tr>
         </table>
-        <h5 id="mark-colors">Mark colors</h5>
+        <h5 id="mark-colors">mark colors</h5>
         <p>See <a href="glyphset-proofer">GlyphSetProofer &gt; Validation details &gt; Cell colors</a>.</p>
       </div>
     </main>
     <footer class="container mx-auto px-auto px-md-4 my-4">
       <p class='small text-muted'>
         This work is licensed under <a href='http://creativecommons.org/licenses/by-sa/4.0/'>Creative Commons Attribution-ShareAlike 4.0 International</a>.
-        <i class="bi bi-arrow-counterclockwise"></i> Last updated on 08 Oct 2024 07:22:42.
+        <i class="bi bi-arrow-counterclockwise"></i> Last updated on 13 Oct 2024 09:33:32.
       </p>
     </footer>
   </body>

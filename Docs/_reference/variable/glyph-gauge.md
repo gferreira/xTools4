@@ -7,6 +7,9 @@ permalink : /reference/dialogs/variable/glyph-gauge
 A tool to to display and validate parametric measurements in the current glyph window.
 {: .lead }
 
+<span class="badge text-bg-success rounded-0">RF4</span> Rewritten using the new RoboFont 4 APIs.  
+
+
 <div class='row'>
 <div class='col-4' markdown='1'>
 ![]({{ site.url }}/images/variable/GlyphGauge.png){: .img-fluid }
@@ -40,19 +43,18 @@ display
 </div>
 
 
-Check results
+check results
 -------------
 
-##### Glyph window
+##### glyph window
 
 ![]({{ site.url }}/images/variable/GlyphGauge_glyph-window.png){: .img-fluid}
 
 
-
-Validation details
+validation details
 ------------------
 
-##### Color codes
+##### color codes
 
 Measurements are displayed using the same colors as [Glyph Validator checks](glyph-validator#color-codes), with the following meanings:
 

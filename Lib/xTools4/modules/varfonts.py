@@ -1,13 +1,9 @@
-from importlib import reload
-import hTools3.modules.encoding
-reload(hTools3.modules.encoding)
-
 import os, glob
 import shutil
 from fontParts.world import RFont, OpenFont
 from fontTools.designspaceLib import DesignSpaceDocument, AxisDescriptor, SourceDescriptor, InstanceDescriptor, RuleDescriptor
-from hTools3.modules.unicode import autoUnicode
-from hTools3.modules.encoding import cropGlyphset
+from xTools4.modules.unicode import autoUnicode
+from xTools4.modules.encoding import cropGlyphset
 
 try:
     import ufoProcessor

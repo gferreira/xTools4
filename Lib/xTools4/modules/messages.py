@@ -1,5 +1,5 @@
 '''
-A collection of standard messages for use in hTools3 dialogs.
+A collection of standard messages for use in xTools4 dialogs.
 
 '''
 
@@ -14,28 +14,28 @@ def showMessage(messageText, mode=0):
 
     ::
     
-        from hTools3.modules.messages import showMessage
+        from xTools4.modules.messages import showMessage
         showMessage('hello world', mode=1)
 
     '''
     if mode == 0:
         print(messageText)
     else:
-        PostBannerNotification('hTools3', messageText)
+        PostBannerNotification('xTools4', messageText)
 
 def noXSelected(x):
     '''
     Generic message to be used when a required object is not selected.
 
     '''
-    return 'No %s selected.\nPlease select one or more %ss.\n' % (x, x)
+    return f'No {x} selected.\nPlease select one or more {x}s.\n'
 
 def noXOpen(x):
     '''
     Generic message to be used when a required object is not open.
 
     '''
-    return 'No %s open.\nPlease open at least one %s.\n' % (x, x)
+    return f'No {x} open.\nPlease open at least one {x}.\n'
 
 # ------
 # points

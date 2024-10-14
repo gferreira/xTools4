@@ -4,9 +4,9 @@ from mojo.roboFont import CurrentFont, NewFont, OpenFont
 from mojo.UI import GetFolder
 from mojo.events import addObserver, removeObserver
 from defconAppKit.windows.baseWindow import BaseWindowController
-from hTools3.dialogs import hDialog
-from hTools3.modules.messages import noFontOpen, showMessage
-from hTools3.modules.fontutils import markGlyphs
+from xTools4.dialogs.old import hDialog
+from xTools4.modules.messages import noFontOpen, showMessage
+from xTools4.modules.fontutils import markGlyphs
 
 
 class ExportLayersDialog(hDialog, BaseWindowController):

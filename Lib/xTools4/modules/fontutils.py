@@ -5,7 +5,7 @@ import plistlib
 from colorsys import hsv_to_rgb
 from fontParts.world import OpenFont
 from fontPens.penTools import distance
-from hTools3.extras.fontAppTools import *
+from xTools4.extras.fontAppTools import *
 
 try:
     from mojo.roboFont import CurrentGlyph, CurrentFont, NewFont, RFont, RGlyph
@@ -29,7 +29,7 @@ def getGlyphs2(font, glyphNames=True, template=False):
 
     ::
 
-        >>> from hTools3.modules.fontutils import getGlyphs2
+        >>> from xTools4.modules.fontutils import getGlyphs2
         >>> f = CurrentFont()
         >>> getGlyphs2(f)
         ['emacron', 'Emacron']
@@ -145,7 +145,7 @@ def getFontID(fontOrFontPath):
 
     ::
 
-        >>> from hTools3.modules.fontutils import getFontID
+        >>> from xTools4.modules.fontutils import getFontID
         >>> f = CurrentFont()
         >>> getFontID(f)
         Publica 555A (/_fonts/Publica/_ufos/555A.ufo)
@@ -188,7 +188,7 @@ def parseGString(font, gString):
 
     ::
     
-        >>> from hTools3.modules.fontutils import parseGString
+        >>> from xTools4.modules.fontutils import parseGString
         >>> f = CurrentFont()
         >>> gstring = 'abc0123/a.sc/a.alt ABC'
         >>> parseGString(f, gstring)
@@ -213,7 +213,7 @@ def isQuadratic(font):
         font (RFont): A font object.
 
     ::
-        >>> from hTools3.modules.fontutils import isQuadratic
+        >>> from xTools4.modules.fontutils import isQuadratic
         >>> isQuadratic(CurrentFont()))
         False
         >>> isQuadratic(OpenFont('MyFont.ttf', showInterface=False)))
@@ -256,7 +256,7 @@ def clearUnicodes(font):
 
     ::
 
-        from hTools3.modules.fontutils import clearUnicodes
+        from xTools4.modules.fontutils import clearUnicodes
         f = CurrentFont()
         clearUnicodes(f)
 
@@ -274,7 +274,7 @@ def clearAllGuidelines(font):
 
     ::
 
-        from hTools3.modules.fontutils import clearAllGuidelines
+        from xTools4.modules.fontutils import clearAllGuidelines
         f = CurrentFont()
         clearAllGuidelines(f)
 
@@ -304,7 +304,7 @@ def markGlyphs(font, glyphNames, color, verbose=True):
 
     ::
 
-        from hTools3.modules.fontutils import markGlyphs
+        from xTools4.modules.fontutils import markGlyphs
         f = CurrentFont()
         markGlyphs(f, ['a', 'b', 'c'], (1, 0, 0, 0.3))
 
@@ -339,7 +339,7 @@ def clearMarkColors(font):
 
     ::
 
-        from hTools3.modules.fontutils import clearMarkColors
+        from xTools4.modules.fontutils import clearMarkColors
         f = CurrentFont()
         clearMarkColors(f)
 
@@ -472,7 +472,7 @@ def findGlyphComponents(font, srcName):
 
     ::
 
-        >>> from hTools3.modules.fontutils import findGlyphComponents
+        >>> from xTools4.modules.fontutils import findGlyphComponents
         >>> f = CurrentFont()
         >>> findGlyphComponents(f, 'a')
         ['aacute', 'agrave', 'atilde', 'acircumflex', 'adieresis', 'aring']

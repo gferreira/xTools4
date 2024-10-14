@@ -1,8 +1,9 @@
 from vanilla import SquareButton, List, CheckBox
 from mojo.UI import PutFile, GetFile
 from mojo.roboFont import CurrentFont
-from hTools3.dialogs import hDialog
-from hTools3.modules.markFeature import markToBaseFeaBuilder
+from xTools4.dialogs.old import hDialog
+from xTools4.modules.markFeature import markToBaseFeaBuilder
+
 
 def markToBaseList2Dict(marksList):
     marksDict = {}
@@ -11,6 +12,7 @@ def markToBaseList2Dict(marksList):
             marksDict[baseGlyph] = []
         marksDict[baseGlyph].append((markGlyph, anchorName))
     return marksDict
+
 
 class MakeMarkFeatureDialog(hDialog):
 

@@ -56,6 +56,7 @@ def saveLinkToLib(glyph, link, key=KEY, verbose=True):
         key (str): The key to the lib where the links will be stored.
 
     '''
+    print(key)
     if key not in glyph.lib:
         glyph.lib[key] = []
 
@@ -121,10 +122,10 @@ def deleteSelectedLinks(glyph, key=KEY):
         key (str): The key to the lib where the links are stored.
 
     '''
-    allLinks = set(getLinks(glyph))
-    selectedLinks = set(getSelectedLinks(glyph))
-    newLinks = allLinks.difference(selectedLinks)
-    setLinks(glyph, list(newLinks))
+    allLinks = getLinks(glyph, key=key)
+    selectedLinks = getSelectedLinks(glyph, key=key)
+    newLinks = set(allLinks).difference(set(selectedLinks))
+    setLinks(glyph, list(newLinks), key=key)
 
 def getLinks(glyph, key=KEY):
     '''
@@ -197,6 +198,6 @@ def getSelectedLinks(glyph, key=KEY):
         A list of links which are selected in the glyph.
 
     '''
-    links = getLinks(glyph)
-    IDs = getSelectedIDs(glyph)
+    links = getLinks(glyph, key=key)
+    IDs = getSelectedIDs(glyph, key=key)
     return [(ID1, ID2) for ID1, ID2 in links if (ID1 in IDs or ID2 in IDs)]

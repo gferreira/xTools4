@@ -3,9 +3,9 @@ from mojo import drawingTools as ctx
 from mojo.UI import getDefault
 from mojo.roboFont import AllFonts
 from mojo.events import addObserver, removeObserver
-from hTools3.dialogs.glyphs.base import GlyphsDialogBase
-from hTools3.modules.interpolation import condenseGlyph
-from hTools3.dialogs.misc.numberEditText001 import NumberEditText_001
+from xTools4.dialogs.glyphs.old.base import GlyphsDialogBase
+from xTools4.modules.interpolation import condenseGlyph
+from xTools4.dialogs.misc.numberEditText001 import NumberEditText_001
 
 
 class CondenseGlyphsDialog(GlyphsDialogBase):

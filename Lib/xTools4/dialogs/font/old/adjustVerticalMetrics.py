@@ -1,16 +1,12 @@
-from importlib import reload
-import hTools3.dialogs
-reload(hTools3.dialogs)
-
 from vanilla import Box, TextBox
 from mojo.roboFont import CurrentFont, CurrentGlyph
 from mojo.UI import NumberEditText
 from mojo.events import addObserver, removeObserver
 from defconAppKit.windows.baseWindow import BaseWindowController
-from hTools3.dialogs import hDialog
-# from hTools3.modules.fontutils import getFontID
-from hTools3.modules.messages import noFontOpen, showMessage
-from hTools3.dialogs.misc.numberEditText01 import NumberEditText_01
+# from xTools4.modules.fontutils import getFontID
+from xTools4.modules.messages import noFontOpen, showMessage
+from xTools4.dialogs.old import hDialog
+from xTools4.dialogs.old.misc.numberEditText01 import NumberEditText_01
 
 
 class AdjustVerticalMetricsDialog(hDialog, BaseWindowController):

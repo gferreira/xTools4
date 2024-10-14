@@ -8,7 +8,7 @@ Math formulas converted from `Drawing better looking curves`_.
 '''
 
 from colorsys import *
-from hTools3.modules.bezier import *
+from xTools4.modules.bezier import *
 from drawBot import BezierPath
 
 
@@ -332,7 +332,7 @@ class CurvatureVisualizer:
     ::
 
         import drawbot
-        from hTools3.modules.curvatureVisualizer import CurvatureVisualizer
+        from xTools4.modules.curvatureVisualizer import CurvatureVisualizer
 
         B = BezierPath()
         B.oval(512, 360, 300, 300)

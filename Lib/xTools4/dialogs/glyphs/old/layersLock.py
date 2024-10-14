@@ -3,7 +3,7 @@ from defconAppKit.windows.baseWindow import BaseWindowController
 from mojo import drawingTools as ctx
 from mojo.events import addObserver, removeObserver
 from mojo.UI import UpdateCurrentGlyphView
-from hTools3.dialogs import hDialog
+from xTools4.old.dialogs import hDialog
 
 
 class LockLayerWidthsDialog(hDialog, BaseWindowController):

@@ -1,10 +1,6 @@
 # menuTitle : clear anchors
 
-from importlib import reload
-import xTools4.dialogs
-reload(xTools4.dialogs)
-
-from xTools4.dialogs import getLayerNames
+from xTools4.dialogs.old import getLayerNames
 from xTools4.modules.fontutils import getGlyphs2
 from xTools4.modules.messages import noFontOpen, noGlyphSelected, showMessage
 

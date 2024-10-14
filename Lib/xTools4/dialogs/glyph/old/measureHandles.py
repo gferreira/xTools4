@@ -1,7 +1,3 @@
-from importlib import reload
-import hTools3.modules.measureHandles
-reload(hTools3.modules.measureHandles)
-
 import drawBot
 from vanilla import CheckBox, ColorWell, Slider, TextBox, RadioGroup, HorizontalLine
 from mojo import drawingTools as ctx
@@ -9,9 +5,9 @@ from mojo.roboFont import RGlyph
 from mojo.UI import UpdateCurrentGlyphView
 from mojo.events import addObserver, removeObserver
 from defcon import Glyph, registerRepresentationFactory, unregisterRepresentationFactory
-from hTools3.dialogs.glyphs.base import GlyphsDialogBase
-from hTools3.modules.color import rgb2nscolor, nscolor2rgb
-from hTools3.modules.measureHandles import MeasureHandlesMaker, MeasureSegmentsMaker
+from xTools4.modules.color import rgb2nscolor, nscolor2rgb
+from xTools4.modules.measureHandles import MeasureHandlesMaker, MeasureSegmentsMaker
+from xTools4.dialogs.glyphs.old.base import GlyphsDialogBase
 
 
 ### TODO: add min/max threshold values

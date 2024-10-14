@@ -1,4 +1,4 @@
-from hTools3.modules.encoding import char2psname
+from xTools4.modules.encoding import char2psname
 
 # diacritics per language
 # source: Diacritics Project

@@ -1,9 +1,13 @@
+from importlib import reload
+import xTools4.modules.linkPoints
+reload(xTools4.modules.linkPoints)
+
 import ezui
 from mojo.subscriber import Subscriber, registerGlyphEditorSubscriber, registerSubscriberEvent, roboFontSubscriberEventRegistry, unregisterGlyphEditorSubscriber
 from mojo.roboFont import OpenWindow, CurrentGlyph
 from mojo.events import postEvent
-from hTools3.modules.linkPoints import *
-from hTools3.modules.measureHandles import getVector
+from xTools4.modules.linkPoints import *
+from xTools4.modules.measureHandles import getVector
 
 
 KEY = 'com.hipertipo.xTools4.dialogs.glyph.linkPoints'
@@ -94,21 +98,21 @@ class LinkPointsController(ezui.WindowController):
         glyph = CurrentGlyph()
         if not glyph:
             return
-        linkPoints(glyph)
+        linkPoints(glyph, key=KEY)
         postEvent(f"{KEY}.changed")
 
     def unlinkButtonCallback(self, sender):
         glyph = CurrentGlyph()
         if not glyph:
             return
-        deleteSelectedLinks(glyph)
+        deleteSelectedLinks(glyph, key=KEY)
         postEvent(f"{KEY}.changed")
 
     def clearButtonCallback(self, sender):
         glyph = CurrentGlyph()
         if not glyph:
             return
-        deleteAllLinks(glyph)
+        deleteAllLinks(glyph, key=KEY)
         postEvent(f"{KEY}.changed")
 
     def settingsChangedCallback(self, sender):
@@ -155,7 +159,7 @@ class LinkPoints(Subscriber):
         if not showPreview:
             return
 
-        links = getLinks(self.glyph)
+        links = getLinks(self.glyph, key=KEY)
 
         linkColor   = self.controller.w.getItem("colorButton").get()
         captionMode = self.controller.w.getItem("captionMode").get()
