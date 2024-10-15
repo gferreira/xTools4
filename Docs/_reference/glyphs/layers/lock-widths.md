@@ -1,7 +1,7 @@
 ---
 title     : lock widths
 layout    : page
-permalink : /reference/dialogs/glyphs/layers/lock-widths
+permalink : /reference/tools/glyphs/layers/lock-widths
 ---
 
 Selectively lock/unlock glyph widths across all layers of selected glyphs.

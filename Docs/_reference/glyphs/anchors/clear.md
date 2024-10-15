@@ -1,7 +1,7 @@
 ---
 title     : clear anchors
 layout    : page
-permalink : /reference/dialogs/glyphs/anchors/clear-anchors
+permalink : /reference/tools/glyphs/anchors/clear-anchors
 ---
 
 Delete all anchors in the selected glyphs.

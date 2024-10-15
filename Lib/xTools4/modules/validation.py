@@ -3,7 +3,7 @@ from fontParts.world import OpenFont, RGlyph
 from fontPens.digestPointPen import DigestPointPen
 from defcon.pens.transformPointPen import TransformPointPen
 from defcon.objects.component import _defaultTransformation
-from variableValues.decomposePointPen import DecomposePointPen
+from xTools4.modules.decomposePointPen import DecomposePointPen
 
 # ----------------------
 # glyph-level validation

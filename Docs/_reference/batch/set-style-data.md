@@ -1,7 +1,7 @@
 ---
 title     : batch set style data
 layout    : page
-permalink : /reference/dialogs/batch/set-style-data
+permalink : /reference/tools/batch/set-style-data
 ---
 
 Set data for individual styles in selected fonts.

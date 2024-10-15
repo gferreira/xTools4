@@ -1,7 +1,7 @@
 ---
 title     : font
 layout    : default
-permalink : /reference/dialogs/font
+permalink : /reference/tools/font
 ---
 
 Tools to modify various kinds of font-level data.

@@ -1,7 +1,7 @@
 ---
 title     : Dialogs
 layout    : default
-permalink : /reference/dialogs/
+permalink : /reference/tools/
 ---
 
 The xTools4 toolkit is organized around 5 main contexts or scopes for performing tasks while working on fonts.

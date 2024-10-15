@@ -1,7 +1,7 @@
 ---
 title     : clear guidelines
 layout    : page
-permalink : /reference/dialogs/glyphs/guidelines/clear
+permalink : /reference/tools/glyphs/guidelines/clear
 ---
 
 Delete all glyph-level guidelines in the selected glyphs.

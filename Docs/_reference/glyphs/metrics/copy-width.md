@@ -1,7 +1,7 @@
 ---
 title     : copy width
 layout    : page
-permalink : /reference/dialogs/glyphs/metrics/copy-width
+permalink : /reference/tools/glyphs/metrics/copy-width
 ---
 
 Copy widths from selected glyphs to the same glyphs in another font or layers.

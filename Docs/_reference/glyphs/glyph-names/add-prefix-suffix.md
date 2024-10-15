@@ -1,7 +1,7 @@
 ---
 title     : add prefix or suffix
 layout    : page
-permalink : /reference/dialogs/glyphs/glyph-names/add-prefix-suffix
+permalink : /reference/tools/glyphs/glyph-names/add-prefix-suffix
 ---
 
 Add a prefix or suffix to the names of selected glyphs.

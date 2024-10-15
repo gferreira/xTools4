@@ -1,7 +1,7 @@
 ---
 title     : skip export
 layout    : page
-permalink : /reference/dialogs/glyphs/glyph-names/skip-export
+permalink : /reference/tools/glyphs/glyph-names/skip-export
 ---
 
 Add or remove the selected glyphs from the list of glyphs to be skipped when exporting font binaries.

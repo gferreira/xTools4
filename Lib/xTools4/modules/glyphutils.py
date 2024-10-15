@@ -290,6 +290,7 @@ def renameGlyphSuffix(glyph, oldSuffix, newSuffix, overwrite=False, duplicate=Fa
     renameGlyph(glyph, newName, overwrite=overwrite, duplicate=duplicate, verbose=verbose)
 
 def renameGlyph(glyph, newName, overwrite=False, duplicate=False, verbose=True):
+    # DEPRECATED, use renameGlyph2
 
     if newName == glyph.name:
         return
@@ -305,51 +306,54 @@ def renameGlyph(glyph, newName, overwrite=False, duplicate=False, verbose=True):
 
     # check for existing glyphs
     if newName in glyph.layer:
-
         # don't overwrite existing glyph
         if not overwrite:
-            print("'%s' already exists in font, skipping..." % newName)
+            print(f"'{newName}' already exists in font, aborting...")
             return
-
         # delete existing glyph (overwrite)
-        print("deleting '%s'..." % newName)
+        print(f"deleting '{newName}'...")
         glyph.layer.removeGlyph(newName)
         glyph.layer.changed()
 
     # rename glyph
     if not duplicate:
         if verbose:
-            print("renaming '%s' as '%s'..." % (glyph.name, newName))
+            print(f"renaming '{glyph.name}' as '{newName}'...")
         glyph.name = newName
         glyph.changed()
 
     # rename as duplicate
     else:
         if verbose:
-            print("duplicating '%s' as '%s'..." % (glyph.name, newName))
+            print(f"duplicating '{glyph.name}' as '{newName}'...")
         glyph.layer.insertGlyph(glyph, name=newName)
         glyph.layer.changed()
 
-def findReplaceGlyphName(glyph, findText, replaceText, overwrite=False, duplicate=False, verbose=True):
+def renameGlyph2(glyph, newName, overwrite=False, duplicate=False, verbose=True):
 
-    if not findText in glyph.name:
+    # TO-DO: implement `overwrite` and `duplicate` arguments
+
+    if newName == glyph.name:
         return
+    font = glyph.font
+    # if glyph is orphan, rename directly
+    if font is None:
+        glyph.name = newName
+        glyph.changed()
+        return
+    # otherwise, do it via the font
+    font.renameGlyph(glyph.name, newName, renameComponents=False, renameGroups=False, renameKerning=False, renameInLayers=False)
 
-    # make new name
+def findReplaceGlyphName(glyph, findText, replaceText, overwrite=False, duplicate=False, verbose=True):
+    if findText not in glyph.name:
+        return
     newName = glyph.name.replace(findText, replaceText)
-
-    # rename glyph
-    renameGlyph(glyph, newName, overwrite=overwrite, duplicate=duplicate, verbose=verbose)
+    renameGlyph2(glyph, newName, overwrite=overwrite, duplicate=duplicate, verbose=verbose)
 
 def addToGlyphName(glyph, addText, suffix=True, overwrite=False, duplicate=False, verbose=True):
-
     if not len(addText):
         return
-
-    # make new name
     newName = glyph.name + addText if suffix else addText + glyph.name
-
-    # rename glyph
     renameGlyph(glyph, newName, overwrite=overwrite, duplicate=duplicate, verbose=verbose)
 
 # -------

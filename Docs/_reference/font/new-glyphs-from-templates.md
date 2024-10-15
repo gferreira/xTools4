@@ -1,7 +1,7 @@
 ---
 title     : new glyphs from templates
 layout    : page
-permalink : /reference/dialogs/font/new-glyphs-from-templates
+permalink : /reference/tools/font/new-glyphs-from-templates
 ---
 
 Create new glyphs from selected template glyphs in the current font.

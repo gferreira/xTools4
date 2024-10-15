@@ -1,7 +1,7 @@
 ---
 title     : GlyphValidator
 layout    : default
-permalink : /reference/dialogs/variable/glyph-validator
+permalink : /reference/tools/variable/glyph-validator
 ---
 
 A tool to validate glyphs in the current font against glyphs from another source.

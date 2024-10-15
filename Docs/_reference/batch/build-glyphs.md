@@ -1,7 +1,7 @@
 ---
 title     : batch build glyphs
 layout    : page
-permalink : /reference/dialogs/batch/build-glyphs
+permalink : /reference/tools/batch/build-glyphs
 ---
 
 Create new glyphs in the selected fonts.
@@ -73,7 +73,7 @@ The default width for new glyphs is defined in RoboFont’s [Font Overview prefe
 </div>
 </div>
 
-[Font Overview preferences]: http://robofont.com/documentation/workspace/preferences-window/font-overview/
+[Font Overview preferences]: http://robofont.com/documentation/reference/workspace/preferences-window/font-overview/
 
 
 constructions

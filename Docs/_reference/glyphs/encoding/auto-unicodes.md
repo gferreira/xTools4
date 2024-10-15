@@ -1,7 +1,7 @@
 ---
 title     : auto unicodes
 layout    : page
-permalink : /reference/dialogs/glyphs/encoding/auto-unicodes
+permalink : /reference/tools/glyphs/encoding/auto-unicodes
 ---
 
 Automatically set unicodes for the selected glyphs.

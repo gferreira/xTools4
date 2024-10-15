@@ -11,7 +11,7 @@ class CreateAnchorsDialog(GlyphsDialogBase):
 
     ::
 
-        from hTools3.dialogs.glyphs.anchorsCreate import CreateAnchorsDialog
+        from xTools4.dialogs.glyphs.old.anchorsCreate import CreateAnchorsDialog
         CreateAnchorsDialog()
 
     '''

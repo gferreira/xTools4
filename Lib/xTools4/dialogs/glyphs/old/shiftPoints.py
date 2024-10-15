@@ -5,6 +5,9 @@ from xTools4.modules.glyphutils import deselectPoints, selectPointsLine, shiftSe
 from xTools4.dialogs.glyphs.old.base import GlyphsDialogBase
 
 
+### WARNING: THIS TOOL CURRENTLY CRASHES RF4.5b (NOT SURE WHY)
+
+
 class ShiftPointsDialog(GlyphsDialogBase):
 
     title = 'shift'
@@ -169,14 +172,15 @@ class ShiftPointsDialog(GlyphsDialogBase):
 
         ctx.save()
 
+        w = 10000
+        h = 10000
+
         # draw glyph
         if not plain:
             ctx.fill(*self.previewFillColor)
             ctx.stroke(*self.previewStrokeColor)
             ctx.strokeWidth(self.previewStrokeWidth * scale)
         else:
-            w = getDefault("glyphViewDefaultWidth")
-            h = getDefault("glyphViewDefaultHeight")
             ctx.stroke(None)
             ctx.fill(1)
             ctx.rect(-w * scale, -h * scale, w * scale * 2, h * scale * 2)
@@ -187,11 +191,11 @@ class ShiftPointsDialog(GlyphsDialogBase):
         # draw position
         if not plain:
             if self.axis == 'y':
-                x1, x2 = -10000, 10000
+                x1, x2 = -w, w
                 y1 = y2 = self.position
             else:
                 x1 = x2 = self.position
-                y1, y2 = -10000, 10000
+                y1, y2 = -h, h
             ctx.lineDash(self.previewStrokeWidth * scale, self.previewStrokeWidth * scale)
             ctx.line((x1, y1), (x2, y2))
 

@@ -1,7 +1,7 @@
 ---
 title     : VarFontAssistant
 layout    : default
-permalink : /reference/dialogs/variable/varfont-assistant
+permalink : /reference/tools/variable/varfont-assistant
 ---
 
 A tool to view and edit font-level values in multiple designspace sources.

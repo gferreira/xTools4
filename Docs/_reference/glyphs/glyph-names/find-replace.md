@@ -1,7 +1,7 @@
 ---
 title     : find & replace in glyph names
 layout    : page
-permalink : /reference/dialogs/glyphs/glyph-names/find-replace
+permalink : /reference/tools/glyphs/glyph-names/find-replace
 ---
 
 Find and replace strings in the names of selected glyphs.
@@ -33,4 +33,13 @@ duplicate
 : rename glyphs as duplicates and keep original glyphs
 </div>
 
+</div>
+
+
+<div class="card bg-light my-3 rounded-0">
+<div class="card-header">note</div>
+<div class="card-body" markdown='1'>
+This tool will be rewritten using `font.renameGlyph`, which adds options to also rename the glyph in *components*, *groups*, *kerning*, and *layers*.
+{: .card-text }
+</div>
 </div>

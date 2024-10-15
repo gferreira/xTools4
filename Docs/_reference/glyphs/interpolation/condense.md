@@ -1,7 +1,7 @@
 ---
 title     : condensomatic
 layout    : page
-permalink : /reference/dialogs/glyphs/interpolation/condense
+permalink : /reference/tools/glyphs/interpolation/condense
 ---
 
 Generate condensed glyphs into the current font by interpolating Regular and Bold sources.

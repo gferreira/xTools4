@@ -1,7 +1,7 @@
 ---
 title     : shift
 layout    : page
-permalink : /reference/dialogs/glyphs/contours/shift
+permalink : /reference/tools/glyphs/contours/shift
 
 ---
 
@@ -40,7 +40,7 @@ preview
 </div>
 
 
-preview
+Preview
 -------
 
 ![]({{"images/glyphs/shift_preview.png" | relative_url }}){: .img-fluid}
@@ -50,3 +50,11 @@ preview
 > - add option to use slant angle (for italic fonts)
 {% endcomment %}
 
+
+<div class="card bg-danger text-bg-danger my-3 rounded-0">
+<div class="card-header">warning</div>
+<div class="card-body" markdown='1'>
+This tool currently crashes RoboFont 4.5b.
+{: .card-text }
+</div>
+</div>

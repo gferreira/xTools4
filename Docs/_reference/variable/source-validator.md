@@ -1,7 +1,7 @@
 ---
 title     : SourceValidator
 layout    : default
-permalink : /reference/dialogs/variable/source-validator
+permalink : /reference/tools/variable/source-validator
 ---
 
 A tool to validate glyphs from one or more fonts against glyphs from another font.

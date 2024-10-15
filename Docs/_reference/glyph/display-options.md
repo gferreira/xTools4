@@ -1,7 +1,7 @@
 ---
 title     : display options
 layout    : page
-permalink : /reference/dialogs/glyph/display-options
+permalink : /reference/tools/glyph/display-options
 ---
 
 A floating palette to quickly toggle the [display options] in the Glyph Editor.

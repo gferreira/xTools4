@@ -1,7 +1,7 @@
 ---
 title     : actions
 layout    : page
-permalink : /reference/dialogs/glyphs/contours/actions
+permalink : /reference/tools/glyphs/contours/actions
 ---
 
 Apply the selected actions to the selected glyphs.
@@ -32,7 +32,7 @@ preview
 </div>
 
 
-preview
+Preview
 -------
 
 ![]({{"images/glyphs/actions_preview.png" | relative_url }}){: .img-fluid}

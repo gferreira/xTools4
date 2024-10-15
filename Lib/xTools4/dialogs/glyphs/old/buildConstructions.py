@@ -17,7 +17,7 @@ class BuildConstructionDialog(GlyphsDialogBase):
 
     ::
 
-        from hTools3.dialogs.glyphs.buildConstructions import BuildConstructionDialog
+        from xTools4.dialogs.glyphs.old.buildConstructions import BuildConstructionDialog
         BuildConstructionDialog()
 
     '''

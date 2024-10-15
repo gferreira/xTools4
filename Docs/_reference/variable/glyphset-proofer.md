@@ -1,7 +1,7 @@
 ---
 title     : GlyphSetProofer
 layout    : default
-permalink : /reference/dialogs/variable/glyphset-proofer
+permalink : /reference/tools/variable/glyphset-proofer
 ---
 
 A tool to create informative PDF glyphset proofs of designspace sources.

@@ -1,7 +1,7 @@
 ---
 title     : preferences
 layout    : default
-permalink : /reference/dialogs/preferences
+permalink : /reference/tools/preferences
 ---
 
 A dialog to edit global xTools4 settings.

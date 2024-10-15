@@ -52,7 +52,7 @@ class GlyphActionsDialog(GlyphsDialogBase):
 
     ::
 
-        from hTools3.dialogs.glyphs.actions import GlyphActionsDialog
+        from xTools4.dialogs.glyphs.old.actions import GlyphActionsDialog
         GlyphActionsDialog()
 
     '''

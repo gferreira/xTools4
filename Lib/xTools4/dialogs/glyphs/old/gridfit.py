@@ -1,7 +1,3 @@
-from importlib import reload
-import hTools3.dialogs.glyphs.base
-reload(hTools3.dialogs.glyphs.base)
-
 from vanilla import CheckBox, Button, TextBox
 from mojo import drawingTools as ctx
 from mojo.UI import getDefault, setDefault, getGlyphViewDisplaySettings, setGlyphViewDisplaySettings, UpdateCurrentGlyphView, NumberEditText
@@ -45,7 +41,7 @@ class RoundToGridDialog(GlyphsDialogBase):
 
     ::
 
-        from hTools3.dialogs.glyphs.gridfit import RoundToGridDialog
+        from xTools4.dialogs.glyphs.old.gridfit import RoundToGridDialog
         RoundToGridDialog()
 
     '''
@@ -159,7 +155,7 @@ class RoundToGridDialog(GlyphsDialogBase):
         self.setGridSize(self.settings['gridSize'])
         self.toggleGrid(True)
         self.initGlyphsWindowBehaviour()
-        registerRepresentationFactory(Glyph, "%s.preview" % self.key, gridfitGlyphFactory)
+        registerRepresentationFactory(Glyph, f"{self.key}.preview", gridfitGlyphFactory)
         self.openWindow()
 
     # -------------
@@ -242,7 +238,7 @@ class RoundToGridDialog(GlyphsDialogBase):
         super().windowCloseCallback(sender)
         removeObserver(self, "drawBackground")
         removeObserver(self, "drawPreview")
-        unregisterRepresentationFactory(Glyph, "%s.preview" % self.key)
+        unregisterRepresentationFactory(Glyph, f"{self.key}.preview")
 
     # ---------
     # observers
@@ -265,7 +261,16 @@ class RoundToGridDialog(GlyphsDialogBase):
             return
 
         # get preview
-        previewGlyph = g.getRepresentation("%s.preview" % self.key, gridsize=self.gridSize, points=self.points, bPoints=self.bPoints, margins=self.margins, width=self.glyphWidth, anchors=self.anchors, components=self.components)
+        previewGlyph = g.getRepresentation(
+            f"{self.key}.preview",
+            gridsize=self.gridSize,
+            points=self.points,
+            bPoints=self.bPoints,
+            margins=self.margins,
+            width=self.glyphWidth,
+            anchors=self.anchors,
+            components=self.components
+        )
 
         # draw preview
         if notification['notificationName'] == 'drawBackground':
@@ -303,8 +308,8 @@ class RoundToGridDialog(GlyphsDialogBase):
             ctx.stroke(*self.previewStrokeColor)
             ctx.strokeWidth(self.previewStrokeWidth * previewScale)
         else:
-            w = getDefault("glyphViewDefaultWidth")
-            h = getDefault("glyphViewDefaultHeight")
+            w = 10000 # getDefault("glyphViewDefaultWidth")
+            h = 10000 # getDefault("glyphViewDefaultHeight")
             ctx.stroke(None)
             ctx.fill(1)
             ctx.rect(-w * previewScale, -h * previewScale, w * previewScale * 2, h * previewScale * 2)
@@ -332,7 +337,7 @@ class RoundToGridDialog(GlyphsDialogBase):
             # draw width
             if self.glyphWidth or self.margins:
                 y1 = -10000
-                y2 = 10000
+                y2 =  10000
                 ctx.save()
                 ctx.lineDash(self.previewStrokeWidth * previewScale, self.previewStrokeWidth * previewScale)
                 ctx.line((glyph.width, y1), (glyph.width, y2))
@@ -376,7 +381,7 @@ class RoundToGridDialog(GlyphsDialogBase):
 
         if self.verbose:
             print('gridfitting glyphs:\n')
-            print('\tgridize: %s' % self.gridSize)
+            print(f'\tgridize: {self.gridSize}')
             print(f'\tlayers: {", ".join(layerNames)}')
             print(f'\tglyphs: {", ".join(glyphNames)}')
             print()
@@ -388,14 +393,16 @@ class RoundToGridDialog(GlyphsDialogBase):
         for glyphName in glyphNames:
             for layerName in layerNames:
                 g = font[glyphName].getLayer(layerName)
-                result = g.getRepresentation("%s.preview" % self.key,
-                            gridsize=self.gridSize,
-                            points=self.points,
-                            bPoints=self.bPoints,
-                            margins=self.margins,
-                            width=self.glyphWidth,
-                            anchors=self.anchors,
-                            components=self.components)
+                result = g.getRepresentation(
+                    f"{self.key}.preview",
+                    gridsize=self.gridSize,
+                    points=self.points,
+                    bPoints=self.bPoints,
+                    margins=self.margins,
+                    width=self.glyphWidth,
+                    anchors=self.anchors,
+                    components=self.components
+                )
                 g.prepareUndo('gridfit')
                 g.clear()
                 g.appendGlyph(result)

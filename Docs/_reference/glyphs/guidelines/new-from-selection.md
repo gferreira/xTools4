@@ -1,13 +1,13 @@
 ---
 title     : new from selection
 layout    : page
-permalink : /reference/dialogs/glyphs/guidelines/new-from-selection
+permalink : /reference/tools/glyphs/guidelines/new-from-selection
 ---
 
 Create new vertical guidelines at the selected contour points.
 {: .lead }
 
-<span class="badge text-bg-secondary rounded-0">RF4</span> This script will be rewritten from scratch as a new *create anchors tool*.
+<span class="badge text-bg-secondary rounded-0">RF4</span> This script will be rewritten from scratch as a new *create guidelines tool*.
 
 
 The vertical angle of the guideline is the font’s italic angle.

@@ -9,15 +9,15 @@ theoretical knowledge · information-oriented · useful when working
 
 <div class='row'>
 <div class='col' markdown='1'>
-Dialogs
--------
+Tools
+-----
 
-- [glyph](dialogs/glyph)
-- [glyphs](dialogs/glyphs)
-- [font](dialogs/font)
-- [batch](dialogs/batch)
-- [variable](dialogs/variable)
-- [preferences](dialogs/preferences)
+- [glyph](tools/glyph)
+- [glyphs](tools/glyphs)
+- [font](tools/font)
+- [batch](tools/batch)
+- [variable](tools/variable)
+- [preferences](tools/preferences)
 </div>
 <div class='col' markdown='1'>
 Formats

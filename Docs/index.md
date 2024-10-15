@@ -31,14 +31,14 @@ tutorials
 reference
 ---------
 
-##### dialogs
+##### tools
 
-- [glyph](reference/dialogs/glyph)
-- [glyphs](reference/dialogs/glyphs)
-- [font](reference/dialogs/font)
-- [batch](reference/dialogs/batch)
-- [variable](reference/dialogs/variable)
-- [preferences](reference/dialogs/preferences)
+- [glyph](reference/tools/glyph)
+- [glyphs](reference/tools/glyphs)
+- [font](reference/tools/font)
+- [batch](reference/tools/batch)
+- [variable](reference/tools/variable)
+- [preferences](reference/tools/preferences)
 
 ##### formats
 

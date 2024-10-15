@@ -10,7 +10,7 @@ class PrintGlyphNamesDialog(hDialog):
 
     ::
 
-        from hTools3.dialogs.glyphs.namesPrint import PrintGlyphNamesDialog
+        from xTools4.dialogs.glyphs.old.namesPrint import PrintGlyphNamesDialog
         PrintGlyphNamesDialog()
 
     '''
@@ -114,16 +114,14 @@ class PrintGlyphNamesDialog(hDialog):
         # print names
         # -----------
 
-        if self.glyphMode:
-            glyphNames = [psname2char(g) for g in glyphNames]
-
-        
-
         if self.sortGlyphNames:
             glyphNames.sort()
         else:
             # sort using font.glyphorder
             glyphNames = [gName for gName in font.glyphOrder if gName in glyphNames]
+
+        if self.glyphMode:
+            glyphNames = [psname2char(g) for g in glyphNames]
 
         # plain string
         if self.printMode == 0:
@@ -135,13 +133,13 @@ class PrintGlyphNamesDialog(hDialog):
 
         # python string
         elif self.printMode == 2:
-            print('"%s"' % ' '.join(glyphNames))
+            print(f'"{' '.join(glyphNames)}"')
 
         # python list
         else:
             txt = '['
             for i, glyphName in enumerate(glyphNames):
-                txt += '"%s"' % glyphName
+                txt += '"{glyphName}"'
                 if i < len(glyphNames) - 1:
                     txt += ', '
             txt += ']'

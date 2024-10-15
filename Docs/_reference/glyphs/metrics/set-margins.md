@@ -1,7 +1,7 @@
 ---
 title     : set margins
 layout    : page
-permalink : /reference/dialogs/glyphs/metrics/set-margins
+permalink : /reference/tools/glyphs/metrics/set-margins
 ---
 
 Set left / right margins in the selected glyphs.

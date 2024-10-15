@@ -1,7 +1,7 @@
 ---
 title     : interpolate glyphs
 layout    : page
-permalink : /reference/dialogs/glyphs/interpolation/interpolate
+permalink : /reference/tools/glyphs/interpolation/interpolate
 ---
 
 Interpolate two fonts into the selected glyphs of the current font.

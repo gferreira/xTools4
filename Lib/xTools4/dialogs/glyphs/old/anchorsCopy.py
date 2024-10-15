@@ -1,8 +1,5 @@
 from vanilla import TextBox, PopUpButton, Button, List
-# from mojo.roboFont import AllFonts
 from mojo.events import addObserver, removeObserver
-# from defconAppKit.windows.baseWindow import BaseWindowController
-# from hTools3.dialogs import hDialog
 from xTools4.modules.anchors import copyAnchors
 from xTools4.dialogs.glyphs.old.base import GlyphsCopyDataDialogBase
 
@@ -14,7 +11,7 @@ class CopyAnchorsDialog(GlyphsCopyDataDialogBase):
 
     ::
 
-        from hTools3.dialogs.glyphs.anchorsCopy import CopyAnchorsDialog
+        from xTools4.dialogs.glyphs.old.anchorsCopy import CopyAnchorsDialog
         CopyAnchorsDialog()
 
     '''
@@ -48,8 +45,8 @@ class CopyAnchorsDialog(GlyphsCopyDataDialogBase):
         # ----------
 
         if self.verbose:
-            sourceFontName = '%s %s' % (sourceFont.info.familyName, sourceFont.info.styleName)
-            targetFontName = '%s %s' % (targetFont.info.familyName, targetFont.info.styleName)
+            sourceFontName = f'{sourceFont.info.familyName} {sourceFont.info.styleName}'
+            targetFontName = f'{targetFont.info.familyName} {targetFont.info.styleName}'
             print('copying anchors:\n')
             print(f'\tsource layer: {sourceFontName} > {self.sourceLayer}')
             print('\ttarget layers:')

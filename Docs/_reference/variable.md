@@ -1,7 +1,7 @@
 ---
 title     : variable
 layout    : default
-permalink : /reference/dialogs/variable
+permalink : /reference/tools/variable
 ---
 
 Tools to visualize and edit variable font sources.

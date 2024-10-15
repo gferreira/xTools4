@@ -1,7 +1,7 @@
 ---
 title     : VarGlyphAssistant
 layout    : default
-permalink : /reference/dialogs/variable/varglyph-assistant
+permalink : /reference/tools/variable/varglyph-assistant
 ---
 
 A tool to view and edit glyph-level values in multiple designspace sources.

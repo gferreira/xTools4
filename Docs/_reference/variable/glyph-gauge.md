@@ -1,7 +1,7 @@
 ---
 title     : GlyphGauge
 layout    : default
-permalink : /reference/dialogs/variable/glyph-gauge
+permalink : /reference/tools/variable/glyph-gauge
 ---
 
 A tool to to display and validate parametric measurements in the current glyph window.

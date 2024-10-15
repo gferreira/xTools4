@@ -1,7 +1,7 @@
 ---
 title     : decompose
 layout    : page
-permalink : /reference/dialogs/glyphs/components/decompose
+permalink : /reference/tools/glyphs/components/decompose
 ---
 
 Decompose all components in the selected glyphs.
