@@ -82,6 +82,7 @@ def getGlyphs2(font, glyphNames=True, template=False):
 
     else:
         if template:
+            # WHY DO WE NEED TO CREATE NEW GLYPHS HERE?? 
             glyphs = [font.newGlyph(gn) for gn in font.templateSelectedGlyphNames]
         else:
             glyphs = list(font.selectedGlyphs)

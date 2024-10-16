@@ -1,11 +1,11 @@
 # menuTitle : skip export
 
 from importlib import reload
-import hTools3.modules.fontutils
-reload(hTools3.modules.fontutils)
+import xTools4.modules.fontutils
+reload(xTools4.modules.fontutils)
 
-from hTools3.modules.fontutils import getGlyphs2
-from hTools3.modules.messages import noFontOpen, noGlyphSelected, showMessage
+from xTools4.modules.fontutils import getGlyphs2
+from xTools4.modules.messages import noFontOpen, noGlyphSelected, showMessage
 
 # TODO: read global settings
 messageMode = 1

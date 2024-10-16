@@ -11,7 +11,7 @@ class CreateAnchorsDialog(GlyphsDialogBase):
 
     ::
 
-        from hTools3.dialogs.glyphs.anchorsCreate import CreateAnchorsDialog
+        from xTools4.dialogs.glyphs.old.anchorsCreate import CreateAnchorsDialog
         CreateAnchorsDialog()
 
     '''
@@ -21,7 +21,7 @@ class CreateAnchorsDialog(GlyphsDialogBase):
     settings = {
         # 'relativeToXHeight' : True,
         'posY' : 100,
-        'posX' : 1, # 0:left, 1:center, 2:right
+        'posX' : 1,     # 0:left, 1:center, 2:right
     }
 
     def __init__(self):

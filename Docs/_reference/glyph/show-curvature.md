@@ -37,7 +37,7 @@ selection only
 </div>
 
 
-preview
+Preview
 -------
 
 ![]({{"images/glyph/curvature_preview.png" | relative_url }}){: .img-fluid}

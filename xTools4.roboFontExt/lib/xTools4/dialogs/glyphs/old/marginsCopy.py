@@ -12,7 +12,7 @@ class CopyMarginsDialog(hDialog, BaseWindowController):
 
     ::
 
-        from hTools3.dialogs.glyphs.marginsCopy import CopyMarginsDialog
+        from xTools4.dialogs.glyphs.old.marginsCopy import CopyMarginsDialog
         CopyMarginsDialog()
 
     '''
@@ -172,7 +172,7 @@ class CopyMarginsDialog(hDialog, BaseWindowController):
             self.w.targetFont.setItems([])
             return
 
-        self.allFonts = {'%s %s' % (f.info.familyName, f.info.styleName) : f for f in AllFonts()}
+        self.allFonts = { f'{f.info.familyName} {f.info.styleName}' : f for f in AllFonts() }
         self.w.targetFont.setItems(self.allFonts.keys())
 
     def updateTargetLayers(self):
@@ -217,13 +217,13 @@ class CopyMarginsDialog(hDialog, BaseWindowController):
         # ----------
 
         if self.verbose:
-            sourceFontName = '%s %s' % (sourceFont.info.familyName, sourceFont.info.styleName)
-            targetFontName = '%s %s' % (targetFont.info.familyName, targetFont.info.styleName)
+            sourceFontName = f'{sourceFont.info.familyName} {sourceFont.info.styleName}'
+            targetFontName = f'{targetFont.info.familyName} {targetFont.info.styleName}'
             print('copying glyph margins:\n')
-            print('\tsource: %s > %s' % (sourceFontName, self.sourceLayer))
-            print('\ttarget: %s > %s' % (targetFontName, self.targetLayer))
-            print('\tleft: %s' % left)
-            print('\tright: %s' % right)
+            print(f'\tsource: {sourceFontName} > {self.sourceLayer}')
+            print(f'\ttarget: {targetFontName} > {self.targetLayer}')
+            print(f'\tleft: {left}')
+            print(f'\tright: {right}')
             print()
             print('\t', end='')
             print(' '.join(glyphNames), end='\n')

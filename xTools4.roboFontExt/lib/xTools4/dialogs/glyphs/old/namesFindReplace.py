@@ -1,3 +1,7 @@
+from importlib import reload
+import xTools4.modules.glyphutils
+reload(xTools4.modules.glyphutils)
+
 from vanilla import TextBox, EditText, CheckBox, Button, RadioGroup
 from xTools4.dialogs.old import hDialog
 from xTools4.modules.glyphutils import findReplaceGlyphName, addToGlyphName
@@ -109,7 +113,7 @@ class FindReplaceGlyphNamesDialog(hDialog):
         if not font:
             return
 
-        glyphNames = self.getGlyphNames(template=True)
+        glyphNames = self.getGlyphNames(template=False)
         if not glyphNames:
             return
 
@@ -132,10 +136,7 @@ class FindReplaceGlyphNamesDialog(hDialog):
 
         for glyphName in glyphNames:
             for layerName in layerNames:
-                layer = font.getLayer(layerName)
-                if glyphName not in layer:
-                    continue
-                g = layer[glyphName]
+                g = font[glyphName].getLayer(layerName)
                 g.prepareUndo('rename glyph')
                 findReplaceGlyphName(g,
                         self.findText, self.replaceText,
@@ -143,7 +144,6 @@ class FindReplaceGlyphNamesDialog(hDialog):
                         duplicate=self.duplicate,
                         verbose=self.verbose)
                 g.performUndo()
-
         print('\n...done.\n')
 
 # -------

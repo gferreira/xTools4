@@ -6,6 +6,8 @@ layout : page
 Skew the selected glyphs.
 {: .lead }
 
+<span class="badge text-bg-warning rounded-0">RF3</span> RoboFont 3 code which still works in RoboFont 4. Not updated to the new RoboFont 4 APIs yet.
+
 
 <div class='row'>
 
@@ -44,7 +46,7 @@ Supports skewing multiple layers using the [layers] selector.
 [layers]: ../../modifiers/layers/
 
 
-preview
+Preview
 -------
 
 ![]({{"images/glyphs/skew_preview.png" | relative_url }}){: .img-fluid}

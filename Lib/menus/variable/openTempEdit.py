@@ -1,10 +1,10 @@
 # menuTitle: TempEdit
 
 from importlib import reload
-import variableValues.dialogs.TempEdit 
-reload(variableValues.dialogs.TempEdit)
+import xTools4.dialogs.variable.TempEdit 
+reload(xTools4.dialogs.variable.TempEdit)
 
 from mojo.roboFont import OpenWindow
-from variableValues.dialogs.TempEdit import TempEdit
+from xTools4.dialogs.variable.TempEdit import TempEdit
 
 OpenWindow(TempEdit)

@@ -1,10 +1,9 @@
 from vanilla import CheckBox, Button, TextBox
 from mojo import drawingTools as ctx
-from mojo.UI import getDefault
-from xTools4.modules.glyphutils import getOriginPosition
-from xTools4.dialogs.glyphs.old.base import GlyphsDialogBase
 from xTools4.dialogs.old.misc.origin import OriginPoint
 from xTools4.dialogs.old.misc.numberEditText01 import NumberEditText_01
+from xTools4.dialogs.glyphs.old.base import GlyphsDialogBase
+from xTools4.modules.glyphutils import getOriginPosition
 
 
 def rotateGlyphFactory():
@@ -18,7 +17,7 @@ class RotateGlyphsDialog(GlyphsDialogBase):
 
     ::
 
-        from hTools3.dialogs.glyphs.rotate import RotateGlyphsDialog
+        from xTools4.dialogs.glyphs.old.rotate import RotateGlyphsDialog
         RotateGlyphsDialog()
 
     '''
@@ -125,6 +124,8 @@ class RotateGlyphsDialog(GlyphsDialogBase):
             return 0, 0
 
     def drawPreview(self, srcGlyph, previewGlyph, previewScale, plain=False):
+        w = h = 10000
+
         ctx.save()
 
         # draw glyph
@@ -133,8 +134,6 @@ class RotateGlyphsDialog(GlyphsDialogBase):
             ctx.stroke(*self.previewStrokeColor)
             ctx.strokeWidth(self.previewStrokeWidth * previewScale)
         else:
-            w = getDefault("glyphViewDefaultWidth")
-            h = getDefault("glyphViewDefaultHeight")
             ctx.stroke(None)
             ctx.fill(1)
             ctx.rect(-w * previewScale, -h * previewScale, w * previewScale * 2, h * previewScale * 2)

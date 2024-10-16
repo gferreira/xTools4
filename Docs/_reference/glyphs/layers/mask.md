@@ -32,8 +32,10 @@ flip
 clear
 : clear contents of the mask layer
 
-lock widths
-: copy glyph widths when copying between layers
+~~copy width~~
+: ^
+  ~~copy glyph widths when copying between layers~~  
+  *this option is no longer necessary in RoboFont 4*
 </div>
 
 </div>

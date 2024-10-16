@@ -1,10 +1,10 @@
 # menuTitle: GlyphSetProofer
 
 from importlib import reload
-import variableValues.dialogs.GlyphSetProofer
-reload(variableValues.dialogs.GlyphSetProofer)
+import xTools4.dialogs.variable.GlyphSetProofer
+reload(xTools4.dialogs.variable.GlyphSetProofer)
 
 from mojo.roboFont import OpenWindow
-from variableValues.dialogs.GlyphSetProofer import GlyphSetProoferUI
+from xTools4.dialogs.variable.GlyphSetProofer import GlyphSetProoferUI
 
 OpenWindow(GlyphSetProoferUI)

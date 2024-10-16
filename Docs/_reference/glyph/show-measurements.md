@@ -46,8 +46,7 @@ show preview
 </div>
 
 
-preview
+Preview
 -------
 
 ![]({{"images/glyph/measurements_preview.png" | relative_url }}){: .img-fluid}
-

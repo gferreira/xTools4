@@ -63,7 +63,7 @@ class ImportGlyphsIntoLayerDialog(hDialog):
                 ["font name", "custom"],
                 isVertical=True,
                 sizeStyle=self.sizeStyle)
-        self.w.targetLayer.set(0)
+        self.w.targetLayer.set(1)
 
         y += self.textHeight * 2 + p
         self.w.targetLayerName = EditText(
@@ -113,7 +113,13 @@ class ImportGlyphsIntoLayerDialog(hDialog):
     # ---------
 
     def getFontCallback(self, sender):
-        ufoPath = getFile()[0]
+        selectedFiles = getFile()
+        if not selectedFiles:
+            # rewrite with xTools4.modules.messages.showMessage
+            print('no file selected, aborting.\n')
+            return
+
+        ufoPath = selectedFiles[0]
         self.sourceFont = OpenFont(ufoPath, showInterface=False)
         self.w.sourceLayers.setItems(self.sourceFont.layerOrder)
 

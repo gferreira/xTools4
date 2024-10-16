@@ -45,7 +45,7 @@ Supports setting widths in multiple layers using the [layers] selector.
 [layers]: ../../modifiers/layers/
 
 
-positioning modes
+Positioning modes
 -----------------
 
 <table class='table table-hover'>
@@ -68,7 +68,7 @@ positioning modes
 </table>
 
 
-preview
+Preview
 -------
 
 ![]({{"images/glyphs/widthSet_preview.png" | relative_url }}){: .img-fluid}

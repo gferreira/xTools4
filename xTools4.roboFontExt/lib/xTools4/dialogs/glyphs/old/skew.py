@@ -17,7 +17,7 @@ class SkewGlyphsDialog(GlyphsDialogBase):
 
     ::
 
-        from hTools3.dialogs.glyphs.skew import SkewGlyphsDialog
+        from xTools4.dialogs.glyphs.old.skew import SkewGlyphsDialog
         SkewGlyphsDialog()
 
     '''
@@ -152,6 +152,8 @@ class SkewGlyphsDialog(GlyphsDialogBase):
 
     def drawPreview(self, glyph, previewScale, plain=False):
 
+        w = h = 10000
+
         ctx.save()
 
         # draw glyph
@@ -160,8 +162,6 @@ class SkewGlyphsDialog(GlyphsDialogBase):
             ctx.stroke(*self.previewStrokeColor)
             ctx.strokeWidth(self.previewStrokeWidth * previewScale)
         else:
-            w = getDefault("glyphViewDefaultWidth")
-            h = getDefault("glyphViewDefaultHeight")
             ctx.stroke(None)
             ctx.fill(1)
             ctx.rect(-w * previewScale, -h * previewScale, w * previewScale * 2, h * previewScale * 2)
@@ -182,8 +182,8 @@ class SkewGlyphsDialog(GlyphsDialogBase):
             # draw margins
             x1 = 0
             x2 = glyph.width
-            y1 = -10000
-            y2 = 10000
+            y1 = -h
+            y2 = h
 
             offsetX = math.tan(math.radians(self.skewAngle[0])) * self.originPos[1]
             x1 -= offsetX

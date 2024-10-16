@@ -1,6 +1,6 @@
 from importlib import reload
-import variableValues.glyphSetProofer
-reload(variableValues.glyphSetProofer)
+import xTools4.modules.glyphSetProofer
+reload(xTools4.modules.glyphSetProofer)
 
 import os, time
 import AppKit
@@ -10,8 +10,8 @@ from vanilla import *
 from mojo.UI import PutFile
 from mojo.roboFont import OpenWindow
 from fontParts.world import OpenFont
-from variableValues.designspacePlus import DesignSpacePlus
-from variableValues.glyphSetProofer import GlyphSetProofer
+from xTools4.modules.designspacePlus import DesignSpacePlus
+from xTools4.modules.glyphSetProofer import GlyphSetProofer
 
 
 class GlyphSetProoferUI:

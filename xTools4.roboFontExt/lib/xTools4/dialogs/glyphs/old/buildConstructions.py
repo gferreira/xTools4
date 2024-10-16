@@ -1,6 +1,6 @@
 from vanilla import Button, CheckBox
 from mojo import drawingTools as ctx
-from mojo.UI import GetFile, CodeEditor, getDefault
+from mojo.UI import GetFile, CodeEditor
 from mojo.events import removeObserver
 from mojo.roboFont import RGlyph, CurrentFont
 from mojo.pens import DecomposePointPen
@@ -17,7 +17,7 @@ class BuildConstructionDialog(GlyphsDialogBase):
 
     ::
 
-        from hTools3.dialogs.glyphs.buildConstructions import BuildConstructionDialog
+        from xTools4.dialogs.glyphs.old.buildConstructions import BuildConstructionDialog
         BuildConstructionDialog()
 
     '''
@@ -172,8 +172,7 @@ class BuildConstructionDialog(GlyphsDialogBase):
             ctx.stroke(*self.previewStrokeColor)
             ctx.strokeWidth(self.previewStrokeWidth * previewScale)
         else:
-            w = getDefault("glyphViewDefaultWidth")
-            h = getDefault("glyphViewDefaultHeight")
+            w = h = 10000
             ctx.stroke(None)
             ctx.fill(1)
             ctx.rect(-w * previewScale, -h * previewScale, w * previewScale * 2, h * previewScale * 2)

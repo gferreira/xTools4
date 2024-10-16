@@ -300,6 +300,8 @@ class RoundToGridDialog(GlyphsDialogBase):
 
     def drawPreview(self, glyph, previewScale, plain=False):
 
+        w = h = 10000
+
         ctx.save()
 
         # draw glyph
@@ -308,8 +310,6 @@ class RoundToGridDialog(GlyphsDialogBase):
             ctx.stroke(*self.previewStrokeColor)
             ctx.strokeWidth(self.previewStrokeWidth * previewScale)
         else:
-            w = 10000 # getDefault("glyphViewDefaultWidth")
-            h = 10000 # getDefault("glyphViewDefaultHeight")
             ctx.stroke(None)
             ctx.fill(1)
             ctx.rect(-w * previewScale, -h * previewScale, w * previewScale * 2, h * previewScale * 2)
@@ -336,8 +336,8 @@ class RoundToGridDialog(GlyphsDialogBase):
 
             # draw width
             if self.glyphWidth or self.margins:
-                y1 = -10000
-                y2 =  10000
+                y1 = -h
+                y2 =  h
                 ctx.save()
                 ctx.lineDash(self.previewStrokeWidth * previewScale, self.previewStrokeWidth * previewScale)
                 ctx.line((glyph.width, y1), (glyph.width, y2))

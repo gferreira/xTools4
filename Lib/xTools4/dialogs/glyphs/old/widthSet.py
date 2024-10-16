@@ -12,7 +12,7 @@ class SetWidthDialog(GlyphsDialogBase):
 
     ::
 
-        from hTools3.dialogs.glyphs.widthSet import SetWidthDialog
+        from xTools4.dialogs.glyphs.old.widthSet import SetWidthDialog
         SetWidthDialog()
 
     '''

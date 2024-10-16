@@ -3,7 +3,7 @@ from defconAppKit.windows.baseWindow import BaseWindowController
 from mojo import drawingTools as ctx
 from mojo.events import addObserver, removeObserver
 from mojo.UI import UpdateCurrentGlyphView
-from xTools4.old.dialogs import hDialog
+from xTools4.dialogs.old import hDialog
 
 
 class LockLayerWidthsDialog(hDialog, BaseWindowController):
@@ -13,7 +13,7 @@ class LockLayerWidthsDialog(hDialog, BaseWindowController):
 
     ::
 
-        from hTools3.dialogs.glyphs.layersLock import LockLayerWidthsDialog
+        from xTools4.dialogs.glyphs.old.layersLock import LockLayerWidthsDialog
         LockLayerWidthsDialog()
 
     '''
@@ -44,7 +44,7 @@ class LockLayerWidthsDialog(hDialog, BaseWindowController):
         y += self.textHeight + p
         self.w.showPreview = CheckBox(
                 (x, y, -p, self.textHeight),
-                "preview",
+                "show icon",
                 value=True,
                 callback=self.previewCallback,
                 sizeStyle=self.sizeStyle)
@@ -167,9 +167,9 @@ class LockLayerWidthsDialog(hDialog, BaseWindowController):
         for glyphName in glyphNames:
             if self.verbose:
                 if value:
-                    print('locking layer widths (%s)...' % glyphName)
+                    print(f'locking layer widths ({glyphName})...')
                 else:
-                    print('unlocking layer widths (%s)...' % glyphName)
+                    print(f'unlocking layer widths ({glyphName})...')
             lockGlyphsDict[glyphName] = value
 
         # save glyph lock dict in font lib

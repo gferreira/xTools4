@@ -51,8 +51,8 @@ Tools to apply actions to the current glyph or to selected glyphs.
 <div class='col' markdown=1>
 ### guidelines
 
-- <span class="badge text-bg-primary rounded-0">RF4</span> [clear](guidelines/clear)
-- <span class="badge text-bg-secondary rounded-0">RF4</span> [new from selection](guidelines/new-from-selection)
+- <span class="badge text-bg-primary   rounded-0">RF4</span> [clear](guidelines/clear)
+- <span class="badge text-bg-secondary rounded-0">RF4</span> [create](guidelines/create)
 </div>
 
 <div class='col' markdown=1>
@@ -79,7 +79,7 @@ Tools to apply actions to the current glyph or to selected glyphs.
 <div class='col' markdown=1>
 ### metrics
 
-- <span class="badge text-bg-warning rounded-0">RF3</span> [center](metrics/center-glyph)
+- <span class="badge text-bg-primary rounded-0">RF4</span> [center](metrics/center-glyph)
 - <span class="badge text-bg-warning rounded-0">RF3</span> [copy margins](metrics/copy-margins)
 - <span class="badge text-bg-warning rounded-0">RF3</span> [copy width](metrics/copy-width)
 - <span class="badge text-bg-warning rounded-0">RF3</span> [set margins](metrics/set-margins)

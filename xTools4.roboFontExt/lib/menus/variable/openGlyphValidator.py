@@ -1,10 +1,10 @@
 # menuTitle: GlyphValidator
 
 from importlib import reload
-import variableValues.dialogs.RF4.GlyphValidator
-reload(variableValues.dialogs.RF4.GlyphValidator)
+import xTools4.dialogs.variable.GlyphValidator
+reload(xTools4.dialogs.variable.GlyphValidator)
 
 from mojo.roboFont import OpenWindow
-from variableValues.dialogs.RF4.GlyphValidator import GlyphValidatorController
+from xTools4.dialogs.variable.GlyphValidator import GlyphValidatorController
 
 OpenWindow(GlyphValidatorController)

@@ -2,7 +2,7 @@ from vanilla import TextBox, PopUpButton, CheckBox, Button
 from mojo import drawingTools as ctx
 from mojo.roboFont import AllFonts
 from mojo.events import addObserver, removeObserver
-from mojo.UI import getDefault, UpdateCurrentGlyphView
+from mojo.UI import UpdateCurrentGlyphView
 from xTools4.dialogs.glyphs.old.base import GlyphsDialogBase
 from xTools4.dialogs.old.misc.numberEditText001 import NumberEditText_001
 
@@ -281,11 +281,13 @@ class InterpolateGlyphsDialog(GlyphsDialogBase):
             self.w.targetLayer.setItems(font.layerOrder)
 
     def drawPreview(self, glyph, previewScale, plain=False):
+        w = h = 10000
+
         s  = previewScale
         x1 = 0
         x2 = glyph.width
-        y1 = -10000
-        y2 = 10000
+        y1 = -h
+        y2 = h
 
         ctx.save()
 
@@ -294,11 +296,9 @@ class InterpolateGlyphsDialog(GlyphsDialogBase):
             ctx.stroke(*self.previewStrokeColor)
             ctx.strokeWidth(self.previewStrokeWidth*s)
         else:
-            w = getDefault("glyphViewDefaultWidth")
-            h = getDefault("glyphViewDefaultHeight")
             ctx.stroke(None)
             ctx.fill(1)
-            ctx.rect(-w*s, -h*s, w*s*2, h*s*2)
+            ctx.rect(-w * s, -h * s, w * s * 2, h * s * 2)
             ctx.fill(0)
 
         ctx.drawGlyph(glyph)

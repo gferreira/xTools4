@@ -30,7 +30,7 @@ class BooleanOperationsDialog(GlyphsDialogBase):
 
     ::
 
-        from hTools3.dialogs.glyphs.boolean import BooleanOperationsDialog
+        from xTools4.dialogs.glyphs.old.boolean import BooleanOperationsDialog
         BooleanOperationsDialog()
 
     '''

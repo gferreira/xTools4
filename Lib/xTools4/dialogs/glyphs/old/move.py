@@ -1,6 +1,6 @@
 from vanilla import CheckBox, Button, TextBox
 from mojo import drawingTools as ctx
-from mojo.UI import getDefault, NumberEditText
+from mojo.UI import NumberEditText
 from xTools4.dialogs.glyphs.old.base import GlyphsDialogBase
 
 
@@ -15,7 +15,7 @@ class MoveGlyphsDialog(GlyphsDialogBase):
 
     ::
 
-        from hTools3.dialogs.glyphs.move import MoveGlyphsDialog
+        from xTools4.dialogs.glyphs.old.move import MoveGlyphsDialog
         MoveGlyphsDialog()
 
     '''
@@ -131,8 +131,7 @@ class MoveGlyphsDialog(GlyphsDialogBase):
             ctx.stroke(*self.previewStrokeColor)
             ctx.strokeWidth(self.previewStrokeWidth * previewScale)
         else:
-            w = getDefault("glyphViewDefaultWidth")
-            h = getDefault("glyphViewDefaultHeight")
+            w = h = 10000
             ctx.stroke(None)
             ctx.fill(1)
             ctx.rect(-w * previewScale, -h * previewScale, w * previewScale * 2, h * previewScale * 2)

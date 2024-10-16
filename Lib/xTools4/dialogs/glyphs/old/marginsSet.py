@@ -13,7 +13,7 @@ class SetMarginsDialog(GlyphsDialogBase):
 
     ::
 
-        from hTools3.dialogs.glyphs.marginsSet import SetMarginsDialog
+        from xTools4.dialogs.glyphs.old.marginsSet import SetMarginsDialog
         SetMarginsDialog()
 
     '''
@@ -250,9 +250,6 @@ class SetMarginsDialog(GlyphsDialogBase):
         margins = self.getMargins(glyph)
         if margins is None:
             return False
-        # elif not all(margins):
-        #     # no margins for glyph {glyph.name} ({glyph.layer.name}).')
-        #     return False
         else:
             return True
 

@@ -1,10 +1,10 @@
 # menuTitle: TempGlyphs
 
 from importlib import reload
-import variableValues.dialogs.TempGlyphs
-reload(variableValues.dialogs.TempGlyphs)
+import xTools4.dialogs.variable.TempGlyphs
+reload(xTools4.dialogs.variable.TempGlyphs)
 
 from mojo.roboFont import OpenWindow
-from variableValues.dialogs.TempGlyphs import TempGlyphs
+from xTools4.dialogs.variable.TempGlyphs import TempGlyphs
 
 OpenWindow(TempGlyphs)

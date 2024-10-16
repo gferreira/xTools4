@@ -1,11 +1,10 @@
 from vanilla import TextBox, PopUpButton, CheckBox, Button
 from mojo import drawingTools as ctx
-from mojo.UI import getDefault
 from mojo.roboFont import AllFonts
 from mojo.events import addObserver, removeObserver
 from xTools4.dialogs.glyphs.old.base import GlyphsDialogBase
 from xTools4.modules.interpolation import condenseGlyph
-from xTools4.dialogs.misc.numberEditText001 import NumberEditText_001
+from xTools4.dialogs.old.misc.numberEditText001 import NumberEditText_001
 
 
 class CondenseGlyphsDialog(GlyphsDialogBase):
@@ -15,7 +14,7 @@ class CondenseGlyphsDialog(GlyphsDialogBase):
 
     ::
 
-        from hTools3.dialogs.glyphs.interpolationCondense import CondenseGlyphsDialog
+        from xTools4.dialogs.glyphs.old.interpolationCondense import CondenseGlyphsDialog
         CondenseGlyphsDialog()
 
     '''
@@ -208,8 +207,8 @@ class CondenseGlyphsDialog(GlyphsDialogBase):
             ctx.stroke(*self.previewStrokeColor)
             ctx.strokeWidth(self.previewStrokeWidth * previewScale)
         else:
-            w = getDefault("glyphViewDefaultWidth")
-            h = getDefault("glyphViewDefaultHeight")
+            w = 10000
+            h = 10000
             ctx.stroke(None)
             ctx.fill(1)
             ctx.rect(-w * previewScale, -h * previewScale, w * previewScale * 2, h * previewScale * 2)

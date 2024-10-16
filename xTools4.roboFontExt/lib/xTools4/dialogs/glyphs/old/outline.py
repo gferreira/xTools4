@@ -29,7 +29,7 @@ class OutlineGlyphsDialog(GlyphsDialogBase):
 
     ::
 
-        from hTools3.dialogs.glyphs.outline import OutlineGlyphsDialog
+        from xTools4.dialogs.glyphs.old.outline import OutlineGlyphsDialog
         OutlineGlyphsDialog()
 
     '''
@@ -158,7 +158,7 @@ class OutlineGlyphsDialog(GlyphsDialogBase):
         addObserver(self, 'updateLayersObserver', 'newFontDidOpen')
         addObserver(self, 'updateLayersObserver', 'fontDidOpen')
         addObserver(self, 'updateLayersObserver', 'fontDidClose')
-        registerRepresentationFactory(Glyph, "%s.preview" % self.key, outlineGlyphFactory)
+        registerRepresentationFactory(Glyph, f"{self.key}.preview", outlineGlyphFactory)
         self.updateSourceLayer()
         self.updateTargetLayer()
         self.openWindow()
@@ -217,7 +217,7 @@ class OutlineGlyphsDialog(GlyphsDialogBase):
         removeObserver(self, 'newFontDidOpen')
         removeObserver(self, 'fontDidOpen')
         removeObserver(self, 'fontDidClose')
-        unregisterRepresentationFactory(Glyph, "%s.preview" % self.key)
+        unregisterRepresentationFactory(Glyph, f"{self.key}.preview")
 
     # ---------
     # observers
@@ -244,13 +244,15 @@ class OutlineGlyphsDialog(GlyphsDialogBase):
             return
 
         # make preview
-        previewGlyph = g.getRepresentation("%s.preview" % self.key,
-                layerName=self.sourceLayer,
-                distance=self.distance,
-                join=self.join,
-                cap=self.cap,
-                inner=self.inner,
-                outer=self.outer)
+        previewGlyph = g.getRepresentation(
+            f"{self.key}.preview",
+            layerName=self.sourceLayer,
+            distance=self.distance,
+            join=self.join,
+            cap=self.cap,
+            inner=self.inner,
+            outer=self.outer
+        )
 
         if previewGlyph is None:
             return
@@ -293,8 +295,8 @@ class OutlineGlyphsDialog(GlyphsDialogBase):
             ctx.stroke(*self.previewStrokeColor)
             ctx.strokeWidth(self.previewStrokeWidth * previewScale)
         else:
-            w = getDefault("glyphViewDefaultWidth")
-            h = getDefault("glyphViewDefaultHeight")
+            w = 10000 # getDefault("glyphViewDefaultWidth")
+            h = 10000 # getDefault("glyphViewDefaultHeight")
             ctx.stroke(None)
             ctx.fill(1)
             ctx.rect(-w * previewScale, -h * previewScale, w * previewScale * 2, h * previewScale * 2)
@@ -324,11 +326,11 @@ class OutlineGlyphsDialog(GlyphsDialogBase):
 
         if self.verbose:
             print('outlining contours...\n')
-            print('\tdistance: %s' % self.distance)
-            print('\tjoin: %s'     % self.strokeParameters[self.join])
-            print('\tcap: %s'      % self.strokeParameters[self.cap])
-            print('\tinner: %s'    % bool(self.inner))
-            print('\touter: %s'    % bool(self.outer))
+            print(f'\tdistance: {self.distance}')
+            print(f'\tjoin: {self.strokeParameters[self.join]}')
+            print(f'\tcap: {self.strokeParameters[self.cap]}')
+            print(f'\tinner: {bool(self.inner)}')
+            print(f'\touter: {bool(self.outer)}')
             print()
             print('\t', end='')
             print(' '.join(glyphNames), end='\n')
@@ -340,13 +342,15 @@ class OutlineGlyphsDialog(GlyphsDialogBase):
         for glyphName in glyphNames:
 
             g = font[glyphName]
-            result = g.getRepresentation("%s.preview" % self.key,
-                    layerName=self.sourceLayer,
-                    distance=self.distance,
-                    join=self.join,
-                    cap=self.cap,
-                    inner=self.inner,
-                    outer=self.outer)
+            result = g.getRepresentation(
+                f"{self.key}.preview",
+                layerName=self.sourceLayer,
+                distance=self.distance,
+                join=self.join,
+                cap=self.cap,
+                inner=self.inner,
+                outer=self.outer
+            )
 
             dstGlyph = g.getLayer(self.targetLayer)
             dstGlyph.prepareUndo('outline glyphs')

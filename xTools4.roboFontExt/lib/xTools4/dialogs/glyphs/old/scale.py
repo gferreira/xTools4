@@ -1,6 +1,5 @@
 from vanilla import CheckBox, Button, RadioGroup, TextBox
 from mojo import drawingTools as ctx
-from mojo.UI import getDefault
 from xTools4.modules.glyphutils import getOriginPosition
 from xTools4.dialogs.glyphs.old.base import GlyphsDialogBase
 from xTools4.dialogs.old.misc.origin import OriginPoint
@@ -18,7 +17,7 @@ class ScaleGlyphsDialog(GlyphsDialogBase):
 
     ::
 
-        from hTools3.dialogs.glyphs.scale import ScaleGlyphsDialog
+        xTools4.dialogs.glyphs.old.scale import ScaleGlyphsDialog
         ScaleGlyphsDialog()
 
     '''
@@ -170,6 +169,7 @@ class ScaleGlyphsDialog(GlyphsDialogBase):
 
     def drawPreview(self, srcGlyph, previewGlyph, previewScale, plain=False):
 
+        w = h = 10000
         scaleX, scaleY = self.scaleFactors
 
         ctx.save()
@@ -180,8 +180,6 @@ class ScaleGlyphsDialog(GlyphsDialogBase):
             ctx.stroke(*self.previewStrokeColor)
             ctx.strokeWidth(self.previewStrokeWidth * previewScale)
         else:
-            w = getDefault("glyphViewDefaultWidth")
-            h = getDefault("glyphViewDefaultHeight")
             ctx.stroke(None)
             ctx.fill(1)
             ctx.rect(-w * previewScale, -h * previewScale, w * previewScale * 2, h * previewScale * 2)
@@ -210,8 +208,8 @@ class ScaleGlyphsDialog(GlyphsDialogBase):
                     L, B, R, T = previewGlyph.bounds
                     x1 = L - leftMargin
                     x2 = R + rightMargin
-                    y1 = -10000
-                    y2 = 10000
+                    y1 = -h
+                    y2 = h
                     ctx.line((x1, y1), (x1, y2))
                     ctx.line((x2, y1), (x2, y2))
                 else:
@@ -220,8 +218,8 @@ class ScaleGlyphsDialog(GlyphsDialogBase):
 
             # draw vertical metrics
             if self.w.metricsY.get():
-                x1 = -10000
-                x2 = 10000
+                x1 = -w
+                x2 = w
                 yLines = [
                     srcGlyph.font.info.xHeight,
                     srcGlyph.font.info.descender,

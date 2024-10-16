@@ -12,7 +12,7 @@ class CopyWidthDialog(hDialog, BaseWindowController):
 
     ::
 
-        from hTools3.dialogs.glyphs.widthCopy import CopyWidthDialog
+        from xTools4.dialogs.glyphs.old.widthCopy import CopyWidthDialog
         CopyWidthDialog()
 
     '''
@@ -157,7 +157,7 @@ class CopyWidthDialog(hDialog, BaseWindowController):
             self.w.targetFont.setItems([])
             return
 
-        self.allFonts = {'%s %s' % (f.info.familyName, f.info.styleName) : f for f in AllFonts()}
+        self.allFonts = { f'{f.info.familyName} {f.info.styleName}' : f for f in AllFonts() }
 
         if not self.allFonts:
             self.w.targetFont.setItems([])
@@ -202,8 +202,8 @@ class CopyWidthDialog(hDialog, BaseWindowController):
         # ----------
 
         if self.verbose:
-            sourceFontName = '%s %s' % (sourceFont.info.familyName, sourceFont.info.styleName)
-            targetFontName = '%s %s' % (targetFont.info.familyName, targetFont.info.styleName)
+            sourceFontName = f'{sourceFont.info.familyName} {sourceFont.info.styleName}'
+            targetFontName = f'{targetFont.info.familyName} {targetFont.info.styleName}'
             print('copying glyph widths:\n')
             print(f'\tsource layer: {sourceFontName} > {self.sourceLayer}')
             print('\ttarget layers:')

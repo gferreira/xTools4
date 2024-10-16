@@ -29,7 +29,7 @@ class OutlineGlyphsDialog(GlyphsDialogBase):
 
     ::
 
-        from hTools3.dialogs.glyphs.outline import OutlineGlyphsDialog
+        from xTools4.dialogs.glyphs.old.outline import OutlineGlyphsDialog
         OutlineGlyphsDialog()
 
     '''

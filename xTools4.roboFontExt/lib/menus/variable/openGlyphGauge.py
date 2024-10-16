@@ -1,10 +1,10 @@
 # menuTitle: GlyphGauge
 
 from importlib import reload
-import variableValues.dialogs.RF4.GlyphGauge
-reload(variableValues.dialogs.RF4.GlyphGauge)
+import xTools4.dialogs.variable.GlyphGauge
+reload(xTools4.dialogs.variable.GlyphGauge)
 
 from mojo.roboFont import OpenWindow
-from variableValues.dialogs.RF4.GlyphGauge import GlyphGauge_EZUI
+from xTools4.dialogs.variable.GlyphGauge import GlyphGauge_EZUI
 
 OpenWindow(GlyphGauge_EZUI)
