@@ -1,7 +1,7 @@
 ---
-title  : set glyph order
-layout : page
-permalink : /reference/tools/font/set-glyph-order
+title     : set glyph order
+layout    : page
+permalink : /reference/tools/font/set-glyph-order/
 ---
 
 Set glyph order in the current font from encoding file.

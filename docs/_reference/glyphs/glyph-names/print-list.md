@@ -1,7 +1,7 @@
 ---
 title     : print glyphs list
 layout    : page
-permalink : /reference/tools/glyphs/glyph-names/print-list
+permalink : /reference/tools/glyphs/glyph-names/print-list/
 ---
 
 Print the selected glyphs in multiple modes and formats.

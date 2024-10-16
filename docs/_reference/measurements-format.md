@@ -1,7 +1,7 @@
 ---
 title     : Measurements format
 layout    : default
-permalink : /reference/measurements-format
+permalink : /reference/measurements-format/
 ---
 
 A data format to store definitions of font-level and glyph-level measurements.

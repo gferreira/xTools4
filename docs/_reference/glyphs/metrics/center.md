@@ -1,7 +1,7 @@
 ---
 title     : center glyph
 layout    : page
-permalink : /reference/tools/glyphs/metrics/center-glyph
+permalink : /reference/tools/glyphs/metrics/center-glyph/
 ---
 
 Center glyph contours by equalizing left and right margins.

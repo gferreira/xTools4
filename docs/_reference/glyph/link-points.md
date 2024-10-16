@@ -1,7 +1,7 @@
 ---
 title     : linked points
 layout    : page
-permalink : /reference/tools/glyph/link-points
+permalink : /reference/tools/glyph/link-points/
 ---
 
 Create permanent links between pairs of points and show the distance or angle between them.

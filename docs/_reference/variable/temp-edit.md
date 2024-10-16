@@ -1,7 +1,7 @@
 ---
 title     : TempEdit
 layout    : default
-permalink : /reference/tools/variable/temp-edit
+permalink : /reference/tools/variable/temp-edit/
 ---
 
 A tool to edit glyphs from multiple designspace sources using temporary font(s).

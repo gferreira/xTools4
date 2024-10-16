@@ -1,7 +1,7 @@
 ---
 title     : BatchValidator
 layout    : default
-permalink : /reference/tools/variable/batch-validator
+permalink : /reference/tools/variable/batch-validator/
 ---
 
 A tool to batch validate glyphs in a set of fonts against glyphs from another font.
@@ -9,7 +9,7 @@ A tool to batch validate glyphs in a set of fonts against glyphs from another fo
 
 <div class='row'>
 <div class='col' markdown='1'>
-![]({{ site.url }}/images/BatchValidator.png){: .img-fluid}
+![]({{ site.url }}/images/variable/BatchValidator.png){: .img-fluid}
 </div>
 <div class='col' markdown='1'>
 default font
@@ -31,7 +31,7 @@ Output
 
 <div class='row'>
 <div class='col' markdown='1'>
-![]({{ site.url }}/images/BatchValidator-1.png){: .img-fluid}
+![]({{ site.url }}/images/variable/BatchValidator-1.png){: .img-fluid}
 </div>
 <div class='col' markdown='1'>
 A report of the test results is printed to RoboFont’s Output window.  

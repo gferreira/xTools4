@@ -1,7 +1,7 @@
 ---
 title     : select layers
 layout    : page
-permalink : /reference/tools/glyphs/modifiers/layers
+permalink : /reference/tools/glyphs/modifiers/layers/
 ---
 
 A palette to select which layers should be affected by actions from other tools.

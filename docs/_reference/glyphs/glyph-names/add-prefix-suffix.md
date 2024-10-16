@@ -1,7 +1,7 @@
 ---
 title     : add prefix or suffix
 layout    : page
-permalink : /reference/tools/glyphs/glyph-names/add-prefix-suffix
+permalink : /reference/tools/glyphs/glyph-names/add-prefix-suffix/
 ---
 
 Add a prefix or suffix to the names of selected glyphs.
@@ -13,7 +13,7 @@ Add a prefix or suffix to the names of selected glyphs.
 <div class='row'>
 
 <div class='col-sm-4' markdown='1'>
-![]({{"images/glyphs/namesPrefixSuffix.png" | relative_url }}){: .img-fluid}
+![]({{ site.url }}/images/glyphs/namesPrefixSuffix.png){: .img-fluid}
 </div>
 
 <div class='col-sm-8' markdown='1'>

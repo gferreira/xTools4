@@ -1,7 +1,7 @@
 ---
 title     : Measurements
 layout    : default
-permalink : /reference/tools/variable/measurements
+permalink : /reference/tools/variable/measurements/
 ---
 
 A tool to create and visualize font- and glyph-level measurements.

@@ -1,7 +1,7 @@
 ---
 title     : find (and replace) components
 layout    : page
-permalink : /reference/tools/font/find-replace-components
+permalink : /reference/tools/font/find-replace-components/
 ---
 
 Find all components of a given glyph, and optionally replace it by another glyph.

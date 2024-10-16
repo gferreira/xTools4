@@ -1,7 +1,7 @@
 ---
-title  : scale
-layout : page
-permalink : /reference/tools/glyphs/transform/scale
+title     : scale
+layout    : page
+permalink : /reference/tools/glyphs/transform/scale/
 ---
 
 Scale the selected glyphs.

@@ -1,7 +1,7 @@
 ---
 title     : clear unicodes
 layout    : page
-permalink : /reference/tools/glyphs/encoding/clear-unicodes
+permalink : /reference/tools/glyphs/encoding/clear-unicodes/
 ---
 
 Clear all unicode values in the selected glyphs.

@@ -1,7 +1,7 @@
 ---
 title     : actions
 layout    : page
-permalink : /reference/tools/glyphs/contours/actions
+permalink : /reference/tools/glyphs/contours/actions/
 ---
 
 Apply the selected actions to the selected glyphs.

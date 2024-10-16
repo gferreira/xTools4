@@ -1,7 +1,7 @@
 ---
 title     : glyphs
 layout    : default
-permalink : /reference/tools/glyphs
+permalink : /reference/tools/glyphs/
 ---
 
 Tools to apply actions to the current glyph or to selected glyphs.

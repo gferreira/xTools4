@@ -1,7 +1,7 @@
 ---
 title     : copy anchors
 layout    : page
-permalink : /reference/tools/glyphs/anchors/copy-anchors
+permalink : /reference/tools/glyphs/anchors/copy-anchors/
 ---
 
 Copy all anchors from selected glyphs to the same glyphs in another font or layers.

@@ -1,7 +1,7 @@
 ---
 title     : move
 layout    : page
-permalink : /reference/tools/glyphs/transform/move
+permalink : /reference/tools/glyphs/transform/move/
 ---
 
 Move the contents of the selected glyphs.

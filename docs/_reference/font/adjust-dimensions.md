@@ -1,7 +1,7 @@
 ---
 title     : adjust dimensions
 layout    : page
-permalink : /reference/tools/font/adjust-dimensions
+permalink : /reference/tools/font/adjust-dimensions/
 ---
 
 Edit dimensions in the current font.

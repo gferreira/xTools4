@@ -1,7 +1,7 @@
 ---
 title     : batch find & replace
 layout    : page
-permalink : /reference/tools/batch/find-replace
+permalink : /reference/tools/batch/find-replace/
 ---
 
 Find and replace font data in the selected fonts.

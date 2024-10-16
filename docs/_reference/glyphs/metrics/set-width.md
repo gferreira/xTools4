@@ -1,7 +1,7 @@
 ---
 title     : set width
 layout    : page
-permalink : /reference/tools/glyphs/metrics/set-width
+permalink : /reference/tools/glyphs/metrics/set-width/
 ---
 
 Set the advance width in selected glyphs.

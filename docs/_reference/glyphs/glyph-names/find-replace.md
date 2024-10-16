@@ -1,7 +1,7 @@
 ---
 title     : find & replace in glyph names
 layout    : page
-permalink : /reference/tools/glyphs/glyph-names/find-replace
+permalink : /reference/tools/glyphs/glyph-names/find-replace/
 ---
 
 Find and replace strings in the names of selected glyphs.

@@ -1,7 +1,7 @@
 ---
 title     : glyph
 layout    : default
-permalink : /reference/tools/glyph
+permalink : /reference/tools/glyph/
 ---
 
 Tools to visualize and edit the current glyph.

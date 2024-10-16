@@ -1,7 +1,7 @@
 ---
 title     : rotate
 layout    : page
-permalink : /reference/tools/glyphs/transform/rotate
+permalink : /reference/tools/glyphs/transform/rotate/
 ---
 
 Rotate selected glyphs.

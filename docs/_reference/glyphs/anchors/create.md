@@ -1,7 +1,7 @@
 ---
 title     : create anchors
 layout    : page
-permalink : /reference/tools/glyphs/anchors/create-anchors
+permalink : /reference/tools/glyphs/anchors/create-anchors/
 ---
 
 Create anchor in the selected glyphs.

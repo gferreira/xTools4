@@ -1,6 +1,7 @@
 ---
-title  : skew
-layout : page
+title     : skew
+layout    : page
+permalink : /reference/tools/glyphs/transform/skew/
 ---
 
 Skew the selected glyphs.

@@ -1,7 +1,7 @@
 ---
 title     : shift
 layout    : page
-permalink : /reference/tools/glyphs/contours/shift
+permalink : /reference/tools/glyphs/contours/shift/
 
 ---
 

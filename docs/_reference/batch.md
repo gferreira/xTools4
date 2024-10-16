@@ -1,7 +1,7 @@
 ---
 title     : batch
 layout    : default
-permalink : /reference/tools/batch
+permalink : /reference/tools/batch/
 ---
 
 Tools to apply actions to multiple fonts at once (closed or open).

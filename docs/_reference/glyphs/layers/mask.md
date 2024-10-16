@@ -1,7 +1,7 @@
 ---
 title     : mask
 layout    : page
-permalink : /reference/tools/glyphs/layers/mask
+permalink : /reference/tools/glyphs/layers/mask/
 ---
 
 Copy and flip between a main layer and a mask layer in the selected glyphs.

@@ -1,7 +1,7 @@
 ---
 title     : create guidelines
 layout    : page
-permalink : /reference/tools/glyphs/guidelines/create
+permalink : /reference/tools/glyphs/guidelines/create/
 ---
 
 Create new vertical guidelines at the selected contour points.

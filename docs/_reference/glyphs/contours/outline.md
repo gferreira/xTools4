@@ -1,7 +1,7 @@
 ---
 title     : outline
 layout    : page
-permalink : /reference/tools/glyphs/contours/outline
+permalink : /reference/tools/glyphs/contours/outline/
 ---
 
 Expand glyph contours outwards and/or inwards by a given offset distance.

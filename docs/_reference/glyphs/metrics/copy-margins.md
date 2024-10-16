@@ -1,7 +1,7 @@
 ---
 title     : copy margins
 layout    : page
-permalink : /reference/tools/glyphs/metrics/copy-margins
+permalink : /reference/tools/glyphs/metrics/copy-margins/
 ---
 
 Copy left / right margins from selected glyphs to the same glyphs in another font or layer.

@@ -2,7 +2,7 @@ title: xTools4 user documentation
 email: gustavo@hipertipo.com
 description: xTools4 user documentation
 baseurl: ""
-url: https://gferreira.github.io/xTools4/
+url: https://gferreira.github.io/xTools4
 
 collections:
   reference:
