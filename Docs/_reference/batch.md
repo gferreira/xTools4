@@ -14,3 +14,7 @@ Tools to apply actions to multiple fonts at once (closed or open).
 - <span class="badge text-bg-warning rounded-0">RF3</span> [glyph actions](glyph-actions)
 - <span class="badge text-bg-warning rounded-0">RF3</span> [set data](set-data)
 - <span class="badge text-bg-warning rounded-0">RF3</span> [set style data](set-style-data)
+
+- - -
+
+<span class="badge text-bg-warning rounded-0">RF3</span> RoboFont 3 code which still works in RoboFont 4. Not updated to the new RoboFont 4 APIs yet.
