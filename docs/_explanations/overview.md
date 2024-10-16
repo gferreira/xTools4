@@ -1,7 +1,6 @@
 ---
 title     : Overview
 layout    : page
-order     : 1
 permalink : /explanations/overview
 ---
 

@@ -17,8 +17,8 @@ xTools4 is a collection of expert tools for typeface design and font production 
 explanations
 ------------
 
+- [about](explanations/about)
 - [overview](explanations/overview)
-- [history](explanations/history)
 </div>
 
 <div class='col-12 col-md-6 col-xl-3' markdown='1'>
