@@ -1,6 +1,7 @@
 ---
-title  : xTools4 user documentation
-layout : default
+title     : xTools4 user documentation
+layout    : default
+permalink : /
 ---
 
 <span class='badge bg-secondary rounded-0'>version {{ site.version }}</span>
