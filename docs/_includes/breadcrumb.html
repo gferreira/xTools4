@@ -2,7 +2,7 @@
   {% assign crumbs = page.url | remove:'/index.html' | split: '/' %}
   <ol class='breadcrumb'>
     <li class='breadcrumb-item small'>
-      <a href="/">Index</a>
+      <a href="{{ site.url }}">Index</a>
     </li>
     {% for crumb in crumbs offset: 1 %}
       {% if forloop.last %}
