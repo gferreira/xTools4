@@ -50,4 +50,4 @@ Supports skewing multiple layers using the [layers] selector.
 Preview
 -------
 
-![]({{"images/glyphs/skew_preview.png" | relative_url }}){: .img-fluid}
+![]({{ site.url }}/images/glyphs/skew_preview.png){: .img-fluid}

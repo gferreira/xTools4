@@ -71,4 +71,4 @@ Positioning modes
 Preview
 -------
 
-![]({{"images/glyphs/widthSet_preview.png" | relative_url }}){: .img-fluid}
+![]({{ site.url }}/images/glyphs/widthSet_preview.png){: .img-fluid}

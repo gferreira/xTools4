@@ -56,7 +56,7 @@ Supports scaling multiple layers using the [layers] selector.
 Preview
 -------
 
-![]({{"images/glyphs/scale_preview.png" | relative_url }}){: .img-fluid}
+![]({{ site.url }}/images/glyphs/scale_preview.png){: .img-fluid}
 
 
 {% comment %}

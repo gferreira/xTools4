@@ -39,4 +39,4 @@ show grid
 Preview
 -------
 
-![]({{"images/glyphs/gridfit_preview.png" | relative_url }}){: .img-fluid}
+![]({{ site.url }}/images/glyphs/gridfit_preview.png){: .img-fluid}

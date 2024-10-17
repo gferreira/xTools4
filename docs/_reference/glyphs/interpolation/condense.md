@@ -36,4 +36,4 @@ preview
 Preview
 -------
 
-![]({{"images/glyphs/interpolationCondense_preview.png" | relative_url }}){: .img-fluid}
+![]({{ site.url }}/images/glyphs/interpolationCondense_preview.png){: .img-fluid}

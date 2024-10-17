@@ -35,8 +35,8 @@ Preview
 
 Glyphs with locked layer widths are marked with a lock icon in the main editing windows.
 
-![]({{"images/glyphs/layersLock_preview.png" | relative_url }}){: .img-fluid}
+![]({{ site.url }}/images/glyphs/layersLock_preview.png){: .img-fluid}
 
-![]({{"images/glyphs/layersLock_preview_spaceCenter.png" | relative_url }}){: .img-fluid}
+![]({{ site.url }}/images/glyphs/layersLock_preview_spaceCenter.png){: .img-fluid}
 
-![]({{"images/glyphs/layersLock_preview_fontWindow.png" | relative_url }}){: .img-fluid}
+![]({{ site.url }}/images/glyphs/layersLock_preview_fontWindow.png){: .img-fluid}

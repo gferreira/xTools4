@@ -46,4 +46,4 @@ Supports rotating multiple layers using the [layers] selector.
 Preview
 -------
 
-![]({{"images/glyphs/rotate_preview.png" | relative_url }}){: .img-fluid}
+![]({{ site.url }}/images/glyphs/rotate_preview.png){: .img-fluid}

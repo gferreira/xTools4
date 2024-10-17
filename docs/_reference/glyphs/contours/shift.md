@@ -43,7 +43,7 @@ preview
 Preview
 -------
 
-![]({{"images/glyphs/shift_preview.png" | relative_url }}){: .img-fluid}
+![]({{ site.url }}/images/glyphs/shift_preview.png){: .img-fluid}
 
 
 {% comment %}

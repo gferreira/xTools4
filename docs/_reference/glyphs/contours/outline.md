@@ -48,7 +48,7 @@ preview
 preview
 -------
 
-![]({{"images/glyphs/outline_preview.png" | relative_url }}){: .img-fluid}
+![]({{ site.url }}/images/glyphs/outline_preview.png){: .img-fluid}
 
 [Outliner]: http://github.com/typemytype/outlinerRoboFontExtension
 

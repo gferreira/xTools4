@@ -53,4 +53,4 @@ Supports setting margins in multiple layers using the [layers] selector.
 Preview
 -------
 
-![]({{"images/glyphs/marginsSet_preview.png" | relative_url }}){: .img-fluid}
+![]({{ site.url }}/images/glyphs/marginsSet_preview.png){: .img-fluid}

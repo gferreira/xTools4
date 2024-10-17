@@ -44,4 +44,4 @@ Supports moving multiple layers using the [layers] selector.
 Preview
 -------
 
-![]({{"images/glyphs/move_preview.png" | relative_url }}){: .img-fluid}
+![]({{ site.url }}/images/glyphs/images/glyphs/move_preview.png){: .img-fluid}

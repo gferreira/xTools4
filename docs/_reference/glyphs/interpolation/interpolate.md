@@ -39,7 +39,7 @@ preview
 Preview
 -------
 
-![]({{"images/glyphs/interpolationMasters_preview.png" | relative_url }}){: .img-fluid}
+![]({{ site.url }}/images/glyphs/interpolationMasters_preview.png){: .img-fluid}
 
 
 <div class="card bg-light my-3 rounded-0">
