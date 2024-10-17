@@ -13,7 +13,7 @@ Interpolate two fonts into the selected glyphs of the current font.
 <div class='row'>
 
 <div class='col-sm-4' markdown='1'>
-![]({{"images/glyphs/interpolationMasters.png" | relative_url }}){: .img-fluid}
+![]({{ site.url }}/images/glyphs/interpolationMasters.png){: .img-fluid}
 </div>
 
 <div class='col-sm-8' markdown='1'>

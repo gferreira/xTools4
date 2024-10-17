@@ -13,7 +13,7 @@ Print the selected glyphs in multiple modes and formats.
 <div class='row'>
 
 <div class='col-sm-4' markdown='1'>
-![]({{"images/glyphs/namesPrint.png" | relative_url }}){: .img-fluid}
+![]({{ site.url }}/images/glyphs/namesPrint.png){: .img-fluid}
 </div>
 
 <div class='col-sm-4' markdown='1'>

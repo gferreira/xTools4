@@ -11,7 +11,7 @@ Set the advance width in selected glyphs.
 <div class='row'>
 
 <div class='col-sm-4' markdown='1'>
-![]({{"images/glyphs/widthSet.png" | relative_url }}){: .img-fluid}
+![]({{ site.url }}/images/glyphs/widthSet.png){: .img-fluid}
 </div>
 
 <div class='col-sm-8' markdown='1'>

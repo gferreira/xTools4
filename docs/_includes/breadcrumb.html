@@ -10,7 +10,7 @@
       {% else %}
         {% if forloop.index < 4 %} {% comment %} don't show glyphs subfolders {% endcomment %}
           <li class='breadcrumb-item small'>
-            <a href="{% assign crumb_limit = forloop.index | plus: 1 %}{% for crumb in crumbs limit: crumb_limit %}{{ crumb | append: '/' }}{% endfor %}">
+            <a href="{{ site.url }}{% assign crumb_limit = forloop.index | plus: 1 %}{% for crumb in crumbs limit: crumb_limit %}{{ crumb | append: '/' }}{% endfor %}">
               {{ crumb | replace: '-', ' ' | remove: '.html' | capitalize }}
             </a>
           </li>

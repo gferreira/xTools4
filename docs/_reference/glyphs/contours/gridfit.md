@@ -13,7 +13,7 @@ Align different glyph parts to a grid.
 <div class='row'>
 
 <div class='col-sm-4' markdown='1'>
-![]({{"images/glyphs/gridfit.png" | relative_url }}){: .img-fluid}
+![]({{ site.url }}/images/glyphs/gridfit.png){: .img-fluid}
 </div>
 
 <div class='col-sm-8' markdown='1'>

@@ -13,7 +13,7 @@ Copy all anchors from selected glyphs to the same glyphs in another font or laye
 <div class='row'>
 
 <div class='col-sm-4' markdown='1'> 
-![]({{"images/glyphs/anchorsCopy.png" | relative_url }}){: .img-fluid}
+![]({{ site.url }}/images/glyphs/anchorsCopy.png){: .img-fluid}
 </div>
 
 <div class='col-sm-8' markdown='1'> 

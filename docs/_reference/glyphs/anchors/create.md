@@ -13,7 +13,7 @@ Create anchor in the selected glyphs.
 <div class='row'>
 
 <div class='col-sm-4' markdown='1'>
-![]({{"images/glyphs/anchorsCreate.png" | relative_url }}){: .img-fluid}
+![]({{ site.url }}/images/glyphs/anchorsCreate.png){: .img-fluid}
 </div>
 
 <div class='col-sm-8' markdown='1'>

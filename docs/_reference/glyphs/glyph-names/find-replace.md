@@ -13,7 +13,7 @@ Find and replace strings in the names of selected glyphs.
 <div class='row'>
 
 <div class='col-sm-4' markdown='1'>
-![]({{"images/glyphs/namesFindReplace.png" | relative_url }}){: .img-fluid}
+![]({{ site.url }}/images/glyphs/namesFindReplace.png){: .img-fluid}
 </div>
 
 <div class='col-sm-8' markdown='1'>

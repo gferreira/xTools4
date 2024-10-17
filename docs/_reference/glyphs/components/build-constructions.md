@@ -16,7 +16,7 @@ Build selected glyphs from components using [Glyph Construction] language.
 <div class='row'>
 
 <div class='col-sm' markdown='1'>
-![]({{"images/glyphs/buildConstructions.png" | relative_url }}){: .img-fluid}
+![]({{ site.url }}/images/glyphs/buildConstructions.png){: .img-fluid}
 </div>
 
 <div class='col-sm' markdown='1'>

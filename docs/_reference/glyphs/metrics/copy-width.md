@@ -13,7 +13,7 @@ Copy widths from selected glyphs to the same glyphs in another font or layers.
 <div class='row'>
 
 <div class='col-sm-4' markdown='1'>
-![]({{"images/glyphs/widthCopy.png" | relative_url }}){: .img-fluid}
+![]({{ site.url }}/images/glyphs/widthCopy.png){: .img-fluid}
 </div>
 
 <div class='col-sm-8' markdown='1'>

@@ -13,7 +13,7 @@ Import glyphs from an external UFO font into a new layer of the current font.
 <div class='row'>
 
 <div class='col-sm-4' markdown='1'> 
-![]({{"images/glyphs/layersImport.png" | relative_url }}){: .img-fluid}
+![]({{ site.url }}/images/glyphs/layersImport.png){: .img-fluid}
 </div>
 
 <div class='col-sm-8' markdown='1'> 
