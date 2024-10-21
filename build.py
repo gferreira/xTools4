@@ -44,7 +44,7 @@ def buildExtension():
     B.requiresVersionMinor = '4'
     B.addToMenu            = [
         {
-            'path'          : 'xTools4/dialogs/preferences.py',
+            'path'          : 'xTools4/dialogs/old/preferences.py',
             'preferredName' : 'preferences',
             'shortKey'      : '',
         },

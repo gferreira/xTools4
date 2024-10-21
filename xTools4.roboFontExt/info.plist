@@ -6,7 +6,7 @@
 	<array>
 		<dict>
 			<key>path</key>
-			<string>xTools4/dialogs/preferences.py</string>
+			<string>xTools4/dialogs/old/preferences.py</string>
 			<key>preferredName</key>
 			<string>preferences</string>
 			<key>shortKey</key>
@@ -30,7 +30,7 @@
 	<key>requiresVersionMinor</key>
 	<string>4</string>
 	<key>timeStamp</key>
-	<real>1729520714.776735</real>
+	<real>1729520814.610584</real>
 	<key>version</key>
 	<string>0.1.0</string>
 </dict>
