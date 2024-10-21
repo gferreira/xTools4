@@ -104,3 +104,34 @@ permill
 
 
 [measurement definitions]: ../measurements-format/
+
+
+Validation
+----------
+
+...
+
+<!--
+
+
+<div class='row'>
+<div class='col' markdown='1'>
+![]({{ site.url }}/images/variable/BatchValidator.png){: .img-fluid}
+</div>
+<div class='col' markdown='1'>
+default font
+: Drag one or more default `.ufo` sources into the top list.
+
+target fonts
+: Drag one or more `.ufo` sources to be checked into the bottom list.
+
+validate
+: ^
+  Select target fonts to validate.  
+  Click on the button to perform glyph tests in all glyphs of all selected fonts.  
+</div>
+</div>
+
+
+-->
+

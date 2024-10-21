@@ -544,6 +544,21 @@ class MeasurementsController(ezui.WindowController):
         postEvent(f"{self.key}.changed")
 
     def fontMeasurementsEditCallback(self, sender):
+        table = sender
+        index = table.getSelectedIndexes()[0]
+        item  = table.getSelectedItems()[0]
+
+        name = item.get('name')
+        if name:
+            direction = item.get('direction')
+            if not direction:
+                if name[0].lower() == 'x':
+                    item['direction'] = 'x'
+                elif name[0].lower() == 'y':
+                    item['direction'] = 'y'
+
+        table.reloadData([index])
+
         postEvent(f"{self.key}.changed")
 
     def tresholdFontParentCallback(self, sender):
@@ -559,29 +574,55 @@ class MeasurementsController(ezui.WindowController):
     # glyph
 
     def glyphMeasurementsAddRemoveButtonAddCallback(self, sender):
+        g = self.glyph
+        if not g:
+            return
+
         table = self.w.getItem("glyphMeasurements")
+
+        if not len(g.selectedPoints) == 2:
+            if self.verbose:
+                # convert to message
+                print('please select two points')
+            return
+
+        pt1 = g.selectedPoints[0]
+        pt2 = g.selectedPoints[1]
+
+        index1 = getIndexForPoint(g, pt1)
+        index2 = getIndexForPoint(g, pt2)
+
         item = table.makeItem()
+        item['point1'] = index1
+        item['point2'] = index2
+
         table.appendItems([item])
 
     def glyphMeasurementsAddRemoveButtonRemoveCallback(self, sender):
         table = self.w.getItem("glyphMeasurements")
         table.removeSelectedItems()
-        postEvent(f"{self.key}.changed")
+        # postEvent(f"{self.key}.changed")
 
     def glyphMeasurementsSelectionCallback(self, sender):
         postEvent(f"{self.key}.changed")
 
     def glyphMeasurementsEditCallback(self, sender):
-        items = self.w.getItem("glyphMeasurements").get()
+        table = self.w.getItem("glyphMeasurements")
+        items = table.get()
+
         glyphMeasurements = {}
-        for item in items:
+
+        needReload = []
+        for index, item in enumerate(items):
+            name = item.get('name')
+            if not name:
+                continue
+            direction = item.get('direction')
             # auto set direction from name
-            if not len(item['direction'].strip()):
-                if item['name'][0] == 'X':
-                    direction = 'x'
+            if not direction:
+                if name[0].lower() == 'x':
                     item['direction'] = 'x'
-                if item['name'][0] == 'Y':
-                    direction = 'y'
+                elif name[0].lower() == 'y':
                     item['direction'] = 'y'
             # make glyph measurement dict
             meamsurementID = f"{item['point1']} {item['point2']}"
@@ -589,7 +630,12 @@ class MeasurementsController(ezui.WindowController):
                 'name'      : item['name'],
                 'direction' : item['direction'],
             }
+            needReload.append(index)
+
+        table.reloadData(needReload)
+
         self.glyphMeasurements[self.glyph.name] = glyphMeasurements
+
         postEvent(f"{self.key}.changed")
 
     def tresholdGlyphFontCallback(self, sender):
@@ -947,7 +993,7 @@ class MeasurementsSubscriberGlyphEditor(Subscriber):
                         padding=(4, 0),
                         cornerRadius=4,
                         fillColor=(1, 1, 1, 1),
-                        horizontalAlignment='left',
+                        horizontalAlignment='center',
                         verticalAlignment='center',
                     )
 

@@ -43,7 +43,7 @@ display
 </div>
 
 
-check results
+Check results
 -------------
 
 ##### glyph window
@@ -51,7 +51,7 @@ check results
 ![]({{ site.url }}/images/variable/GlyphGauge_glyph-window.png){: .img-fluid}
 
 
-validation details
+Validation details
 ------------------
 
 ##### color codes

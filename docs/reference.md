@@ -24,5 +24,6 @@ Formats
 -------
 
 - [Measurements format](measurements-format)
+- [Measurement scales and tresholds](measurement-scales-tresholds)
 </div>
 </div>
