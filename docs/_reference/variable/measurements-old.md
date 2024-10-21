@@ -7,6 +7,8 @@ permalink : /reference/tools/variable/measurements-old/
 A tool to create and visualize font- and glyph-level measurements.
 {: .lead}
 
+<span class="badge text-bg-warning rounded-0">RF3</span> RoboFont 3 code which still works in RoboFont 4. For the new RoboFont 4 version, see [Measurements](../measurements).  
+
 
 font
 ----

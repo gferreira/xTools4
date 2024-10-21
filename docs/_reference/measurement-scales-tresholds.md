@@ -4,7 +4,7 @@ layout    : default
 permalink : /reference/measurement-scales-tresholds/
 ---
 
-Measurement scales reveal relationships between a given measurement and its parent, font, and default values.
+Measurement scales reveal the proportion between a given measurement and its parent value, font value, or default value.
 {: .lead}
 
 * Table of Contents
@@ -64,6 +64,7 @@ Example:
 
 Measurement tresholds
 ---------------------
+{: .mt-4 }
 
 Each measurement scale has a corresponding *treshold value* which can be used to validate a measurement against a reference value in the same font or in another font.
 
@@ -77,24 +78,31 @@ Each measurement scale has a corresponding *treshold value* which can be used to
 
 Measurement validation
 ----------------------
+{: .mt-4 }
 
-Based on the scale and treshold values, a measurement can be in one of three categories in relation to its reference value. Each category is represented by a different color.
+Based on its treshold value, a scale can be in one of three value ranges in relation to its reference value.
+
+Each value range can be represented by a different color, allowing visual validation in tables with multiple scales and measurements.
 
 <table class='table table-hover'>
   <tr>
+    <th>range</th>
     <th>color</th>
     <th>meaning</th>
   </tr>
   <tr>
+    <td>equal</td>
     <td class='blue'>blue</td>
-    <td>equal to</td>
+    <td>equal to the reference value</td>
   </tr>
   <tr>
+    <td>within</td>
     <td class='green'>green</td>
-    <td>different but within treshold</td>
+    <td>different from the reference value, but within the treshold for this scale</td>
   </tr>
   <tr>
+    <td>beyond</td>
     <td class='red'>red</td>
-    <td>different and beyond treshold</td>
+    <td>different from the reference value, and beyond the treshold for this scale</td>
   </tr>
 </table>

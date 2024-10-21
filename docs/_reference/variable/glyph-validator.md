@@ -37,26 +37,26 @@ mark glyphs
 </div>
 
 
-check results
+Check results
 -------------
 
-##### font window
+### Font window
 
 Labels with check results are shown in the Font Overview’s glyph cells if the option *font window* is activated.
 
 ![]({{ site.url }}/images/variable/GlyphValidator_font-window.png){: .img-fluid}
 
-##### glyph window
+### Glyph window
 
 Labels with check results are shown in the Glyph View if the option *glyph window* is activated.
 
 ![]({{ site.url }}/images/variable/GlyphValidator_glyph-window.png){: .img-fluid}
 
 
-validation details
+Validation details
 ------------------
 
-##### color codes
+### Color codes
 
 Check results are displayed as a string of colored labels. Label colors have the following meaning:
 
@@ -128,7 +128,7 @@ Check results are displayed as a string of colored labels. Label colors have the
 </tr>
 </table>
 
-##### compatibility checks
+### Compatibility checks
 
 Glyph attributes are considered **compatible** if the following conditions are met:
 
@@ -168,7 +168,7 @@ Glyph attributes are considered **compatible** if the following conditions are m
 </tr>
 </table>
 
-##### equality checks
+### Equality checks
 
 Glyph attributes are considered **identical** if the following conditions are met:
 
@@ -201,7 +201,7 @@ Glyph attributes are considered **identical** if the following conditions are me
   <tr>
     <td>components</td>
     <td>C</td>
-    <td>same point positions (flattened)</td>
+    <td>same point positions (decomposed)</td>
   </tr>
   <tr>
     <td>anchors</td>
@@ -215,6 +215,8 @@ Glyph attributes are considered **identical** if the following conditions are me
   </tr>
 </table>
 
-##### mark colors 
+### Mark colors 
 
-See [GlyphSetProofer > Validation details > Cell colors](glyphset-proofer).
+See [GlyphSetProofer > Validation details > Cell colors](../glyphset-proofer) for the meaning of each color.
+
+![]({{ site.url }}/images/variable/GlyphValidator_mark-colors.png){: .img-fluid}

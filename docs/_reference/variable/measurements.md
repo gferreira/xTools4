@@ -33,15 +33,15 @@ default…
 : Select and load the default font source for comparison.
 
 p-treshold
-: ...
+: Treshold value for validating the scale of the font measurement in relation to its parent value.
 
 d-treshold
-: ...
+: Treshold value for validating the scale of the font measurement in relation to the default font.
 
 <div class="card bg-light my-3 rounded-0">
 <div class="card-header">note</div>
 <div class="card-body" markdown='1'>
-For more information about each column of the table see [Measurements format > Font-level measurements] and [Measurement scales].
+For more information about each column of the table see [Measurements format > Font-level measurements] and [Measurement scales and tresholds].
 {: .card-text }
 </div>
 </div>
@@ -61,16 +61,16 @@ remove
 : Delete the selected glyph-level measurement(s) from the list.
 
 f-treshold
-: ...
+: Treshold value for validating the scale of the glyph measurement in relation to the font-level value.
 
 d-treshold
-: ...
+: Treshold value for validating the scale of the glyph measurement in relation to the default font.
 
 display
-: ...
+: Turn the Glyph Editor visualization of the measurements on / off.
 
 color
-: Choose a color for the measurement lines and captions in the Glyph Editor preview.
+: Choose a color for the measurement lines and captions in the Glyph Editor visualization.
 
 flip
 : Invert the direction of selected measurements by swapping point indexes 1 and 2.
@@ -78,7 +78,7 @@ flip
 <div class="card bg-light my-3 rounded-0">
 <div class="card-header">note</div>
 <div class="card-body" markdown='1'>
-For more information about each column see [Measurements format > Glyph-level measurements] and [Measurement scales].
+For more information about each column see [Measurements format > Glyph-level measurements] and [Measurement scales and tresholds].
 {: .card-text }
 </div>
 </div>
@@ -119,9 +119,9 @@ Know bugs
 ---------
 
 - flip button is not working (reverts to previous value after editing)
-
+- “ghost” measuremements from previous glyph are displayed in glyphs with no measurements
 
 
 [Measurements format > Font-level measurements]: ../../../measurements-format/#font-level-measurements
 [Measurements format > Glyph-level measurements]: ../../../measurements-format/#glyph-level-measurements
-[Measurement scales]: ../../../measurement-scales-tresholds
+[Measurement scales and tresholds]: ../../../measurement-scales-tresholds

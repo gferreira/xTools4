@@ -15,54 +15,68 @@ A tool to to display and validate parametric measurements in the current glyph w
 ![]({{ site.url }}/images/variable/GlyphGauge.png){: .img-fluid }
 </div>
 <div class='col-8' markdown='1'>
-get default…
-: Open a dialog to select the source to check against the _current font_.
-
-reload default
-: Reload the selected source from disk (in case it has changed).
-
 measurements…
 : Open a dialog to select a measurements file and load its data into the UI.
 
 reload measurements
 : Reload the selected measurements file from disk (in case it has changed).
 
-parent value
-: Compare glyph measurements with their font-level parent value (instead of default).
+get default…
+: Open a dialog to select the source to check against the _current font_.
+
+reload default
+: Reload the selected source from disk (in case it has changed).
+
+font value
+: Compare glyph measurements with their font-level value.
+
+default value
+: Compare glyph measurements with their default value.
+
+font tolerance
+: Adjust validation threshold for font scale values.
+
+default tolerance
+: Adjust validation threshold for default scale values.
+
+em units
+: Show measurements in font units.
 
 per mille
-: Show measurements in per mille values instead of in font units.
-
-tolerance
-: Adjust threshold value for valid/invalid measurements (green/red).
+: Show measurements in per mille values.
 
 display
-: Show/hide the measurements visualization in the Glyph View.
-
+: Show/hide visualization in the Glyph View.
 </div>
 </div>
 
 
-Check results
--------------
+Preview
+-------
 
-##### glyph window
+### Font values
+{: .h5 }
 
 ![]({{ site.url }}/images/variable/GlyphGauge_glyph-window.png){: .img-fluid}
+
+### Default values
+{: .h5 }
+
+![]({{ site.url }}/images/variable/GlyphGauge_glyph-window-2.png){: .img-fluid}
 
 
 Validation details
 ------------------
 
-##### color codes
+### Color codes
+{: .h5 }
 
-Measurements are displayed using the same colors as [Glyph Validator checks](glyph-validator#color-codes), with the following meanings:
+Measurements are displayed using the same colors as [Glyph Validator checks](../glyph-validator#color-codes), with the following meanings:
 
 | color                                                 | meaning                       |
 |-------------------------------------------------------|-------------------------------|
 | <span style='color:rgba(0, 114.75, 255);'>blue</span> | equal value                   |
 | <span style='color:rgba(0, 216.75, 0);'>green</span>  | different but within treshold |
 | <span style='color:red;'>red</span>                   | different and beyond treshold |
-| <span style='color:black;'>black</span>               | no value to compare with      |
 {: .table .table-hover }
 
