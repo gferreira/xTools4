@@ -7,6 +7,8 @@ permalink : /reference/tools/variable/temp-edit/
 A tool to edit glyphs from multiple designspace sources using temporary font(s).
 {: .lead}
 
+<span class="badge text-bg-warning rounded-0">RF3</span> RoboFont 3 code which still works in RoboFont 4. Not updated to the new RoboFont 4 APIs yet.  
+
 
 Options
 -------
@@ -44,19 +46,22 @@ Import modes
 
 TempEdit offers 3 different import modes:
 
-#### fonts → fonts  
+### fonts → fonts
+{: .h5 }
 
 Import glyph(s) from each source into a separate font.
 
 <img class='img-fluid' src='{{ site.url }}/images/variable/TempEdit_fonts.png' />
 
-#### fonts → glyphs  
+### fonts → glyphs
+{: .h5 }
 
 Import each glyph source into a separate glyph of a single font
 
 <img class='img-fluid' src='{{ site.url }}/images/variable/TempEdit_glyphs.png' />
 
-#### fonts → layers  
+### fonts → layers
+{: .h5 }
 
 Import glyph sources as layers of a single font.
 

@@ -133,4 +133,13 @@ ul { padding-left: 1.5em; }
 .header-link { opacity: 0; text-decoration: none; }
 h2:hover .header-link, h3:hover .header-link, h4:hover .header-link, h5:hover .header-link, h6:hover .header-link, dt:hover .header-link { opacity: 1; }
 .header-link span:after { content: "¶"; position: absolute; }
+/* --- validation colors --- */
+.red { color: #F00 !important; }
+.green { color: #0C0 !important; }
+.blue { color: #00F !important; }
+.cells-contours-equal { background-color: rgba(0, 166, 255, 0.35) !important; }
+.cells-contours-different { background-color: white !important; }
+.cells-components-equal { background-color: rgba(255, 166, 0, 0.35) !important; }
+.cells-components-different { background-color: rgba(255, 76, 0, 0.35) !important; }
+.cells-warning { background-color: rgba(255, 0, 0, 0.65) !important; }
 /*# sourceMappingURL=style.css.map */

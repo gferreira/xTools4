@@ -1,5 +1,5 @@
 ---
-title     : Dialogs
+title     : Tools
 layout    : default
 permalink : /reference/tools/
 ---

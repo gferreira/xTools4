@@ -7,6 +7,8 @@ permalink : /reference/tools/variable/varfont-assistant/
 A tool to view and edit font-level values in multiple designspace sources.
 {: .lead}
 
+<span class="badge text-bg-warning rounded-0">RF3</span> RoboFont 3 code which still works in RoboFont 4. Not updated to the new RoboFont 4 APIs yet.  
+
 
 Designspace
 -----------
@@ -109,11 +111,9 @@ permill
 Validation
 ----------
 
-...
+![]({{ site.url }}/images/variable/VarFontAssistant-validator.png){: .img-fluid}
 
 <!--
-
-
 <div class='row'>
 <div class='col' markdown='1'>
 ![]({{ site.url }}/images/variable/BatchValidator.png){: .img-fluid}
@@ -131,7 +131,5 @@ validate
   Click on the button to perform glyph tests in all glyphs of all selected fonts.  
 </div>
 </div>
-
-
 -->
 

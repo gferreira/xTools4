@@ -79,4 +79,3 @@ Measurements are displayed using the same colors as [Glyph Validator checks](../
 | <span style='color:rgba(0, 216.75, 0);'>green</span>  | different but within treshold |
 | <span style='color:red;'>red</span>                   | different and beyond treshold |
 {: .table .table-hover }
-

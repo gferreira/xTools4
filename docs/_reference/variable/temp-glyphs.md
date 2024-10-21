@@ -1,7 +1,7 @@
 ---
 title     : TempGlyphs
 layout    : default
-permalink : /reference/tools/reference/temp-glyphs/
+permalink : /reference/tools/variable/temp-glyphs/
 ---
 
 A tool to import glyphs from another font into a sparse source, and easily keep or discard them.
