@@ -1,11 +1,7 @@
-from importlib import reload
-import hTools3.dialogs
-reload(hTools3.dialogs)
-
 from vanilla import TextBox, ColorWell, Slider, CheckBox, Group
 from mojo.UI import UpdateCurrentGlyphView, AccordionView
-from hTools3.dialogs import hDialog
-from hTools3.modules.color import rgb2nscolor, nscolor2rgb
+from xTools4.dialogs.old import hDialog
+from xTools4.modules.color import rgb2nscolor, nscolor2rgb
 
 
 class PreferencesDialog(hDialog):
