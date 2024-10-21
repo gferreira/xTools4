@@ -53,7 +53,7 @@ Supports creating anchors in multiple layers using the [layers] selector.
 [layers]: ../../modifiers/layers/
 
 
-preview
+Preview
 -------
 
-![]({{"images/glyphs/anchorsCreate_preview.png" | relative_url }})
+![]({{ site.url }}/images/glyphs/anchorsCreate_preview.png}})

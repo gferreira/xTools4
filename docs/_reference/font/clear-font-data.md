@@ -13,7 +13,7 @@ Clear different kinds of data in the current font.
 <div class='row'>
 
 <div class='col-sm-4' markdown='1'>
-![]({{"images/font/clearData.png" | relative_url }}){: .img-fluid}
+![]({{ site.url }}/images/font/clearData.png){: .img-fluid}
 </div>
 
 <div class='col-sm-8' markdown='1'>

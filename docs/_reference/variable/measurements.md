@@ -32,16 +32,16 @@ save…
 default…
 : Select and load the default font source for comparison.
 
-p-treshold
+p-threshold
 : Treshold value for validating the scale of the font measurement in relation to its parent value.
 
-d-treshold
+d-threshold
 : Treshold value for validating the scale of the font measurement in relation to the default font.
 
 <div class="card bg-light my-3 rounded-0">
 <div class="card-header">note</div>
 <div class="card-body" markdown='1'>
-For more information about each column of the table see [Measurements format > Font-level measurements] and [Measurement scales and tresholds].
+For more information about each column of the table see [Measurements format > Font-level measurements] and [Measurement scales and thresholds].
 {: .card-text }
 </div>
 </div>
@@ -60,10 +60,10 @@ add
 remove
 : Delete the selected glyph-level measurement(s) from the list.
 
-f-treshold
+f-threshold
 : Treshold value for validating the scale of the glyph measurement in relation to the font-level value.
 
-d-treshold
+d-threshold
 : Treshold value for validating the scale of the glyph measurement in relation to the default font.
 
 display
@@ -78,7 +78,7 @@ flip
 <div class="card bg-light my-3 rounded-0">
 <div class="card-header">note</div>
 <div class="card-body" markdown='1'>
-For more information about each column see [Measurements format > Glyph-level measurements] and [Measurement scales and tresholds].
+For more information about each column see [Measurements format > Glyph-level measurements] and [Measurement scales and thresholds].
 {: .card-text }
 </div>
 </div>
@@ -103,7 +103,7 @@ New features
 ------------
 
 - using table cell colors for validation
-- treshold values for parent, font, and default values
+- threshold values for parent, font, and default values
 - loading of default font
 -->
 
@@ -124,4 +124,4 @@ Know bugs
 
 [Measurements format > Font-level measurements]: ../../../measurements-format/#font-level-measurements
 [Measurements format > Glyph-level measurements]: ../../../measurements-format/#glyph-level-measurements
-[Measurement scales and tresholds]: ../../../measurement-scales-tresholds
+[Measurement scales and thresholds]: ../../../measurement-scales-thresholds

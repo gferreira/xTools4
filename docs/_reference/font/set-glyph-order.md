@@ -13,7 +13,7 @@ Set glyph order in the current font from encoding file.
 <div class='row'>
 
 <div class='col-sm-4' markdown='1'>
-![]({{"images/font/setGlyphOrder.png" | relative_url }}){: .img-fluid}
+![]({{ site.url }}/images/font/setGlyphOrder.png){: .img-fluid}
 </div>
 
 <div class='col-sm-8' markdown='1'>

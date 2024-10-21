@@ -18,7 +18,7 @@ Select source and target fonts.
 <div class='row'>
 
 <div class='col-sm' markdown='1'>
-![]({{"images/batch/BatchCopy_0.png" | relative_url }}){: .img-fluid}
+![]({{ site.url }}/images/batch/BatchCopy_0.png){: .img-fluid}
 </div>
 
 <div class='col-sm' markdown='1'>
@@ -52,7 +52,7 @@ Copy the selected font info attributes from source font to all target fonts.
 <div class='row'>
 
 <div class='col-sm' markdown='1'>
-![]({{"images/batch/BatchCopy_1.png" | relative_url }}){: .img-fluid}
+![]({{ site.url }}/images/batch/BatchCopy_1.png){: .img-fluid}
 </div>
 
 <div class='col-sm' markdown='1'>
@@ -80,7 +80,7 @@ Copy data from the source font to all target fonts.
 <div class='row'>
 
 <div class='col-sm' markdown='1'>
-![]({{"images/batch/BatchCopy_2.png" | relative_url }}){: .img-fluid}
+![]({{ site.url }}/images/batch/BatchCopy_2.png){: .img-fluid}
 </div>
 
 <div class='col-sm' markdown='1'>
@@ -117,7 +117,7 @@ kerning
 <div class='row'>
 
 <div class='col-sm' markdown='1'>
-![]({{"images/batch/BatchCopy_3.png" | relative_url }}){: .img-fluid}
+![]({{ site.url }}/images/batch/BatchCopy_3.png){: .img-fluid}
 </div>
 
 <div class='col-sm' markdown='1'>
@@ -140,7 +140,7 @@ groups
 <div class='row'>
 
 <div class='col-sm' markdown='1'>
-![]({{"images/batch/BatchCopy_4.png" | relative_url }}){: .img-fluid}
+![]({{ site.url }}/images/batch/BatchCopy_4.png){: .img-fluid}
 </div>
 
 <div class='col-sm' markdown='1'>
@@ -166,7 +166,7 @@ features
 <div class='row'>
 
 <div class='col-sm' markdown='1'>
-![]({{"images/batch/BatchCopy_5.png" | relative_url }}){: .img-fluid}
+![]({{ site.url }}/images/batch/BatchCopy_5.png){: .img-fluid}
 </div>
 
 <div class='col-sm' markdown='1'>

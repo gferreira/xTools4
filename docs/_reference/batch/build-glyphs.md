@@ -18,7 +18,7 @@ Select on which fonts to build the glyphs.
 <div class='row'>
 
 <div class='col-sm' markdown='1'>
-![]({{"images/batch/BatchBuild_0.png" | relative_url }}){: .img-fluid}
+![]({{ site.url }}/images/batch/BatchBuild_0.png){: .img-fluid}
 </div>
 
 <div class='col-sm' markdown='1'>
@@ -49,7 +49,7 @@ Create new empty glyphs in the selected fonts.
 <div class='row'>
 
 <div class='col-sm' markdown='1'>
-![]({{"images/batch/BatchBuild_1.png" | relative_url }}){: .img-fluid}
+![]({{ site.url }}/images/batch/BatchBuild_1.png){: .img-fluid}
 </div>
 
 <div class='col-sm' markdown='1'>
@@ -84,7 +84,7 @@ Create new glyphs from glyph construction rules.
 <div class='row'>
 
 <div class='col-sm' markdown='1'>
-![]({{"images/batch/BatchBuild_2.png" | relative_url }}){: .img-fluid}
+![]({{ site.url }}/images/batch/BatchBuild_2.png){: .img-fluid}
 </div>
 
 <div class='col-sm' markdown='1'>
@@ -126,7 +126,7 @@ Duplicate glyphs in the same font under new names.
 <div class='row'>
 
 <div class='col-sm' markdown='1'>
-![]({{"images/batch/BatchBuild_3.png" | relative_url }}){: .img-fluid}
+![]({{ site.url }}/images/batch/BatchBuild_3.png){: .img-fluid}
 </div>
 
 <div class='col-sm' markdown='1'>

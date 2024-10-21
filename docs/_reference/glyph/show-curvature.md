@@ -14,7 +14,7 @@ Visualize the curvature along curve segments.
 <div class='row'>
 
 <div class='col-sm-4' markdown='1'>
-![]({{"images/glyph/curvature.png" | relative_url }}){: .img-fluid}
+![]({{ site.url }}/images/glyph/curvature.png){: .img-fluid}
 </div>
 
 <div class='col-sm-8' markdown='1'>
@@ -40,7 +40,7 @@ selection only
 Preview
 -------
 
-![]({{"images/glyph/curvature_preview.png" | relative_url }}){: .img-fluid}
+![]({{ site.url }}/images/glyph/curvature_preview.png){: .img-fluid}
 
 
 <div class="card text-dark bg-light my-3 rounded-0">

@@ -14,7 +14,7 @@ Preview interpolation steps with another font, layer and / or glyph.
 <div class='row'>
 
 <div class='col-sm-4' markdown='1'>
-![]({{"images/glyph/interpolation.png" | relative_url }}){: .img-fluid}
+![]({{ site.url }}/images/glyph/interpolation.png){: .img-fluid}
 </div>
 
 <div class='col-sm-8' markdown='1'>
@@ -55,7 +55,7 @@ contour index
 Preview
 -------
 
-![]({{"images/glyph/interpolation_preview.png" | relative_url }}){: .img-fluid}
+![]({{ site.url }}/images/glyph/interpolation_preview.png){: .img-fluid}
 
 
 Errors
@@ -63,7 +63,7 @@ Errors
 
 If the two master glyphs are incompatible, an error report is displayed in the background.
 
-![]({{"images/glyph/interpolation_error.png" | relative_url }}){: .img-fluid}
+![]({{ site.url }}/images/glyph/interpolation_error.png){: .img-fluid}
 
 
 <div class="card text-dark bg-light my-3 rounded-0">

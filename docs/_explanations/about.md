@@ -17,7 +17,7 @@ xTools4 is a fusion of hTools3 and variableValues extensions, updated to the new
 - [Subscriber], a new notification manager that is meant to work along with Merz. It makes subscribing to application events easier and more efficient.
 - [Ezui], a new toolkit that makes it easier to build user interfaces. It’s built on top of and is fully interoperable with [vanilla].
 
-RoboFont 3 tools still work in RoboFont 4, with some limitations such as blurry previews as slower performance.
+RoboFont 3 tools still work fine in RoboFont 4, with small limitations such as blurry previews.
 
 [RoboFont 4]: http://robofont.com/announcements/RoboFont-4.0/
 [Merz]: http://robofont.com/documentation/topics/merz/

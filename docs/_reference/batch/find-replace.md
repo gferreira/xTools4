@@ -28,7 +28,7 @@ Select on which fonts to find & replace data.
 <div class='row'>
 
 <div class='col-sm' markdown='1'>
-![]({{"images/batch/BatchFindReplace_0.png" | relative_url }}){: .img-fluid}
+![]({{ site.url }}/images/batch/BatchFindReplace_0.png){: .img-fluid}
 </div>
 
 <div class='col-sm' markdown='1'>
@@ -60,7 +60,7 @@ Find and replace text in the selected font info attributes.
 <div class='row'>
 
 <div class='col-sm' markdown='1'>
-![]({{"images/batch/BatchFindReplace_1.png" | relative_url }}){: .img-fluid}
+![]({{ site.url }}/images/batch/BatchFindReplace_1.png){: .img-fluid}
 </div>
 
 <div class='col-sm' markdown='1'>

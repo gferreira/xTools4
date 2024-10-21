@@ -42,7 +42,7 @@ preview
 preview
 -------
 
-![]({{"images/glyphs/buildConstructions_preview.png" | relative_url }}){: .img-fluid}
+![]({{ site.url }}/images/glyphs/buildConstructions_preview.png){: .img-fluid}
 
 
 {% comment %}

@@ -1,7 +1,7 @@
 ---
-title     : Measurement scales and tresholds
+title     : Measurement scales and thresholds
 layout    : default
-permalink : /reference/measurement-scales-tresholds/
+permalink : /reference/measurement-scales-thresholds/
 ---
 
 Measurement scales reveal the proportion between a given measurement and its parent value, font value, or default value.
@@ -62,17 +62,17 @@ Example:
 *“The thickness of a vertical stem in **u** is 344,7% thicker than that same stem in the default font.”*
 
 
-Measurement tresholds
+Measurement thresholds
 ---------------------
 {: .mt-4 }
 
-Each measurement scale has a corresponding *treshold value* which can be used to validate a measurement against a reference value in the same font or in another font.
+Each measurement scale has a corresponding *threshold value* which can be used to validate a measurement against a reference value in the same font or in another font.
 
-| scale   | treshold   | validation against                           |
+| scale   | threshold   | validation against                           |
 |---------|------------|----------------------------------------------|
-| p-scale | p-treshold | parent font-level measurement                |
-| f-scale | f-treshold | font-level measurement                       |
-| d-scale | d-treshold | default font- or glyph-level measurement     |
+| p-scale | p-threshold | parent font-level measurement                |
+| f-scale | f-threshold | font-level measurement                       |
+| d-scale | d-threshold | default font- or glyph-level measurement     |
 {: .table .table-hover }
 
 
@@ -80,7 +80,7 @@ Measurement validation
 ----------------------
 {: .mt-4 }
 
-Based on its treshold value, a scale can be in one of three value ranges in relation to its reference value.
+Based on its threshold value, a scale can be in one of three value ranges in relation to its reference value.
 
 Each value range can be represented by a different color, allowing visual validation in tables with multiple scales and measurements.
 
@@ -98,11 +98,11 @@ Each value range can be represented by a different color, allowing visual valida
   <tr>
     <td>within</td>
     <td class='green'>green</td>
-    <td>different from the reference value, but within the treshold for this scale</td>
+    <td>different from the reference value, but within the threshold for this scale</td>
   </tr>
   <tr>
     <td>beyond</td>
     <td class='red'>red</td>
-    <td>different from the reference value, and beyond the treshold for this scale</td>
+    <td>different from the reference value, and beyond the threshold for this scale</td>
   </tr>
 </table>

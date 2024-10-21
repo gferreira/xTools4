@@ -18,7 +18,7 @@ Select on which fonts to set data.
 <div class='row'>
 
 <div class='col-sm' markdown='1'>
-![]({{"images/batch/BatchSetData_0.png" | relative_url }}){: .img-fluid}
+![]({{ site.url }}/images/batch/BatchSetData_0.png){: .img-fluid}
 </div>
 
 <div class='col-sm' markdown='1'>
@@ -47,7 +47,7 @@ style data
 <div class='row'>
 
 <div class='col-sm' markdown='1'>
-![]({{"images/batch/BatchSetData_1.png" | relative_url }}){: .img-fluid}
+![]({{ site.url }}/images/batch/BatchSetData_1.png){: .img-fluid}
 </div>
 
 <div class='col-sm' markdown='1'>

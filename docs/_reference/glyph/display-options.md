@@ -15,7 +15,7 @@ A floating palette to quickly toggle the [display options] in the Glyph Editor.
 <div class='row'>
 
 <div class='col-sm-4' markdown='1'>
-![]({{"images/glyph/display-options.png" | relative_url }}){: .img-fluid}
+![]({{ site.url }}/images/glyph/display-options.png){: .img-fluid}
 </div>
 
 <div class='col-sm-8' markdown='1'>

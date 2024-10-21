@@ -21,34 +21,34 @@ colorCheckFalse = 1.00, 0.00, 0.00, 1.00
 colorCheckEqual = 0.00, 0.33, 1.00, 1.00
 colorCheckNone  = 0.00, 0.00, 0.00, 1.00
 
-tresholdFontParent   = 0.1
-tresholdFontDefault  = 0.1
-tresholdGlyphFont    = 0.1
-tresholdGlyphDefault = 0.1
+thresholdFontParent   = 0.1
+thresholdFontDefault  = 0.1
+thresholdGlyphFont    = 0.1
+thresholdGlyphDefault = 0.1
 
 
-def scaleColorFormatter(attributes, treshold):
+def scaleColorFormatter(attributes, threshold):
     value = attributes['value']
     if value is None:
         attributes["fillColor"] = colorCheckNone
     elif value == 1:
         attributes["fillColor"] = colorCheckEqual
-    elif (1.0 - treshold) < value < (1.0 + treshold):
+    elif (1.0 - threshold) < value < (1.0 + threshold):
         attributes["fillColor"] = colorCheckTrue
     else:
         attributes["fillColor"] = colorCheckFalse
 
 def parentScaleColorFormatter(attributes):
-    scaleColorFormatter(attributes, tresholdFontParent)
+    scaleColorFormatter(attributes, thresholdFontParent)
 
 def defaultScaleFontColorFormatter(attributes):
-    scaleColorFormatter(attributes, tresholdFontDefault)
+    scaleColorFormatter(attributes, thresholdFontDefault)
 
 def fontScaleColorFormatter(attributes):
-    scaleColorFormatter(attributes, tresholdGlyphFont)
+    scaleColorFormatter(attributes, thresholdGlyphFont)
 
 def defaultScaleColorFormatter(attributes):
-    scaleColorFormatter(attributes, tresholdGlyphDefault)
+    scaleColorFormatter(attributes, thresholdGlyphDefault)
 
 def scaleValueToCellConverter(value):
     if value is None:
@@ -97,10 +97,10 @@ class MeasurementsController(ezui.WindowController):
     > |      |           |        |        |        |        |       |         |        |         |             |
     > |---------------------------------------------------------------------------------------------------------|
     >> (+-)         @fontMeasurementsAddRemoveButton
-    >> p-treshold
-    >> [__](±)      @tresholdFontParent
-    >> d-treshold
-    >> [__](±)      @tresholdFontDefault
+    >> p-threshold
+    >> [__](±)      @thresholdFontParent
+    >> d-threshold
+    >> [__](±)      @thresholdFontDefault
 
     * Tab: glyph @glyphsTab
     > |-----------------------------------------------------------------------------------------------------|
@@ -109,10 +109,10 @@ class MeasurementsController(ezui.WindowController):
     > |      |           |        |        |       |         |      |         |         |         |         |
     > |-----------------------------------------------------------------------------------------------------|
     >> (+-)         @glyphMeasurementsAddRemoveButton
-    >> f-treshold
-    >> [__](±)      @tresholdGlyphFont
-    >> d-treshold
-    >> [__](±)      @tresholdGlyphDefault
+    >> f-threshold
+    >> [__](±)      @thresholdGlyphFont
+    >> d-threshold
+    >> [__](±)      @thresholdGlyphDefault
     >> [X] display  @preview
     >> * ColorWell  @colorButton
     >> (flip)       @flipButton
@@ -246,18 +246,18 @@ class MeasurementsController(ezui.WindowController):
                 description=None,
             ),
         ),
-        tresholdFontParent=dict(
+        thresholdFontParent=dict(
             width=buttonWidth,
             valueType="float",
-            value=tresholdFontParent,
+            value=thresholdFontParent,
             minValue=0.0,
             maxValue=10.0,
             valueIncrement=0.01,
         ),
-        tresholdFontDefault=dict(
+        thresholdFontDefault=dict(
             width=buttonWidth,
             valueType="float",
-            value=tresholdFontDefault,
+            value=thresholdFontDefault,
             minValue=0.0,
             maxValue=10.0,
             valueIncrement=0.01,
@@ -389,18 +389,18 @@ class MeasurementsController(ezui.WindowController):
         flipButton=dict(
             width=buttonWidth,
         ),
-        tresholdGlyphFont=dict(
+        thresholdGlyphFont=dict(
             width=buttonWidth,
             valueType="float",
-            value=tresholdGlyphFont,
+            value=thresholdGlyphFont,
             minValue=0.0,
             maxValue=10.0,
             valueIncrement=0.01,
         ),
-        tresholdGlyphDefault=dict(
+        thresholdGlyphDefault=dict(
             width=buttonWidth,
             valueType="float",
-            value=tresholdGlyphDefault,
+            value=thresholdGlyphDefault,
             minValue=0.0,
             maxValue=10.0,
             valueIncrement=0.01,
@@ -557,14 +557,14 @@ class MeasurementsController(ezui.WindowController):
 
         postEvent(f"{self.key}.changed")
 
-    def tresholdFontParentCallback(self, sender):
-        global tresholdFontParent
-        tresholdFontParent = self.w.getItem('tresholdFontParent').get()
+    def thresholdFontParentCallback(self, sender):
+        global thresholdFontParent
+        thresholdFontParent = self.w.getItem('thresholdFontParent').get()
         postEvent(f"{self.key}.changed")
 
-    def tresholdFontDefaultCallback(self, sender):
-        global tresholdFontDefault
-        tresholdFontDefault = self.w.getItem('tresholdFontDefault').get()
+    def thresholdFontDefaultCallback(self, sender):
+        global thresholdFontDefault
+        thresholdFontDefault = self.w.getItem('thresholdFontDefault').get()
         postEvent(f"{self.key}.changed")
 
     # glyph
@@ -634,14 +634,14 @@ class MeasurementsController(ezui.WindowController):
 
         postEvent(f"{self.key}.changed")
 
-    def tresholdGlyphFontCallback(self, sender):
-        global tresholdGlyphFont
-        tresholdGlyphFont = self.w.getItem('tresholdGlyphFont').get()
+    def thresholdGlyphFontCallback(self, sender):
+        global thresholdGlyphFont
+        thresholdGlyphFont = self.w.getItem('thresholdGlyphFont').get()
         postEvent(f"{self.key}.changed")
 
-    def tresholdGlyphDefaultCallback(self, sender):
-        global tresholdGlyphDefault
-        tresholdGlyphDefault = self.w.getItem('tresholdGlyphDefault').get()
+    def thresholdGlyphDefaultCallback(self, sender):
+        global thresholdGlyphDefault
+        thresholdGlyphDefault = self.w.getItem('thresholdGlyphDefault').get()
         postEvent(f"{self.key}.changed")
 
     def previewCallback(self, sender):

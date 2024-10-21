@@ -13,7 +13,7 @@ Find all components of a given glyph, and optionally replace it by another glyph
 <div class='row'>
 
 <div class='col-sm-4' markdown='1'>
-![]({{"images/font/findComponents.png" | relative_url }}){: .img-fluid}
+![]({{ site.url }}/images/font/findComponents.png){: .img-fluid}
 </div>
 
 <div class='col-sm-8' markdown='1'>

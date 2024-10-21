@@ -18,7 +18,7 @@ Select on which fonts to set data.
 <div class='row'>
 
 <div class='col-sm' markdown='1'>
-![]({{"images/batch/BatchSet_0.png" | relative_url }}){: .img-fluid}
+![]({{ site.url }}/images/batch/BatchSet_0.png){: .img-fluid}
 </div>
 
 <div class='col-sm' markdown='1'>
@@ -49,7 +49,7 @@ Set data in the selected font info attributes.
 <div class='row'>
 
 <div class='col-sm' markdown='1'>
-![]({{"images/batch/BatchSet_1.png" | relative_url }}){: .img-fluid}
+![]({{ site.url }}/images/batch/BatchSet_1.png){: .img-fluid}
 </div>
 
 <div class='col-sm' markdown='1'>
@@ -84,7 +84,7 @@ glyph set
 <div class='row'>
 
 <div class='col-sm' markdown='1'>
-![]({{"images/batch/BatchSet_2.png" | relative_url }}){: .img-fluid}
+![]({{ site.url }}/images/batch/BatchSet_2.png){: .img-fluid}
 </div>
 
 <div class='col-sm' markdown='1'>
@@ -119,7 +119,7 @@ unicodes
 <div class='row'>
 
 <div class='col-sm' markdown='1'>
-![]({{"images/batch/BatchSet_3.png" | relative_url }}){: .img-fluid}
+![]({{ site.url }}/images/batch/BatchSet_3.png){: .img-fluid}
 </div>
 
 <div class='col-sm' markdown='1'>

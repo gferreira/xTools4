@@ -76,6 +76,6 @@ Measurements are displayed using the same colors as [Glyph Validator checks](../
 | color                                                 | meaning                       |
 |-------------------------------------------------------|-------------------------------|
 | <span style='color:rgba(0, 114.75, 255);'>blue</span> | equal value                   |
-| <span style='color:rgba(0, 216.75, 0);'>green</span>  | different but within treshold |
-| <span style='color:red;'>red</span>                   | different and beyond treshold |
+| <span style='color:rgba(0, 216.75, 0);'>green</span>  | different but within threshold |
+| <span style='color:red;'>red</span>                   | different and beyond threshold |
 {: .table .table-hover }

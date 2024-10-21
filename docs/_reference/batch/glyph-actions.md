@@ -18,7 +18,7 @@ Select on which fonts the actions should be applied.
 <div class='row'>
 
 <div class='col-sm' markdown='1'>
-![]({{"images/batch/BatchActions_0.png" | relative_url }}){: .img-fluid}
+![]({{ site.url }}/images/batch/BatchActions_0.png){: .img-fluid}
 </div>
 
 <div class='col-sm' markdown='1'>
@@ -49,7 +49,7 @@ Select on which glyphs the actions should be applied.
 <div class='row'>
 
 <div class='col-sm' markdown='1'>
-![]({{"images/batch/BatchActions_1.png" | relative_url }}){: .img-fluid}
+![]({{ site.url }}/images/batch/BatchActions_1.png){: .img-fluid}
 </div>
 
 <div class='col-sm' markdown='1'>
@@ -73,7 +73,7 @@ Select and apply actions.
 <div class='row'>
 
 <div class='col-sm' markdown='1'>
-![]({{"images/batch/BatchActions_2.png" | relative_url }}){: .img-fluid}
+![]({{ site.url }}/images/batch/BatchActions_2.png){: .img-fluid}
 </div>
 
 <div class='col-sm' markdown='1'>

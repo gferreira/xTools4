@@ -5,7 +5,7 @@ permalink : /reference/tools/glyphs/contours/shift/
 
 ---
 
-Select and shift all points with coordinates smaller / bigger than a given treshold value.
+Select and shift all points with coordinates smaller / bigger than a given threshold value.
 {: .lead }
 
 <span class="badge text-bg-danger  rounded-0">RF3</span> RoboFont 3 code which does no longer work in RoboFont 4.  

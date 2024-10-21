@@ -14,7 +14,7 @@ Visualize angle and length of bezier handles and line segments.
 <div class='row'>
 
 <div class='col-sm-4' markdown='1'>
-![]({{"images/glyph/measurements.png" | relative_url }}){: .img-fluid}
+![]({{ site.url }}/images/glyph/measurements.png){: .img-fluid}
 </div>
 
 <div class='col-sm-8' markdown='1'>
@@ -49,4 +49,4 @@ show preview
 Preview
 -------
 
-![]({{"images/glyph/measurements_preview.png" | relative_url }}){: .img-fluid}
+![]({{ site.url }}/images/glyph/measurements_preview.png){: .img-fluid}

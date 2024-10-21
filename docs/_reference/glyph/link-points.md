@@ -13,7 +13,7 @@ Create permanent links between pairs of points and show the distance or angle be
 <div class='row'>
 
 <div class='col-sm-4' markdown='1'>
-![]({{"images/glyph/links.png" | relative_url }}){: .img-fluid}
+![]({{ site.url }}/images/glyph/links.png){: .img-fluid}
 </div>
 
 <div class='col-sm-8' markdown='1'>
@@ -51,7 +51,7 @@ show preview
 Preview
 -------
 
-![]({{"images/glyph/links_preview.png" | relative_url }})
+![]({{ site.url }}/images/glyph/links_preview.png)
 
 
 {% comment %}

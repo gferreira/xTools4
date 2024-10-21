@@ -13,7 +13,7 @@ Export single layers in the current font as separate UFO fonts.
 <div class='row'>
 
 <div class='col-sm-4' markdown='1'>
-![]({{"images/font/exportLayers.png" | relative_url }}){: .img-fluid}
+![]({{ site.url }}/images/font/exportLayers.png){: .img-fluid}
 </div>
 
 <div class='col-sm-8' markdown='1'>

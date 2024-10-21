@@ -18,7 +18,7 @@ Select on which fonts to clear data.
 <div class='row'>
 
 <div class='col-sm' markdown='1'>
-![]({{"images/batch/BatchClear_0.png" | relative_url }}){: .img-fluid}
+![]({{ site.url }}/images/batch/BatchClear_0.png){: .img-fluid}
 </div>
 
 <div class='col-sm' markdown='1'>
@@ -49,7 +49,7 @@ Clear the selected font info attributes.
 <div class='row'>
 
 <div class='col-sm' markdown='1'>
-![]({{"images/batch/BatchClear_1.png" | relative_url }}){: .img-fluid}
+![]({{ site.url }}/images/batch/BatchClear_1.png){: .img-fluid}
 </div>
 
 <div class='col-sm' markdown='1'>
@@ -77,7 +77,7 @@ Clear the selected types of font data.
 <div class='row'>
 
 <div class='col-sm' markdown='1'>
-![]({{"images/batch/BatchClear_2.png" | relative_url }}){: .img-fluid}
+![]({{ site.url }}/images/batch/BatchClear_2.png){: .img-fluid}
 </div>
 
 <div class='col-sm' markdown='1'>
