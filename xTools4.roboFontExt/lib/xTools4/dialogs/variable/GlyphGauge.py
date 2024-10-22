@@ -31,11 +31,11 @@ class GlyphGauge_EZUI(ezui.WindowController):
     (X) font value     @parent
     ( ) default value  
 
-    font tolerance
-    [__](±)            @toleranceFont
+    font threshold
+    [__](±)            @thresholdFont
 
-    default tolerance
-    [__](±)            @toleranceDefault
+    default threshold
+    [__](±)            @thresholdDefault
 
     (X) em units       @permille
     ( ) per mille      
@@ -63,7 +63,7 @@ class GlyphGauge_EZUI(ezui.WindowController):
         reloadMeasurementsButton=dict(
             width='fill',
         ),
-        toleranceFont=dict(
+        thresholdFont=dict(
             callback='settingsChangedCallback',
             valueType="float",
             value=0.10,
@@ -71,7 +71,7 @@ class GlyphGauge_EZUI(ezui.WindowController):
             maxValue=5.0,
             valueIncrement=0.01,
         ),
-        toleranceDefault=dict(
+        thresholdDefault=dict(
             callback='settingsChangedCallback',
             valueType="float",
             value=0.10,
@@ -208,7 +208,7 @@ class GlyphGaugeSubscriberGlyphEditor(Subscriber):
     def _drawTable1(self, font, glyph):
 
         permille  = self.controller.w.getItem('permille').get()
-        tolerance = self.controller.w.getItem('toleranceDefault').get()
+        threshold = self.controller.w.getItem('thresholdDefault').get()
 
         txt = []
 
@@ -290,7 +290,7 @@ class GlyphGaugeSubscriberGlyphEditor(Subscriber):
                 scaleValue = '-'
             else:
                 scaleValue = valueUnits / defaultUnits
-                if (1.0 - tolerance) < scaleValue < (1.0 + tolerance):
+                if (1.0 - threshold) < scaleValue < (1.0 + threshold):
                     color = self.controller.colorCheckTrue
                 else:
                     color = self.controller.colorCheckFalse
@@ -319,7 +319,7 @@ class GlyphGaugeSubscriberGlyphEditor(Subscriber):
     def _drawTable2(self, font, glyph):
 
         permille  = self.controller.w.getItem('permille').get()
-        tolerance = self.controller.w.getItem('toleranceFont').get()
+        threshold = self.controller.w.getItem('thresholdFont').get()
 
         txt = []
 
@@ -424,7 +424,7 @@ class GlyphGaugeSubscriberGlyphEditor(Subscriber):
                     scaleValue = valueUnits / parentUnits
                     # use absolute value when comparing to parent measurement
                     # disregard direction is needed to check overshoots, serifs, etc.
-                    if (1.0 - tolerance) < scaleValue < (1.0 + tolerance):
+                    if (1.0 - threshold) < scaleValue < (1.0 + threshold):
                         color = self.controller.colorCheckTrue
                     else:
                         color = self.controller.colorCheckFalse

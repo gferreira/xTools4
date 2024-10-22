@@ -54,6 +54,8 @@ class VarGlyphViewer(ezui.WindowController):
     [ ] selection     @selectionOnly
 
     ((( – | + )))     @addSubtractButton
+
+    [X] showPreview   @showPreview
     """
 
     descriptionData = dict(

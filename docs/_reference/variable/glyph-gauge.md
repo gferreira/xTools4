@@ -33,10 +33,10 @@ font value
 default value
 : Compare glyph measurements with their default value.
 
-font tolerance
+font threshold
 : Adjust validation threshold for font scale values.
 
-default tolerance
+default threshold
 : Adjust validation threshold for default scale values.
 
 em units

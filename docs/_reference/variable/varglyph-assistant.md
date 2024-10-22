@@ -7,8 +7,7 @@ permalink : /reference/tools/variable/varglyph-assistant/
 A tool to view and edit glyph-level values in multiple designspace sources.
 {: .lead}
 
-* Table of Contents
-{:toc}
+<span class="badge text-bg-success rounded-0">RF4</span> Rewritten using the new RoboFont 4 APIs.
 
 
 designspace
@@ -21,75 +20,46 @@ Use the **designspace** tab to define which designspaces and font sources to loo
 designspaces
 : Drag one or more `.designspace` files into the list.
 
-axes
-: ^
-  A list of axes in the selected designspace.  
-  Drag the items to change the sorting order of the list of sources.
-
-
 sources
 : ^
   A list of all sources in the selected designspace.  
-  Select which sources to collect values from in the next tabs.  
-  Double-click a source to open the font in the UI.
+  Select which sources to display values from in the next tabs.  
 
-
-glyph sets
-----------
-
-Use the **glyph sets** tab to define which glyphs to look into in the selected sources.
-
-![]({{ site.url }}/images/variable/VarGlyphAssistant-glyphsets.png){: .img-fluid}
-
-glyph set files
-: Drag one or more `.roboFontSets` files into the list.
-
-glyph sets
-: ^
-  A list of glyph sets in the selected glyph sets file.  
-  Select one or more glyph sets to update the glyph names list.
-
-glyph names
-: A list of glyph names in the selected glyph sets.
+open
+: Use the open button or double-click on a source to open the font in the UI.
 
 
 attributes
 ----------
 
-Use the **attributes** tab to visualize and edit glyph attributes in the selected glyphs of selected sources.
+Use the **attributes** tab to visualize ~~and edit~~ glyph attributes in the selected glyph of the selected sources.
 
 ![]({{ site.url }}/images/variable/VarGlyphAssistant-attributes.png){: .img-fluid}
 
-load
-: Click on the button to collect values from the fonts and display them in the UI.
-
-glyphs
-: A list of glyph names for inspection in the selected sources.
-
-attributes
-: ^
-  Values for various glyph attributes for the selected glyphs across all selected sources.  
-  Click on the column headers to sort the list based on a specific attribute.
+- Open one source from this designspace to navigate through the glyphs.
+- Click on the column headers to sort the list based on a specific attribute.
 
 
-compatibility
--------------
+points
+------
 
-Use the **compatibility** tab to visualize and edit contour segments in the selected glyphs of selected sources.
+Use the **compatibility** tab to visualize contour segments in the selected glyph of the selected sources.
 
-![]({{ site.url }}/images/variable/VarGlyphAssistant-compatibility.png){: .img-fluid}
+**Not implemented yet.**
 
-load
-: Click on the button to collect values from the fonts and display them in the UI.
 
-glyphs
-: A list of glyph names for inspection in the selected sources.
+measurements
+------------
 
-segments
-: ^
-  A list of segments in the selected glyphs across all selected sources.  
-  The letter codes mean:
+Use the **measurements** tab to visualize glyph measurements in the selected glyph of the selected sources.
 
-  - **L** line segment
-  - **C** cubic segment
-  - **Q** quadratic segment
+![]({{ site.url }}/images/variable/VarGlyphAssistant-measurements.png){: .img-fluid}
+
+load…
+: Open a dialog to select a measurements file and load its data into the UI.
+
+f-threshold
+: Treshold value for validating the scale of the glyph measurement in relation to the font-level value.
+
+d-threshold
+: Treshold value for validating the scale of the glyph measurement in relation to the default font.

@@ -7,7 +7,7 @@ permalink : /
 <span class='badge bg-secondary rounded-0'>version {{ site.version }}</span>
 
 xTools4 is a collection of expert tools for typeface design and font production in [RoboFont 4].
-{: .lead}
+{: .lead }
 
 [RoboFont 4]: http://robofont.com/
 
@@ -17,8 +17,9 @@ xTools4 is a collection of expert tools for typeface design and font production 
 explanations
 ------------
 
-- [about](explanations/about)
 - [overview](explanations/overview)
+- [about xTools4](explanations/about)
+- [about this documentation](explanations/about-docs)
 </div>
 
 <div class='col-12 col-md-6 col-xl-3' markdown='1'>
@@ -44,6 +45,7 @@ reference
 ##### formats
 
 - [measurements format](reference/measurements-format)
+- [measurement scales and thresholds](reference/measurement-scales-thresholds)
 </div>
 
 <div class='col-12 col-md-6 col-xl-3' markdown='1'>
@@ -55,48 +57,6 @@ how-tos
 </div>
 
 </div>
-
-
-{% comment %}
-
-<div class="alert alert-light my-4 rounded-0" role="alert" markdown=1>
-The structure of this documentation is based on [The Documentation System]:
-
-<table class='table'>
-  <tr>
-    <td width='30%'></td>
-    <th width='35%' class='text-body-secondary'>useful when studying</th>
-    <th width='35%' class='text-body-secondary'>useful when working</th>
-  </tr>
-  <tr>
-    <th class='text-body-secondary'>theoretical knowledge</th>
-    <td>
-      <strong><a href='explanations'>explanations</a></strong><br/>
-      <em>understanding-oriented</em>
-    </td>
-    <td>
-      <strong><a href='reference'>reference</a></strong><br/>
-      <em>information-oriented</em>
-    </td>
-  </tr>
-  <tr>
-    <th class='text-body-secondary'>practical steps</th>
-    <td>
-      <strong><a href='tutorials'>tutorials</a></strong><br/>
-      <em>learning-oriented</em>
-    </td>
-    <td>
-      <strong><a href='how-tos'>how tos</a></strong><br/>
-      <em>problem-oriented</em>
-    </td>
-  </tr>
-</table>
-
-</div>
-
-[The Documentation System]: http://docs.divio.com/documentation-system/
-
-{% endcomment %}
 
 
 development

@@ -10,11 +10,11 @@ Tools to visualize and edit variable font sources.
 - <span class="badge text-bg-success rounded-0">RF4</span> [GlyphGauge](glyph-gauge)
 - <span class="badge text-bg-success rounded-0">RF4</span> [GlyphValidator](glyph-validator)
 - <span class="badge text-bg-warning rounded-0">RF3</span> [GlyphSetProofer](glyphset-proofer)
-- <span class="badge text-bg-success rounded-0">RF4</span> [Measurements](measurements) · [old](measurements-old)
+- <span class="badge text-bg-success rounded-0">RF4</span> [Measurements](measurements) · <span class="badge text-bg-warning rounded-0">RF3</span> [old](measurements-old)
 - <span class="badge text-bg-warning rounded-0">RF3</span> [TempEdit](temp-edit)
 - <span class="badge text-bg-warning rounded-0">RF3</span> [TempGlyphs](temp-glyphs)
 - <span class="badge text-bg-warning rounded-0">RF3</span> [VarFontAssistant](varfont-assistant)
-- <span class="badge text-bg-success rounded-0">RF4</span> [VarGlyphAssistant](varglyph-assistant)
+- <span class="badge text-bg-success rounded-0">RF4</span> [VarGlyphAssistant](varglyph-assistant) · <span class="badge text-bg-warning rounded-0">RF3</span> [old](varglyph-assistant-old)
 - <span class="badge text-bg-success rounded-0">RF4</span> [VarGlyphViewer](varglyph-viewer)
 
 - - -

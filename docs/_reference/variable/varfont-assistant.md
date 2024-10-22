@@ -105,7 +105,7 @@ permill
 : Value of the selected measurement across all selected sources in permill units (thousands of em).
 
 
-[measurement definitions]: ../measurements-format/
+[measurement definitions]: ../../../measurements-format/
 
 
 Validation

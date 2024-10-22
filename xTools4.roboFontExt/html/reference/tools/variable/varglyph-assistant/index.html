@@ -37,7 +37,7 @@
           <nav class='col-sm-3 mt-sm-2'>
             <ul class="pagination pagination-sm float-end">
               <li class="page-item">
-                <a class="page-link px-3 rounded-0 prev" href="http://localhost:4000//reference/tools/variable/varfont-assistant/" title='VarFontAssistant'>&laquo;</a>
+                <a class="page-link px-3 rounded-0 prev" href="http://localhost:4000//reference/tools/variable/varglyph-assistant-old/" title='VarGlyphAssistant (old)'>&laquo;</a>
               </li>
               <li class="page-item">
                 <a class="page-link px-3 rounded-0 next" href="http://localhost:4000//reference/tools/variable/varglyph-viewer/" title='VarGlyphViewer'>&raquo;</a>
@@ -69,83 +69,48 @@
           </ol>
         </nav>
         <p class="lead">A tool to view and edit glyph-level values in multiple designspace sources.</p>
-        <ul id="markdown-toc">
-          <li><a href="#designspace" id="markdown-toc-designspace">designspace</a></li>
-          <li><a href="#glyph-sets" id="markdown-toc-glyph-sets">glyph sets</a></li>
-          <li><a href="#attributes" id="markdown-toc-attributes">attributes</a></li>
-          <li><a href="#compatibility" id="markdown-toc-compatibility">compatibility</a></li>
-        </ul>
+        <p><span class="badge text-bg-success rounded-0">RF4</span> Rewritten using the new RoboFont 4 APIs.</p>
         <h2 id="designspace">designspace</h2>
         <p>Use the <strong>designspace</strong> tab to define which designspaces and font sources to look into.</p>
         <p><img src="http://localhost:4000/images/variable/VarGlyphAssistant-designspace.png" alt="" class="img-fluid" /></p>
         <dl>
           <dt>designspaces</dt>
           <dd>Drag one or more <code class="language-plaintext highlighter-rouge">.designspace</code> files into the list.</dd>
-          <dt>axes</dt>
-          <dd>
-            <p>A list of axes in the selected designspace.<br />
-              Drag the items to change the sorting order of the list of sources.</p>
-          </dd>
           <dt>sources</dt>
           <dd>
             <p>A list of all sources in the selected designspace.<br />
-              Select which sources to collect values from in the next tabs.<br />
-              Double-click a source to open the font in the UI.</p>
+              Select which sources to display values from in the next tabs.</p>
           </dd>
-        </dl>
-        <h2 id="glyph-sets">glyph sets</h2>
-        <p>Use the <strong>glyph sets</strong> tab to define which glyphs to look into in the selected sources.</p>
-        <p><img src="http://localhost:4000/images/variable/VarGlyphAssistant-glyphsets.png" alt="" class="img-fluid" /></p>
-        <dl>
-          <dt>glyph set files</dt>
-          <dd>Drag one or more <code class="language-plaintext highlighter-rouge">.roboFontSets</code> files into the list.</dd>
-          <dt>glyph sets</dt>
-          <dd>
-            <p>A list of glyph sets in the selected glyph sets file.<br />
-              Select one or more glyph sets to update the glyph names list.</p>
-          </dd>
-          <dt>glyph names</dt>
-          <dd>A list of glyph names in the selected glyph sets.</dd>
+          <dt>open</dt>
+          <dd>Use the open button or double-click on a source to open the font in the UI.</dd>
         </dl>
         <h2 id="attributes">attributes</h2>
-        <p>Use the <strong>attributes</strong> tab to visualize and edit glyph attributes in the selected glyphs of selected sources.</p>
+        <p>Use the <strong>attributes</strong> tab to visualize <del>and edit</del> glyph attributes in the selected glyph of the selected sources.</p>
         <p><img src="http://localhost:4000/images/variable/VarGlyphAssistant-attributes.png" alt="" class="img-fluid" /></p>
+        <ul>
+          <li>Open one source from this designspace to navigate through the glyphs.</li>
+          <li>Click on the column headers to sort the list based on a specific attribute.</li>
+        </ul>
+        <h2 id="points">points</h2>
+        <p>Use the <strong>compatibility</strong> tab to visualize contour segments in the selected glyph of the selected sources.</p>
+        <p><strong>Not implemented yet.</strong></p>
+        <h2 id="measurements">measurements</h2>
+        <p>Use the <strong>measurements</strong> tab to visualize glyph measurements in the selected glyph of the selected sources.</p>
+        <p><img src="http://localhost:4000/images/variable/VarGlyphAssistant-measurements.png" alt="" class="img-fluid" /></p>
         <dl>
-          <dt>load</dt>
-          <dd>Click on the button to collect values from the fonts and display them in the UI.</dd>
-          <dt>glyphs</dt>
-          <dd>A list of glyph names for inspection in the selected sources.</dd>
-          <dt>attributes</dt>
-          <dd>
-            <p>Values for various glyph attributes for the selected glyphs across all selected sources.<br />
-              Click on the column headers to sort the list based on a specific attribute.</p>
-          </dd>
-        </dl>
-        <h2 id="compatibility">compatibility</h2>
-        <p>Use the <strong>compatibility</strong> tab to visualize and edit contour segments in the selected glyphs of selected sources.</p>
-        <p><img src="http://localhost:4000/images/variable/VarGlyphAssistant-compatibility.png" alt="" class="img-fluid" /></p>
-        <dl>
-          <dt>load</dt>
-          <dd>Click on the button to collect values from the fonts and display them in the UI.</dd>
-          <dt>glyphs</dt>
-          <dd>A list of glyph names for inspection in the selected sources.</dd>
-          <dt>segments</dt>
-          <dd>
-            <p>A list of segments in the selected glyphs across all selected sources.<br />
-              The letter codes mean:</p>
-            <ul>
-              <li><strong>L</strong> line segment</li>
-              <li><strong>C</strong> cubic segment</li>
-              <li><strong>Q</strong> quadratic segment</li>
-            </ul>
-          </dd>
+          <dt>load…</dt>
+          <dd>Open a dialog to select a measurements file and load its data into the UI.</dd>
+          <dt>f-threshold</dt>
+          <dd>Treshold value for validating the scale of the glyph measurement in relation to the font-level value.</dd>
+          <dt>d-threshold</dt>
+          <dd>Treshold value for validating the scale of the glyph measurement in relation to the default font.</dd>
         </dl>
       </div>
     </main>
     <footer class="container mx-auto px-auto px-md-4 my-4">
       <p class='small text-muted'>
         This work is licensed under <a href='http://creativecommons.org/licenses/by-sa/4.0/'>Creative Commons Attribution-ShareAlike 4.0 International</a>.
-        <i class="bi bi-arrow-counterclockwise"></i> Last updated on 21 Oct 2024 10:52:13.
+        <i class="bi bi-arrow-counterclockwise"></i> Last updated on 22 Oct 2024 13:53:45.
       </p>
     </footer>
   </body>

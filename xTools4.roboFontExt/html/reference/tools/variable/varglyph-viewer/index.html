@@ -65,13 +65,53 @@
             <li class='breadcrumb-item small'>varglyph viewer</li>
           </ol>
         </nav>
-        <p>…</p>
+        <p class="lead">A tool to visualize and highlight the differences between the current glyph and the same glyph in another font.</p>
+        <p><span class="badge text-bg-success rounded-0">RF4</span> Rewritten using the new RoboFont 4 APIs.</p>
+        <div class="row">
+          <div class="col-4">
+            <p><img src="http://localhost:4000/images/variable/VarGlyphViewer.png" alt="" class="img-fluid" /></p>
+          </div>
+          <div class="col-8">
+            <dl>
+              <dt>get default…</dt>
+              <dd>Open a dialog to select the source to check against the <em>current font</em>.</dd>
+              <dt>reload</dt>
+              <dd>Reload the selected source from disk (in case it has changed).</dd>
+              <dt>font value</dt>
+              <dd>Compare glyph measurements with their font-level value.</dd>
+              <dt>color</dt>
+              <dd>Choose a color for the Glyph Editor visualization.</dd>
+              <dt>show equal</dt>
+              <dd>Highlight points which have the same position as the default.</dd>
+              <dt>show deltas</dt>
+              <dd>Show delta vectors for points which change position in relation to the default.</dd>
+              <dt>show default</dt>
+              <dd>Show the default glyph shape in the background.</dd>
+              <dt>selection</dt>
+              <dd>Show measurements in font units.</dd>
+              <dt>subtract</dt>
+              <dd>Subtract the default glyph from the current glyph.</dd>
+              <dt>add</dt>
+              <dd>Add the default glyph to the current glyph.</dd>
+              <dt>show preview</dt>
+              <dd>Turn the visualisation on/off.</dd>
+            </dl>
+          </div>
+        </div>
+        <h2 id="preview">Preview</h2>
+        <p><img src="http://localhost:4000/images/variable/VarGlyphViewer_preview.png" alt="" class="img-fluid" /></p>
+        <div class="card bg-light my-3 rounded-0">
+          <div class="card-header">note</div>
+          <div class="card-body">
+            <p class="card-text">For more info on adding and subtracting glyphs, see <a href="http://doc.robofont.com/documentation/tutorials/using-glyphmath/">Using GlyphMath</a>.</p>
+          </div>
+        </div>
       </div>
     </main>
     <footer class="container mx-auto px-auto px-md-4 my-4">
       <p class='small text-muted'>
         This work is licensed under <a href='http://creativecommons.org/licenses/by-sa/4.0/'>Creative Commons Attribution-ShareAlike 4.0 International</a>.
-        <i class="bi bi-arrow-counterclockwise"></i> Last updated on 21 Oct 2024 10:52:13.
+        <i class="bi bi-arrow-counterclockwise"></i> Last updated on 22 Oct 2024 13:27:22.
       </p>
     </footer>
   </body>
