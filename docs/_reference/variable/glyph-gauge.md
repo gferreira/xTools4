@@ -79,3 +79,14 @@ Measurements are displayed using the same colors as [Glyph Validator checks](../
 | <span style='color:rgba(0, 216.75, 0);'>green</span>  | different but within threshold |
 | <span style='color:red;'>red</span>                   | different and beyond threshold |
 {: .table .table-hover }
+
+
+
+<div class="card bg-light my-3 rounded-0">
+<div class="card-header">note</div>
+<div class="card-body" markdown='1'>
+The functionality provided by this tool is now available directly from the data table of the [Measurements](../measurements) tool. This tool will be deprecated.
+{: .card-text }
+</div>
+</div>
+

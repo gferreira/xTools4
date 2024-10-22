@@ -11,7 +11,7 @@ A dialog to edit global xTools4 settings.
 <div class='row'>
 
 <div class='col-sm-4' markdown='1'>
-![]({{"images/preferences.png" | relative_url }})
+![]({{ site.url }}/images/preferences.png)
 </div>
 
 <div class='col-sm-8' markdown='1'>

@@ -74,19 +74,19 @@ Preview
 
 <div class="carousel-inner">
   <div class="carousel-item active">
-    <img src='{{"images/glyph/display-options_preview_1.png" | relative_url }}' class="d-block w-100">
+    <img src='{{ site.url }}/images/glyph/display-options_preview_1.png"' class="d-block w-100">
   </div>
   <div class="carousel-item">
-    <img src='{{"images/glyph/display-options_preview_3.png" | relative_url }}' class="d-block w-100">
+    <img src='{{ site.url }}/images/glyph/display-options_preview_3.png"' class="d-block w-100">
   </div>
   <div class="carousel-item">
-    <img src='{{"images/glyph/display-options_preview_4.png" | relative_url }}' class="d-block w-100">
+    <img src='{{ site.url }}/images/glyph/display-options_preview_4.png"' class="d-block w-100">
   </div>
   <div class="carousel-item">
-    <img src='{{"images/glyph/display-options_preview_5.png" | relative_url }}' class="d-block w-100">
+    <img src='{{ site.url }}/images/glyph/display-options_preview_5.png"' class="d-block w-100">
   </div>
   <div class="carousel-item">
-    <img src='{{"images/glyph/display-options_preview_2.png" | relative_url }}' class="d-block w-100">
+    <img src='{{ site.url }}/images/glyph/display-options_preview_2.png"' class="d-block w-100">
   </div>
 </div>
 

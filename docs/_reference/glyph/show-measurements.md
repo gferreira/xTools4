@@ -50,3 +50,12 @@ Preview
 -------
 
 ![]({{ site.url }}/images/glyph/measurements_preview.png){: .img-fluid}
+
+
+<div class="card text-dark bg-light my-3 rounded-0">
+<div class="card-header">note</div>
+<div class="card-body" markdown='1'>
+Does not work correctly with quadratic contours yet!
+{: .card-text }
+</div>
+</div>
