@@ -1,8 +1,10 @@
 source "https://rubygems.org"
 
-gem "jekyll", "~> 4.1.0"
+ruby "3.2.5"
 
-gem "webrick", "~> 1.7.0"
+gem "jekyll", "~> 4.2.0"
+
+# gem "webrick", "~> 1.7.0"
 
 group :jekyll_plugins do
    gem "jekyll-tidy"
