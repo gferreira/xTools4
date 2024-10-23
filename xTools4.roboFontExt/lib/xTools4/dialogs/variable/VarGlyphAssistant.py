@@ -13,12 +13,10 @@ from mojo.subscriber import Subscriber, registerGlyphEditorSubscriber, unregiste
 from xTools4.dialogs.variable.DesignSpaceSelector import DesignSpaceSelector_EZUI, getSourceName
 from xTools4.dialogs.variable.Measurements import scaleValueToCellConverter, scaleCellToValueConverter, fontScaleColorFormatter, defaultScaleColorFormatter
 from xTools4.modules.linkPoints2 import readMeasurements, getPointAtIndex, getIndexForPoint, getAnchorPoint
-from xTools4.modules.measurements import Measurement
 
 
-tresholdFont    = 0.1
-tresholdDefault = 0.1
-
+thresholdFont    = 0.1
+thresholdDefault = 0.1
 
 DEBUG = False
 
@@ -62,10 +60,10 @@ class VarGlyphAssistantController(DesignSpaceSelector_EZUI):
 
     >= HorizontalStack
     >> ( load… )                                     @loadMeasurementsButton
-    >> f-treshold
-    >> [__](±)                                       @tresholdFont
-    >> d-treshold
-    >> [__](±)                                       @tresholdDefault
+    >> f-threshold
+    >> [__](±)                                       @thresholdFont
+    >> d-threshold
+    >> [__](±)                                       @thresholdDefault
     '''
 
     buttonWidth = DesignSpaceSelector_EZUI.buttonWidth
@@ -290,18 +288,18 @@ class VarGlyphAssistantController(DesignSpaceSelector_EZUI):
         loadMeasurementsButton=dict(
             width=buttonWidth,
         ),
-        tresholdFont=dict(
+        thresholdFont=dict(
             width=buttonWidth,
             valueType="float",
-            value=tresholdFont,
+            value=thresholdFont,
             minValue=0.0,
             maxValue=10.0,
             valueIncrement=0.01,
         ),
-        tresholdDefault=dict(
+        thresholdDefault=dict(
             width=buttonWidth,
             valueType="float",
-            value=tresholdDefault,
+            value=thresholdDefault,
             minValue=0.0,
             maxValue=10.0,
             valueIncrement=0.01,

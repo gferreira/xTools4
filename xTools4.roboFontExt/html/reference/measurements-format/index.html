@@ -65,8 +65,7 @@
               <li><a href="#font-level-measurements" id="markdown-toc-font-level-measurements">Font-level measurements</a></li>
               <li><a href="#glyph-level-measurements" id="markdown-toc-glyph-level-measurements">Glyph-level measurements</a></li>
               <li><a href="#direction-keys" id="markdown-toc-direction-keys">Direction keys</a></li>
-              <li><a href="#point-indexes-or-shortcuts" id="markdown-toc-point-indexes-or-shortcuts">Point indexes or shortcuts</a></li>
-              <li><a href="#sign-of-the-measured-values" id="markdown-toc-sign-of-the-measured-values">Sign of the measured values</a></li>
+              <li><a href="#point-indexes-and-shortcut-keys" id="markdown-toc-point-indexes-and-shortcut-keys">Point indexes and shortcut keys</a></li>
             </ul>
           </li>
           <li><a href="#python-example" id="markdown-toc-python-example">Python example</a></li>
@@ -74,7 +73,7 @@
         </ul>
         <h2 id="data-structure">Data structure</h2>
         <p>A measurement establishes a link between two points and allows us to calculate the distance between them.</p>
-        <p>The order of the points determine if the measurement is positive or negative.</p>
+        <p>The order of the points matters: a measurement can be positive or negative.</p>
         <h3 id="font-level-measurements">Font-level measurements</h3>
         <ul>
           <li>A font may contain multiple font-level measurements.</li>
@@ -123,6 +122,12 @@
             </tr>
           </tbody>
         </table>
+        <div class="card bg-light my-3 rounded-0">
+          <div class="card-header">note</div>
+          <div class="card-body">
+            <p class="card-text">The attribute <code class="language-plaintext highlighter-rouge">glyph 2</code> can probably be deprecated. It was available to allow measurement of overshoots using a straight shape from one glyph and a round shape from another glyph. Overshoot measurement is now possible using</p>
+          </div>
+        </div>
         <h3 id="glyph-level-measurements">Glyph-level measurements</h3>
         <ul>
           <li>A glyph may contain multiple glyph-level measurements.</li>
@@ -181,9 +186,9 @@
             </tr>
           </tbody>
         </table>
-        <h3 id="point-indexes-or-shortcuts">Point indexes or shortcuts</h3>
+        <h3 id="point-indexes-and-shortcut-keys">Point indexes and shortcut keys</h3>
         <p>Point indexes are expressed as integers.</p>
-        <p>Font-level vertical metrics values are also acessible using the following shortcut characters:</p>
+        <p>Font-level vertical metrics values are also available using the following shortcut characters:</p>
         <table class="table table-hover">
           <thead>
             <tr>
@@ -226,9 +231,6 @@
             </tr>
           </tbody>
         </table>
-        <h3 id="sign-of-the-measured-values">Sign of the measured values</h3>
-        <p><strong>The sign of the measured values matters.</strong> While most measurements are usually positive, some are by definition <em>negative</em> – for example the descender value or a bottom overshoot.</p>
-        <p>If a font-level value is positive, and the measured glyph value is negative, we can suspect an issue with the contours (shapes turning inside out).</p>
         <h2 id="python-example">Python example</h2>
         <p>The key for font-level measurements is the name of the measurement.</p>
         <div class="language-python highlighter-rouge">
@@ -307,7 +309,7 @@
     <footer class="container mx-auto px-auto px-md-4 my-4">
       <p class='small text-muted'>
         This work is licensed under <a href='http://creativecommons.org/licenses/by-sa/4.0/'>Creative Commons Attribution-ShareAlike 4.0 International</a>.
-        <i class="bi bi-arrow-counterclockwise"></i> Last updated on 22 Oct 2024 13:27:22.
+        <i class="bi bi-arrow-counterclockwise"></i> Last updated on 22 Oct 2024 19:06:51.
       </p>
     </footer>
   </body>

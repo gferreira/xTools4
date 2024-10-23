@@ -7,6 +7,7 @@ from mojo.UI import UpdateCurrentGlyphView, GetFile
 from mojo.roboFont import OpenFont, CurrentFont, CurrentGlyph, RGlyph, OpenWindow
 from mojo.events import postEvent, addObserver, removeObserver
 from xTools4.modules.validation import *
+from xTools4.dialogs.variable.Measurements import colorCheckTrue, colorCheckFalse, colorCheckEqual
 
 
 KEY = 'com.fontBureau.glyphValidator'
@@ -22,6 +23,9 @@ def checkResultsFactory(glyph, defaultGlyph=None):
     }
     return checkResults
 
+def validationGroupFactory(glyph):
+    pass
+
 
 class GlyphValidatorController(ezui.WindowController):
 
@@ -32,33 +36,42 @@ class GlyphValidatorController(ezui.WindowController):
     defaultPath = None
     defaultFont = None
 
-    colorCheckTrue  = 0.00, 0.85, 0.00, 1.00
-    colorCheckFalse = 1.00, 0.00, 0.00, 1.00
-    colorCheckEqual = 0.00, 0.33, 1.00, 1.00
-
     content = """
-    ( get default… )   @getDefaultButton
-    ( reload ↺ )       @reloadButton
+    ( get default… )      @getDefaultButton
+    ( reload ↺ )          @reloadButton
 
-    checks
-    [X] width          @widthCheck
-    [ ] left           @leftCheck
-    [ ] right          @rightCheck
-    [X] points         @pointsCheck
-    [X] components     @componentsCheck
-    [X] anchors        @anchorsCheck
-    [X] unicodes       @unicodesCheck
+    * Accordion: checks   @checksPanel
+    > [X] width           @widthCheck
+    > [ ] left            @leftCheck
+    > [ ] right           @rightCheck
+    > [X] points          @pointsCheck
+    > [X] components      @componentsCheck
+    > [X] anchors         @anchorsCheck
+    > [X] unicodes        @unicodesCheck
 
-    display
-    [X] font overview  @displayFontOverview
-    [X] glyph window   @displayGlyphWindow
+    * Accordion: display  @displayPanel
+    > [X] font overview   @displayFontOverview
+    > [X] glyph window    @displayGlyphWindow
 
-    ( mark glyphs )    @markGlyphsButton
+    * Accordion: filters  @filtersPanel
+    > [ ] /= contours     @filterContoursEqual
+    > [ ] ≠ contours      @filterContoursDifferent
+    > [ ] /= components   @filterComponentsEqual
+    > [ ] ≠ components    @filterComponentsDifferent
+    > [ ] ‼ not allowed   @filterNestedMixed
+
+    ( mark glyphs )       @markGlyphsButton
     """
 
     descriptionData = dict(
         content=dict(
             sizeStyle="small",
+        ),
+        displayPanel=dict(
+            closed=True
+        ),
+        filtersPanel=dict(
+            closed=True
         ),
         getDefaultButton=dict(
             width='fill',
@@ -148,12 +161,18 @@ class GlyphValidatorController(ezui.WindowController):
     def unicodesCheckCallback(self, sender):
         self.settingsChangedCallback(None)
 
-    def markGlyphsButtonCallback(self, sender):
-        currentFont = CurrentFont()
-        defaultFont = self.defaultFont
-        if currentFont is None or defaultFont is None:
-            return
-        applyValidationColors(currentFont, defaultFont)
+    # def markGlyphsButtonCallback(self, sender):
+    #     currentFont = CurrentFont()
+    #     defaultFont = self.defaultFont
+    #     if currentFont is None or defaultFont is None:
+    #         return
+    #     applyValidationColors(currentFont, defaultFont)
+
+    def displayFontOverviewCallback(self, sender):
+        self.updateFontViewCallback(sender)
+
+    def displayGlyphWindowCallback(self, sender):
+        postEvent(f"{KEY}.changed")
 
     def settingsChangedCallback(self, sender):
         postEvent(f"{KEY}.changed")
@@ -169,7 +188,7 @@ class GlyphValidatorController(ezui.WindowController):
     # drawing
 
     def checkResultsGlyphCellDrawBackground(self, notification):
-        if not self.w.getItem("displayFontOverview"):
+        if not self.w.getItem("displayFontOverview").get():
             return
 
         if self.defaultFont is None:
@@ -197,11 +216,11 @@ class GlyphValidatorController(ezui.WindowController):
             isCompatible = checkResults['compatibility'].get(checkName)
             isEqual      = checkResults['equality'].get(checkName)
             if isCompatible and isEqual:
-                ctx.fill(*self.colorCheckEqual)
+                ctx.fill(*colorCheckEqual)
             elif isCompatible or isEqual:
-                ctx.fill(*self.colorCheckTrue)
+                ctx.fill(*colorCheckTrue)
             else:
-                ctx.fill(*self.colorCheckFalse)
+                ctx.fill(*colorCheckFalse)
             # draw check label
             label = checkName[0].upper()
             ctx.text(label, (0, -3))
@@ -232,9 +251,9 @@ class GlyphValidatorGlyphEditor(Subscriber):
         glyphEditor = self.getGlyphEditor()
         sizeX, sizeY = 400, 40
         self.merzView = MerzView((0, -sizeY, sizeX, sizeY))
-        merzContainer = self.merzView.getMerzContainer()
+        container = self.merzView.getMerzContainer()
         color = 0, 0.5, 1, 1
-        self.reportLayer = merzContainer.appendTextBoxSublayer(
+        self.reportLayer = container.appendTextBoxSublayer(
             name=f'{KEY}.report',
             position=(0, 0),
             size=(sizeX, sizeY),
@@ -268,9 +287,16 @@ class GlyphValidatorGlyphEditor(Subscriber):
 
     def _drawCheckResults(self):
 
+        if self.controller.glyph is None:
+            return
+
         glyphName = self.controller.glyph.name
 
         if self.controller.defaultFont is None or glyphName not in self.controller.defaultFont:
+            return
+
+        if not self.controller.w.getItem('displayGlyphWindow').get():
+            self.reportLayer.setVisible(False)
             return
 
         defaultGlyph = self.controller.defaultFont[glyphName]
@@ -285,11 +311,11 @@ class GlyphValidatorGlyphEditor(Subscriber):
                 continue
             isCompatible = isCompatibleResults.get(checkName)
             if isCompatible and isEqual:
-                color = self.controller.colorCheckEqual
+                color = colorCheckEqual
             elif isCompatible or isEqual:
-                color = self.controller.colorCheckTrue
+                color = colorCheckTrue
             else:
-                color = self.controller.colorCheckFalse
+                color = colorCheckFalse
             txt.append(
                 dict(
                     text=f'{checkName[0].upper()} ',
@@ -299,6 +325,7 @@ class GlyphValidatorGlyphEditor(Subscriber):
 
         with self.reportLayer.propertyGroup():
             self.reportLayer.setText(txt)
+            self.reportLayer.setVisible(True)
 
 
 glyphValidatorEvent = f"{KEY}.changed"
