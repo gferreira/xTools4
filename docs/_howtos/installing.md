@@ -12,6 +12,12 @@ xTools4 is packaged and distributed as a [RoboFont extension].
 {:toc}
 
 
+Requirements
+------------
+
+**The latest version of RoboFont 4.5 beta is recommended.**
+
+
 Installing with Mechanic
 ------------------------
 

@@ -14,16 +14,9 @@ A high-level introduction to the xTools4 toolkit.
 Modular
 -------
 
-xTools4 contains many small and very specific tools that are intended to be used together.
+xTools4 contains many small and very specific tools that are intended to be used together. 
 
-
-<div class="card text-dark bg-light my-3 rounded-0">
-<div class="card-header">see also</div>
-<div class="card-body" markdown='1'>
-- [Unix design philosophy](http://en.wikipedia.org/wiki/Unix_philosophy)
-{: .card-text }
-</div>
-</div>
+This approach is inspired by the [Unix design philosophy](http://en.wikipedia.org/wiki/Unix_philosophy).
 
 
 Contexts

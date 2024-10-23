@@ -7,5 +7,6 @@ permalink : /explanations/
 theoretical knowledge · understanding-oriented · useful when studying
 {: .lead }
 
-- [about](about)
 - [overview](overview)
+- [about](about)
+- [about this documentation](explanations/about-docs)

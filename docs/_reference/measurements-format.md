@@ -16,7 +16,7 @@ Data structure
 
 A measurement establishes a link between two points and allows us to calculate the distance between them.
 
-The order of the points determine if the measurement is positive or negative.
+The order of the points matters: a measurement can be positive or negative.
 
 ### Font-level measurements
 
@@ -35,6 +35,15 @@ The order of the points determine if the measurement is positive or negative.
 | parent      | parent measurement (optional)                          |
 | description | description of this measurement (optional)             |
 {: .table .table-hover }
+
+<div class="card bg-light my-3 rounded-0">
+<div class="card-header">note</div>
+<div class="card-body" markdown='1'>
+The attribute `glyph 2` can probably be deprecated. It was available to allow measurement of overshoots using a straight shape from one glyph and a round shape from another glyph. Overshoot measurement is now possible using 
+{: .card-text }
+</div>
+</div>
+
 
 ### Glyph-level measurements
 
@@ -63,11 +72,11 @@ The direction of measurement must be one of the following characters:
 | a          | angled measurement     |
 {: .table .table-hover }
 
-### Point indexes or shortcuts
+### Point indexes and shortcut keys
 
 Point indexes are expressed as integers.
 
-Font-level vertical metrics values are also acessible using the following shortcut characters:
+Font-level vertical metrics values are also available using the following shortcut characters:
 
 | character | description | x             | y                     |
 |-----------|-------------|---------------|-----------------------|
@@ -78,11 +87,11 @@ Font-level vertical metrics values are also acessible using the following shortc
 | X         | x-height    | `0`           | `font.info.xHeight`   |
 {: .table .table-hover }
 
+{% comment %}
 ### Sign of the measured values
 
 **The sign of the measured values matters.** While most measurements are usually positive, some are by definition *negative* – for example the descender value or a bottom overshoot.
-
-If a font-level value is positive, and the measured glyph value is negative, we can suspect an issue with the contours (shapes turning inside out).
+{% endcomment %}
 
 
 Python example

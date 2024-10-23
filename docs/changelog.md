@@ -36,6 +36,13 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/), 
 0.1.0
 -----
 
-Released on 07 October 2024.
+Initial internal release.
 
-...
+- Merging [hTools3] into a single [VariableValues] open-source project.
+- All tools work, or almost all. Some have been upgraded to RF4, a few new ones were added.
+- Documentation covers all tools, is available online, and includes labels indicating the status of each tool.
+- A `.mechanic` file is included for installation and updating through [RoboFont Mechanic].
+
+[hTools3]: #
+[VariableValues]: #
+[RoboFont Mechanic]: #

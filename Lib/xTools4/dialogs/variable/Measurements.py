@@ -468,6 +468,8 @@ class MeasurementsController(ezui.WindowController):
             print('done.\n')
 
     def saveButtonCallback(self, sender):
+        self._updateGlyphMeasurementsDict()
+
         fontItems = self.w.getItem("fontMeasurements").get()
 
         # convert table items to font measurements format
@@ -597,7 +599,8 @@ class MeasurementsController(ezui.WindowController):
     def glyphMeasurementsAddRemoveButtonRemoveCallback(self, sender):
         table = self.w.getItem("glyphMeasurements")
         table.removeSelectedItems()
-        # postEvent(f"{self.key}.changed")
+        table.reloadData()
+        postEvent(f"{self.key}.changed")
 
     def glyphMeasurementsSelectionCallback(self, sender):
         postEvent(f"{self.key}.changed")
@@ -656,15 +659,11 @@ class MeasurementsController(ezui.WindowController):
         if not selectedItems:
             return
 
-        needReload = []
         for itemIndex, item in enumerate(selectedItems):
             p1 = item['point1']
             p2 = item['point2']
             item['point1'] = p2
             item['point2'] = p1
-            needReload.append(itemIndex)
-
-        table.reloadData(needReload)
 
         postEvent(f"{self.key}.changed")
 
@@ -867,6 +866,20 @@ class MeasurementsController(ezui.WindowController):
 
         table.reloadData(needReload)
 
+    def _updateGlyphMeasurementsDict(self):
+        table = self.w.getItem("glyphMeasurements")
+        items = table.get()
+
+        measurements = {}
+        for item in items:
+            measurementID = f"{item['point1']} {item['point2']}"
+            measurements[measurementID] = {
+                'name'      : item['name'],
+                'direction' : item['direction'],
+            }
+
+        self.glyphMeasurements[self.glyph.name] = measurements
+
 
 class MeasurementsSubscriberRoboFont(Subscriber):
 
@@ -883,6 +896,7 @@ class MeasurementsSubscriberRoboFont(Subscriber):
         self.controller._updateGlyphMeasurements()
 
     def roboFontDidSwitchCurrentGlyph(self, info):
+        self.controller._updateGlyphMeasurementsDict()
         self.controller.glyph = info["glyph"]
         self.controller._loadGlyphMeasurements()
         self.controller._updateGlyphMeasurements()
