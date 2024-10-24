@@ -2,10 +2,11 @@ from random import random
 import os, json
 import ezui
 from merz import MerzView
-from mojo.UI import PutFile, GetFile
+from mojo import drawingTools as ctx
+from mojo.UI import PutFile, GetFile, CurrentFontWindow
 from mojo.roboFont import OpenFont, CurrentFont, CurrentGlyph
 from mojo.subscriber import Subscriber, registerGlyphEditorSubscriber, unregisterGlyphEditorSubscriber, registerRoboFontSubscriber, unregisterRoboFontSubscriber, registerSubscriberEvent, roboFontSubscriberEventRegistry
-from mojo.events import postEvent
+from mojo.events import postEvent, addObserver, removeObserver
 from xTools4.modules.linkPoints2 import readMeasurements, getPointAtIndex, getIndexForPoint, getAnchorPoint
 from xTools4.modules.measurements import Measurement
 
@@ -437,6 +438,7 @@ class MeasurementsController(ezui.WindowController):
         registerRoboFontSubscriber(MeasurementsSubscriberRoboFont)
         MeasurementsSubscriberGlyphEditor.controller = self
         registerGlyphEditorSubscriber(MeasurementsSubscriberGlyphEditor)
+        addObserver(self, "drawLabelCell", "glyphCellDrawBackground")
         self.font  = CurrentFont()
         self.glyph = CurrentGlyph()
 
@@ -445,6 +447,7 @@ class MeasurementsController(ezui.WindowController):
         MeasurementsSubscriberRoboFont.controller = None
         unregisterGlyphEditorSubscriber(MeasurementsSubscriberGlyphEditor)
         MeasurementsSubscriberGlyphEditor.controller = None
+        removeObserver(self, "glyphCellDrawBackground")
 
     # ---------
     # callbacks
@@ -669,6 +672,27 @@ class MeasurementsController(ezui.WindowController):
 
         postEvent(f"{self.key}.changed")
 
+    # glyph cells
+
+    def drawLabelCell(self, notification):
+
+        glyph = notification['glyph']
+
+        measurements = self.glyphMeasurements.get(glyph.name)
+        if not measurements:
+            return
+
+        w = CurrentFontWindow()
+        cellSize = w.fontOverview.views.sizeSlider.get()
+        x, y = 3, cellSize-30
+
+        ctx.save()
+        ctx.font('LucidaGrande-Bold')
+        ctx.fontSize(10)
+        ctx.fill(0, 0, 1)
+        ctx.text('M', (x, y))
+        ctx.restore()
+
     # -------
     # methods
     # -------
@@ -869,6 +893,9 @@ class MeasurementsController(ezui.WindowController):
         table.reloadData(needReload)
 
     def _updateGlyphMeasurementsDict(self):
+        if self.glyph is None:
+            return
+
         table = self.w.getItem("glyphMeasurements")
         items = table.get()
 
