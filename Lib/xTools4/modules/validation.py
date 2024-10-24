@@ -5,6 +5,13 @@ from defcon.pens.transformPointPen import TransformPointPen
 from defcon.objects.component import _defaultTransformation
 from xTools4.modules.decomposePointPen import DecomposePointPen
 
+
+colorComponentsDifferent = 1.00, 0.30, 0.00, 0.35
+colorComponentsEqual     = 1.00, 0.65, 0.00, 0.35
+colorContoursDifferent   = 0.00, 0.65, 1.00, 0.35
+colorContoursEqual       = None
+colorWarning             = 1.00, 0.00, 0.00, 0.65
+
 # ----------------------
 # glyph-level validation
 # ----------------------
@@ -365,10 +372,10 @@ def applyValidationColors(font, defaultFont, colors=None, glyphNames=None):
 
     if colors is None:
         colors = {
-            'components'      : (1.00, 0.30, 0.00, 0.35),
-            'componentsEqual' : (1.00, 0.65, 0.00, 0.35),
-            'default'         : (0.00, 0.65, 1.00, 0.35),
-            'warning'         : (1.00, 0.00, 0.00, 0.65),
+            'components'      : colorComponentsDifferent,
+            'componentsEqual' : colorComponentsEqual,
+            'default'         : colorContoursEqual,
+            'warning'         : colorWarning,
         }
 
     if glyphNames is None:

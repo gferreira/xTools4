@@ -3,14 +3,15 @@ from merz import MerzView
 from defcon import Glyph, registerRepresentationFactory, unregisterRepresentationFactory
 from mojo import drawingTools as ctx
 from mojo.subscriber import Subscriber, registerGlyphEditorSubscriber, unregisterGlyphEditorSubscriber, registerRoboFontSubscriber, unregisterRoboFontSubscriber, registerSubscriberEvent, roboFontSubscriberEventRegistry
-from mojo.UI import UpdateCurrentGlyphView, GetFile
+from mojo.UI import GetFile, CurrentFontWindow
 from mojo.roboFont import OpenFont, CurrentFont, CurrentGlyph, RGlyph, OpenWindow
 from mojo.events import postEvent, addObserver, removeObserver
+from mojo.smartSet import SmartSet
 from xTools4.modules.validation import *
 from xTools4.dialogs.variable.Measurements import colorCheckTrue, colorCheckFalse, colorCheckEqual
 
 
-KEY = 'com.fontBureau.glyphValidator'
+KEY = 'com.xTools4.glyphValidator'
 
 
 def checkResultsFactory(glyph, defaultGlyph=None):
@@ -23,8 +24,42 @@ def checkResultsFactory(glyph, defaultGlyph=None):
     }
     return checkResults
 
-def validationGroupFactory(glyph):
-    pass
+def validationGroupFactory(glyph, defaultGlyph=None):
+    if defaultGlyph is None:
+        defaultGlyph = RGlyph()
+    glyph = glyph.asFontParts()
+
+    checkResults = {
+        'compatibility' : checkCompatibility(glyph, defaultGlyph),
+        'equality'      : checkEquality(glyph, defaultGlyph),
+    }
+
+    validationGroup = None
+
+    if glyph.components:
+        levels = getNestingLevels(glyph)
+        # warning: nested components of mixed contour/components
+        if levels > 1 or len(glyph.contours):
+            validationGroup = 'warning'
+        else:
+            # components equal to default
+            if all(checkResults['compatibility']) and checkResults['equality']['components']:
+                validationGroup = 'componentsEqual'
+            # components different from default
+            else:
+                validationGroup = 'componentsDifferent'
+    else:
+        if checkResults['compatibility']['points'] and checkResults['equality']['points']:
+            # contours equal to default
+            if glyph.font.path != defaultGlyph.font.path:
+                validationGroup = 'contoursEqual'
+            # contours different from default
+            else:
+                validationGroup = 'contoursDifferent'
+        else:
+            validationGroup = 'contoursDifferent'
+
+    return validationGroup
 
 
 class GlyphValidatorController(ezui.WindowController):
@@ -59,8 +94,7 @@ class GlyphValidatorController(ezui.WindowController):
     > [ ] /= components   @filterComponentsEqual
     > [ ] ≠ components    @filterComponentsDifferent
     > [ ] ‼ not allowed   @filterNestedMixed
-
-    ( mark glyphs )       @markGlyphsButton
+    > ( mark glyphs )     @markGlyphsButton
     """
 
     descriptionData = dict(
@@ -100,6 +134,7 @@ class GlyphValidatorController(ezui.WindowController):
         GlyphValidatorGlyphEditor.controller = self
         GlyphValidatorRoboFont.controller = self
         registerRepresentationFactory(Glyph, f"{KEY}.checkResults", checkResultsFactory)
+        registerRepresentationFactory(Glyph, f"{KEY}.validationGroup", validationGroupFactory)
         addObserver(self, "checkResultsGlyphCellDrawBackground", "glyphCellDrawBackground")
         registerGlyphEditorSubscriber(GlyphValidatorGlyphEditor)
         registerRoboFontSubscriber(GlyphValidatorRoboFont)
@@ -110,6 +145,7 @@ class GlyphValidatorController(ezui.WindowController):
         GlyphValidatorGlyphEditor.controller = None
         GlyphValidatorRoboFont.controller = None
         unregisterRepresentationFactory(Glyph, f"{KEY}.checkResults")
+        unregisterRepresentationFactory(Glyph, f"{KEY}.validationGroup")
         removeObserver(self, "glyphCellDrawBackground")
         self.updateFontViewCallback(None)
 
@@ -161,12 +197,86 @@ class GlyphValidatorController(ezui.WindowController):
     def unicodesCheckCallback(self, sender):
         self.settingsChangedCallback(None)
 
-    # def markGlyphsButtonCallback(self, sender):
-    #     currentFont = CurrentFont()
-    #     defaultFont = self.defaultFont
-    #     if currentFont is None or defaultFont is None:
-    #         return
-    #     applyValidationColors(currentFont, defaultFont)
+    def markGlyphsButtonCallback(self, sender):
+        currentFont = CurrentFont()
+        defaultFont = self.defaultFont
+        if currentFont is None or defaultFont is None:
+            return
+        applyValidationColors(currentFont, defaultFont)
+
+    def filterContoursEqualCallback(self, sender):
+        self.updateFiltersCallback(sender)
+
+    def filterContoursDifferentCallback(self, sender):
+        self.updateFiltersCallback(sender)
+
+    def filterComponentsEqualCallback(self, sender):
+        self.updateFiltersCallback(sender)
+
+    def filterComponentsDifferentCallback(self, sender):
+        self.updateFiltersCallback(sender)
+
+    def filterNestedMixedCallback(self, sender):
+        self.updateFiltersCallback(sender)
+
+    def updateFiltersCallback(self, sender):
+        currentFont = CurrentFont()
+        defaultFont = self.defaultFont
+        if currentFont is None or defaultFont is None:
+            return
+
+        contoursEqual       = []
+        contoursDifferent   = []
+        componentsEqual     = []
+        componentsDifferent = []
+        nestedMixed         = []
+
+        for glyphName in currentFont.glyphOrder:
+            defaultGlyph = defaultFont[glyphName]
+            group = currentFont[glyphName].getRepresentation(f"{KEY}.validationGroup", defaultGlyph=defaultGlyph)
+            if group == 'componentsEqual':
+                componentsEqual.append(glyphName)
+            elif group == 'componentsDifferent':
+                componentsDifferent.append(glyphName)
+            elif group == 'contoursEqual':
+                contoursEqual.append(glyphName)
+            elif group == 'contoursDifferent':
+                contoursDifferent.append(glyphName)
+            elif group == 'warning':
+                nestedMixed.append(glyphName)
+
+        filters = {
+            'contoursEqual'       : self.w.getItem('filterContoursEqual').get(),
+            'contoursDifferent'   : self.w.getItem('filterContoursDifferent').get(),
+            'componentsEqual'     : self.w.getItem('filterComponentsEqual').get(),
+            'componentsDifferent' : self.w.getItem('filterComponentsDifferent').get(),
+            'nestedMixed'         : self.w.getItem('filterNestedMixed').get(),
+        }
+
+        if not any(filters.values()):
+            glyphNames = None
+        else:
+            glyphNames = []
+            if self.w.getItem('filterContoursEqual').get():
+                glyphNames += contoursEqual
+            if self.w.getItem('filterContoursDifferent').get():
+                glyphNames += contoursDifferent
+            if self.w.getItem('filterComponentsEqual').get():
+                glyphNames += componentsEqual
+            if self.w.getItem('filterComponentsDifferent').get():
+                glyphNames += componentsDifferent
+            if self.w.getItem('filterNestedMixed').get():
+                glyphNames += nestedMixed
+
+        query = SmartSet()
+        if glyphNames is not None:
+            query.glyphNames = glyphNames
+            queryObject = query.getQueryObject()
+        else:
+            queryObject = None
+
+        w = CurrentFontWindow()
+        w.getGlyphCollection().setQuery(queryObject)
 
     def displayFontOverviewCallback(self, sender):
         self.updateFontViewCallback(sender)
@@ -185,13 +295,14 @@ class GlyphValidatorController(ezui.WindowController):
         for g in font:
             g.changed()
 
-    # drawing
-
     def checkResultsGlyphCellDrawBackground(self, notification):
         if not self.w.getItem("displayFontOverview").get():
             return
 
         if self.defaultFont is None:
+            return
+
+        if CurrentFont() == self.defaultFont:
             return
 
         glyph = notification['glyph']

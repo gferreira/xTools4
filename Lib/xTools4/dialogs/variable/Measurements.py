@@ -16,6 +16,8 @@ RF4.5b + EZUI + Subscriber + Merz
 
 '''
 
+KEY = 'com.xTools4.measurements'
+
 colorCheckTrue  = 0.00, 0.85, 0.00, 1.00
 colorCheckFalse = 1.00, 0.00, 0.00, 1.00
 colorCheckEqual = 0.00, 0.33, 1.00, 1.00
@@ -75,7 +77,7 @@ def scaleCellToValueConverter(value):
 class MeasurementsController(ezui.WindowController):
 
     title       = 'Measurements'
-    key         = 'com.fontBureau.measurements4'
+    key         = KEY
     buttonWidth = 75
     colWidth    = 55
     verbose     = False
