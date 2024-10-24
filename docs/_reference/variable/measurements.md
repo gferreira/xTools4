@@ -86,41 +86,39 @@ For more information about each column see [Measurements format > Glyph-level me
 
 Preview
 -------
+{: .mt-4 }
+
+### Font overview
+{: .h5 }
+
+Glyphs containing measurements are marked with a letter **M** in the Font Overview glyph cells.
+
+![]({{ site.url }}/images/variable/Measurements_glyph-cells.png){: .img-fluid}
+
+### Glyph window
+{: .h5 }
 
 The Glyph View displays a visualization of the measurements in the current glyph:
 
 ![]({{ site.url }}/images/variable/Measurements_preview.png){: .img-fluid}
 
 - Dotted lines indicate a measurement between pairs of points.
-- Select one or more measurements in the dialog to highlight and show their name, direction and distance.
-
-
-
-- - -
+- Select one or more measurements in the list to highlight and show their <!--name,--> direction and distance.
 
 <!--
-New features
-------------
-
-- using table cell colors for validation
-- threshold values for parent, font, and default values
-- loading of default font
--->
-
 
 Missing features
 ----------------
 
 - drag to reorder font-level measurements
-- indicator for glyph-level measurements in Font Overview glyph cells
 
 
 Know bugs
 ---------
 
-- flip button is not working (reverts to previous value after editing)
 - “ghost” measuremements from previous glyph are displayed in glyphs with no measurements
 
+-->
 
 [Measurements format > Font-level measurements]: ../../../measurements-format/#font-level-measurements
 [Measurements format > Glyph-level measurements]: ../../../measurements-format/#glyph-level-measurements

@@ -72,29 +72,29 @@ class GlyphValidatorController(ezui.WindowController):
     defaultFont = None
 
     content = """
-    ( get default… )      @getDefaultButton
-    ( reload ↺ )          @reloadButton
+    ( get default… )         @getDefaultButton
+    ( reload ↺ )             @reloadButton
 
-    * Accordion: checks   @checksPanel
-    > [X] width           @widthCheck
-    > [ ] left            @leftCheck
-    > [ ] right           @rightCheck
-    > [X] points          @pointsCheck
-    > [X] components      @componentsCheck
-    > [X] anchors         @anchorsCheck
-    > [X] unicodes        @unicodesCheck
+    * Accordion: checks      @checksPanel
+    > [X] width              @widthCheck
+    > [ ] left               @leftCheck
+    > [ ] right              @rightCheck
+    > [X] points             @pointsCheck
+    > [X] components         @componentsCheck
+    > [X] anchors            @anchorsCheck
+    > [X] unicodes           @unicodesCheck
 
-    * Accordion: display  @displayPanel
-    > [X] font overview   @displayFontOverview
-    > [X] glyph window    @displayGlyphWindow
+    * Accordion: display     @displayPanel
+    > [X] font overview      @displayFontOverview
+    > [X] glyph window       @displayGlyphWindow
 
-    * Accordion: filters  @filtersPanel
-    > [ ] /= contours     @filterContoursEqual
-    > [ ] ≠ contours      @filterContoursDifferent
-    > [ ] /= components   @filterComponentsEqual
-    > [ ] ≠ components    @filterComponentsDifferent
-    > [ ] ‼ not allowed   @filterNestedMixed
-    > ( mark glyphs )     @markGlyphsButton
+    * Accordion: validation  @filtersPanel
+    > [ ] /= contours        @filterContoursEqual
+    > [ ] ≠ contours         @filterContoursDifferent
+    > [ ] /= components      @filterComponentsEqual
+    > [ ] ≠ components       @filterComponentsDifferent
+    > [ ] ‼ not allowed      @filterNestedMixed
+    > ( mark glyphs )        @markGlyphsButton
     """
 
     descriptionData = dict(

@@ -12,7 +12,7 @@ A tool to validate glyphs in the current font against glyphs from another source
 
 <div class='row'>
 <div class='col-4' markdown='1'>
-![]({{ site.url }}/images/variable/GlyphValidator.png){: .img-fluid}
+![]({{ site.url }}/images/variable/GlyphValidator_checks.png){: .img-fluid}
 </div>
 <div class='col-8' markdown='1'>
 get default…
@@ -29,10 +29,38 @@ font window
 
 glyph window
 : Show/hide check results in the Glyph View.
+</div>
+</div>
+
+### Validation groups
+{: .h5 }
+
+Based on the results of the attribute checks, a glyph can be categorized as belonging to one of five validation groups.
+
+Use the checkboxes to show/hide glyphs from individual validation groups from the Font Overview.
+
+<div class='row'>
+<div class='col-4' markdown='1'>
+![]({{ site.url }}/images/variable/GlyphValidator_filters.png){: .img-fluid}
+</div>
+<div class='col-8' markdown='1'>
+= contours
+: Glyphs consisting only of contours, equal to the default.
+
+≠ contours
+: Glyphs consisting only of contours, different from the default.
+
+= components
+: Glyphs consisting only of components, equal to the default.
+
+≠ components
+: Glyphs consisting only of components, different from the default.
+
+‼ not allowed
+: Glyphs which are not allowed: nested contours, mixed contours and components.
 
 mark glyphs
-: Apply mark colors to different types of glyphs.
-
+: Apply mark colors to identify the different types of glyphs.
 </div>
 </div>
 
@@ -41,12 +69,14 @@ Check results
 -------------
 
 ### Font window
+{: .h5 }
 
 Labels with check results are shown in the Font Overview’s glyph cells if the option *font window* is activated.
 
 ![]({{ site.url }}/images/variable/GlyphValidator_font-window.png){: .img-fluid}
 
 ### Glyph window
+{: .h5 }
 
 Labels with check results are shown in the Glyph View if the option *glyph window* is activated.
 
@@ -57,6 +87,7 @@ Validation details
 ------------------
 
 ### Color codes
+{: .h5 }
 
 Check results are displayed as a string of colored labels. Label colors have the following meaning:
 
@@ -129,6 +160,7 @@ Check results are displayed as a string of colored labels. Label colors have the
 </table>
 
 ### Compatibility checks
+{: .h5 }
 
 Glyph attributes are considered **compatible** if the following conditions are met:
 
@@ -169,6 +201,7 @@ Glyph attributes are considered **compatible** if the following conditions are m
 </table>
 
 ### Equality checks
+{: .h5 }
 
 Glyph attributes are considered **identical** if the following conditions are met:
 
@@ -215,7 +248,8 @@ Glyph attributes are considered **identical** if the following conditions are me
   </tr>
 </table>
 
-### Mark colors 
+### Mark colors
+{: .h5 }
 
 See [GlyphSetProofer > Validation details > Cell colors](../glyphset-proofer) for the meaning of each color.
 
