@@ -30,6 +30,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/), 
 - <span class='badge rounded-0'>Removed</span> removed features
 - <span class='badge rounded-0'>Fixed</span> bug fixes
 - <span class='badge rounded-0'>Security</span> fixes for vulnerabilities
+{: ._changelog .mb-5 }
 
 - - -
 
@@ -38,11 +39,13 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/), 
 
 Initial internal release.
 
-- Merging [hTools3] into a single [VariableValues] open-source project.
+- Merging [hTools3] and [VariableValues] into a single open-source project.
 - All tools work, or almost all. Some have been upgraded to RF4, a few new ones were added.
-- Documentation covers all tools, is available online, and includes labels indicating the status of each tool.
-- A `.mechanic` file is included for installation and updating through [RoboFont Mechanic].
+- The plan is to continue upgrading existing tools, and to continuously improve the toolkit based on user freedback.
+- Documentation covering all tools [is available online][docs], including labels to indicate the status of each tool.
+- A `.mechanic` file for easy installation and update with [RoboFont Mechanic] is included.
 
-[hTools3]: #
-[VariableValues]: #
-[RoboFont Mechanic]: #
+[hTools3]: http://hipertipo.gitlab.io/htools3-extension/
+[VariableValues]: http://gferreira.github.io/fb-variable-values/
+[docs]: http://gferreira.github.io/xTools4/
+[RoboFont Mechanic]: http://robofontmechanic.com/
