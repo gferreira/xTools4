@@ -57,7 +57,7 @@ def buildExtension():
         shutil.rmtree(extensionPath)
 
     print('\tbuilding .roboFontExt package...')
-    B.save(extensionPath, libFolder=libFolder, htmlFolder=docsFolder)
+    B.save(extensionPath, libFolder=libFolder) # htmlFolder=docsFolder
 
     errors = B.validationErrors()
     if len(errors):

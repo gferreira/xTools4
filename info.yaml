@@ -1,0 +1,12 @@
+name: xTools4
+developer: Gustavo Ferreira
+developerURL: http://hipertipo.com
+launchAtStartUp: true
+mainScript: start.py
+version: 0.1.0
+addToMenu:
+- path: xTools4/dialogs/old/preferences.py
+  preferredName: preferences
+html: false
+requiresVersionMajor: '4'
+requiresVersionMinor: '0'
