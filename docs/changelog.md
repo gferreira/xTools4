@@ -30,9 +30,17 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/), 
 - <span class='badge rounded-0'>Removed</span> removed features
 - <span class='badge rounded-0'>Fixed</span> bug fixes
 - <span class='badge rounded-0'>Security</span> fixes for vulnerabilities
-{: ._changelog .mb-5 }
+{: ._changelog .mb-4 }
 
 - - -
+{: .mb-4 }
+
+0.1.1
+-----
+
+- <span class='badge rounded-0'>Added</span> Adding new module MeasurementsViewer, adding PDF export to the Measurements tool.
+{: ._changelog .mb-4 }
+
 
 0.1.0
 -----

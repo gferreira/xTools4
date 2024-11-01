@@ -17,11 +17,17 @@ Use the **font** tab to create and edit font-level measurements.
 
 ![]({{ site.url }}/images/variable/Measurements_font.png){: .img-fluid}
 
-add
+add (+)
 : Add a new empty font-level measurement to the list.  
 
-remove
+remove (-)
 : Delete the selected font-level measurement(s) from the list.  
+
+p-threshold
+: Treshold value for validating the scale of the font measurement in relation to its parent value.
+
+d-threshold
+: Treshold value for validating the scale of the font measurement in relation to the default font.
 
 load…
 : Load measurement data from an external JSON file into the UI.
@@ -32,11 +38,8 @@ save…
 default…
 : Select and load the default font source for comparison.
 
-p-threshold
-: Treshold value for validating the scale of the font measurement in relation to its parent value.
-
-d-threshold
-: Treshold value for validating the scale of the font measurement in relation to the default font.
+PDF…
+: Save a visual overview of all measurements to a PDF file.
 
 <div class="card bg-light my-3 rounded-0">
 <div class="card-header">note</div>
@@ -54,10 +57,10 @@ Use the **glyph** tab to create and edit glyph-level measurements.
 
 ![]({{ site.url }}/images/variable/Measurements_glyph.png){: .img-fluid}
 
-add
+add (+)
 : Select two points and click on the + button to add a new empty glyph-level measurement to the list.
 
-remove
+remove (-)
 : Delete the selected glyph-level measurement(s) from the list.
 
 f-threshold
@@ -103,20 +106,21 @@ The Glyph View displays a visualization of the measurements in the current glyph
 ![]({{ site.url }}/images/variable/Measurements_preview.png){: .img-fluid}
 
 - Dotted lines indicate a measurement between pairs of points.
-- Select one or more measurements in the list to highlight and show their <!--name,--> direction and distance.
+- Select one or more measurements in the list to highlight and show their direction and distance.
+- Use the color button to change the color of the measurements.
 
 <!--
 
 Missing features
 ----------------
 
-- drag to reorder font-level measurements
+- [ ] drag to reorder font-level measurements
 
 
 Know bugs
 ---------
 
-- “ghost” measuremements from previous glyph are displayed in glyphs with no measurements
+- [ ] “ghost” measuremements from previous glyph are displayed in glyphs with no measurements
 
 -->
 

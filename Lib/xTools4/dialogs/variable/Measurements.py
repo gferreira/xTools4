@@ -1,3 +1,7 @@
+from importlib import reload
+import xTools4.modules.measurementsViewer
+reload(xTools4.modules.measurementsViewer)
+
 from random import random
 import os, json
 import ezui
@@ -9,6 +13,7 @@ from mojo.subscriber import Subscriber, registerGlyphEditorSubscriber, unregiste
 from mojo.events import postEvent, addObserver, removeObserver
 from xTools4.modules.linkPoints2 import readMeasurements, getPointAtIndex, getIndexForPoint, getAnchorPoint
 from xTools4.modules.measurements import Measurement
+from xTools4.modules.measurementsViewer import MeasurementsViewer
 
 '''
 M E A S U R E M E N T S v4
@@ -83,8 +88,8 @@ class MeasurementsController(ezui.WindowController):
     colWidth    = 55
     verbose     = False
 
-    fontMeasurements  = {}
-    glyphMeasurements = {}
+    measurementsPath = None
+    measurements     = {}
 
     font        = None
     glyph       = None
@@ -125,6 +130,7 @@ class MeasurementsController(ezui.WindowController):
     ( load… )       @loadButton
     ( save… )       @saveButton
     ( default… )    @defaultButton
+    ( PDF… )        @makePdfButton
     """
 
     descriptionData = dict(
@@ -417,6 +423,9 @@ class MeasurementsController(ezui.WindowController):
         defaultButton=dict(
             width=buttonWidth,
         ),
+        makePdfButton=dict(
+            width=buttonWidth,
+        ),
     )
 
     def build(self):
@@ -449,22 +458,31 @@ class MeasurementsController(ezui.WindowController):
         MeasurementsSubscriberGlyphEditor.controller = None
         removeObserver(self, "glyphCellDrawBackground")
 
+    # -------------
+    # dynamic attrs
+    # -------------
+
+    @property
+    def fontMeasurements(self):
+        return self.measurements.get('font')
+
+    @property
+    def glyphMeasurements(self):
+        return self.measurements.get('glyphs')
+
     # ---------
     # callbacks
     # ---------
 
     def loadButtonCallback(self, sender):
-        jsonPath = GetFile(message='Select JSON file with measurements:')
-        if jsonPath is None:
+        measurementsPath = GetFile(message='Select JSON file with measurements:')
+        if measurementsPath is None:
             return
 
         if self.verbose:
-            print(f'loading data from {os.path.split(jsonPath)[-1]}... ', end='')
+            print(f'loading data from {os.path.split(measurementsPath)[-1]}... ', end='')
 
-        measurements = readMeasurements(jsonPath)
-
-        self.fontMeasurements  = measurements['font']
-        self.glyphMeasurements = measurements['glyphs']
+        self.measurements = readMeasurements(measurementsPath)
 
         self._loadFontMeasurements()
         self._loadGlyphMeasurements()
@@ -490,12 +508,7 @@ class MeasurementsController(ezui.WindowController):
             } for i in fontItems
         }
 
-        glyphMeasurements = self.glyphMeasurements
-
-        measurementsDict = {
-            'font'   : fontMeasurements,
-            'glyphs' : glyphMeasurements,
-        }
+        self.measurements['font'] = fontMeasurements
 
         # get JSON file path
         jsonFileName = 'measurements.json'
@@ -513,7 +526,7 @@ class MeasurementsController(ezui.WindowController):
             print(f'saving measurements to {jsonPath}...', end=' ')
 
         with open(jsonPath, 'w', encoding='utf-8') as f:
-            json.dump(measurementsDict, f, indent=2)
+            json.dump(self.measurements, f, indent=2)
 
         if self.verbose:
             print('done.\n')
@@ -532,6 +545,26 @@ class MeasurementsController(ezui.WindowController):
             print('done.\n')
 
         postEvent(f"{self.key}.changed")
+
+    def makePdfButtonCallback(self, sender):
+
+        if not self.measurements:
+            print('no measurements available')
+            return
+
+        if not self.defaultFont:
+            print('no default font available')
+            return
+
+        if self.verbose:
+            print('making PDF overview...')
+
+        pdfFileName = f'{self.defaultFont.info.familyName}_measurements.pdf'
+        pdfPath = PutFile(message='Save measurements preview as a PDF file:', fileName=pdfFileName)
+
+        M = MeasurementsViewer(self.measurements, self.defaultFont.path)
+        M.makePDF(fontMeasurements=True, glyphMeasurements=False, sectionTitle=False, title=False)
+        M.savePDF(pdfPath)
 
     # font
 
@@ -629,8 +662,8 @@ class MeasurementsController(ezui.WindowController):
                 elif name[0].lower() == 'y':
                     item['direction'] = 'y'
             # make glyph measurement dict
-            meamsurementID = f"{item['point1']} {item['point2']}"
-            glyphMeasurements[meamsurementID] = {
+            measurementID = f"{item['point1']} {item['point2']}"
+            glyphMeasurements[measurementID] = {
                 'name'      : item['name'],
                 'direction' : item['direction'],
             }
@@ -638,7 +671,7 @@ class MeasurementsController(ezui.WindowController):
 
         table.reloadData(needReload)
 
-        self.glyphMeasurements[self.glyph.name] = glyphMeasurements
+        self.measurements['glyphs'][self.glyph.name] = glyphMeasurements
 
         postEvent(f"{self.key}.changed")
 
@@ -782,7 +815,7 @@ class MeasurementsController(ezui.WindowController):
         table = self.w.getItem("glyphMeasurements")
         items = []
 
-        if not self.glyph:
+        if not self.glyph or not self.glyphMeasurements:
             table.set(items)
             return
 
@@ -896,6 +929,9 @@ class MeasurementsController(ezui.WindowController):
         if self.glyph is None:
             return
 
+        if 'glyphs' not in self.measurements:
+            return
+
         table = self.w.getItem("glyphMeasurements")
         items = table.get()
 
@@ -907,7 +943,7 @@ class MeasurementsController(ezui.WindowController):
                 'direction' : item['direction'],
             }
 
-        self.glyphMeasurements[self.glyph.name] = measurements
+        self.measurements['glyphs'][self.glyph.name] = measurements
 
 
 class MeasurementsSubscriberRoboFont(Subscriber):
