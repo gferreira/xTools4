@@ -44,6 +44,7 @@ class TempEdit:
                 minSize=(self.width*0.9, self.width*0.5))
 
         self.designspaces = Group((0, 0, -0, -0))
+
         x = y = p = self.padding
         self.designspaces.list = List(
                 (x, y, -p, -p),
@@ -56,12 +57,18 @@ class TempEdit:
                 otherApplicationDropSettings=dict(
                     type=NSFilenamesPboardType,
                     operation=NSDragOperationCopy,
-                    callback=self.dropCallback))
+                    callback=self.dropCallback)
+                )
 
         self.sources = Group((0, 0, -0, -0))
 
         x = y = p = self.padding
-        self.sources.list = List((x, y, -p, -p), [])
+        self.sources.list = List(
+                (x, y, -p, -p),
+                [],
+                allowsMultipleSelection=True,
+                enableDelete=False,
+            )
 
         self.glyphs = Group((0, 0, -0, -0))
 
@@ -100,19 +107,22 @@ class TempEdit:
                 size=self.lineHeight*5,
                 minSize=self.lineHeight*3,
                 collapsed=False,
-                canResize=True),
+                canResize=True
+            ),
            dict(label="sources",
                 view=self.sources,
                 size=self.lineHeight*8,
                 minSize=self.lineHeight*6,
                 collapsed=False,
-                canResize=True),
-           dict(label="glyphs",
+                canResize=True,
+            ),
+            dict(label="glyphs",
                 view=self.glyphs,
                 size=self.lineHeight*10,
                 minSize=self.lineHeight*8,
                 collapsed=False,
-                canResize=True),
+                canResize=True
+            ),
         ]
         self.w.accordionView = AccordionView((0, 0, -0, -0), descriptions)
 
@@ -158,13 +168,13 @@ class TempEdit:
         designSpaces = self.designspaces.list.get()
 
         # delete current list
-        posSize = self.sources.list.getPosSize()
-        del self.sources.list
+        # posSize = self.sources.list.getPosSize()
+        # del self.sources.list
 
         # list of sources is empty
         if not selection or not len(designSpaces):
             items = []
-            self.sources.list = List(posSize, [])
+            self.sources.list.set([])
             return
 
         # get sources from selected designspace
@@ -179,21 +189,21 @@ class TempEdit:
 
         # make list items
         self._sources = {}
-        items = []
+        # items = []
         for source in designSpace.sources:
             sourceName = os.path.splitext(os.path.split(source.path)[-1])[0]
             self._sources[sourceName] = source.path
-            item = { 'name' : sourceName }
-            for axis in designSpace.axes:
-                item[axis.name] = source.location[axis.name]
-            items.append(item)
+        #     item = { 'name' : sourceName }
+        #     for axis in designSpace.axes:
+        #         item[axis.name] = source.location[axis.name]
+        #     items.append(item)
 
         # create list UI with items
-        self.sources.list = List(
-            posSize, items,
-            columnDescriptions=descriptions,
-            allowsMultipleSelection=True,
-            enableDelete=False)
+        self.sources.list.set(self._sources.keys()) # = List(
+        #     posSize, items,
+        #     columnDescriptions=descriptions,
+        #     allowsMultipleSelection=True,
+        #     enableDelete=False)
 
     def dropCallback(self, sender, dropInfo):
 
@@ -329,7 +339,7 @@ class TempEdit:
                 tmpFont = NewFont(familyName='tempEdit')
 
             for i, master in enumerate(self.selectedMasters):
-                ufoPath = self._sources[master['name']]
+                ufoPath = self._sources[master]
                 if not os.path.exists(ufoPath):
                     if self.verbose:
                         print(f'source file does not exist: {ufoPath}')

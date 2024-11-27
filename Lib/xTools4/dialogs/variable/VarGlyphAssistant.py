@@ -359,7 +359,6 @@ class VarGlyphAssistantController(DesignSpaceSelector_EZUI):
             print(f'loading data from {os.path.split(jsonPath)[-1]}... ')
 
         self._measurementsData = readMeasurements(jsonPath)
-        print(self._measurementsData.keys())
         self._loadMeasurements()
 
     def measurementsSelectionCallback(self, sender):
@@ -654,17 +653,17 @@ class VarGlyphAssistantSubscriberRoboFont(Subscriber):
     controller = None
 
     def fontDocumentDidBecomeCurrent(self, info):
-        print('fontDocumentDidBecomeCurrent')
+        # print('fontDocumentDidBecomeCurrent')
         self.controller.font = info['font']
         self.controller._updateLists()
 
     def fontDocumentDidOpen(self, info):
-        print('fontDocumentDidOpen')
+        # print('fontDocumentDidOpen')
         self.controller.font = info['font']
         self.controller._updateLists()
 
     def roboFontDidSwitchCurrentGlyph(self, info):
-        print('roboFontDidSwitchCurrentGlyph')
+        # print('roboFontDidSwitchCurrentGlyph')
         self.controller.glyph = info["glyph"]
         self.controller._updateLists()
 
