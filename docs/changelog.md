@@ -35,6 +35,14 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/), 
 - - -
 {: .mb-4 }
 
+
+0.1.2
+-----
+
+- <span class='badge rounded-0'>Fixed</span> Fixing bug in the Measurements tool which caused glyph-level measurements to disappear when changing layers.
+- <span class='badge rounded-0'>Changed</span> Adding support for avar2 designspaces to TempEdit.
+{: ._changelog .mb-4 }
+
 0.1.1
 -----
 

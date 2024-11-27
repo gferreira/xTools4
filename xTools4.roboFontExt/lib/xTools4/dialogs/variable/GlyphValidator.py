@@ -1,3 +1,7 @@
+from importlib import reload
+import xTools4.modules.validation
+reload(xTools4.modules.validation)
+
 import ezui
 from merz import MerzView
 from defcon import Glyph, registerRepresentationFactory, unregisterRepresentationFactory
@@ -253,6 +257,10 @@ class GlyphValidatorController(ezui.WindowController):
             'nestedMixed'         : self.w.getItem('filterNestedMixed').get(),
         }
 
+        # don't update if filters state has not changed
+        if filters == currentFont.tempLib.get(f'{KEY}.filters'):
+            return
+
         if not any(filters.values()):
             glyphNames = None
         else:
@@ -277,6 +285,9 @@ class GlyphValidatorController(ezui.WindowController):
 
         w = CurrentFontWindow()
         w.getGlyphCollection().setQuery(queryObject)
+
+        # store filters state in temp lib
+        currentFont.tempLib[f'{KEY}.filters'] = filters
 
     def displayFontOverviewCallback(self, sender):
         self.updateFontViewCallback(sender)
@@ -345,10 +356,18 @@ class GlyphValidatorRoboFont(Subscriber):
     controller = None
 
     def fontDocumentDidBecomeCurrent(self, info):
+        currentFont = info['font']
+        filters = currentFont.tempLib.get(f'{KEY}.filters')
+        if filters:
+            for key, value in filters.items():
+                checkbox = self.controller.w.getItem(f'filter{key[0].upper()}{key[1:]}')
+                checkbox.set(value)
         self.controller.updateFontViewCallback(None)
+        self.controller.updateFiltersCallback(None)
 
     def fontDocumentDidOpen(self, info):
         self.controller.updateFontViewCallback(None)
+        self.controller.updateFiltersCallback(None)
 
     def fontDocumentDidClose(self, info):
         self.controller.updateFontViewCallback(None)

@@ -13,7 +13,7 @@ class MeasurementsViewer:
     fontSizePoints  = 6
     fontSizeTitle   = 48
     fontSizeSection = 36
-    glyphScale      = 0.185
+    glyphScale      = 0.19
 
     colorMeasurementLink  = 1, 0, 0
     colorGlyphShapeFill   = 0.9,
@@ -176,7 +176,7 @@ class MeasurementsViewer:
         DB.strokeWidth(2)
         DB.line((pt1.x, pt1.y), (pt2.x, pt2.y))
 
-    def drawGlyphPoints(self, glyph, point1, point2):
+    def drawGlyphPoints(self, glyph, selectedPoints):
         r = 8
         DB.stroke(None)
         DB.fontSize(self.fontSizePoints * 1 / self.glyphScale)
@@ -184,7 +184,7 @@ class MeasurementsViewer:
         i = 0
         for c in glyph:
             for p in c.points:
-                if str(i) in [point1, point2]:
+                if str(i) in selectedPoints:
                     DB.fill(1, 0, 0)
                 else:
                     DB.fill(0.65)
@@ -201,7 +201,7 @@ class MeasurementsViewer:
             '99' : (glyph.width, 0),
         }
         for name, pos in namedPoints.items():
-            if name in [point1, point2]:
+            if name in selectedPoints:
                 DB.fill(1, 0, 0)
                 x, y = pos
                 DB.oval(x - r, y - r, r * 2, r * 2)
@@ -257,12 +257,64 @@ class MeasurementsViewer:
             self.drawMeasurementDirection(pt1, pt2, direction)
             self.drawGlyphShape(glyph)
             self.drawMeasurementLink(pt1, pt2)
-            self.drawGlyphPoints(glyph, point1, point2)
+            self.drawGlyphPoints(glyph, [point1, point2])
 
             # exit clipping path
             DB.restore()
 
             self.drawFrame()
+
+    def drawMeasurementLinks(self, glyph):
+
+        if glyph.name not in self.glyphMeasurements:
+            return
+
+        glyphMeasurements = self.glyphMeasurements[glyph.name]
+        for ID in glyphMeasurements:
+            pt1_index, pt2_index = ID.split()
+            
+            try:
+                pt1 = getPointAtIndex(glyph, int(pt1_index))
+            except:
+                pt1 = getAnchorPoint(glyph.font, pt1_index)
+
+            try:
+                pt2 = getPointAtIndex(glyph, int(pt2_index))
+            except:
+                pt2 = getAnchorPoint(glyph.font, pt2_index)
+
+            self.drawMeasurementLink(pt1, pt2)
+
+    def drawGlyphMeasurementsInfo(self, glyphName):
+
+        if glyphName not in self.font:
+            return
+
+        glyph = self.font[glyphName]
+
+        x = self.boxSize + self.margin * 2
+        y = DB.height() - self.margin - self.fontSize * 0.7
+
+        txt = DB.FormattedString()
+        txt.fontSize(self.fontSize)
+        txt.lineHeight(self.fontSize * self.lineHeight)
+        txt.paragraphBottomSpacing(None)
+        txt.append(f'{glyphName}\n')
+        txt.fontSize(self.fontSizeLabels)
+        txt.lineHeight(self.fontSizeLabels * self.lineHeight)
+        txt.paragraphBottomSpacing(5)
+        txt.append('glyph name\n')
+
+        txt.paragraphBottomSpacing(0)
+        txt.tabs((50, "left"), (100, "left"), (150, "left"))
+
+        measurements = self.glyphMeasurements.get(glyphName, {})
+        for ID in measurements.keys():
+            pt1, pt2 = ID.split()
+            m = measurements[ID]
+            txt.append(f'{m["name"]}\t{pt1}\t{pt2}\n')
+
+        DB.text(txt, (x, y))
 
     def drawTitlePage(self):
         DB.newPage('A4Landscape')
@@ -277,17 +329,56 @@ class MeasurementsViewer:
         DB.fontSize(self.fontSizeSection)
         DB.textBox(sectionTitle, (x, y, DB.width() - m*2, DB.height() - m*2))
 
-    def drawGlyphMeasurements(self, sectionTitle=True):
+    def drawGlyphMeasurements(self, sectionTitle=True, glyphNames=[]):
         if sectionTitle:
             self.drawSectionTitlePage('glyph-level measurements')
 
-    def makePDF(self, fontMeasurements=True, glyphMeasurements=True, sectionTitle=True, title=True):
+        s = self.glyphScale
+
+        for glyphName in glyphNames:
+
+            if not self.glyphMeasurements.get(glyphName):
+                continue
+
+            DB.newPage('A4Landscape')
+            self.drawGlyphMeasurementsInfo(glyphName)
+
+            if glyphName not in self.font:
+                continue
+
+            glyph = self.font[glyphName]
+
+            # enter clipping path
+            B = DB.BezierPath()
+            B.rect(self.margin, self.margin, self.boxSize, self.boxSize)
+            DB.save()
+            DB.clipPath(B)
+
+            self.drawGlyphMetrics(glyph)
+
+            DB.translate(*self.glyphOrigin(glyph))
+            DB.scale(s)
+
+            self.drawGlyphShape(glyph)
+            self.drawMeasurementLinks(glyph)
+            self.drawGlyphPoints(glyph, [])
+
+            # exit clipping path
+            DB.restore()
+
+            self.drawFrame()
+
+    def makePDF(self, fontMeasurements=True, glyphMeasurements=False, sectionTitle=False, title=False, glyphNames=None):
+        if glyphNames is None:
+            glyphNames = self.font.glyphOrder
         if title:
             self.drawTitlePage()
         if fontMeasurements:
             self.drawFontMeasurements(sectionTitle=sectionTitle)
         if glyphMeasurements:
-            self.drawGlyphMeasurements(sectionTitle=sectionTitle)
+            self.drawGlyphMeasurements(sectionTitle=sectionTitle, glyphNames=glyphNames)
 
     def savePDF(self, pdfPath):
         DB.saveImage(pdfPath)
+
+

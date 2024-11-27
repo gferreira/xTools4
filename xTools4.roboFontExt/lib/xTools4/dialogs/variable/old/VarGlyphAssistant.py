@@ -2,7 +2,7 @@ import AppKit
 import os, sys
 import plistlib
 from operator import itemgetter 
-from vanilla import  Window, EditText, TextBox, Box, List, Button, Tabs, LevelIndicatorListCell
+from vanilla import  Window, EditText, TextBox, Box, List, Button, Tabs
 from mojo.roboFont import OpenWindow, OpenFont
 from mojo.smartSet import readSmartSets
 from xTools4.dialogs.variable.old.DesignSpaceSelector import DesignSpaceSelector

@@ -8,8 +8,8 @@ from xTools4.modules.decomposePointPen import DecomposePointPen
 
 colorComponentsDifferent = 1.00, 0.30, 0.00, 0.35
 colorComponentsEqual     = 1.00, 0.65, 0.00, 0.35
-colorContoursDifferent   = 0.00, 0.65, 1.00, 0.35
-colorContoursEqual       = None
+colorContoursDifferent   = None
+colorContoursEqual       = 0.00, 0.65, 1.00, 0.35
 colorWarning             = 1.00, 0.00, 0.00, 0.65
 
 # ----------------------
@@ -372,10 +372,11 @@ def applyValidationColors(font, defaultFont, colors=None, glyphNames=None):
 
     if colors is None:
         colors = {
-            'components'      : colorComponentsDifferent,
-            'componentsEqual' : colorComponentsEqual,
-            'default'         : colorContoursEqual,
-            'warning'         : colorWarning,
+            'componentsDifferent' : colorComponentsDifferent,
+            'componentsEqual'     : colorComponentsEqual,
+            'contoursEqual'       : colorContoursEqual,
+            'contoursDifferent'   : colorContoursDifferent,
+            'warning'             : colorWarning,
         }
 
     if glyphNames is None:
@@ -406,15 +407,14 @@ def applyValidationColors(font, defaultFont, colors=None, glyphNames=None):
                     currentGlyph.markColor = colors['componentsEqual']
                 # components different from default
                 else:
-                    currentGlyph.markColor = colors['components']
+                    currentGlyph.markColor = colors['componentsDifferent']
         else:
+            # contours equal to default
             if results['compatibility']['points'] and results['equality']['points']:
-                # contours equal to default
-                if font.path != defaultFont.path:
-                    currentGlyph.markColor = colors['default']
-                # contours different from default
-                else:
-                    currentGlyph.markColor = None
+                currentGlyph.markColor = colors['contoursEqual']
+            # contours different from default
+            else:
+                currentGlyph.markColor = colors['contoursDifferent']
 
     font.changed()
 

@@ -14,6 +14,7 @@ from mojo.events import postEvent, addObserver, removeObserver
 from xTools4.modules.linkPoints2 import readMeasurements, getPointAtIndex, getIndexForPoint, getAnchorPoint
 from xTools4.modules.measurements import Measurement
 from xTools4.modules.measurementsViewer import MeasurementsViewer
+from xTools4.modules.messages import showMessage
 
 '''
 M E A S U R E M E N T S v4
@@ -94,6 +95,8 @@ class MeasurementsController(ezui.WindowController):
     font        = None
     glyph       = None
     defaultFont = None
+
+    messageMode = 1
 
     content = """
     = Tabs
@@ -549,17 +552,17 @@ class MeasurementsController(ezui.WindowController):
     def makePdfButtonCallback(self, sender):
 
         if not self.measurements:
-            print('no measurements available')
+            showMessage('no measurements available', self.messageMode)
             return
 
         if not self.defaultFont:
-            print('no default font available')
+            showMessage('no default font available', self.messageMode)
             return
 
         if self.verbose:
             print('making PDF overview...')
 
-        pdfFileName = f'{self.defaultFont.info.familyName}_measurements.pdf'
+        pdfFileName = f'{self.defaultFont.info.familyName.replace(' ', '-')}_measurements.pdf'
         pdfPath = PutFile(message='Save measurements preview as a PDF file:', fileName=pdfFileName)
 
         M = MeasurementsViewer(self.measurements, self.defaultFont.path)
@@ -618,8 +621,7 @@ class MeasurementsController(ezui.WindowController):
 
         if not len(g.selectedPoints) == 2:
             if self.verbose:
-                # convert to message
-                print('please select two points')
+                showMessage('please select two points', self.messageMode)
             return
 
         pt1 = g.selectedPoints[0]
@@ -961,6 +963,9 @@ class MeasurementsSubscriberRoboFont(Subscriber):
         self.controller._updateGlyphMeasurements()
 
     def roboFontDidSwitchCurrentGlyph(self, info):
+        glyph = info["glyph"]
+        if glyph.name == self.controller.glyph.name:
+            return
         self.controller._updateGlyphMeasurementsDict()
         self.controller.glyph = info["glyph"]
         self.controller._loadGlyphMeasurements()
