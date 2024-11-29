@@ -53,7 +53,6 @@ how-tos
 -------
 
 - [installing xTools4](how-tos/installing-xtools4)
-- [assigning short keys to tools](#)
 </div>
 
 </div>

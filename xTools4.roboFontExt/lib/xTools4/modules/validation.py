@@ -411,10 +411,24 @@ def applyValidationColors(font, defaultFont, colors=None, glyphNames=None):
         else:
             # contours equal to default
             if results['compatibility']['points'] and results['equality']['points']:
-                currentGlyph.markColor = colors['contoursEqual']
-            # contours different from default
+                # width equal to default
+                if currentGlyph.width == defaultGlyph.width:
+                    currentGlyph.markColor = colors['contoursEqual']
+                # width different from default
+                else:
+                    currentGlyph.markColor = colors['contoursDifferent']
             else:
-                currentGlyph.markColor = colors['contoursDifferent']
+                # empty glyphs
+                if not len(defaultGlyph) and not len(currentGlyph):
+                    # width equal to default
+                    if currentGlyph.width == defaultGlyph.width:
+                        currentGlyph.markColor = colors['contoursEqual']
+                    # width different from default
+                    else:
+                        currentGlyph.markColor = colors['contoursDifferent']
+                # contours different from default
+                else:
+                    currentGlyph.markColor = colors['contoursDifferent']
 
     font.changed()
 

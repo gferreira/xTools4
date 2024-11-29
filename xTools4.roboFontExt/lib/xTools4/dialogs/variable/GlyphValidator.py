@@ -40,9 +40,10 @@ def validationGroupFactory(glyph, defaultGlyph=None):
 
     validationGroup = None
 
+    # glyphs with components
     if glyph.components:
         levels = getNestingLevels(glyph)
-        # warning: nested components of mixed contour/components
+        # warning: nested components or mixed contour/components
         if levels > 1 or len(glyph.contours):
             validationGroup = 'warning'
         else:
@@ -53,15 +54,25 @@ def validationGroupFactory(glyph, defaultGlyph=None):
             else:
                 validationGroup = 'componentsDifferent'
     else:
+        # contours equal to default
         if checkResults['compatibility']['points'] and checkResults['equality']['points']:
-            # contours equal to default
-            if glyph.font.path != defaultGlyph.font.path:
+            # if glyph.font.path != defaultGlyph.font.path 
+            if glyph.width == defaultGlyph.width:
                 validationGroup = 'contoursEqual'
-            # contours different from default
             else:
                 validationGroup = 'contoursDifferent'
         else:
-            validationGroup = 'contoursDifferent'
+            # empty glyphs
+            if not len(defaultGlyph) and not len(glyph):
+                # width equal to default
+                if glyph.width == defaultGlyph.width:
+                    validationGroup = 'contoursEqual'
+                # width different from default
+                else:
+                    validationGroup = 'contoursDifferent'
+            # contours different from default
+            else:
+                validationGroup = 'contoursDifferent'
 
     return validationGroup
 

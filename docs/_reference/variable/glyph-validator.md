@@ -45,10 +45,10 @@ Use the checkboxes to show/hide glyphs from individual validation groups from th
 </div>
 <div class='col-8' markdown='1'>
 = contours
-: Glyphs consisting only of contours, equal to the default.
+: Glyphs consisting only of contours (or empty), equal to the default.
 
 ≠ contours
-: Glyphs consisting only of contours, different from the default.
+: Glyphs consisting only of contours (or empty), different from the default.
 
 = components
 : Glyphs consisting only of components, equal to the default.

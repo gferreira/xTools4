@@ -687,14 +687,17 @@ class BatchBuildGlyphsDialog(BatchDialogBase):
             # get source & target glyph names
             for srcName, dstName in glyphNames:
                 print("\t\tduplicating '%s' as '%s'..." % (srcName, dstName))
+                # create target glyph
+                if dstName not in font:
+                    font.newGlyph(dstName)
 
-                # create/reset target glyph
-                if self.overwrite or dstName not in font:
-                    font.insertGlyph(font[srcName], name=dstName)
-                    font[dstName].unicodes = []
+                if self.overwrite:
+                    font[dstName] = font[srcName]
+                else:
+                    # copy duplicate into existing glyph
+                    font[dstName].appendGlyph(font[srcName])
 
-                # copy duplicate into existing glyph
-                font[dstName].appendGlyph(font[srcName])
+                font[dstName].unicodes = []
 
                 # mark target glyph
                 if self.markGlyphs:

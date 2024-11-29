@@ -268,8 +268,6 @@ class BatchBuildGlyphsDialog(BatchDialogBase):
     @property
     def selectedGlyphNames(self):
         selection = self.duplicateRenameSelector.glyphNames.getSelection()
-        print(selection)
-        print(self.allGlyphNames)
         glyphNames = []
         for i, glyphName in enumerate(self.allGlyphNames):
             if i in selection:

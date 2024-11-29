@@ -35,6 +35,13 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/), 
 - - -
 {: .mb-4 }
 
+0.1.3
+-----
+
+- <span class='badge rounded-0'>Fixed</span> Fixing bugs in logic to assign glyphs to validation groups (empty glyphs, equal contours with different width).
+- <span class='badge rounded-0'>Fixed</span> Fixing overwrite mode in batch build duplicate glyphs.
+- <span class='badge rounded-0'>Fixed</span> Fixing bug with empty glyph selection in Measurements tool.
+{: ._changelog .mb-4 }
 
 0.1.2
 -----
@@ -48,7 +55,6 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/), 
 
 - <span class='badge rounded-0'>Added</span> Adding new module MeasurementsViewer, adding PDF export to the Measurements tool.
 {: ._changelog .mb-4 }
-
 
 0.1.0
 -----
