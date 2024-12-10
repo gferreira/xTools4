@@ -1,3 +1,7 @@
+from importlib import reload
+import xTools4.modules.accents
+reload(xTools4.modules.accents)
+
 from vanilla import Button, CheckBox
 from mojo import drawingTools as ctx
 from mojo.UI import GetFile, CodeEditor
@@ -90,13 +94,13 @@ class BuildConstructionDialog(GlyphsDialogBase):
 
     def importConstructionsCallback(self, sender):
 
-        self.glyphConstructionPath = GetFile(message='Get .glyphConstruction file…', title=self.title)
+        self.glyphConstructionPath = GetFile(message='Get .glyphConstruction file...', title=self.title)
 
         if not self.glyphConstructionPath:
             return
 
         if self.verbose:
-            print('importing glyph constructions from file…')
+            print('importing glyph constructions from file...', end=' ')
 
         # read glyph constructions from file
         with open(self.glyphConstructionPath, 'r', encoding='utf-8') as f:
@@ -105,19 +109,19 @@ class BuildConstructionDialog(GlyphsDialogBase):
         self.w.glyphConstructions.set(constructions)
 
         if self.verbose:
-            print('…done.\n')
+            print('done.\n')
 
     def exportConstructionsCallback(self, sender):
         constructionsTxt = self.w.glyphConstructions.get()
 
         if self.verbose:
-            print('exporting glyph constructions back to file…')
+            print('exporting glyph constructions back to file...', end=' ')
 
         with open(self.glyphConstructionPath, 'w', encoding='utf-8') as f:
             constructions = f.write(constructionsTxt)
 
         if self.verbose:
-            print('…done.\n')
+            print('done.\n')
 
     # ---------
     # observers
@@ -192,9 +196,12 @@ class BuildConstructionDialog(GlyphsDialogBase):
         if not font:
             return
 
-        glyphNames = self.getGlyphNames(template=True)
+        glyphNames = self.getGlyphNames(template=False)
         if not glyphNames:
             return
+
+        for glyphName in glyphNames:
+            print(glyphName, len(font[glyphName]))
 
         if not self.constructions:
             print('no .glyphConstruction file\n')
@@ -206,8 +213,8 @@ class BuildConstructionDialog(GlyphsDialogBase):
 
         if self.verbose:
             print('building glyph constructions:\n')
-            print('\t', end='')
-            print(' '.join(glyphNames), end='\n')
+            # print('\t', end='')
+            # print(' '.join(glyphNames), end='\n')
 
         # ------------
         # build glyphs
@@ -216,8 +223,9 @@ class BuildConstructionDialog(GlyphsDialogBase):
         for glyphName in glyphNames:
             construction = self.constructions.get(glyphName)
             if construction is None:
-                continue
-            buildGlyphConstruction(font, construction, clear=True, verbose=False, autoUnicodes=False)
+                print(f'\tskipping {glyphName} (no construction)...')
+            else:
+                buildGlyphConstruction(font, construction, clear=True, verbose=True, autoUnicodes=False, indentLevel=1)
 
         # done
         font.changed()

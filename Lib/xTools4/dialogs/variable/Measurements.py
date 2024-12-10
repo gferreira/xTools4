@@ -964,8 +964,9 @@ class MeasurementsSubscriberRoboFont(Subscriber):
 
     def roboFontDidSwitchCurrentGlyph(self, info):
         glyph = info["glyph"]
-        if self.controller.glyph is not None and glyph.name == self.controller.glyph.name:
-            return
+        if self.controller.glyph is not None and glyph is not None:
+            if glyph.name == self.controller.glyph.name:
+                return
         self.controller._updateGlyphMeasurementsDict()
         self.controller.glyph = info["glyph"]
         self.controller._loadGlyphMeasurements()
