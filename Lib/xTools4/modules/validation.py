@@ -404,7 +404,12 @@ def applyValidationColors(font, defaultFont, colors=None, glyphNames=None):
             else:
                 # components equal to default
                 if all(results['compatibility']) and results['equality']['components']:
-                    currentGlyph.markColor = colors['componentsEqual']
+                    # width equal to default
+                    if currentGlyph.width == defaultGlyph.width:
+                        currentGlyph.markColor = colors['componentsEqual']
+                    # width different from default
+                    else:
+                        currentGlyph.markColor = colors['componentsDifferent']
                 # components different from default
                 else:
                     currentGlyph.markColor = colors['componentsDifferent']
