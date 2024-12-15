@@ -2,8 +2,9 @@ from importlib import reload
 import xTools4.modules.measurementsViewer
 reload(xTools4.modules.measurementsViewer)
 
-from random import random
 import os, json
+from random import random
+from operator import itemgetter
 import ezui
 from merz import MerzView
 from mojo import drawingTools as ctx
@@ -19,7 +20,7 @@ from xTools4.modules.messages import showMessage
 '''
 M E A S U R E M E N T S v4
 
-RF4.5b + EZUI + Subscriber + Merz
+RF4.5 + EZUI + Subscriber + Merz
 
 '''
 
@@ -848,6 +849,13 @@ class MeasurementsController(ezui.WindowController):
             )
             items.append(item)
 
+        # rebuild list using the font measurements order
+        sortedItems = []
+        for fontMeasurementName in self.fontMeasurements.keys():
+            for item in items:
+                if item['name'] == fontMeasurementName:
+                    sortedItems.append(item)
+
         table.set(items)
 
         postEvent(f"{self.key}.changed")
@@ -858,7 +866,7 @@ class MeasurementsController(ezui.WindowController):
 
         # get font-level values
         fontMeasurements = self.w.getItem("fontMeasurements").get()
-        fontValues       = { i['name']: i['units'] for i in fontMeasurements }
+        fontValues       = { i['name']: i['units']  for i in fontMeasurements }
         fontGlyphs       = { i['name']: i['glyph1'] for i in fontMeasurements }
 
         needReload = []
