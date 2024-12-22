@@ -3,7 +3,7 @@
 from xTools4.modules.messages import noFontOpen, noGlyphSelected, showMessage
 from xTools4.modules.fontutils import getGlyphs2
 from xTools4.modules.glyphutils import centerGlyph
-from xTools4.dialogs import getLayerNames
+from xTools4.dialogs.old import getLayerNames
 
 # TODO: read global settings
 messageMode = 1

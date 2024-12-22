@@ -4,7 +4,6 @@ reload(xTools4.modules.measurementsViewer)
 
 import os, json
 from random import random
-from operator import itemgetter
 import ezui
 from merz import MerzView
 from mojo import drawingTools as ctx
@@ -91,7 +90,10 @@ class MeasurementsController(ezui.WindowController):
     verbose     = False
 
     measurementsPath = None
-    measurements     = {}
+    measurements = {
+        'font'   : {},
+        'glyphs' : {},
+    }
 
     font        = None
     glyph       = None
@@ -352,9 +354,6 @@ class MeasurementsController(ezui.WindowController):
                     width=colWidth,
                     editable=False,
                     cellDescription=dict(
-                        # valueToCellConverter=scaleValueToCellConverter,
-                        # cellToValueConverter=scaleCellToValueConverter,
-                        # stringFormatter=fontScaleColorFormatter,
                         cellType='TextField',
                         valueType='string',
                     ),
@@ -849,14 +848,14 @@ class MeasurementsController(ezui.WindowController):
             )
             items.append(item)
 
-        # rebuild list using the font measurements order
+        # follow order of font measurements
         sortedItems = []
         for fontMeasurementName in self.fontMeasurements.keys():
             for item in items:
                 if item['name'] == fontMeasurementName:
                     sortedItems.append(item)
 
-        table.set(items)
+        table.set(sortedItems)
 
         postEvent(f"{self.key}.changed")
 

@@ -35,6 +35,17 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/), 
 - - -
 {: .mb-4 }
 
+0.1.4
+-----
+
+- <span class='badge rounded-0'>Fixed</span> Fixing bugs in Measurements tool (disappearing measurements, creating new measurements file).
+- <span class='badge rounded-0'>Fixed</span> Fixing false positives in glyph validation group (equal components with different width).
+- <span class='badge rounded-0'>Fixed</span> Fixing bug in glyph construction builder (deleted non-construction glyphs).
+- <span class='badge rounded-0'>Fixed</span> Fixing center glyphs script.
+- <span class='badge rounded-0'>Changed</span> Measurements tool loads glyph measurements in the order of font measurements.
+{: ._changelog .mb-4 }
+
+
 0.1.3
 -----
 

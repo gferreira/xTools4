@@ -2,8 +2,8 @@ from importlib import reload
 import xTools4.modules.measurementsViewer
 reload(xTools4.modules.measurementsViewer)
 
-from random import random
 import os, json
+from random import random
 import ezui
 from merz import MerzView
 from mojo import drawingTools as ctx
@@ -19,7 +19,7 @@ from xTools4.modules.messages import showMessage
 '''
 M E A S U R E M E N T S v4
 
-RF4.5b + EZUI + Subscriber + Merz
+RF4.5 + EZUI + Subscriber + Merz
 
 '''
 
@@ -90,7 +90,10 @@ class MeasurementsController(ezui.WindowController):
     verbose     = False
 
     measurementsPath = None
-    measurements     = {}
+    measurements = {
+        'font'   : {},
+        'glyphs' : {},
+    }
 
     font        = None
     glyph       = None
@@ -351,9 +354,6 @@ class MeasurementsController(ezui.WindowController):
                     width=colWidth,
                     editable=False,
                     cellDescription=dict(
-                        # valueToCellConverter=scaleValueToCellConverter,
-                        # cellToValueConverter=scaleCellToValueConverter,
-                        # stringFormatter=fontScaleColorFormatter,
                         cellType='TextField',
                         valueType='string',
                     ),
@@ -848,7 +848,14 @@ class MeasurementsController(ezui.WindowController):
             )
             items.append(item)
 
-        table.set(items)
+        # follow order of font measurements
+        sortedItems = []
+        for fontMeasurementName in self.fontMeasurements.keys():
+            for item in items:
+                if item['name'] == fontMeasurementName:
+                    sortedItems.append(item)
+
+        table.set(sortedItems)
 
         postEvent(f"{self.key}.changed")
 
@@ -858,7 +865,7 @@ class MeasurementsController(ezui.WindowController):
 
         # get font-level values
         fontMeasurements = self.w.getItem("fontMeasurements").get()
-        fontValues       = { i['name']: i['units'] for i in fontMeasurements }
+        fontValues       = { i['name']: i['units']  for i in fontMeasurements }
         fontGlyphs       = { i['name']: i['glyph1'] for i in fontMeasurements }
 
         needReload = []
@@ -964,8 +971,9 @@ class MeasurementsSubscriberRoboFont(Subscriber):
 
     def roboFontDidSwitchCurrentGlyph(self, info):
         glyph = info["glyph"]
-        if self.controller.glyph is not None and glyph.name == self.controller.glyph.name:
-            return
+        if self.controller.glyph is not None and glyph is not None:
+            if glyph.name == self.controller.glyph.name:
+                return
         self.controller._updateGlyphMeasurementsDict()
         self.controller.glyph = info["glyph"]
         self.controller._loadGlyphMeasurements()

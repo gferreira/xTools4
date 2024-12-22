@@ -361,7 +361,6 @@ class InterpolationPreviewRoboFont(Subscriber):
         self._updateLayers()
 
     def _updateFonts(self):
-        # print('_updateFonts')
         self.controller.font1 = CurrentFont()
         allFonts = AllFonts()
         # no fonts open
@@ -375,7 +374,6 @@ class InterpolationPreviewRoboFont(Subscriber):
         self.controller.w.getItem("font2").setItems(allFontNames)
 
     def _updateLayers(self):
-        # print('_updateLayers')
         # glyph1 = CurrentGlyph()
 
         if self.controller.font1 is None or self.controller.font2 is None: # or not glyph1:
@@ -396,7 +394,6 @@ class InterpolationPreviewRoboFont(Subscriber):
         self.controller.w.getItem("layers2").setItems(layerNames)
 
     def fontDocumentDidBecomeCurrent(self, info):
-        # print('fontDocumentDidBecomeCurrent')
         self.controller.font1 = CurrentFont()
         self._updateFonts()
         self._updateLayers()
@@ -407,13 +404,11 @@ class InterpolationPreviewRoboFont(Subscriber):
     #     self._updateLayers()
 
     def fontDocumentDidClose(self, info):
-        # print('fontDocumentDidClose')
         self.controller.font1 = CurrentFont()
         self._updateFonts()
         self._updateLayers()
 
     def roboFontDidSwitchCurrentGlyph(self, info):
-        # print('roboFontDidSwitchCurrentGlyph')
         # self._updateFonts()
         # self._updateLayers()
         pass

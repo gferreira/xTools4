@@ -243,7 +243,7 @@ class GlyphSetProofer:
 
                 n += 1
 
-    def build(self, savePDF=False):
+    def build(self, savePDF=False, folder=None):
 
         defaultFont = OpenFont(self.defaultFontPath, showInterface=False)
         sources     = [OpenFont(srcPath, showInterface=False) for srcPath in self.sourcePaths]
@@ -256,7 +256,9 @@ class GlyphSetProofer:
             self._makePage(font, defaultFont, now)
 
         if savePDF:
-            pdfPath = os.path.join(os.getcwd(), f"glyphset_{self.familyName.replace(' ', '-')}.pdf")
+            if folder is None:
+                folder = os.getcwd()
+            pdfPath = os.path.join(folder, f"glyphset_{self.familyName.replace(' ', '-')}.pdf")
             DB.saveImage(pdfPath)
 
 

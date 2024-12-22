@@ -36,14 +36,15 @@ The order of the points matters: a measurement can be positive or negative.
 | description | description of this measurement (optional)             |
 {: .table .table-hover }
 
+{% comment %}
 <div class="card bg-light my-3 rounded-0">
 <div class="card-header">note</div>
 <div class="card-body" markdown='1'>
-The attribute `glyph 2` can probably be deprecated. It was available to allow measurement of overshoots using a straight shape from one glyph and a round shape from another glyph. Overshoot measurement is now possible using 
+The attribute *glyph 2* can probably be deprecated. It was available to allow measurement of overshoots using a straight shape from one glyph and a round shape from another glyph. Overshoot measurement is now possible using [reference points](#reference-points).
 {: .card-text }
 </div>
 </div>
-
+{% endcomment %}
 
 ### Glyph-level measurements
 
@@ -72,9 +73,24 @@ The direction of measurement must be one of the following characters:
 | a          | angled measurement     |
 {: .table .table-hover }
 
-### Point indexes and shortcut keys
+<div class="card bg-light my-3 rounded-0">
+<div class="card-header">note</div>
+<div class="card-body" markdown='1'>
+The sign of the measured value indicates its direction. Some measurements are by definition negative, for example the descender value or a bottom overshoot.
+{: .card-text }
+</div>
+</div>
 
-Point indexes are expressed as integers.
+
+### Point IDs
+
+Points can be identified by a **number** (point index) or a **letter** (reference point).
+
+#### Point indexes
+
+Contour points are identified by their index (an integer).
+
+#### Reference points
 
 Font-level vertical metrics values are also available using the following shortcut characters:
 
@@ -86,12 +102,6 @@ Font-level vertical metrics values are also available using the following shortc
 | D         | descender   | `0`           | `font.info.descender` |
 | X         | x-height    | `0`           | `font.info.xHeight`   |
 {: .table .table-hover }
-
-{% comment %}
-### Sign of the measured values
-
-**The sign of the measured values matters.** While most measurements are usually positive, some are by definition *negative* – for example the descender value or a bottom overshoot.
-{% endcomment %}
 
 
 Python example
@@ -113,12 +123,12 @@ fontMeasurements = {
 }
 ```
 
-The key for glyph-level measurements is an identifier created from the two point indexes.
+The key for glyph-level measurements is an identifier created from the two point IDs.
 
 ```python
 glyphMeasurements = {
     "a" : {
-      f'{ptIndex1} {ptIndex2}' : {
+      f'{ptID1} {ptID2}' : {
           'name'      : 'XTRA',
           'direction' : 'x',
       },
