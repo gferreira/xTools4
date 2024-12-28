@@ -27,8 +27,8 @@ class MaskDialog(hDialog, BaseWindowController):
     }
 
     def __init__(self):
-        self.height  = self.textHeight * 7
-        self.height += self.padding * 6
+        self.height  = self.textHeight * 8
+        self.height += self.padding * 7
         self.w = self.window((self.width, self.height), self.title)
 
         x = p = self.padding
@@ -78,12 +78,12 @@ class MaskDialog(hDialog, BaseWindowController):
                 sizeStyle=self.sizeStyle,
                 callback=self.clearMaskCallback)
 
-        # y += self.textHeight + p
-        # self.w.lockLayerWidths = CheckBox(
-        #         (x, y, -p, self.textHeight),
-        #         'copy width',
-        #         value=self.settings['copyWidth'],
-        #         sizeStyle=self.sizeStyle)
+        y += self.textHeight + p
+        self.w.lockLayerWidths = CheckBox(
+                (x, y, -p, self.textHeight),
+                'copy width',
+                value=self.settings['copyWidth'],
+                sizeStyle=self.sizeStyle)
 
         self.updateSourceLayer()
         self.updateMaskLayersList()
@@ -108,9 +108,9 @@ class MaskDialog(hDialog, BaseWindowController):
         i = self.w.maskLayers.get()
         return self.w.maskLayers.getItems()[i]
 
-    # @property
-    # def lockLayerWidths(self):
-    #     return self.w.lockLayerWidths.get()
+    @property
+    def lockLayerWidths(self):
+        return self.w.lockLayerWidths.get()
 
     # ---------
     # observers
@@ -154,10 +154,10 @@ class MaskDialog(hDialog, BaseWindowController):
             g = font[glyphName]
             g.flipLayers(self.sourceLayer, self.maskLayer)
 
-            # if self.lockLayerWidths:
-            #     sourceGlyph = font[glyphName].getLayer(self.sourceLayer)
-            #     maskGlyph   = font[glyphName].getLayer(self.maskLayer)
-            #     maskGlyph.width = sourceGlyph.width
+            if self.lockLayerWidths:
+                sourceGlyph = font[glyphName].getLayer(self.sourceLayer)
+                maskGlyph   = font[glyphName].getLayer(self.maskLayer)
+                maskGlyph.width = sourceGlyph.width
 
     def clearMaskCallback(self, sender):
         '''

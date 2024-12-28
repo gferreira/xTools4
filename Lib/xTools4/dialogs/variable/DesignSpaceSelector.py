@@ -33,7 +33,8 @@ class DesignSpaceSelector_EZUI(ezui.WindowController):
     >> |--------------|
     >> | sources      |  @sources
     >> |--------------|
-    >> ( open )          @openButton
+    >>> ( reload ↺ )     @reloadButton
+    >>> ( open )         @openButton
     """
 
     descriptionData = dict(
@@ -69,6 +70,9 @@ class DesignSpaceSelector_EZUI(ezui.WindowController):
                 ),
             ],
         ),
+        reloadButton=dict(
+            width=buttonWidth,
+        ),
         openButton=dict(
             width=buttonWidth,
         ),
@@ -93,6 +97,16 @@ class DesignSpaceSelector_EZUI(ezui.WindowController):
         for itemName in self._tables:
             self.w.getItem(itemName).getNSTableView().setRowHeight_(self.rowHeight)
         self.w.open()
+
+    # dynamic attrs
+
+    @property
+    def defaultFont(self):
+        if self.designspace is None:
+            return
+        defaultName = getSourceName(self.designspace.default)
+        if defaultName in self.sources:
+            return self.sources[defaultName].font
 
     # callbacks
 
@@ -155,6 +169,12 @@ class DesignSpaceSelector_EZUI(ezui.WindowController):
         
         if self.verbose:
             print('done...\n')
+
+    def reloadButtonCallback(self, sender):
+        print('reloading sources...', end=' ')
+        for src in self.designspace.sources:
+            src.font = Font(src.path)
+        print('done.\n')
 
 
 if __name__ == '__main__':

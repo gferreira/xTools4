@@ -35,6 +35,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/), 
 - - -
 {: .mb-4 }
 
+
 0.1.4
 -----
 
@@ -54,6 +55,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/), 
 - <span class='badge rounded-0'>Fixed</span> Fixing bug with empty glyph selection in Measurements tool.
 {: ._changelog .mb-4 }
 
+
 0.1.2
 -----
 
@@ -61,11 +63,13 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/), 
 - <span class='badge rounded-0'>Changed</span> Adding support for avar2 designspaces to TempEdit.
 {: ._changelog .mb-4 }
 
+
 0.1.1
 -----
 
 - <span class='badge rounded-0'>Added</span> Adding new module MeasurementsViewer, adding PDF export to the Measurements tool.
 {: ._changelog .mb-4 }
+
 
 0.1.0
 -----
