@@ -33,8 +33,9 @@ class DesignSpaceSelector_EZUI(ezui.WindowController):
     >> |--------------|
     >> | sources      |  @sources
     >> |--------------|
-    >>> ( reload ↺ )     @reloadButton
+    >>= HorizontalStack
     >>> ( open )         @openButton
+    >>> ( reload ↺ )     @reloadButton
     """
 
     descriptionData = dict(
@@ -175,6 +176,30 @@ class DesignSpaceSelector_EZUI(ezui.WindowController):
         for src in self.designspace.sources:
             src.font = Font(src.path)
         print('done.\n')
+
+    def sourcesSelectionCallback(self, sender):
+        self._updateLists()
+
+    def openSourceCallback(self, sender):
+
+        selectedItems = sender.getSelectedItems()
+        selectedSourceNames = [src['fileName'] for src in selectedItems]
+
+        for srcName in selectedSourceNames:
+            if srcName in self.sources:
+                src = self.sources[srcName]
+                if self.verbose:
+                    print(f'\topening {srcName}...')
+                OpenFont(src.path)
+        
+        if self.verbose:
+            print('done...\n')
+
+    def _updateLists(self):
+        # add method in subclass object
+        # loads font data in other tabs
+        pass
+
 
 
 if __name__ == '__main__':
