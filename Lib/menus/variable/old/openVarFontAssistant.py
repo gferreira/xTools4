@@ -1,4 +1,4 @@
-# menuTitle: VarFontAssistant (old)
+# menuTitle: VarFontAssistant
 
 from importlib import reload
 import xTools4.dialogs.variable.old.VarFontAssistant

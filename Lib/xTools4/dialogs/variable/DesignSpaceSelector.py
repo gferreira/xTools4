@@ -1,8 +1,10 @@
 import os
 import ezui
 from defcon import Font
+from mojo.UI import GetFile
 from mojo.roboFont import OpenWindow, OpenFont
 from fontTools.designspaceLib import DesignSpaceDocument
+from xTools4.modules.linkPoints2 import readMeasurements # getPointAtIndex, getIndexForPoint, getAnchorPoint
 
 
 def getSourceName(src):
@@ -37,6 +39,8 @@ class DesignSpaceSelector_EZUI(ezui.WindowController):
     >>> ( open )         @openButton
     >>> ( reload ↺ )     @reloadButton
     """
+
+    _measurementsData = {}
 
     descriptionData = dict(
         designspaces=dict(
@@ -146,8 +150,8 @@ class DesignSpaceSelector_EZUI(ezui.WindowController):
 
         sourcesTable.set(sourcesItems)
 
-    def sourcesDoubleClickCallback(self, sender):
-        self.openButtonCallback(None)
+    # def sourcesDoubleClickCallback(self, sender):
+    #     self.openButtonCallback(None)
 
     def openButtonCallback(self, sender):
 
@@ -195,11 +199,26 @@ class DesignSpaceSelector_EZUI(ezui.WindowController):
         if self.verbose:
             print('done...\n')
 
+    def loadMeasurementsButtonCallback(self, sender):
+        jsonPath = GetFile(message='Select JSON file with measurements:')
+        if jsonPath is None:
+            return
+
+        if self.verbose:
+            print(f'loading data from {os.path.split(jsonPath)[-1]}... ')
+
+        self._measurementsData = readMeasurements(jsonPath)
+        self._loadMeasurements()
+
     def _updateLists(self):
-        # add method in subclass object
+        # implement method when subclassing object
         # loads font data in other tabs
         pass
 
+    def _loadMeasurements(self):
+        # implement method when subclassing object
+        # loads measurements in another tab
+        pass
 
 
 if __name__ == '__main__':

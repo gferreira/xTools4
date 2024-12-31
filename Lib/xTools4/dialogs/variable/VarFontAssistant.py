@@ -4,9 +4,17 @@ reload(xTools4.dialogs.variable.DesignSpaceSelector)
 
 import ezui
 from mojo.roboFont import OpenWindow, OpenFont
-from xTools4.dialogs.variable.DesignSpaceSelector import DesignSpaceSelector_EZUI
+from xTools4.dialogs.variable.DesignSpaceSelector import DesignSpaceSelector_EZUI, getSourceName
+from xTools4.dialogs.variable.Measurements import *
 
 KEY = 'com.xTools4.VarFontAssistant'
+
+
+thresholdDefault = 0.1
+
+def defaultScaleColorFormatter(attributes):
+    scaleColorFormatter(attributes, thresholdDefault)
+
 
 
 class VarFontAssistant_EZUI(DesignSpaceSelector_EZUI):
@@ -18,7 +26,8 @@ class VarFontAssistant_EZUI(DesignSpaceSelector_EZUI):
     columnFontInfo     = 180
     columnKerningPairs = 180
     columnFontName     = 240
-    columnValue        = 50
+    columnValue        = 40
+    columnKerningValue = 40
     columnMeasurements = 55
 
     _fontInfoAttrs = {
@@ -64,75 +73,50 @@ class VarFontAssistant_EZUI(DesignSpaceSelector_EZUI):
     }
     _fontInfoValues = {}
 
-    _kerningValues = {}
+    _kerningValues   = {}
     _kerningPairsAll = []
+
+    _measurementsData = {}
 
     content = DesignSpaceSelector_EZUI.content
     content += '''
-    * Tab: font info     @fontInfoTab
+    * Tab: font info    @fontInfoTab
     >= HorizontalStack
 
-    >>= VerticalStack
-    >>> attributes
-    >>> |-----------|
-    >>> |           |    @fontInfoAttributes
-    >>> |-----------|
+    >> |-----------|
+    >> |           |    @fontInfoAttributes
+    >> |-----------|
 
-    >>= VerticalStack
-    >>> values
-    >>> |-----------|--------|---------|
-    >>> | file name | value  | permill |  @fontInfoValues
-    >>> |-----------|--------|---------|
-
-    # >= HorizontalStack
-    # >> ( load )          @loadFontInfoButton
-    # >> ( save )          @saveFontInfoButton
+    >> |-----------|--------|---------|
+    >> | file name | value  | permill |  @fontInfoValues
+    >> |-----------|--------|---------|
 
     * Tab: kerning       @kerningTab
     >= HorizontalStack
 
-    >>= VerticalStack
-    >>> pairs
-    >>> |-----|-----|
-    >>> | 1st | 2nd |    @kerningPairs
-    >>> |-----|-----|
+    >> |-----|-----|
+    >> | 1st | 2nd |    @kerningPairs
+    >> |-----|-----|
 
-    >>= VerticalStack    @kerningPreviewStack
-    # >>> preview
-    # >>> * MerzView     @kerningPreview
-    >>> values
-    >>> |-----------|--------|---------|
-    >>> | file name | value  | permill |  @kerningValues
-    >>> |-----------|--------|---------|
-
-    # >= HorizontalStack
-    # >> ( load )          @loadKerningButton
-    # >> ( save )          @saveKerningButton
+    >> |-----------|--------|---------|
+    >> | file name | value  | permill |  @kerningValues
+    >> |-----------|--------|---------|
 
     * Tab: measurements  @measurementsTab
-    >= VerticalStack
+    >= HorizontalStack
 
-    # >> measurement files
-    # >> |-files------------|
-    # >> | measurementFiles |  @measurementFiles
-    # >> |------------------|
+    >> |-------------|
+    >> | measurement |  @measurements
+    >> |-------------|
 
-    >>= HorizontalStack
-    >>>= VerticalStack
-    >>>> measurements
-    >>>> |-----------|
-    >>>> |           |   @measurements
-    >>>> |-----------|
-
-    >>>= VerticalStack
-    >>>> values
-    >>>> |-----------|-------|---------|---------|
-    >>>> | file name | units | permill | d-scale |  @measurementValues
-    >>>> |-----------|-------|---------|---------|
+    >> |----------|-------|---------|---------|
+    >> | filename | units | permill | d-scale |  @measurementValues
+    >> |----------|-------|---------|---------|
 
     >= HorizontalStack
     >> ( load… )         @loadMeasurementsButton
-    >> ( save… )         @exportMeasurementsButton
+    >> d-threshold
+    >> [__](±)           @thresholdDefault
 
     * Tab: validation    @validationTab
     >= HorizontalStack
@@ -243,7 +227,7 @@ class VarFontAssistant_EZUI(DesignSpaceSelector_EZUI):
                 dict(
                     identifier="value",
                     title="value",
-                    width=columnValue,
+                    width=columnKerningValue,
                     sortable=True,
                 ),
             ]
@@ -255,31 +239,40 @@ class VarFontAssistant_EZUI(DesignSpaceSelector_EZUI):
             width=buttonWidth,
         ),
         # measurements
-        measurementFiles=dict(
-            alternatingRowColors=True,
-            height=100,
-            itemType="dict",
-            acceptedDropFileTypes=[".measurements"],
-            allowsDropBetweenRows=True,
-            allowsInternalDropReordering=True,
-            allowsMultipleSelection=False,
-            columnDescriptions=[
-                dict(
-                    identifier="path",
-                    title="path",
-                    cellClassArguments=dict(
-                        showFullPath=True
-                    )
-                ),
-            ],
-        ),
         measurements=dict(
             alternatingRowColors=True,
             width=columnLeft,
+            allowsEmptySelection=False,
+            allowsMultipleSelection=False,
+            columnDescriptions=[
+                dict(
+                    identifier="name",
+                    title="name",
+                    # width=columnValue*1.2,
+                ),
+                # dict(
+                #     identifier="direction",
+                #     title="dir",
+                #     width=columnValue*0.5,
+                # ),
+                # dict(
+                #     identifier="pt1",
+                #     title="pt1",
+                #     width=columnValue*0.6,
+                # ),
+                # dict(
+                #     identifier="pt2",
+                #     title="pt2",
+                #     width=columnValue*0.6,
+                # ),
+            ],
+        ),
+        measurementValuesStack=dict(
+            distribution="fill",
         ),
         measurementValues=dict(
             alternatingRowColors=True,
-            width='auto',
+            allowsSorting=True,
             columnDescriptions=[
                 dict(
                     identifier="fileName",
@@ -289,27 +282,46 @@ class VarFontAssistant_EZUI(DesignSpaceSelector_EZUI):
                     maxWidth=columnFontName*2,
                 ),
                 dict(
-                    identifier="value",
-                    title="value",
-                    width=columnValue,
+                    identifier="units",
+                    title="units",
+                    width=columnMeasurements,
+                    cellDescription=dict(
+                        cellType='TextField',
+                        valueType='integer',
+                    ),
                 ),
                 dict(
                     identifier="permill",
                     title="permill",
-                    width=columnValue,
+                    width=columnMeasurements,
+                    cellDescription=dict(
+                        cellType='TextField',
+                        valueType='integer',
+                    ),
+
                 ),
                 dict(
                     identifier="scale_d",
                     title="d-scale",
-                    width=columnValue,
+                    width=columnMeasurements,
+                    cellDescription=dict(
+                        valueToCellConverter=scaleValueToCellConverter,
+                        cellToValueConverter=scaleCellToValueConverter,
+                        stringFormatter=defaultScaleColorFormatter,
+                    ),
                 ),
             ]
         ),
         loadMeasurementsButton=dict(
             width=buttonWidth,
         ),
-        exportMeasurementsButton=dict(
+        thresholdDefault=dict(
             width=buttonWidth,
+            valueType="float",
+            value=thresholdDefault,
+            minValue=0.0,
+            maxValue=10.0,
+            valueIncrement=0.01,
         ),
         # validation
         widthCheckBox=dict(
@@ -456,10 +468,123 @@ class VarFontAssistant_EZUI(DesignSpaceSelector_EZUI):
 
     # measurements
 
+    def measurementsSelectionCallback(self, sender):
+        self._loadMeasurementValues()
+
+    def thresholdDefaultCallback(self, sender):
+        global thresholdDefault
+        thresholdDefault = self.w.getItem('thresholdDefault').get()
+        self._loadMeasurementValues()
+
     def _loadMeasurements(self):
-        pass
 
+        measurementsTable      = self.w.getItem('measurements')
+        measurementValuesTable = self.w.getItem('measurementValues')
 
+        if not self._measurementsData or not self._measurementsData.get('font'):
+            measurementsTable.set([])
+            measurementValuesTable.set([])
+            return
+
+        fontMeasurements = self._measurementsData['font']
+
+        # make font measurements list
+        measurementsItems = []
+        for measurementName in fontMeasurements.keys():
+            listItem = {
+                'name'      : measurementName,
+                # 'direction' : fontMeasurements[measurementName].get('direction'),
+                # 'pt1'       : fontMeasurements[measurementName].get('point 1'),
+                # 'pt2'       : fontMeasurements[measurementName].get('point 2'),
+            }
+            measurementsItems.append(listItem) 
+
+        # store values for all font measurements 
+
+        selectedSources = self.w.getItem('sources').getSelectedItems()
+        selectedSourceNames = [src['name'] for src in selectedSources]
+
+        self._measurementsUnits        = {}
+        self._measurementsPermill      = {}
+        self._measurementsScaleDefault = {}
+
+        for srcName in selectedSourceNames:
+            if srcName not in self.sources:
+                continue
+
+            # get defcon Font from designspace
+            font = self.sources[srcName].font
+
+            self._measurementsUnits[srcName]        = []
+            self._measurementsPermill[srcName]      = []
+            self._measurementsScaleDefault[srcName] = []
+
+            for measurementName in fontMeasurements.keys():
+                direction  = fontMeasurements[measurementName].get('direction')
+                glyphName1 = fontMeasurements[measurementName].get('glyph 1')
+                glyphName2 = fontMeasurements[measurementName].get('glyph 2')
+                index1     = fontMeasurements[measurementName].get('point 1')
+                index2     = fontMeasurements[measurementName].get('point 2')
+
+                # setup measurement
+                M = Measurement(
+                    measurementName,
+                    direction,
+                    glyphName1, index1,
+                    glyphName2, index2
+                )
+
+                # measure glyph
+                valueUnits = M.measure(font)
+                if valueUnits is None:
+                    valuePermill = None
+                elif valueUnits == 0:
+                    valuePermill = 0
+                else:
+                    valuePermill = round(valueUnits*1000 / font.info.unitsPerEm)
+
+                # get default value
+                scale_d = None
+                if self.designspace.default is not None:
+                    defaultName = getSourceName(self.designspace.default)
+                    defaultFont = self.sources[defaultName].font
+                    valueDefault = M.measure(defaultFont)
+                    # calculate d-scale
+                    if valueUnits and valueDefault:
+                        scale_d = valueUnits / valueDefault
+
+                self._measurementsUnits[srcName].append(valueUnits)
+                self._measurementsPermill[srcName].append(valuePermill)
+                self._measurementsScaleDefault[srcName].append(scale_d)
+
+        measurementsTable.set(measurementsItems)
+
+    def _loadMeasurementValues(self):
+
+        measurementsTable      = self.w.getItem('measurements')
+        measurementValuesTable = self.w.getItem('measurementValues')
+
+        selectedMeasurements = measurementsTable.getSelectedIndexes()
+        if not selectedMeasurements:
+            return
+
+        selectionIndex = selectedMeasurements[0]
+        selectedSources = self.w.getItem('sources').getSelectedItems()
+        selectedSourceNames = [src['name'] for src in selectedSources]
+
+        listItems = []
+        for srcName in selectedSourceNames:
+            if srcName not in self.sources:
+                continue
+            listItem = {
+                'fileName' : srcName,
+                'units'    : self._measurementsUnits[srcName][selectionIndex],
+                'permill'  : self._measurementsPermill[srcName][selectionIndex],
+                'scale_d'  : self._measurementsScaleDefault[srcName][selectionIndex],
+            }
+            listItems.append(listItem)
+
+        measurementValuesTable.set(listItems)
 
 
 if __name__ == '__main__':

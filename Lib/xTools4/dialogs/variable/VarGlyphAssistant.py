@@ -7,11 +7,9 @@ reload(xTools4.dialogs.variable.Measurements)
 import os
 import ezui
 from defcon import Font
-from mojo.UI import GetFile
 from mojo.roboFont import OpenWindow, OpenFont, CurrentFont, CurrentGlyph
 from mojo.subscriber import Subscriber, registerGlyphEditorSubscriber, unregisterGlyphEditorSubscriber, registerRoboFontSubscriber, unregisterRoboFontSubscriber # , registerSubscriberEvent, roboFontSubscriberEventRegistry
 from xTools4.modules.fontutils import getGlyphs2
-from xTools4.modules.linkPoints2 import readMeasurements, getPointAtIndex, getIndexForPoint, getAnchorPoint
 from xTools4.dialogs.variable.DesignSpaceSelector import DesignSpaceSelector_EZUI, getSourceName
 from xTools4.dialogs.variable.Measurements import *
 from xTools4.dialogs.variable.GlyphValidator import checkResultsFactory, validationGroupFactory
@@ -126,13 +124,13 @@ class VarGlyphAssistantController(DesignSpaceSelector_EZUI):
     * Tab: measurements  @measurementsTab
     >= HorizontalStack
 
-    >> |------------------|-----------|-----|-----|
-    >> | measurement name | direction | pt1 | pt2 |  @measurements
-    >> |------------------|-----------|-----|-----|
+    >> |-------------|-----------|-----|-----|
+    >> | measurement | direction | pt1 | pt2 |  @measurements
+    >> |-------------|-----------|-----|-----|
 
-    >> |-----------|-------|---------|---------|
-    >> | file name | units | permill | d-scale | @measurementValues
-    >> |-----------|-------|---------|---------|
+    >> |----------|-------|---------|---------|
+    >> | filename | units | permill | d-scale | @measurementValues
+    >> |----------|-------|---------|---------|
 
     >= HorizontalStack
     >> ( load… )     @loadMeasurementsButton
@@ -506,17 +504,6 @@ class VarGlyphAssistantController(DesignSpaceSelector_EZUI):
         attributesTable.set(listItems)
 
     # measurements
-
-    def loadMeasurementsButtonCallback(self, sender):
-        jsonPath = GetFile(message='Select JSON file with measurements:')
-        if jsonPath is None:
-            return
-
-        if self.verbose:
-            print(f'loading data from {os.path.split(jsonPath)[-1]}... ')
-
-        self._measurementsData = readMeasurements(jsonPath)
-        self._loadMeasurements()
 
     def measurementsSelectionCallback(self, sender):
         self._loadMeasurementValues()
