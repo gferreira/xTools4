@@ -1,11 +1,15 @@
 from importlib import reload
 import xTools4.dialogs.variable.DesignSpaceSelector
 reload(xTools4.dialogs.variable.DesignSpaceSelector)
+import xTools4.modules.validation
+reload(xTools4.modules.validation)
 
 import ezui
 from mojo.roboFont import OpenWindow, OpenFont
 from xTools4.dialogs.variable.DesignSpaceSelector import DesignSpaceSelector_EZUI, getSourceName
 from xTools4.dialogs.variable.Measurements import *
+from xTools4.modules.validation import validateFonts
+
 
 KEY = 'com.xTools4.VarFontAssistant'
 
@@ -78,6 +82,10 @@ class VarFontAssistant_EZUI(DesignSpaceSelector_EZUI):
 
     _measurementsData = {}
 
+    _validationChecks = {
+
+    }
+
     content = DesignSpaceSelector_EZUI.content
     content += '''
     * Tab: font info    @fontInfoTab
@@ -119,21 +127,17 @@ class VarFontAssistant_EZUI(DesignSpaceSelector_EZUI):
     >> [__](±)           @thresholdDefault
 
     * Tab: validation    @validationTab
-    >= HorizontalStack
-    
-    >>= VerticalStack    @checksStack
-    >>> checks
-    >>> [ ] width        @widthCheckBox
-    >>> [ ] left         @leftCheckBox
-    >>> [ ] right        @rightCheckBox
-    >>> [X] points       @pointsCheckBox
-    >>> [X] components   @componentsCheckBox
-    >>> [X] anchors      @anchorsCheckBox
-    >>> [X] unicodes     @unicodesCheckBox
 
-    >>= VerticalStack
-    >>> result
-    >>> *EZOutputEditor  @checkResults
+    >= HorizontalStack
+    >> [ ] width         @widthCheckBox
+    >> [ ] left          @leftCheckBox
+    >> [ ] right         @rightCheckBox
+    >> [X] points        @pointsCheckBox
+    >> [X] components    @componentsCheckBox
+    >> [X] anchors       @anchorsCheckBox
+    >> [X] unicodes      @unicodesCheckBox
+
+    >> [[_~ results ~_]] @checkResults
 
     > ( validate )       @validateButton
     '''
@@ -329,6 +333,9 @@ class VarFontAssistant_EZUI(DesignSpaceSelector_EZUI):
         ),
         validateButton=dict(
             width=buttonWidth,
+        ),
+        checkResults=dict(
+            width='fill',
         ),
     ))
 
@@ -585,6 +592,43 @@ class VarFontAssistant_EZUI(DesignSpaceSelector_EZUI):
             listItems.append(listItem)
 
         measurementValuesTable.set(listItems)
+
+    # validation
+
+    def validateButtonCallback(self, sender):
+        options = {
+            'width'      : self.w.getItem('widthCheckBox').get(),
+            'left'       : self.w.getItem('leftCheckBox').get(),
+            'right'      : self.w.getItem('rightCheckBox').get(),
+            'points'     : self.w.getItem('pointsCheckBox').get(),
+            'components' : self.w.getItem('componentsCheckBox').get(),
+            'anchors'    : self.w.getItem('anchorsCheckBox').get(),
+            'unicodes'   : self.w.getItem('unicodesCheckBox').get(),
+
+        }
+
+        txt = 'validating selected sources...\n\n'
+        for checkName, value in options.items():
+            if value:
+                txt += f'\t- {checkName}\n'
+        txt += '\n'
+
+        # get default font
+        defaultFont = self.defaultFont
+        txt += f'\tdefault font: {defaultFont.info.familyName} {defaultFont.info.styleName}\n\n'
+
+        # get selected sources
+        selectedSourceItems = self.w.getItem('sources').getSelectedItems()
+        selectedSourceNames = [src['name'] for src in selectedSourceItems]
+        selectedSources = [self.sources[srcName].font for srcName in selectedSourceNames]
+
+        if defaultFont in selectedSources:
+            selectedSources.remove(defaultFont)
+
+        txt += validateFonts(selectedSources, defaultFont, options)
+        txt += '...done!\n\n'
+
+        self.w.getItem('checkResults').set(txt)
 
 
 if __name__ == '__main__':
