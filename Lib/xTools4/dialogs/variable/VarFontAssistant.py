@@ -8,17 +8,49 @@ import ezui
 from mojo.roboFont import OpenWindow, OpenFont
 from xTools4.dialogs.variable.DesignSpaceSelector import DesignSpaceSelector_EZUI, getSourceName
 from xTools4.dialogs.variable.Measurements import *
+from xTools4.dialogs.variable.VarGlyphAssistant import intToCellConverter, cellToIntConverter, numberColorFormatter
 from xTools4.modules.validation import validateFonts
 
 
 KEY = 'com.xTools4.VarFontAssistant'
 
-
 thresholdDefault = 0.1
+fontInfoDefault  = None
+kernValueDefault = None
 
 def defaultScaleColorFormatter(attributes):
     scaleColorFormatter(attributes, thresholdDefault)
 
+def fontInfoColorFormatter(attributes):
+    value = attributes['value']
+    if value is None:
+        attributes["fillColor"] = colorCheckNone
+    elif value == fontInfoDefault:
+        attributes["fillColor"] = colorCheckTrue
+    else:
+        attributes["fillColor"] = colorCheckFalse
+
+def fontInfoToCellConverter(value):
+    if value is None:
+        return ''
+    else:
+        return str(value)
+
+def cellToFontInfoConverter(value):
+    if value == '':
+        return None
+    # value is float or integer
+    try:
+        v = float(value)
+        if v == int(v):
+            v = int(v)
+        return v
+    # value is string
+    except ValueError:
+        return value
+
+def kernValueColorFormatter(attributes):
+    numberColorFormatter(attributes, kernValueDefault)
 
 
 class VarFontAssistant_EZUI(DesignSpaceSelector_EZUI):
@@ -181,6 +213,11 @@ class VarFontAssistant_EZUI(DesignSpaceSelector_EZUI):
                     identifier="value",
                     title="value",
                     sortable=True,
+                    cellDescription=dict(
+                        valueToCellConverter=fontInfoToCellConverter,
+                        cellToValueConverter=cellToFontInfoConverter,
+                        stringFormatter=fontInfoColorFormatter,
+                    ),
                 ),
             ]
         ),
@@ -233,6 +270,11 @@ class VarFontAssistant_EZUI(DesignSpaceSelector_EZUI):
                     title="value",
                     width=columnKerningValue,
                     sortable=True,
+                    cellDescription=dict(
+                        valueToCellConverter=intToCellConverter,
+                        cellToValueConverter=cellToIntConverter,
+                        stringFormatter=kernValueColorFormatter,
+                    ),
                 ),
             ]
         ),
@@ -252,23 +294,7 @@ class VarFontAssistant_EZUI(DesignSpaceSelector_EZUI):
                 dict(
                     identifier="name",
                     title="name",
-                    # width=columnValue*1.2,
                 ),
-                # dict(
-                #     identifier="direction",
-                #     title="dir",
-                #     width=columnValue*0.5,
-                # ),
-                # dict(
-                #     identifier="pt1",
-                #     title="pt1",
-                #     width=columnValue*0.6,
-                # ),
-                # dict(
-                #     identifier="pt2",
-                #     title="pt2",
-                #     width=columnValue*0.6,
-                # ),
             ],
         ),
         measurementValuesStack=dict(
@@ -354,21 +380,9 @@ class VarFontAssistant_EZUI(DesignSpaceSelector_EZUI):
         self.w.open()
 
     def started(self):
-        # VarGlyphAssistantSubscriberRoboFont.controller = self
-        # registerRoboFontSubscriber(VarGlyphAssistantSubscriberRoboFont)
-        # self.font = CurrentFont()
-        # if self.font:
-        #     glyphs = getGlyphs2(self.font, glyphNames=False)
-        #     self.glyph = glyphs[0] if glyphs else None
-        # else:
-        #     self.glyph = None
-        # self._updateGlobals()
-        # self._updateLists()
         pass
 
     def destroy(self):
-        # unregisterRoboFontSubscriber(VarGlyphAssistantSubscriberRoboFont)
-        # VarGlyphAssistantSubscriberRoboFont.controller = None
         pass
 
     # ---------
@@ -386,11 +400,6 @@ class VarFontAssistant_EZUI(DesignSpaceSelector_EZUI):
     # font info
 
     def _loadFontInfo(self):
-        # # not sure why we need this ??
-        # if not hasattr(self, 'w'):
-        #     return
-
-
         # load font info values into dict
         selectedSources = self.w.getItem('sources').getSelectedItems()
         selectedSourceNames = [src['name'] for src in selectedSources]
@@ -406,11 +415,16 @@ class VarFontAssistant_EZUI(DesignSpaceSelector_EZUI):
                     self._fontInfoValues[srcName][attrLabel] = value
 
     def fontInfoAttributesSelectionCallback(self, sender):
+
         if not hasattr(self, 'w'): # why is this needed ??
             return
 
         fontInfoValues = self.w.getItem('fontInfoValues')
         selectedFontInfoAttr = self.w.getItem('fontInfoAttributes').getSelectedItems()[0]
+
+        global fontInfoDefault
+        fontInfoAttr = [k for k, v in self._fontInfoAttrs.items() if v == selectedFontInfoAttr][0]
+        fontInfoDefault = getattr(self.defaultFont.info, fontInfoAttr)
 
         # display dict data in the UI
         listItems = []
@@ -463,6 +477,9 @@ class VarFontAssistant_EZUI(DesignSpaceSelector_EZUI):
         selectedKerningPairItem = self.w.getItem('kerningPairs').getSelectedItems()[0]
         selectedKerningPair = selectedKerningPairItem['first'], selectedKerningPairItem['second']
 
+        global kernValueDefault
+        kernValueDefault = self.defaultFont.kerning.get(selectedKerningPair)
+
         # display dict data in the UI
         listItems = []
         for srcName in self._kerningValues:
@@ -499,10 +516,7 @@ class VarFontAssistant_EZUI(DesignSpaceSelector_EZUI):
         measurementsItems = []
         for measurementName in fontMeasurements.keys():
             listItem = {
-                'name'      : measurementName,
-                # 'direction' : fontMeasurements[measurementName].get('direction'),
-                # 'pt1'       : fontMeasurements[measurementName].get('point 1'),
-                # 'pt2'       : fontMeasurements[measurementName].get('point 2'),
+                'name' : measurementName,
             }
             measurementsItems.append(listItem) 
 
@@ -604,7 +618,6 @@ class VarFontAssistant_EZUI(DesignSpaceSelector_EZUI):
             'components' : self.w.getItem('componentsCheckBox').get(),
             'anchors'    : self.w.getItem('anchorsCheckBox').get(),
             'unicodes'   : self.w.getItem('unicodesCheckBox').get(),
-
         }
 
         txt = 'validating selected sources...\n\n'
