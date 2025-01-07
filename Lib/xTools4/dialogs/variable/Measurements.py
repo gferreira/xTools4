@@ -115,6 +115,7 @@ class MeasurementsController(ezui.WindowController):
     >> [__](±)      @thresholdFontParent
     >> d-threshold
     >> [__](±)      @thresholdFontDefault
+    >> (flip)       @flipButtonFont
 
     * Tab: glyph @glyphsTab
     > |-----------------------------------------------------------------------------------------------------|
@@ -276,6 +277,9 @@ class MeasurementsController(ezui.WindowController):
             minValue=0.0,
             maxValue=10.0,
             valueIncrement=0.01,
+        ),
+        flipButtonFont=dict(
+            width=buttonWidth,
         ),
         glyphMeasurements=dict(
             columnDescriptions=[
@@ -602,6 +606,9 @@ class MeasurementsController(ezui.WindowController):
 
     def fontMeasurementsEditCallback(self, sender):
         table = sender
+        if not table.getSelectedIndexes():
+            return
+
         index = table.getSelectedIndexes()[0]
         item  = table.getSelectedItems()[0]
 
@@ -626,6 +633,27 @@ class MeasurementsController(ezui.WindowController):
     def thresholdFontDefaultCallback(self, sender):
         global thresholdFontDefault
         thresholdFontDefault = self.w.getItem('thresholdFontDefault').get()
+        postEvent(f"{self.key}.changed")
+
+    def flipButtonFontCallback(self, sender):
+        table = self.w.getItem("fontMeasurements")
+        selectedItems = table.getSelectedItems()
+        if not selectedItems:
+            return
+
+        for itemIndex, item in enumerate(selectedItems):
+            # flip points
+            p1 = item['point1']
+            p2 = item['point2']
+            item['point1'] = p2
+            item['point2'] = p1
+            # flip glyphs
+            g1 = item['glyph1']
+            g2 = item['glyph2']
+            if g1 != g2:
+                item['glyph1'] = g2
+                item['glyph2'] = g1
+
         postEvent(f"{self.key}.changed")
 
     # glyph

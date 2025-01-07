@@ -113,6 +113,7 @@ class GlyphSetProofer:
 
         glyphColor = bgColor = None
 
+        # glyphs with components
         if currentGlyph.components:
             levels = getNestingLevels(currentGlyph)
             # warning: nested components of mixed contour/components
@@ -130,11 +131,18 @@ class GlyphSetProofer:
                     glyphColor = self.colorComponents
 
         else:
+            # contours equal to default
             if results['compatibility']['points'] and results['equality']['points']:
-                # contours equal to default
-                if font.path != defaultFont.path:
+                if currentGlyph.width == defaultGlyph.width:
                     bgColor    = self.colorContoursEqual + (self.colorAlpha,)
                     glyphColor = self.colorContoursEqual
+            else:
+                # empty glyphs
+                if not len(defaultGlyph) and not len(currentGlyph):
+                    # width equal to default
+                    if currentGlyph.width == defaultGlyph.width:
+                        bgColor    = self.colorContoursEqual + (self.colorAlpha,)
+                        glyphColor = self.colorContoursEqual
 
         # ---------
         # draw cell
@@ -251,8 +259,8 @@ class GlyphSetProofer:
 
         now = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
+        DB.newDrawing()
         for font in sources:
-
             self._makePage(font, defaultFont, now)
 
         if savePDF:
@@ -260,7 +268,6 @@ class GlyphSetProofer:
                 folder = os.getcwd()
             pdfPath = os.path.join(folder, f"glyphset_{self.familyName.replace(' ', '-')}.pdf")
             DB.saveImage(pdfPath)
-
 
 
 class GlyphSetProoferDesignspace:

@@ -56,7 +56,6 @@ def validationGroupFactory(glyph, defaultGlyph=None):
     else:
         # contours equal to default
         if checkResults['compatibility']['points'] and checkResults['equality']['points']:
-            # if glyph.font.path != defaultGlyph.font.path 
             if glyph.width == defaultGlyph.width:
                 validationGroup = 'contoursEqual'
             else:
