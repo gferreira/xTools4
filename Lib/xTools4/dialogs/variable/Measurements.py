@@ -574,7 +574,25 @@ class MeasurementsController(ezui.WindowController):
     def fontMeasurementsAddRemoveButtonAddCallback(self, sender):
         table = self.w.getItem("fontMeasurements")
         item = table.makeItem()
+
+        g = self.glyph
+
+        if g:
+            if len(g.selectedPoints) == 2:
+                pt1 = g.selectedPoints[0]
+                pt2 = g.selectedPoints[1]
+
+                index1 = getIndexForPoint(g, pt1)
+                index2 = getIndexForPoint(g, pt2)
+
+                item = table.makeItem()
+                item['glyph1'] = g.name
+                item['point1'] = index1
+                item['glyph2'] = g.name
+                item['point2'] = index2
+
         table.appendItems([item])
+
         postEvent(f"{self.key}.changed")
 
     def fontMeasurementsAddRemoveButtonRemoveCallback(self, sender):

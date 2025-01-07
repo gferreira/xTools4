@@ -1,7 +1,7 @@
 ---
 title     : GlyphGauge
 layout    : default
-permalink : /reference/tools/variable/glyph-gauge/
+permalink : /reference/tools/variable/old/glyph-gauge/
 ---
 
 A tool to to display and validate parametric measurements in the current glyph window.
@@ -12,7 +12,7 @@ A tool to to display and validate parametric measurements in the current glyph w
 
 <div class='row'>
 <div class='col-4' markdown='1'>
-![]({{ site.url }}/images/variable/GlyphGauge.png){: .img-fluid }
+![]({{ site.url }}/images/variable/old/GlyphGauge.png){: .img-fluid }
 </div>
 <div class='col-8' markdown='1'>
 measurements…
@@ -57,12 +57,12 @@ Preview
 ### Font values
 {: .h5 }
 
-![]({{ site.url }}/images/variable/GlyphGauge_glyph-window.png){: .img-fluid}
+![]({{ site.url }}/images/variable/old/GlyphGauge_glyph-window.png){: .img-fluid}
 
 ### Default values
 {: .h5 }
 
-![]({{ site.url }}/images/variable/GlyphGauge_glyph-window-2.png){: .img-fluid}
+![]({{ site.url }}/images/variable/old/GlyphGauge_glyph-window-2.png){: .img-fluid}
 
 
 Validation details
@@ -71,7 +71,7 @@ Validation details
 ### Color codes
 {: .h5 }
 
-Measurements are displayed using the same colors as [Glyph Validator checks](../glyph-validator#color-codes), with the following meanings:
+Measurements are displayed using the same colors as [Glyph Validator checks](../../glyph-validator#color-codes), with the following meanings:
 
 | color                                                 | meaning                       |
 |-------------------------------------------------------|-------------------------------|
@@ -79,8 +79,6 @@ Measurements are displayed using the same colors as [Glyph Validator checks](../
 | <span style='color:rgba(0, 216.75, 0);'>green</span>  | different but within threshold |
 | <span style='color:red;'>red</span>                   | different and beyond threshold |
 {: .table .table-hover }
-
-
 
 <div class="card bg-light my-3 rounded-0">
 <div class="card-header">note</div>

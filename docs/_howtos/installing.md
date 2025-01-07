@@ -15,7 +15,9 @@ xTools4 is packaged and distributed as a [RoboFont extension].
 Requirements
 ------------
 
-**The latest version of RoboFont 4.5 beta is recommended.**
+**The latest version of RoboFont 4.5 is recommended.**
+
+Some tools in xTools4 require [DrawBot](http://github.com/typemytype/drawBotRoboFontExtension).
 
 
 Installing with Mechanic

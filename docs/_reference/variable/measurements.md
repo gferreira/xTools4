@@ -10,7 +10,7 @@ A tool to create and visualize font- and glyph-level measurements.
 <span class="badge text-bg-success rounded-0">RF4</span> Rewritten using the new RoboFont 4 APIs.  
 
 
-font
+Font
 ----
 
 Use the **font** tab to create and edit font-level measurements.
@@ -50,7 +50,7 @@ For more information about each column of the table see [Measurements format > F
 </div>
 
 
-glyph
+Glyph
 -----
 
 Use the **glyph** tab to create and edit glyph-level measurements.
@@ -109,7 +109,8 @@ The Glyph View displays a visualization of the measurements in the current glyph
 - Select one or more measurements in the list to highlight and show their direction and distance.
 - Use the color button to change the color of the measurements.
 
-<!--
+
+{% comment %}
 
 Missing features
 ----------------
@@ -122,7 +123,8 @@ Know bugs
 
 - [ ] “ghost” measuremements from previous glyph are displayed in glyphs with no measurements
 
--->
+{% endcomment %}
+
 
 [Measurements format > Font-level measurements]: ../../../measurements-format/#font-level-measurements
 [Measurements format > Glyph-level measurements]: ../../../measurements-format/#glyph-level-measurements

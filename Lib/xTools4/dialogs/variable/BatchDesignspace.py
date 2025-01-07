@@ -111,9 +111,9 @@ def cleanupBeforeCommit(font):
     pass
 
 
-class VarProjectController:
+class BatchDesignspace:
 
-    title      = 'VarProject'
+    title      = 'BatchDesignspace'
     width      = 123*2
     height     = 640
     padding    = 10
@@ -453,6 +453,5 @@ class VarProjectController:
 
 if __name__ == '__main__':
 
-    VarProjectController()
-
+    BatchDesignspace()
 

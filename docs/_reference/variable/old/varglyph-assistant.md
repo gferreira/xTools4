@@ -1,7 +1,7 @@
 ---
 title     : VarGlyphAssistant (old)
 layout    : default
-permalink : /reference/tools/variable/varglyph-assistant-old/
+permalink : /reference/tools/variable/old/varglyph-assistant/
 ---
 
 A tool to view and edit glyph-level values in multiple designspace sources.
@@ -15,7 +15,7 @@ designspace
 
 Use the **designspace** tab to define which designspaces and font sources to look into.
 
-![]({{ site.url }}/images/variable/VarGlyphAssistant-designspace_old.png){: .img-fluid}
+![]({{ site.url }}/images/variable/old/VarGlyphAssistant-designspace.png){: .img-fluid}
 
 designspaces
 : Drag one or more `.designspace` files into the list.
@@ -38,7 +38,7 @@ glyph sets
 
 Use the **glyph sets** tab to define which glyphs to look into in the selected sources.
 
-![]({{ site.url }}/images/variable/VarGlyphAssistant-glyphsets_old.png){: .img-fluid}
+![]({{ site.url }}/images/variable/old/VarGlyphAssistant-glyphsets.png){: .img-fluid}
 
 glyph set files
 : Drag one or more `.roboFontSets` files into the list.
@@ -57,7 +57,7 @@ attributes
 
 Use the **attributes** tab to visualize and edit glyph attributes in the selected glyphs of selected sources.
 
-![]({{ site.url }}/images/variable/VarGlyphAssistant-attributes_old.png){: .img-fluid}
+![]({{ site.url }}/images/variable/old/VarGlyphAssistant-attributes.png){: .img-fluid}
 
 load
 : Click on the button to collect values from the fonts and display them in the UI.
@@ -76,7 +76,7 @@ compatibility
 
 Use the **compatibility** tab to visualize and edit contour segments in the selected glyphs of selected sources.
 
-![]({{ site.url }}/images/variable/VarGlyphAssistant-compatibility_old.png){: .img-fluid}
+![]({{ site.url }}/images/variable/old/VarGlyphAssistant-compatibility.png){: .img-fluid}
 
 load
 : Click on the button to collect values from the fonts and display them in the UI.

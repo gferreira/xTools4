@@ -7,15 +7,30 @@ permalink : /reference/tools/variable/
 Tools to visualize and edit variable font sources.
 {: .lead }
 
-- <span class="badge text-bg-success rounded-0">RF4</span> [GlyphGauge](glyph-gauge)
+<div class='row'>
+
+<div class='col' markdown='1'>
 - <span class="badge text-bg-success rounded-0">RF4</span> [GlyphValidator](glyph-validator)
 - <span class="badge text-bg-warning rounded-0">RF3</span> [GlyphSetProofer](glyphset-proofer)
-- <span class="badge text-bg-success rounded-0">RF4</span> [Measurements](measurements) · <span class="badge text-bg-warning rounded-0">RF3</span> [old](measurements-old)
+- <span class="badge text-bg-success rounded-0">RF4</span> [Measurements](measurements)
 - <span class="badge text-bg-warning rounded-0">RF3</span> [TempEdit](temp-edit)
 - <span class="badge text-bg-warning rounded-0">RF3</span> [TempGlyphs](temp-glyphs)
-- <span class="badge text-bg-warning rounded-0">RF3</span> [VarFontAssistant](varfont-assistant)
-- <span class="badge text-bg-success rounded-0">RF4</span> [VarGlyphAssistant](varglyph-assistant) · <span class="badge text-bg-warning rounded-0">RF3</span> [old](varglyph-assistant-old)
+- <span class="badge text-bg-success rounded-0">RF4</span> [VarFontAssistant](varfont-assistant)
+- <span class="badge text-bg-success rounded-0">RF4</span> [VarGlyphAssistant](varglyph-assistant)
 - <span class="badge text-bg-success rounded-0">RF4</span> [VarGlyphViewer](varglyph-viewer)
+</div>
+
+<div class='col' markdown='1'>
+## Old versions which will be soon retired
+{: .h5 }
+
+- <span class="badge text-bg-success rounded-0">RF4</span> [GlyphGauge](old/glyph-gauge)
+- <span class="badge text-bg-warning rounded-0">RF3</span> [Measurements](old/measurements)
+- <span class="badge text-bg-warning rounded-0">RF3</span> [VarFontAssistant](old/varfont-assistant)
+- <span class="badge text-bg-warning rounded-0">RF3</span> [VarGlyphAssistant](old/varglyph-assistant)
+</div>
+
+</div>
 
 - - -
 

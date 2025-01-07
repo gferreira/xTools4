@@ -514,6 +514,7 @@ class VarGlyphAssistantController(DesignSpaceSelector_EZUI):
         self._loadMeasurementValues()
 
     def _loadMeasurements(self):
+        
         measurementsTable      = self.w.getItem('measurements')
         measurementValuesTable = self.w.getItem('measurementValues')
 

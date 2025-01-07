@@ -13,7 +13,7 @@ xTools4 is a collection of expert tools for typeface design and font production 
 
 <div class='row'>
 
-<div class='col-12 col-md-6 col-xl-3' markdown='1'>
+<div class='col-12 col-sm-6 col-xl-3' markdown='1'>
 explanations
 ------------
 
@@ -22,14 +22,7 @@ explanations
 - [about this documentation](explanations/about-docs)
 </div>
 
-<div class='col-12 col-md-6 col-xl-3' markdown='1'>
-tutorials
----------
-
-...
-</div>
-
-<div class='col-12 col-md-6 col-xl-3' markdown='1'>
+<div class='col-12 col-sm-6 col-xl-3' markdown='1'>
 reference
 ---------
 
@@ -48,14 +41,30 @@ reference
 - [measurement scales and thresholds](reference/measurement-scales-thresholds)
 </div>
 
-<div class='col-12 col-md-6 col-xl-3' markdown='1'>
+<div class='col-12 col-sm-6 col-xl-3' markdown='1'>
 how-tos
 -------
 
 - [installing xTools4](how-tos/installing-xtools4)
 </div>
 
+<div class='col-12 col-sm-6 col-xl-3' markdown='1'>
+tutorials
+---------
+
+- ...
+
+{% comment %}
+- [creating measurements for an existing font or designspace](tutorials/creating-measurements)
+- [building a parametric designspace from measurements](tutorials/building-designspace-from-measurements)
+{% endcomment %}
 </div>
+
+</div>
+
+
+- - -
+{: .mb-4 }
 
 
 development
