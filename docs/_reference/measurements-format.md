@@ -138,6 +138,14 @@ glyphMeasurements = {
 }
 ```
 
+<div class="card bg-light my-3 rounded-0">
+<div class="card-header">note</div>
+<div class="card-body" markdown='1'>
+The current glyph-level measurement format has one limitation: a pair of points can only have one measurement attached to it. It should be possible to have both x and y measurements for same pair of points though, for example the width and height of a serif. The format will be updated to address this.
+{: .card-text }
+</div>
+</div>
+
 
 JSON format
 -----------
