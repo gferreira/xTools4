@@ -46,7 +46,12 @@ def getPointTypes(glyph):
         A list of strings with the type of each point: either `line`, `curve`, `qcurve`, or `offcurve`.
 
     '''
-    return [p.type for c in glyph for p in c.points]
+    isDefcon = hasattr(glyph, 'representationFactories')
+
+    if isDefcon:
+        return [p.segmentType for c in glyph for p in c]
+    else:
+        return [p.type for c in glyph for p in c.points]
 
 def getNestingLevels(g, levels=0, verbose=True):
     if g.components:
@@ -289,7 +294,7 @@ def checkEquality(g1, g2):
 # font-level validation
 # ---------------------
 
-def validateFont(f1, f2, options):
+def validateFont(f1, f2, options, indent=0):
     '''
     Check if the *glyphs* in two fonts match.
 
@@ -304,11 +309,13 @@ def validateFont(f1, f2, options):
         A string with a report of all differences found.
 
     '''
-    txt = f"validating '{f1.info.familyName} {f1.info.styleName}'...\n\n"
+    txt = f"{'\t'*indent}validating '{f1.info.familyName} {f1.info.styleName}'...\n\n"
     for gName in f1.glyphOrder:
+        if gName not in f1:
+            continue
         if gName not in f2:
-            txt += f'\t{gName}:\n'
-            txt += f"\t- glyph not in font\n"
+            txt += f"{'\t'*(indent+1)}{gName}:\n"
+            txt += f"{'\t'*(indent+1)}- glyph not in font\n"
             txt += '\n'
             continue
         checks = validateGlyph(f1[gName], f2[gName], options)
@@ -318,7 +325,7 @@ def validateFont(f1, f2, options):
             txt += f'\t{gName}:\n'
             for check, result in checks.items():
                 if result is False:
-                    txt += f"\t- {check} not matching\n"
+                    txt += f"{'\t'*(indent+1)}- {check} not matching\n"
             txt += '\n'
 
     return txt
@@ -333,7 +340,7 @@ def validateFonts(targetFonts, sourceFont, options):
     '''
     txt = ''
     for targetFont in targetFonts:
-        txt += validateFont(targetFont, sourceFont, options)
+        txt += validateFont(targetFont, sourceFont, options, indent=1)
     return txt
 
 def validateFont2(f1, f2, width=True, points=True, components=True, anchors=True, unicodes=True):

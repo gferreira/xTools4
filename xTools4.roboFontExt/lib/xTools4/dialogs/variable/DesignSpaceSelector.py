@@ -1,8 +1,10 @@
 import os
 import ezui
 from defcon import Font
+from mojo.UI import GetFile
 from mojo.roboFont import OpenWindow, OpenFont
 from fontTools.designspaceLib import DesignSpaceDocument
+from xTools4.modules.linkPoints2 import readMeasurements # getPointAtIndex, getIndexForPoint, getAnchorPoint
 
 
 def getSourceName(src):
@@ -33,8 +35,12 @@ class DesignSpaceSelector_EZUI(ezui.WindowController):
     >> |--------------|
     >> | sources      |  @sources
     >> |--------------|
-    >> ( open )          @openButton
+    >>= HorizontalStack
+    >>> ( open )         @openButton
+    >>> ( reload ↺ )     @reloadButton
     """
+
+    _measurementsData = {}
 
     descriptionData = dict(
         designspaces=dict(
@@ -69,6 +75,9 @@ class DesignSpaceSelector_EZUI(ezui.WindowController):
                 ),
             ],
         ),
+        reloadButton=dict(
+            width=buttonWidth,
+        ),
         openButton=dict(
             width=buttonWidth,
         ),
@@ -93,6 +102,16 @@ class DesignSpaceSelector_EZUI(ezui.WindowController):
         for itemName in self._tables:
             self.w.getItem(itemName).getNSTableView().setRowHeight_(self.rowHeight)
         self.w.open()
+
+    # dynamic attrs
+
+    @property
+    def defaultFont(self):
+        if self.designspace is None:
+            return
+        defaultName = getSourceName(self.designspace.default)
+        if defaultName in self.sources:
+            return self.sources[defaultName].font
 
     # callbacks
 
@@ -131,8 +150,8 @@ class DesignSpaceSelector_EZUI(ezui.WindowController):
 
         sourcesTable.set(sourcesItems)
 
-    def sourcesDoubleClickCallback(self, sender):
-        self.openButtonCallback(None)
+    # def sourcesDoubleClickCallback(self, sender):
+    #     self.openButtonCallback(None)
 
     def openButtonCallback(self, sender):
 
@@ -155,6 +174,51 @@ class DesignSpaceSelector_EZUI(ezui.WindowController):
         
         if self.verbose:
             print('done...\n')
+
+    def reloadButtonCallback(self, sender):
+        print('reloading sources...', end=' ')
+        for src in self.designspace.sources:
+            src.font = Font(src.path)
+        print('done.\n')
+
+    def sourcesSelectionCallback(self, sender):
+        self._updateLists()
+
+    def openSourceCallback(self, sender):
+
+        selectedItems = sender.getSelectedItems()
+        selectedSourceNames = [src['fileName'] for src in selectedItems]
+
+        for srcName in selectedSourceNames:
+            if srcName in self.sources:
+                src = self.sources[srcName]
+                if self.verbose:
+                    print(f'\topening {srcName}...')
+                OpenFont(src.path)
+        
+        if self.verbose:
+            print('done...\n')
+
+    def loadMeasurementsButtonCallback(self, sender):
+        jsonPath = GetFile(message='Select JSON file with measurements:')
+        if jsonPath is None:
+            return
+
+        if self.verbose:
+            print(f'loading data from {os.path.split(jsonPath)[-1]}... ')
+
+        self._measurementsData = readMeasurements(jsonPath)
+        self._loadMeasurements()
+
+    def _updateLists(self):
+        # implement method when subclassing object
+        # loads font data in other tabs
+        pass
+
+    def _loadMeasurements(self):
+        # implement method when subclassing object
+        # loads measurements in another tab
+        pass
 
 
 if __name__ == '__main__':

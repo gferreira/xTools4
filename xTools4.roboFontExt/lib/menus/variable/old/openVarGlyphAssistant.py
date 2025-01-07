@@ -1,4 +1,4 @@
-# menuTitle: VarGlyphAssistant (old)
+# menuTitle: VarGlyphAssistant
 
 from importlib import reload
 import xTools4.dialogs.variable.old.VarGlyphAssistant

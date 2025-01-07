@@ -1,32 +1,106 @@
-# from importlib import reload
-# import xTools4.dialogs.variable.DesignSpaceSelector
-# reload(xTools4.dialogs.variable.DesignSpaceSelector)
-# import xTools4.modules.measurements
-# reload(xTools4.modules.measurements)
+from importlib import reload
+import xTools4.dialogs.variable.DesignSpaceSelector
+reload(xTools4.dialogs.variable.DesignSpaceSelector)
+import xTools4.dialogs.variable.Measurements
+reload(xTools4.dialogs.variable.Measurements)
 
 import os
 import ezui
 from defcon import Font
 from mojo.roboFont import OpenWindow, OpenFont, CurrentFont, CurrentGlyph
-from mojo.UI import GetFile
 from mojo.subscriber import Subscriber, registerGlyphEditorSubscriber, unregisterGlyphEditorSubscriber, registerRoboFontSubscriber, unregisterRoboFontSubscriber # , registerSubscriberEvent, roboFontSubscriberEventRegistry
+from xTools4.modules.fontutils import getGlyphs2
 from xTools4.dialogs.variable.DesignSpaceSelector import DesignSpaceSelector_EZUI, getSourceName
-from xTools4.dialogs.variable.Measurements import scaleValueToCellConverter, scaleCellToValueConverter, fontScaleColorFormatter, defaultScaleColorFormatter
-from xTools4.modules.linkPoints2 import readMeasurements, getPointAtIndex, getIndexForPoint, getAnchorPoint
+from xTools4.dialogs.variable.Measurements import *
+from xTools4.dialogs.variable.GlyphValidator import checkResultsFactory, validationGroupFactory
 
+KEY = 'com.xTools4.VarGlyphAssistant'
 
-thresholdFont    = 0.1
-thresholdDefault = 0.1
+# color formatting
 
-DEBUG = False
+attributesWidth      = 0
+attributesLeft       = 0
+attributesRight      = 0
+attributesContours   = 0
+attributesPoints     = 0
+attributesComponents = 0
+attributesAnchors    = 0
+thresholdDefault     = 0.1
+
+def intToCellConverter(value):
+    if value is None:
+        return ''
+    else:
+        return str(value)
+
+def cellToIntConverter(value):
+    if value == '':
+        return None
+    try:
+        value = int(value)
+        return value
+    except ValueError:
+        return None
+
+def marginToCellConverter(value):
+    if value is None:
+        return ''
+    else:
+        places = 1
+        s = "{value:." + str(places) + "f}"
+        s = s.format(value=value, places=places)
+        s = s.rstrip("0").rstrip(".")
+        return s
+
+def cellToMarginConverter(value):
+    if value == '':
+        return None
+    try:
+        v = float(value)
+        if v == int(v):
+            v = int(v)
+        return v
+    except ValueError:
+        return None
+
+def numberColorFormatter(attributes, otherValue):
+    value = attributes['value']
+    if value is None:
+        attributes["fillColor"] = colorCheckNone
+    elif value == otherValue:
+        attributes["fillColor"] = colorCheckTrue
+    else:
+        attributes["fillColor"] = colorCheckFalse
+
+def widthColorFormatter(attributes):
+    numberColorFormatter(attributes, attributesWidth)
+
+def leftColorFormatter(attributes):
+    numberColorFormatter(attributes, attributesLeft)
+
+def rightColorFormatter(attributes):
+    numberColorFormatter(attributes, attributesRight)
+
+def contoursColorFormatter(attributes):
+    numberColorFormatter(attributes, attributesContours)
+
+def pointsColorFormatter(attributes):
+    numberColorFormatter(attributes, attributesPoints)
+
+def componentsColorFormatter(attributes):
+    numberColorFormatter(attributes, attributesComponents)
+
+def anchorsColorFormatter(attributes):
+    numberColorFormatter(attributes, attributesAnchors)
+
+def defaultScaleColorFormatter(attributes):
+    scaleColorFormatter(attributes, thresholdDefault)
 
 
 class VarGlyphAssistantController(DesignSpaceSelector_EZUI):
 
     title = 'VarGlyph Assistant'
-    key   = 'com.fontBureau.varGlyphAssistant'
-
-    debug = DEBUG
+    key   = KEY
 
     buttonWidth        = 75
     columnLeft         = 160
@@ -38,32 +112,30 @@ class VarGlyphAssistantController(DesignSpaceSelector_EZUI):
     content = DesignSpaceSelector_EZUI.content
     content += '''
     * Tab: attributes                                @attributesTab
-    > |-----------|---|---|---|---|---|---|---|---|
-    > | file name | W | L | R | C | S | P | A | C |  @attributesValues
-    > |-----------|---|---|---|---|---|---|---|---|
+    > |-----------|---|---|---|---|---|---|---|
+    > | file name | W | L | R | C | P | A | C |  @attributesValues
+    > |-----------|---|---|---|---|---|---|---|
 
-    * Tab: points                                    @pointsTab
-    > |-----------|---|---|---|-----|
-    > | file name | 0 | 1 | 2 | ... |                @pointsTable
-    > |-----------|---|---|---|-----|
+    # * Tab: points                      @pointsTab
+    # > |-----------|---|---|---|-----|
+    # > | file name | 0 | 1 | 2 | ... |  @pointsTable
+    # > |-----------|---|---|---|-----|
 
-    * Tab: measurements                              @measurementsTab
+    * Tab: measurements  @measurementsTab
     >= HorizontalStack
 
-    >> |------------------|-----------|-----|-----|
-    >> | measurement name | direction | pt1 | pt2 |  @measurements
-    >> |------------------|-----------|-----|-----|
+    >> |-------------|-----------|-----|-----|
+    >> | measurement | direction | pt1 | pt2 |  @measurements
+    >> |-------------|-----------|-----|-----|
 
-    >> |-----------|-------|---------|---------|---------|
-    >> | file name | units | permill | f-scale | d-scale | @measurementValues
-    >> |-----------|-------|---------|---------|---------|
+    >> |----------|-------|---------|---------|
+    >> | filename | units | permill | d-scale | @measurementValues
+    >> |----------|-------|---------|---------|
 
     >= HorizontalStack
-    >> ( load… )                                     @loadMeasurementsButton
-    >> f-threshold
-    >> [__](±)                                       @thresholdFont
+    >> ( load… )     @loadMeasurementsButton
     >> d-threshold
-    >> [__](±)                                       @thresholdDefault
+    >> [__](±)       @thresholdDefault
     '''
 
     buttonWidth = DesignSpaceSelector_EZUI.buttonWidth
@@ -71,7 +143,7 @@ class VarGlyphAssistantController(DesignSpaceSelector_EZUI):
     _tables  = DesignSpaceSelector_EZUI._tables.copy()
     _tables += [
         'attributesValues',
-        'pointsTable',
+        # 'pointsTable',
         'measurements',
         'measurementValues'
     ]
@@ -102,8 +174,9 @@ class VarGlyphAssistantController(DesignSpaceSelector_EZUI):
                     width=columnValueAttrs,
                     sortable=True,
                     cellDescription=dict(
-                        cellType='TextField',
-                        valueType='integer',
+                        valueToCellConverter=intToCellConverter,
+                        cellToValueConverter=cellToIntConverter,
+                        stringFormatter=widthColorFormatter,
                     ),
                 ),
                 dict(
@@ -111,20 +184,22 @@ class VarGlyphAssistantController(DesignSpaceSelector_EZUI):
                     title="L",
                     width=columnValueAttrs,
                     sortable=True,
-                    # cellDescription=dict(
-                    #     cellType='TextField',
-                    #     valueType='integer',
-                    # ),
+                    cellDescription=dict(
+                        valueToCellConverter=marginToCellConverter,
+                        cellToValueConverter=cellToMarginConverter,
+                        stringFormatter=leftColorFormatter,
+                    ),
                 ),
                 dict(
                     identifier="right",
                     title="R",
                     width=columnValueAttrs,
                     sortable=True,
-                    # cellDescription=dict(
-                    #     cellType='TextField',
-                    #     valueType='integer',
-                    # ),
+                    cellDescription=dict(
+                        valueToCellConverter=marginToCellConverter,
+                        cellToValueConverter=cellToMarginConverter,
+                        stringFormatter=rightColorFormatter,
+                    ),
                 ),
                 dict(
                     identifier="contours",
@@ -132,18 +207,9 @@ class VarGlyphAssistantController(DesignSpaceSelector_EZUI):
                     width=columnValueAttrs,
                     sortable=True,
                     cellDescription=dict(
-                        cellType='TextField',
-                        valueType='integer',
-                    ),
-                ),
-                dict(
-                    identifier="segments",
-                    title="S",
-                    width=columnValueAttrs,
-                    sortable=True,
-                    cellDescription=dict(
-                        cellType='TextField',
-                        valueType='integer',
+                        valueToCellConverter=intToCellConverter,
+                        cellToValueConverter=cellToIntConverter,
+                        stringFormatter=contoursColorFormatter,
                     ),
                 ),
                 dict(
@@ -152,8 +218,9 @@ class VarGlyphAssistantController(DesignSpaceSelector_EZUI):
                     width=columnValueAttrs,
                     sortable=True,
                     cellDescription=dict(
-                        cellType='TextField',
-                        valueType='integer',
+                        valueToCellConverter=intToCellConverter,
+                        cellToValueConverter=cellToIntConverter,
+                        stringFormatter=pointsColorFormatter,
                     ),
                 ),
                 dict(
@@ -162,8 +229,9 @@ class VarGlyphAssistantController(DesignSpaceSelector_EZUI):
                     width=columnValueAttrs,
                     sortable=True,
                     cellDescription=dict(
-                        cellType='TextField',
-                        valueType='integer',
+                        valueToCellConverter=intToCellConverter,
+                        cellToValueConverter=cellToIntConverter,
+                        stringFormatter=componentsColorFormatter,
                     ),
                 ),
                 dict(
@@ -172,8 +240,9 @@ class VarGlyphAssistantController(DesignSpaceSelector_EZUI):
                     width=columnValueAttrs,
                     sortable=True,
                     cellDescription=dict(
-                        cellType='TextField',
-                        valueType='integer',
+                        valueToCellConverter=intToCellConverter,
+                        cellToValueConverter=cellToIntConverter,
+                        stringFormatter=anchorsColorFormatter,
                     ),
                 ),
             ]
@@ -181,28 +250,28 @@ class VarGlyphAssistantController(DesignSpaceSelector_EZUI):
         loadAttributesButton=dict(
             width=buttonWidth,
         ),
-       # points
-        pointsGlyphs=dict(
-            alternatingRowColors=True,
-            width=columnLeft,
-        ),
-        pointsTable=dict(
-            alternatingRowColors=True,
-            showColumnTitles=True,
-            columnDescriptions=[
-                dict(
-                    identifier="fileName",
-                    title="file name",
-                    width=columnFontName,
-                    minWidth=columnFontName*0.9,
-                    maxWidth=columnFontName*2,
-                    sortable=True,
-                ),
-            ],
-        ),
-        loadPointsButton=dict(
-            width=buttonWidth,
-        ),
+        # points
+        # pointsGlyphs=dict(
+        #     alternatingRowColors=True,
+        #     width=columnLeft,
+        # ),
+        # pointsTable=dict(
+        #     alternatingRowColors=True,
+        #     showColumnTitles=True,
+        #     columnDescriptions=[
+        #         dict(
+        #             identifier="fileName",
+        #             title="file name",
+        #             width=columnFontName,
+        #             minWidth=columnFontName*0.9,
+        #             maxWidth=columnFontName*2,
+        #             sortable=True,
+        #         ),
+        #     ],
+        # ),
+        # loadPointsButton=dict(
+        #     width=buttonWidth,
+        # ),
         # measurements
         measurements=dict(
             alternatingRowColors=True,
@@ -237,6 +306,7 @@ class VarGlyphAssistantController(DesignSpaceSelector_EZUI):
         ),
         measurementValues=dict(
             alternatingRowColors=True,
+            allowsSorting=True,
             columnDescriptions=[
                 dict(
                     identifier="fileName",
@@ -264,16 +334,6 @@ class VarGlyphAssistantController(DesignSpaceSelector_EZUI):
                     ),
                 ),
                 dict(
-                    identifier="scale_f",
-                    title="f-scale",
-                    width=columnMeasurements,
-                    cellDescription=dict(
-                        valueToCellConverter=scaleValueToCellConverter,
-                        cellToValueConverter=scaleCellToValueConverter,
-                        stringFormatter=fontScaleColorFormatter,
-                    ),
-                ),
-                dict(
                     identifier="scale_d",
                     title="d-scale",
                     width=columnMeasurements,
@@ -288,14 +348,6 @@ class VarGlyphAssistantController(DesignSpaceSelector_EZUI):
         loadMeasurementsButton=dict(
             width=buttonWidth,
         ),
-        thresholdFont=dict(
-            width=buttonWidth,
-            valueType="float",
-            value=thresholdFont,
-            minValue=0.0,
-            maxValue=10.0,
-            valueIncrement=0.01,
-        ),
         thresholdDefault=dict(
             width=buttonWidth,
             valueType="float",
@@ -308,8 +360,8 @@ class VarGlyphAssistantController(DesignSpaceSelector_EZUI):
 
     _glyphAttributes = {}
 
-    _glyphPoints = {} 
-    _pointCount  = 0
+    # _glyphPoints = {} 
+    # _pointCount  = 0
 
     _measurementsData    = {}
     _measurementsUnits   = {}
@@ -335,34 +387,67 @@ class VarGlyphAssistantController(DesignSpaceSelector_EZUI):
     def started(self):
         VarGlyphAssistantSubscriberRoboFont.controller = self
         registerRoboFontSubscriber(VarGlyphAssistantSubscriberRoboFont)
-        self.font  = CurrentFont()
-        self.glyph = CurrentGlyph()
+        self.font = CurrentFont()
+        if self.font:
+            glyphs = getGlyphs2(self.font, glyphNames=False)
+            self.glyph = glyphs[0] if glyphs else None
+        else:
+            self.glyph = None
+        self._updateGlobals()
         self._updateLists()
 
     def destroy(self):
         unregisterRoboFontSubscriber(VarGlyphAssistantSubscriberRoboFont)
         VarGlyphAssistantSubscriberRoboFont.controller = None
 
+    # -------------
+    # dynamic attrs
+    # -------------
+
+    @property
+    def defaultGlyph(self):
+        if self.defaultFont is None or self.glyph is None:
+            return
+        if self.glyph.name not in self.defaultFont:
+            return
+        return self.defaultFont[self.glyph.name]
+
     # ---------
     # callbacks
     # ---------
 
-    def sourcesSelectionCallback(self, sender):
-        self._updateLists()
+    def _updateLists(self):
+        self._loadAttributes()
+        # self._loadPoints()
+        self._loadMeasurements()
+        self._loadMeasurementValues()
 
-    def loadMeasurementsButtonCallback(self, sender):
-        jsonPath = GetFile(message='Select JSON file with measurements:')
-        if jsonPath is None:
+    def _updateGlobals(self):
+        g = self.defaultGlyph
+        if g is None:
             return
 
-        if self.verbose:
-            print(f'loading data from {os.path.split(jsonPath)[-1]}... ')
+        # store attributes of default glyph in global variables
+        global attributesWidth
+        global attributesLeft
+        global attributesRight
+        global attributesContours
+        global attributesPoints
+        global attributesComponents
+        global attributesAnchors
 
-        self._measurementsData = readMeasurements(jsonPath)
-        self._loadMeasurements()
+        attributesWidth      = g.width
+        attributesLeft       = g.leftMargin
+        attributesRight      = g.rightMargin
+        attributesContours   = len(g)
+        attributesPoints     = sum([len(c) for c in g])
+        attributesComponents = len(g.components)
+        attributesAnchors    = len(g.anchors)
 
-    def measurementsSelectionCallback(self, sender):
-        self._loadMeasurementValues()
+    # attributes
+
+    def attributesValuesDoubleClickCallback(self, sender):
+        self.openSourceCallback(sender)
 
     def _loadAttributes(self):
         attributesTable = self.w.getItem('attributesValues')
@@ -372,12 +457,11 @@ class VarGlyphAssistantController(DesignSpaceSelector_EZUI):
             return
 
         # load glyph attributes into dict
-
         selectedSources = self.w.getItem('sources').getSelectedItems()
         selectedSourceNames = [src['name'] for src in selectedSources]
 
         glyphName = self.glyph.name
-        glyphAttributeIDs = ['width', 'left', 'right', 'contours', 'segments', 'points', 'anchors', 'components']
+        glyphAttributeIDs = ['width', 'left', 'right', 'contours', 'points', 'anchors', 'components']
 
         self._glyphAttributes = {}
         for srcName in selectedSourceNames:
@@ -396,14 +480,8 @@ class VarGlyphAssistantController(DesignSpaceSelector_EZUI):
                         value = glyph.rightMargin
                     elif attr == 'contours':
                         value = len(glyph)
-                    elif attr == 'segments':
-                        value = 0
-                        for contour in glyph:
-                            value += len(contour.segments)
                     elif attr == 'points':
-                        value = 0
-                        for contour in glyph:
-                            value += len(contour)
+                        value = sum([len(c) for c in glyph])
                     elif attr == 'anchors':
                         value = len(glyph.anchors)
                     elif attr == 'components':
@@ -424,6 +502,146 @@ class VarGlyphAssistantController(DesignSpaceSelector_EZUI):
             listItems.append(listItem)
 
         attributesTable.set(listItems)
+
+    # measurements
+
+    def measurementsSelectionCallback(self, sender):
+        self._loadMeasurementValues()
+
+    def thresholdDefaultCallback(self, sender):
+        global thresholdDefault
+        thresholdDefault = self.w.getItem('thresholdDefault').get()
+        self._loadMeasurementValues()
+
+    def _loadMeasurements(self):
+        
+        measurementsTable      = self.w.getItem('measurements')
+        measurementValuesTable = self.w.getItem('measurementValues')
+
+        if self.glyph is None or not self._measurementsData:
+            measurementsTable.set([])
+            measurementValuesTable.set([])
+            return
+
+        glyphName = self.glyph.name
+        glyphMeasurements = self._measurementsData['glyphs'].get(glyphName)
+        fontMeasurements  = self._measurementsData['font']
+
+        if glyphMeasurements is None:
+            measurementsTable.set([])
+            measurementValuesTable.set([])
+            return
+
+        # make glyph measurements list
+        measurementsItems = []
+        for measurementID in glyphMeasurements.keys():
+            pt1, pt2 = measurementID.split()
+            listItem = {
+                'name'      : glyphMeasurements[measurementID].get('name'),
+                'direction' : glyphMeasurements[measurementID].get('direction'),
+                'pt1'       : pt1,
+                'pt2'       : pt2,
+            }
+            measurementsItems.append(listItem) 
+
+        # store values for all glyph measurements 
+
+        selectedSources = self.w.getItem('sources').getSelectedItems()
+        selectedSourceNames = [src['name'] for src in selectedSources]
+
+        self._measurementsUnits        = {}
+        self._measurementsPermill      = {}
+        # self._measurementsScaleFont    = {}
+        self._measurementsScaleDefault = {}
+
+        for srcName in selectedSourceNames:
+            if srcName not in self.sources:
+                continue
+
+            # get defcon Font from designspace
+            font = self.sources[srcName].font
+
+            self._measurementsUnits[srcName]        = []
+            self._measurementsPermill[srcName]      = []
+            # self._measurementsScaleFont[srcName]    = []
+            self._measurementsScaleDefault[srcName] = []
+
+            for key in glyphMeasurements.keys():
+                parts = key.split()
+
+                # get point indexes
+                if len(parts) == 2:
+                    index1, index2 = parts
+                else:
+                    continue
+                try:
+                    index1 = int(index1)
+                except:
+                    pass
+                try:
+                    index2 = int(index2)
+                except:
+                    pass
+
+                # setup measurement
+                measurementName = glyphMeasurements[key]['name']
+                M = Measurement(measurementName,
+                    glyphMeasurements[key]['direction'],
+                    glyphName, index1, glyphName, index2)
+
+                # measure glyph
+                valueUnits = M.measure(font)
+                if valueUnits is None:
+                    valuePermill = None
+                elif valueUnits == 0:
+                    valuePermill = 0
+                else:
+                    valuePermill = round(valueUnits*1000 / font.info.unitsPerEm)
+
+                # get default value
+                scale_d = None
+                if self.designspace.default is not None:
+                    defaultName = getSourceName(self.designspace.default)
+                    defaultFont = self.sources[defaultName].font
+                    valueDefault = M.measure(defaultFont)
+                    # calculate d-scale
+                    if valueUnits and valueDefault:
+                        scale_d = valueUnits / valueDefault
+
+                self._measurementsUnits[srcName].append(valueUnits)
+                self._measurementsPermill[srcName].append(valuePermill)
+                self._measurementsScaleDefault[srcName].append(scale_d)
+
+        measurementsTable.set(measurementsItems)
+
+    def _loadMeasurementValues(self):
+
+        measurementsTable      = self.w.getItem('measurements')
+        measurementValuesTable = self.w.getItem('measurementValues')
+
+        selectedMeasurements = measurementsTable.getSelectedIndexes()
+        if not selectedMeasurements:
+            return
+
+        selectionIndex = selectedMeasurements[0]
+        selectedSources = self.w.getItem('sources').getSelectedItems()
+        selectedSourceNames = [src['name'] for src in selectedSources]
+
+        listItems = []
+        for srcName in selectedSourceNames:
+            if srcName not in self.sources:
+                continue
+            listItem = {
+                'fileName' : srcName,
+                'units'    : self._measurementsUnits[srcName][selectionIndex],
+                'permill'  : self._measurementsPermill[srcName][selectionIndex],
+                'scale_d'  : self._measurementsScaleDefault[srcName][selectionIndex],
+            }
+            listItems.append(listItem)
+
+        measurementValuesTable.set(listItems)
+
+    # points
 
     def _loadPoints(self):
         pointsTable = self.w.getItem('pointsTable')
@@ -495,194 +713,24 @@ class VarGlyphAssistantController(DesignSpaceSelector_EZUI):
 
         '''
 
-    def _loadMeasurements(self):
-        measurementsTable      = self.w.getItem('measurements')
-        measurementValuesTable = self.w.getItem('measurementValues')
-
-        if self.glyph is None or not self._measurementsData:
-            measurementsTable.set([])
-            measurementValuesTable.set([])
-            return
-
-        glyphName = self.glyph.name
-        glyphMeasurements = self._measurementsData['glyphs'].get(glyphName)
-        fontMeasurements  = self._measurementsData['font']
-
-        if glyphMeasurements is None:
-            measurementsTable.set([])
-            measurementValuesTable.set([])
-            return
-
-        # make glyph measurements list
-        measurementsItems = []
-        for measurementID in glyphMeasurements.keys():
-            pt1, pt2 = measurementID.split()
-            listItem = {
-                'name'      : glyphMeasurements[measurementID].get('name'),
-                'direction' : glyphMeasurements[measurementID].get('direction'),
-                'pt1'       : pt1,
-                'pt2'       : pt2,
-            }
-            measurementsItems.append(listItem) 
-
-        # store values for all glyph measurements 
-
-        selectedSources = self.w.getItem('sources').getSelectedItems()
-        selectedSourceNames = [src['name'] for src in selectedSources]
-
-        self._measurementsUnits        = {}
-        self._measurementsPermill      = {}
-        self._measurementsScaleFont    = {}
-        self._measurementsScaleDefault = {}
-
-        for srcName in selectedSourceNames:
-            if srcName not in self.sources:
-                continue
-
-            # get defcon Font from designspace
-            font = self.sources[srcName].font
-
-            self._measurementsUnits[srcName]        = []
-            self._measurementsPermill[srcName]      = []
-            self._measurementsScaleFont[srcName]    = []
-            self._measurementsScaleDefault[srcName] = []
-
-            for key in glyphMeasurements.keys():
-                parts = key.split()
-
-                # get point indexes
-                if len(parts) == 2:
-                    index1, index2 = parts
-                else:
-                    continue
-                try:
-                    index1 = int(index1)
-                except:
-                    pass
-                try:
-                    index2 = int(index2)
-                except:
-                    pass
-
-                # setup measurement
-                measurementName = glyphMeasurements[key]['name']
-                M = Measurement(measurementName,
-                    glyphMeasurements[key]['direction'],
-                    glyphName, index1, glyphName, index2)
-
-                # measure glyph
-                valueUnits = M.measure(font)
-                if valueUnits is None:
-                    valuePermill = None
-                elif valueUnits == 0:
-                    valuePermill = 0
-                else:
-                    valuePermill = round(valueUnits*1000 / font.info.unitsPerEm)
-
-                # get font-level value
-                scale_f = None
-                if fontMeasurements is not None:
-                    if measurementName in fontMeasurements:
-                        measurement = fontMeasurements.get(measurementName)
-                        M2 = Measurement(measurementName,
-                            measurement['direction'],
-                            measurement['glyph 1'], measurement['point 1'],
-                            measurement['glyph 2'], measurement['point 2']
-                        )
-                        valueFont = M2.measure(font)
-                        # calculate f-scale
-                        if valueUnits and valueFont:
-                            scale_f = valueUnits / valueFont
-
-                # get default value
-                scale_d = None
-                if self.designspace.default is not None:
-                    defaultName = getSourceName(self.designspace.default)
-                    defaultFont = self.sources[defaultName].font
-                    valueDefault = M.measure(defaultFont)
-                    # calculate d-scale
-                    if valueUnits and valueDefault:
-                        scale_d = valueUnits / valueDefault
-
-                self._measurementsUnits[srcName].append(valueUnits)
-                self._measurementsPermill[srcName].append(valuePermill)
-                self._measurementsScaleFont[srcName].append(scale_f)
-                self._measurementsScaleDefault[srcName].append(scale_d)
-
-        measurementsTable.set(measurementsItems)
-
-    def _loadMeasurementValues(self):
-
-        measurementsTable      = self.w.getItem('measurements')
-        measurementValuesTable = self.w.getItem('measurementValues')
-
-        selectedMeasurements = measurementsTable.getSelectedIndexes()
-        if not selectedMeasurements:
-            return
-
-        selectionIndex = selectedMeasurements[0]
-
-        selectedSources = self.w.getItem('sources').getSelectedItems()
-        selectedSourceNames = [src['name'] for src in selectedSources]
-
-        listItems = []
-        for srcName in selectedSourceNames:
-            if srcName not in self.sources:
-                continue
-
-            listItem = {
-                'fileName' : srcName,
-                'units'    : self._measurementsUnits[srcName][selectionIndex],
-                'permill'  : self._measurementsPermill[srcName][selectionIndex],
-                'scale_f'  : self._measurementsScaleFont[srcName][selectionIndex],
-                'scale_d'  : self._measurementsScaleDefault[srcName][selectionIndex],
-            }
-            listItems.append(listItem)
-
-        measurementValuesTable.set(listItems)
-
-    def _updateLists(self):
-        self._loadAttributes()
-        self._loadPoints()
-        self._loadMeasurements()
-        self._loadMeasurementValues()
-
 
 class VarGlyphAssistantSubscriberRoboFont(Subscriber):
 
     controller = None
 
     def fontDocumentDidBecomeCurrent(self, info):
-        # print('fontDocumentDidBecomeCurrent')
         self.controller.font = info['font']
         self.controller._updateLists()
 
     def fontDocumentDidOpen(self, info):
-        # print('fontDocumentDidOpen')
         self.controller.font = info['font']
         self.controller._updateLists()
 
     def roboFontDidSwitchCurrentGlyph(self, info):
         # print('roboFontDidSwitchCurrentGlyph')
         self.controller.glyph = info["glyph"]
+        self.controller._updateGlobals()
         self.controller._updateLists()
-
-    # def settingsDidChange(self, info):
-    #     print('settingsDidChange')
-
-
-# varGlyphAssistantEventName = f"{VarGlyphAssistantController.key}.changed"
-
-# if varGlyphAssistantEventName not in roboFontSubscriberEventRegistry:
-#     registerSubscriberEvent(
-#         subscriberEventName=varGlyphAssistantEventName,
-#         methodName="settingsDidChange",
-#         lowLevelEventNames=[varGlyphAssistantEventName],
-#         documentation="Send when the VarGlyphAssistant window changes its parameters.",
-#         dispatcher="roboFont",
-#         delay=0,
-#         debug=True
-#     )
 
 
 if __name__ == '__main__':
