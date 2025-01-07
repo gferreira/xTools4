@@ -194,7 +194,7 @@ class GlyphSetProoferUI:
         sourcePaths = [self._sources[p] for p in self.selectedSources]
 
         print('building PDF proof... ', end='')
-        DB.newDrawing()
+        # DB.newDrawing()
         start = time.time()
         P = GlyphSetProofer(default.familyName, default.path, sourcePaths)
         P.build(savePDF=False)
