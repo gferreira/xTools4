@@ -24,13 +24,13 @@ Contexts
 
 The xTools4 toolkit is organized around **5** main *contexts* or *scopes* for performing tasks while working on fonts:
 
-| context                                   | description                                                        |
-|-------------------------------------------|--------------------------------------------------------------------|
-| [glyph](../reference/dialogs/glyph)       | tools for visualizing and editing the current glyph                |
-| [glyphs](../reference/dialogs/glyphs)     | tools for applying actions to selected glyphs or the current glyph |
-| [font](../reference/dialogs/font)         | tools for editing various kinds of font-level data                 |
-| [batch](../reference/dialogs/batch)       | tools for applying actions to multiple fonts at once               |
-| [variable](../reference/dialogs/variable) | tools for visualizing and editing variable font sources            |
+| context                                  | description                                                         |
+|------------------------------------------|---------------------------------------------------------------------|
+| [glyph](../reference/tools/glyph)        | tools for visualizing and editing the current glyph                 |
+| [glyphs](../reference/tools/glyphs)      | tools for applying actions to selected glyphs or the current glyph  |
+| [font](../reference/tools/font)          | tools for editing various kinds of font-level data                  |
+| [batch](../reference/tools/batch)        | tools for applying actions to multiple fonts at once                |
+| [variable](../reference/tools/variable)  | tools for visualizing and editing variable font sources             |
 {: .table .table-hover }
 
 These contexts are used to organize the tools internally in the code library and externally in the menu.
@@ -47,4 +47,4 @@ The interface of all tools is designed to be space-efficient. All *glyph* and *g
 
 Custom keyboard shortcuts can be assigned to any dialog using the [RoboFont Preferences](http://robofont.com/documentation/workspace/preferences-window/short-keys/).
 
-Tools which modify the current glyph offer an optional interactive preview. Some attributes of the preview can be adjusted in the [preferences](../reference/dialogs/preferences).
+Tools which modify the current glyph offer an optional interactive preview. Some attributes of the preview can be adjusted in the [preferences](../reference/tools/preferences).
