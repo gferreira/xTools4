@@ -20,14 +20,16 @@ The **p-scale** (`A÷B`) is the scale of a font-level measurement (`A`) in relat
 
 Example:
 
-| ref.    | description                   | name   | glyph | source  | value |
-|---------|-------------------------------|--------|-------|---------|-------|
-| `A`     | font-level measurement        | `XOLC` | `n`   | current | 590   |
-| `B`     | parent font-level measurement | `XOPQ` | `H`   | current | 621   |
-| `A÷B`   | p-scale                       |        |       |         | 0.95  |
+![]({{ site.url }}/images/measurement-scale_1.png){: .img-fluid }
+
+| ref.    | description            | name   | glyph | source  | value |
+|---------|------------------------|--------|-------|---------|-------|
+| `A`     | font-level measurement | `XOLC` | `n`   | current | 170   |
+| `B`     | font-level measurement | `XOPQ` | `H`   | current | 180   |
+| `A÷B`   | p-scale                |        |       |         | 0.944 |
 {: .table .table-hover }
 
-*“The general thickness of lowercase vertical stems is 95% of the general thickness of the uppercase vertical stems.”*
+*“The general thickness of lowercase vertical stems is 94,4% of the general thickness of the uppercase vertical stems.”*
 
 ### Font scale
 {: .mt-4 }
@@ -36,14 +38,16 @@ The **f-scale** (`A÷B`) is the scale of a glyph-level measurement (`A`) in rela
 
 Example:
 
+![]({{ site.url }}/images/measurement-scale_2.png){: .img-fluid }
+
 | ref.    | description             | name   | glyph | source  | value |
 |---------|-------------------------|--------|-------|---------|-------|
-| `A`     | glyph-level measurement | `XOLC` | `u`   | current | 586   |
-| `B`     | font-level measurement  | `XOLC` | `n`   | current | 590   |
-| `A÷B`   | f-scale                 |        |       |         | 0.993 |
+| `A`     | glyph-level measurement | `XOLC` | `u`   | current | 168   |
+| `B`     | font-level measurement  | `XOLC` | `n`   | current | 170   |
+| `A÷B`   | f-scale                 |        |       |         | 0.988 |
 {: .table .table-hover }
 
-*“The thickness of a vertical stem in **u** is 99,3% of the general lowercase vertical stem thickness, which is taken from the **n**.”*
+*“The thickness of a vertical stem in **u** is 98,8% of the general lowercase vertical stem thickness, which is taken from the **n**.”*
 
 ### Default scale
 {: .mt-4 }
@@ -52,14 +56,16 @@ The **d-scale** (`A÷B`) is the scale of a font- or glyph-level measurement (`A`
 
 Example:
 
+![]({{ site.url }}/images/measurement-scale_3.png){: .img-fluid }
+
 | ref.    | description             | name   | glyph | source  | value |
 |---------|-------------------------|--------|-------|---------|-------|
 | `A`     | glyph-level measurement | `XOLC` | `u`   | current | 586   |
-| `B`     | glyph-level measurement | `XOLC` | `u`   | default | 170   |
-| `A÷B`   | d-scale                 |        |       |         | 3.447 |
+| `B`     | glyph-level measurement | `XOLC` | `u`   | default | 168   |
+| `A÷B`   | d-scale                 |        |       |         | 3.488 |
 {: .table .table-hover }
 
-*“The thickness of a vertical stem in **u** is 344,7% thicker than that same stem in the default font.”*
+*“The thickness of a vertical stem in **u** is 348,8% thicker than that same stem in the default font.”*
 
 
 Measurement thresholds
