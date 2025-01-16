@@ -96,11 +96,15 @@ gA = f[glyphNameA]
 glyphNameB = measurements['font'][B]['glyph 1']
 gB = f[glyphNameB]
 
-W, H = sizes('A4Landscape')
+W = 1000
 H = f.info.capHeight*s + ty
 yTop = H - yt
 
 newPage(W, H)
+with savedState():
+    fill(1)
+    rect(0, 0, width(), height())
+
 save()
 
 mx = (width() - (gA.width + gB.width) * s) / 2
@@ -130,7 +134,7 @@ A      = 'XOLC' # glyph-level
 B      = 'XOLC' # font-level
 glyphA = 'u'
 
-src = 'wght400'
+src = 'XOLC293' # 'wght400'
 
 txtA = 'glyph-level measurement\ncurrent font'
 txtB = 'font-level measurement\ncurrent font'
@@ -154,10 +158,14 @@ fontScale = valueUnitsA / valueUnitsB
 
 gB = f[measurements['font'][B]['glyph 1']]
 
-W, H = sizes('A4Landscape')
 H = f.info.xHeight*s + ty
 yTop = H - yt
+
 newPage(W, H)
+with savedState():
+    fill(1)
+    rect(0, 0, width(), height())
+
 save()
 fontSize(fs)
 
@@ -214,6 +222,10 @@ valueUnitsB = mB.measure(fB)
 defaultScale = valueUnitsA / valueUnitsB
 
 newPage(W, H)
+with savedState():
+    fill(1)
+    rect(0, 0, width(), height())
+
 save()
 fontSize(fs)
 

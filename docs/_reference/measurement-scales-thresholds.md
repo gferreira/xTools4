@@ -20,8 +20,6 @@ The **p-scale** (`A÷B`) is the scale of a font-level measurement (`A`) in relat
 
 Example:
 
-![]({{ site.url }}/images/measurement-scale_1.png){: .img-fluid }
-
 | ref.    | description            | name   | glyph | source  | value |
 |---------|------------------------|--------|-------|---------|-------|
 | `A`     | font-level measurement | `XOLC` | `n`   | current | 170   |
@@ -38,8 +36,6 @@ The **f-scale** (`A÷B`) is the scale of a glyph-level measurement (`A`) in rela
 
 Example:
 
-![]({{ site.url }}/images/measurement-scale_2.png){: .img-fluid }
-
 | ref.    | description             | name   | glyph | source  | value |
 |---------|-------------------------|--------|-------|---------|-------|
 | `A`     | glyph-level measurement | `XOLC` | `u`   | current | 168   |
@@ -55,8 +51,6 @@ Example:
 The **d-scale** (`A÷B`) is the scale of a font- or glyph-level measurement (`A`) in relation to the same measurement in the default font (`B`).
 
 Example:
-
-![]({{ site.url }}/images/measurement-scale_3.png){: .img-fluid }
 
 | ref.    | description             | name   | glyph | source  | value |
 |---------|-------------------------|--------|-------|---------|-------|
