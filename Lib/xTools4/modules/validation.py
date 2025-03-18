@@ -7,7 +7,7 @@ from xTools4.modules.decomposePointPen import DecomposePointPen
 
 
 colorComponentsDifferent = 1.00, 0.30, 0.00, 0.35
-colorComponentsEqual     = 1.00, 0.65, 0.00, 0.35
+colorComponentsEqual     = 1.00, 0.70, 0.00, 0.35
 colorContoursDifferent   = None
 colorContoursEqual       = 0.00, 0.65, 1.00, 0.35
 colorWarning             = 1.00, 0.00, 0.00, 0.65
@@ -290,6 +290,50 @@ def checkEquality(g1, g2):
         'unicodes'   : checkEqualUnicodes(g1, g2),
     }
 
+def assignValidationGroup(g1, g2):
+
+    checkResults = {
+        'compatibility' : checkCompatibility(g1, g2),
+        'equality'      : checkEquality(g1, g2),
+    }
+
+    validationGroup = None
+
+    # glyphs with components
+    if g1.components:
+        levels = getNestingLevels(g1)
+        # warning: nested components or mixed contour/components
+        if levels > 1 or len(g1.contours):
+            validationGroup = 'warning'
+        else:
+            # components equal to default
+            if all(checkResults['compatibility']) and checkResults['equality']['components']:
+                validationGroup = 'componentsEqual'
+            # components different from default
+            else:
+                validationGroup = 'componentsDifferent'
+    else:
+        # contours equal to default
+        if checkResults['compatibility']['points'] and checkResults['equality']['points']:
+            if g1.width == g2.width:
+                validationGroup = 'contoursEqual'
+            else:
+                validationGroup = 'contoursDifferent'
+        else:
+            # empty glyphs
+            if not len(g2) and not len(g1):
+                # width equal to default
+                if g1.width == g2.width:
+                    validationGroup = 'contoursEqual'
+                # width different from default
+                else:
+                    validationGroup = 'contoursDifferent'
+            # contours different from default
+            else:
+                validationGroup = 'contoursDifferent'
+
+    return validationGroup
+
 # ---------------------
 # font-level validation
 # ---------------------
@@ -330,7 +374,7 @@ def validateFont(f1, f2, options, indent=0):
 
     return txt
 
-def validateFonts(targetFonts, sourceFont, options):
+def validateFonts(targetFonts, sourceFont, options, indent=1):
     '''
     Batch check if all fonts in `targetFonts` match the ones in sourceFont.
 

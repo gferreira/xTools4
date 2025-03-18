@@ -638,7 +638,7 @@ class VarFontAssistant_EZUI(DesignSpaceSelector_EZUI):
         if defaultFont in selectedSources:
             selectedSources.remove(defaultFont)
 
-        txt += validateFonts(selectedSources, defaultFont, options)
+        txt += validateFonts(selectedSources, defaultFont, options, indent=2)
         txt += '...done!\n\n'
 
         self.w.getItem('checkResults').set(txt)

@@ -32,7 +32,7 @@ colorCheckNone  = 0.00, 0.00, 0.00, 1.00
 
 thresholdFontParent   = 0.1
 thresholdFontDefault  = 0.1
-thresholdGlyphFont    = 0.1
+thresholdGlyphFont    = 0.2
 thresholdGlyphDefault = 0.1
 
 

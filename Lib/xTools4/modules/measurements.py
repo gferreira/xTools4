@@ -43,7 +43,7 @@ class FontMeasurements:
                 pt2 = int(attrs['point 2'])
             except:
                 pt2 = attrs['point 2']
-            self.definitions.append((name, attrs['direction'], attrs['glyph 1'], pt1, attrs['glyph 2'], pt2, attrs.get('parent')))
+            self.definitions.append((name, attrs['direction'], attrs['glyph 1'], pt1, attrs['glyph 2'], pt2, attrs.get('parent'), attrs.get('description')))
 
     def measure(self, font, roundToInt=True, absolute=False):
         for d in self.definitions:
@@ -65,7 +65,7 @@ class Measurement:
 
     font = None
 
-    def __init__(self, name, direction, glyphName1, pointIndex1, glyphName2, pointIndex2, parent=None):
+    def __init__(self, name, direction, glyphName1, pointIndex1, glyphName2, pointIndex2, parent=None, description=None):
         self.name        = name
         self.direction   = direction
         self.glyphName1  = glyphName1
