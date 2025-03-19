@@ -3,6 +3,7 @@ import xTools4.modules.linkPoints2
 reload(xTools4.modules.linkPoints2)
 
 import os, csv
+from lib.tools.bezierTools import angledPoint
 from fontTools.agl import UV2AGL
 from fontParts.world import RFont
 from xTools4.modules.linkPoints2 import *
@@ -11,6 +12,10 @@ from xTools4.modules.linkPoints2 import *
 def permille(value, unitsPerEm):
     '''Converts a value in font units to a permille value (thousands of em).'''
     return round(value * 1000 / unitsPerEm)
+
+def offsetAngledPoint(point, angle, offset):
+    x, y = angledPoint(point, -angle)
+    return x - offset, y
 
 
 class FontMeasurements:
@@ -74,7 +79,6 @@ class Measurement:
         self.pointIndex2 = pointIndex2
         self.parent      = parent
 
-
     @property
     def fontIsDefcon(self):
         return hasattr(self.font, 'representationFactories')
@@ -95,7 +99,6 @@ class Measurement:
     def point1(self):
         if self.glyph1 is not None:
             try:
-                # if isinstance(self.pointIndex1, int):
                 return getPointAtIndex(self.glyph1, int(self.pointIndex1), isDefcon=self.fontIsDefcon)
             except:
                 return getAnchorPoint(self.font, self.pointIndex1)
@@ -104,7 +107,6 @@ class Measurement:
     def point2(self):
         if self.glyph2 is not None:
             try:
-                # if isinstance(self.pointIndex2, int):
                 return getPointAtIndex(self.glyph2, int(self.pointIndex2), isDefcon=self.fontIsDefcon)
             except:
                 return getAnchorPoint(self.font, self.pointIndex2)
@@ -127,22 +129,30 @@ class Measurement:
         if self.point1 is None or self.point2 is None:
             return
 
+        x1, y1 = self.point1.x, self.point1.y
+        x2, y2 = self.point2.x, self.point2.y
+
+        # NEW: italic correction for slant angle & offset
+        angle  = font.info.italicAngle
+        offset = font.lib.get('com.typemytype.robofont.italicSlantOffset') or 0
+        if angle or offset:
+            x1, y1 = offsetAngledPoint((x1, y1), angle, offset)
+            x2, y2 = offsetAngledPoint((x2, y2), angle, offset)
+
         if self.direction == 'x':
-            d = self.point2.x - self.point1.x
+            d = x2 - x1
 
         elif self.direction == 'y':
-            d = self.point2.y - self.point1.y
+            d = y2 - y1
 
         else:
-            d = sqrt((self.point2.x - self.point1.x)**2 + (self.point2.y - self.point1.y)**2)
+            d = sqrt((x2 - x1)**2 + (y2 - y1)**2)
 
         if absolute:
             d = abs(d)
 
         if roundToInt:
             d = round(d)
-
-        # print(self.font, self.point1, self.point2, d)
 
         if verbose:
             print(f'\tdistance : {d}')

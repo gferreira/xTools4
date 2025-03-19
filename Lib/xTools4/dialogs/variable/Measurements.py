@@ -1,6 +1,8 @@
 from importlib import reload
-import xTools4.modules.measurementsViewer
-reload(xTools4.modules.measurementsViewer)
+import xTools4.modules.linkPoints2
+reload(xTools4.modules.linkPoints2)
+import xTools4.modules.measurements
+reload(xTools4.modules.measurements)
 
 import os, json
 from random import random
@@ -1060,16 +1062,6 @@ class MeasurementsSubscriberGlyphEditor(Subscriber):
         self.controller._updateGlyphMeasurements()
         self._drawGlyphMeasurements()
 
-    # def glyphEditorDidKeyDown(self, info):
-    #     if info['deviceState']['keyDownWithoutModifiers'] == "v":
-    #         self.controller.valueMode = 'permill'
-    #         self._drawGlyphMeasurements()
-
-    # def glyphEditorDidKeyUp(self, info):
-    #     if info['deviceState']['keyDownWithoutModifiers'] == "v":
-    #         self.controller.valueMode = 'units'
-    #         self._drawGlyphMeasurements()
-
     def measurementsDidChange(self, info):
         self._drawGlyphMeasurements()
 
@@ -1122,16 +1114,6 @@ class MeasurementsSubscriberGlyphEditor(Subscriber):
                         strokeColor=(R, G, B, 0.3),
                         strokeWidth=100000,
                     )
-
-                    ### DEBUG GEOMETRY
-                    self.measurementsLayer.appendRectangleSublayer(
-                        position=(min(pt1.x, pt2.x), min(pt1.y, pt2.y)),
-                        size=(pt2.x - pt1.x, pt2.y - pt1.y),
-                        strokeColor=(R, G, B, a),
-                        strokeWidth=1,
-                        fillColor=None,
-                    )
-                    ### END DEBUG
 
                 strokeDash = (3, 3) if item not in selectedItems else None
                 strokeWidth = 2 if item in selectedItems else 1
