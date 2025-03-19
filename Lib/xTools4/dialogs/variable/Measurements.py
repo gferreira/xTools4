@@ -100,6 +100,7 @@ class MeasurementsController(ezui.WindowController):
     defaultFont = None
 
     messageMode = 1
+    valueMode   = ['units', 'permill'][0]
 
     content = """
     = Tabs
@@ -130,6 +131,7 @@ class MeasurementsController(ezui.WindowController):
     >> [__](±)      @thresholdGlyphDefault
     >> [X] display  @preview
     >> * ColorWell  @colorButton
+    >> [ ] permill  @permill
     >> (flip)       @flipButton
 
     =============
@@ -736,6 +738,13 @@ class MeasurementsController(ezui.WindowController):
     def previewCallback(self, sender):
         postEvent(f"{self.key}.changed")
 
+    def permillCallback(self, sender):
+        if sender.get():
+            self.valueMode = 'permill'
+        else:
+            self.valueMode = 'units'
+        postEvent(f"{self.key}.changed")
+
     def colorButtonCallback(self, sender):
         postEvent(f"{self.key}.changed")
 
@@ -1051,6 +1060,16 @@ class MeasurementsSubscriberGlyphEditor(Subscriber):
         self.controller._updateGlyphMeasurements()
         self._drawGlyphMeasurements()
 
+    # def glyphEditorDidKeyDown(self, info):
+    #     if info['deviceState']['keyDownWithoutModifiers'] == "v":
+    #         self.controller.valueMode = 'permill'
+    #         self._drawGlyphMeasurements()
+
+    # def glyphEditorDidKeyUp(self, info):
+    #     if info['deviceState']['keyDownWithoutModifiers'] == "v":
+    #         self.controller.valueMode = 'units'
+    #         self._drawGlyphMeasurements()
+
     def measurementsDidChange(self, info):
         self._drawGlyphMeasurements()
 
@@ -1104,6 +1123,16 @@ class MeasurementsSubscriberGlyphEditor(Subscriber):
                         strokeWidth=100000,
                     )
 
+                    ### DEBUG GEOMETRY
+                    self.measurementsLayer.appendRectangleSublayer(
+                        position=(min(pt1.x, pt2.x), min(pt1.y, pt2.y)),
+                        size=(pt2.x - pt1.x, pt2.y - pt1.y),
+                        strokeColor=(R, G, B, a),
+                        strokeWidth=1,
+                        fillColor=None,
+                    )
+                    ### END DEBUG
+
                 strokeDash = (3, 3) if item not in selectedItems else None
                 strokeWidth = 2 if item in selectedItems else 1
                 self.measurementsLayer.appendLineSublayer(
@@ -1120,7 +1149,7 @@ class MeasurementsSubscriberGlyphEditor(Subscriber):
                     self.measurementsLayer.appendTextLineSublayer(
                         position=(cx, cy),
                         backgroundColor=color,
-                        text=f"{item['units']}",
+                        text=f"{direction}:{item[self.controller.valueMode]}",
                         font="system",
                         weight="bold",
                         pointSize=9,
