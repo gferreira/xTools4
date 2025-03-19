@@ -138,6 +138,8 @@ class MeasurementsController(ezui.WindowController):
 
     =============
 
+    [X] italic correction @italicCorrection
+
     ( load… )       @loadButton
     ( save… )       @saveButton
     ( default… )    @defaultButton
@@ -764,6 +766,9 @@ class MeasurementsController(ezui.WindowController):
 
         postEvent(f"{self.key}.changed")
 
+    def italicCorrectionCallback(self, sender):
+        postEvent(f"{self.key}.changed")
+
     # glyph cells
 
     def drawLabelCell(self, notification):
@@ -820,6 +825,8 @@ class MeasurementsController(ezui.WindowController):
         table = self.w.getItem("fontMeasurements")
         items = table.get()
 
+        italicCorrection = self.w.getItem("italicCorrection").get()
+
         needReload = []
         for itemIndex, item in enumerate(items):
             try:
@@ -838,7 +845,7 @@ class MeasurementsController(ezui.WindowController):
                 item['glyph2'], pt2_index,
                 item['parent']
             )
-            distanceUnits = M.measure(self.font)
+            distanceUnits = M.measure(self.font, italicCorrection=italicCorrection)
             item['units'] = distanceUnits
 
             if distanceUnits and self.font.info.unitsPerEm:
@@ -847,7 +854,7 @@ class MeasurementsController(ezui.WindowController):
 
             # get default value
             if self.defaultFont:
-                distanceDefault = M.measure(self.defaultFont)
+                distanceDefault = M.measure(self.defaultFont, italicCorrection=italicCorrection)
                 item['default'] = distanceDefault
                 # calculate d-scale
                 if distanceUnits and distanceDefault:
@@ -919,6 +926,7 @@ class MeasurementsController(ezui.WindowController):
     def _updateGlyphMeasurements(self):
         table = self.w.getItem("glyphMeasurements")
         items = table.get()
+        italicCorrection = self.w.getItem("italicCorrection").get()
 
         # get font-level values
         fontMeasurements = self.w.getItem("fontMeasurements").get()
@@ -944,7 +952,7 @@ class MeasurementsController(ezui.WindowController):
                 self.glyph.name, pt2_index,
                 item['font']
             )
-            distanceUnits = M.measure(self.font)
+            distanceUnits = M.measure(self.font, italicCorrection=italicCorrection)
 
             # no measurement value
             if distanceUnits is None:
@@ -979,7 +987,7 @@ class MeasurementsController(ezui.WindowController):
 
             # get default value
             if self.defaultFont:
-                distanceDefault = M.measure(self.defaultFont)
+                distanceDefault = M.measure(self.defaultFont, italicCorrection=italicCorrection)
                 item['default'] = distanceDefault
                 # calculate d-scale
                 if distanceUnits and distanceDefault:

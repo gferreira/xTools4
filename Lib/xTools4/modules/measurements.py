@@ -3,7 +3,8 @@ import xTools4.modules.linkPoints2
 reload(xTools4.modules.linkPoints2)
 
 import os, csv
-from lib.tools.bezierTools import angledPoint
+from math import tan, radians
+# from lib.tools.bezierTools import angledPoint
 from fontTools.agl import UV2AGL
 from fontParts.world import RFont
 from xTools4.modules.linkPoints2 import *
@@ -12,6 +13,11 @@ from xTools4.modules.linkPoints2 import *
 def permille(value, unitsPerEm):
     '''Converts a value in font units to a permille value (thousands of em).'''
     return round(value * 1000 / unitsPerEm)
+
+def angledPoint(point, angle):
+    x, y = point
+    d = tan(radians(angle)) * y
+    return x - d, y
 
 def offsetAngledPoint(point, angle, offset):
     x, y = angledPoint(point, -angle)
@@ -111,7 +117,7 @@ class Measurement:
             except:
                 return getAnchorPoint(self.font, self.pointIndex2)
 
-    def measure(self, font, roundToInt=True, absolute=False, verbose=False):
+    def measure(self, font, roundToInt=True, absolute=False, verbose=False, italicCorrection=True):
 
         self.font = font
 
@@ -132,12 +138,12 @@ class Measurement:
         x1, y1 = self.point1.x, self.point1.y
         x2, y2 = self.point2.x, self.point2.y
 
-        # NEW: italic correction for slant angle & offset
-        angle  = font.info.italicAngle
-        offset = font.lib.get('com.typemytype.robofont.italicSlantOffset') or 0
-        if angle or offset:
-            x1, y1 = offsetAngledPoint((x1, y1), angle, offset)
-            x2, y2 = offsetAngledPoint((x2, y2), angle, offset)
+        if italicCorrection:
+            angle  = font.info.italicAngle
+            offset = font.lib.get('com.typemytype.robofont.italicSlantOffset') or 0
+            if angle or offset:
+                x1, y1 = offsetAngledPoint((x1, y1), angle, offset)
+                x2, y2 = offsetAngledPoint((x2, y2), angle, offset)
 
         if self.direction == 'x':
             d = x2 - x1
