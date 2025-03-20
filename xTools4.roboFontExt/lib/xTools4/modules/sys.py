@@ -155,6 +155,11 @@ def buildDocsHTML(sourceFolder, buildFolder, incremental=True, verbose=True):
         if stdout: print(stdout)
         if stderr: print(stderr)
 
+def timer(start, end):
+    hours, rem = divmod(end - start, 3600)
+    minutes, seconds = divmod(rem, 60)
+    print(f"total elapsed time: {int(hours):0>2} hours {int(minutes):0>2} minutes {seconds:05.2f} seconds")
+
 # ---------------
 # xTools4 startup
 # ---------------

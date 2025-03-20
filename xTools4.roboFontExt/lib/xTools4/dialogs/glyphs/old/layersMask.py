@@ -3,7 +3,7 @@ from mojo.roboFont import AllFonts
 from mojo.events import addObserver, removeObserver
 from defconAppKit.windows.baseWindow import BaseWindowController
 from xTools4.dialogs.old import hDialog
-
+from xTools4.modules.anchors import copyAnchors
 
 # TODO: add observers for layerset changes
 # update UI when adding/deleting/renaming layers
@@ -23,12 +23,13 @@ class MaskDialog(hDialog, BaseWindowController):
     title = 'mask'
     key   = f'{hDialog.key}.glyphs.layers.mask'
     settings = {
-        'copyWidth' : True,
+        'copyWidth'   : True,
+        'copyAnchors' : True,
     }
 
     def __init__(self):
-        self.height  = self.textHeight * 8
-        self.height += self.padding * 7
+        self.height  = self.textHeight * 9
+        self.height += self.padding * 6 -5
         self.w = self.window((self.width, self.height), self.title)
 
         x = p = self.padding
@@ -57,21 +58,21 @@ class MaskDialog(hDialog, BaseWindowController):
                 [],
                 sizeStyle=self.sizeStyle)
 
-        y += self.textHeight + p + 5
+        y += self.textHeight + p # + 5
         self.w.copyButton = Button(
                 (x, y, -p, self.textHeight),
                 "copy",
                 sizeStyle=self.sizeStyle,
                 callback=self.copyCallback)
 
-        y += self.textHeight + p
+        y += self.textHeight + p/2
         self.w.switchButton = Button(
                 (x, y, -p, self.textHeight),
                 "flip",
                 sizeStyle=self.sizeStyle,
                 callback=self.flipLayersCallback)
 
-        y += self.textHeight + p
+        y += self.textHeight + p/2
         self.w.clearButton = Button(
                 (x, y, -p, self.textHeight),
                 "clear",
@@ -83,6 +84,13 @@ class MaskDialog(hDialog, BaseWindowController):
                 (x, y, -p, self.textHeight),
                 'copy width',
                 value=self.settings['copyWidth'],
+                sizeStyle=self.sizeStyle)
+
+        y += self.textHeight
+        self.w.copyAnchors = CheckBox(
+                (x, y, -p, self.textHeight),
+                'copy anchors',
+                value=self.settings['copyAnchors'],
                 sizeStyle=self.sizeStyle)
 
         self.updateSourceLayer()
@@ -111,6 +119,10 @@ class MaskDialog(hDialog, BaseWindowController):
     @property
     def lockLayerWidths(self):
         return self.w.lockLayerWidths.get()
+
+    @property
+    def copyAnchors(self):
+        return self.w.copyAnchors.get()
 
     # ---------
     # observers
@@ -195,10 +207,15 @@ class MaskDialog(hDialog, BaseWindowController):
             g = font[glyphName].getLayer(self.sourceLayer)
             g.copyToLayer(self.maskLayer, clear=False)
 
-            if not self.lockLayerWidths:
+            if self.lockLayerWidths:
                 sourceGlyph = font[glyphName].getLayer(self.sourceLayer)
                 maskGlyph   = font[glyphName].getLayer(self.maskLayer)
                 maskGlyph.width = sourceGlyph.width
+
+            if self.copyAnchors:
+                sourceGlyph = font[glyphName].getLayer(self.sourceLayer)
+                maskGlyph   = font[glyphName].getLayer(self.maskLayer)
+                copyAnchors(sourceGlyph, maskGlyph, clear=False, proportional=False)
 
     # -------
     # methods

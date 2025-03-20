@@ -9,7 +9,7 @@ Tools to make various kinds of measurements in a font.
 
 '''
 
-KEY = 'com.fontBureau.measurements'
+KEY = 'com.xTools4.measurements'
 
 def getPointAtIndex(glyph, ptIndex, isDefcon=False):
     '''Get the point at the given linear point index.

@@ -404,7 +404,7 @@ class RoundToGridDialog(GlyphsDialogBase):
                     components=self.components
                 )
                 g.prepareUndo('gridfit')
-                g.clear()
+                g.clearContours()
                 g.appendGlyph(result)
                 g.changed()
                 g.performUndo()

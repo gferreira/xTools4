@@ -1,20 +1,23 @@
 from importlib import reload
-import xTools4.modules.measurementsViewer
-reload(xTools4.modules.measurementsViewer)
+import xTools4.modules.linkPoints2
+reload(xTools4.modules.linkPoints2)
+import xTools4.modules.measurements
+reload(xTools4.modules.measurements)
 
 import os, json
 from random import random
 import ezui
-from merz import MerzView
+from merz import MerzView, MerzPen
 from mojo import drawingTools as ctx
 from mojo.UI import PutFile, GetFile, CurrentFontWindow
 from mojo.roboFont import OpenFont, CurrentFont, CurrentGlyph
 from mojo.subscriber import Subscriber, registerGlyphEditorSubscriber, unregisterGlyphEditorSubscriber, registerRoboFontSubscriber, unregisterRoboFontSubscriber, registerSubscriberEvent, roboFontSubscriberEventRegistry
 from mojo.events import postEvent, addObserver, removeObserver
 from xTools4.modules.linkPoints2 import readMeasurements, getPointAtIndex, getIndexForPoint, getAnchorPoint
-from xTools4.modules.measurements import Measurement
+from xTools4.modules.measurements import Measurement, offsetAngledPoint
 from xTools4.modules.measurementsViewer import MeasurementsViewer
 from xTools4.modules.messages import showMessage
+from xTools4.modules.measureHandles import vector, getVector
 
 '''
 M E A S U R E M E N T S v4
@@ -32,7 +35,7 @@ colorCheckNone  = 0.00, 0.00, 0.00, 1.00
 
 thresholdFontParent   = 0.1
 thresholdFontDefault  = 0.1
-thresholdGlyphFont    = 0.1
+thresholdGlyphFont    = 0.2
 thresholdGlyphDefault = 0.1
 
 
@@ -100,6 +103,7 @@ class MeasurementsController(ezui.WindowController):
     defaultFont = None
 
     messageMode = 1
+    valueMode   = ['units', 'permill'][0]
 
     content = """
     = Tabs
@@ -130,9 +134,12 @@ class MeasurementsController(ezui.WindowController):
     >> [__](±)      @thresholdGlyphDefault
     >> [X] display  @preview
     >> * ColorWell  @colorButton
+    >> [ ] permill  @permill
     >> (flip)       @flipButton
 
     =============
+
+    [X] italic correction @italicCorrection
 
     ( load… )       @loadButton
     ( save… )       @saveButton
@@ -736,6 +743,13 @@ class MeasurementsController(ezui.WindowController):
     def previewCallback(self, sender):
         postEvent(f"{self.key}.changed")
 
+    def permillCallback(self, sender):
+        if sender.get():
+            self.valueMode = 'permill'
+        else:
+            self.valueMode = 'units'
+        postEvent(f"{self.key}.changed")
+
     def colorButtonCallback(self, sender):
         postEvent(f"{self.key}.changed")
 
@@ -751,6 +765,9 @@ class MeasurementsController(ezui.WindowController):
             item['point1'] = p2
             item['point2'] = p1
 
+        postEvent(f"{self.key}.changed")
+
+    def italicCorrectionCallback(self, sender):
         postEvent(f"{self.key}.changed")
 
     # glyph cells
@@ -809,6 +826,8 @@ class MeasurementsController(ezui.WindowController):
         table = self.w.getItem("fontMeasurements")
         items = table.get()
 
+        italicCorrection = self.w.getItem("italicCorrection").get()
+
         needReload = []
         for itemIndex, item in enumerate(items):
             try:
@@ -827,7 +846,7 @@ class MeasurementsController(ezui.WindowController):
                 item['glyph2'], pt2_index,
                 item['parent']
             )
-            distanceUnits = M.measure(self.font)
+            distanceUnits = M.measure(self.font, italicCorrection=italicCorrection)
             item['units'] = distanceUnits
 
             if distanceUnits and self.font.info.unitsPerEm:
@@ -836,7 +855,7 @@ class MeasurementsController(ezui.WindowController):
 
             # get default value
             if self.defaultFont:
-                distanceDefault = M.measure(self.defaultFont)
+                distanceDefault = M.measure(self.defaultFont, italicCorrection=italicCorrection)
                 item['default'] = distanceDefault
                 # calculate d-scale
                 if distanceUnits and distanceDefault:
@@ -908,6 +927,7 @@ class MeasurementsController(ezui.WindowController):
     def _updateGlyphMeasurements(self):
         table = self.w.getItem("glyphMeasurements")
         items = table.get()
+        italicCorrection = self.w.getItem("italicCorrection").get()
 
         # get font-level values
         fontMeasurements = self.w.getItem("fontMeasurements").get()
@@ -933,7 +953,7 @@ class MeasurementsController(ezui.WindowController):
                 self.glyph.name, pt2_index,
                 item['font']
             )
-            distanceUnits = M.measure(self.font)
+            distanceUnits = M.measure(self.font, italicCorrection=italicCorrection)
 
             # no measurement value
             if distanceUnits is None:
@@ -968,7 +988,7 @@ class MeasurementsController(ezui.WindowController):
 
             # get default value
             if self.defaultFont:
-                distanceDefault = M.measure(self.defaultFont)
+                distanceDefault = M.measure(self.defaultFont, italicCorrection=italicCorrection)
                 item['default'] = distanceDefault
                 # calculate d-scale
                 if distanceUnits and distanceDefault:
@@ -1055,16 +1075,20 @@ class MeasurementsSubscriberGlyphEditor(Subscriber):
         self._drawGlyphMeasurements()
 
     def _drawGlyphMeasurements(self):
-        table         = self.controller.w.getItem("glyphMeasurements")
-        items         = table.get()
-        selectedItems = table.getSelectedItems()
-        color         = self.controller.w.getItem("colorButton").get()
-        preview       = self.controller.w.getItem("preview").get()
+        table            = self.controller.w.getItem("glyphMeasurements")
+        items            = table.get()
+        selectedItems    = table.getSelectedItems()
+        color            = self.controller.w.getItem("colorButton").get()
+        preview          = self.controller.w.getItem("preview").get()
+        italicCorrection = self.controller.w.getItem("italicCorrection").get()
 
         self.measurementsLayer.clearSublayers()
 
         if not preview:
             return
+
+        R, G, B, A = color
+        sw = 10000000
 
         with self.measurementsLayer.sublayerGroup():
             for item in items:
@@ -1085,26 +1109,43 @@ class MeasurementsSubscriberGlyphEditor(Subscriber):
                     continue
 
                 if item in selectedItems:
-                    direction = item['direction']
-                    if direction == 'x':
-                        P1 = pt1.x, pt1.y
-                        P2 = pt2.x, pt1.y
-                    elif direction == 'y':
-                        P1 = pt2.x, pt1.y
-                        P2 = pt2.x, pt2.y
-                    else: # angled
-                        P1 = pt1.x, pt1.y
-                        P2 = pt2.x, pt2.y
 
-                    R, G, B, a = color
-                    self.measurementsLayer.appendLineSublayer(
-                        startPoint=P1,
-                        endPoint=P2,
-                        strokeColor=(R, G, B, 0.3),
-                        strokeWidth=100000,
+                    d, a = getVector((pt1.x, pt1.y), (pt2.x, pt2.y))
+
+                    direction = item['direction']
+
+                    if direction == 'x':
+                        angle = 90
+                    elif direction == 'y':
+                        angle = 180
+                    else:
+                        angle = a - 90
+
+                    if italicCorrection and direction != 'y':
+                        italicAngle = self.controller.font.info.italicAngle
+                        if italicAngle:
+                            angle += italicAngle
+
+                    pA = vector((pt1.x, pt1.y), angle, sw)
+                    pB = vector((pt2.x, pt2.y), angle, sw)
+                    pC = vector((pt2.x, pt2.y), 180 + angle, sw)
+                    pD = vector((pt1.x, pt1.y), 180 + angle, sw)
+
+                    pathLayer = self.measurementsLayer.appendPathSublayer(
+                        fillColor=(R, G, B, 0.3),
+                        stroke=None,
                     )
 
-                strokeDash = (3, 3) if item not in selectedItems else None
+                    pen = MerzPen()
+                    pen.moveTo(pA)
+                    pen.lineTo(pB)
+                    pen.lineTo(pC)
+                    pen.lineTo(pD)
+                    pen.closePath()
+
+                    pathLayer.setPath(pen.path)
+
+                strokeDash  = (3, 3) if item not in selectedItems else None
                 strokeWidth = 2 if item in selectedItems else 1
                 self.measurementsLayer.appendLineSublayer(
                     startPoint=(pt1.x, pt1.y),
@@ -1120,7 +1161,7 @@ class MeasurementsSubscriberGlyphEditor(Subscriber):
                     self.measurementsLayer.appendTextLineSublayer(
                         position=(cx, cy),
                         backgroundColor=color,
-                        text=f"{item['units']}",
+                        text=f"{direction}:{item[self.controller.valueMode]}",
                         font="system",
                         weight="bold",
                         pointSize=9,

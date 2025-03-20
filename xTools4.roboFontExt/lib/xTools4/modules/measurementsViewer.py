@@ -371,6 +371,8 @@ class MeasurementsViewer:
     def makePDF(self, fontMeasurements=True, glyphMeasurements=False, sectionTitle=False, title=False, glyphNames=None):
         if glyphNames is None:
             glyphNames = self.font.glyphOrder
+
+        DB.newDrawing()
         if title:
             self.drawTitlePage()
         if fontMeasurements:

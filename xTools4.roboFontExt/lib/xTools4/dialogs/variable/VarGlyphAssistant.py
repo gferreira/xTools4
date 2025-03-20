@@ -111,7 +111,7 @@ class VarGlyphAssistantController(DesignSpaceSelector_EZUI):
 
     content = DesignSpaceSelector_EZUI.content
     content += '''
-    * Tab: attributes                                @attributesTab
+    * Tab: attributes                            @attributesTab
     > |-----------|---|---|---|---|---|---|---|
     > | file name | W | L | R | C | P | A | C |  @attributesValues
     > |-----------|---|---|---|---|---|---|---|
@@ -314,11 +314,13 @@ class VarGlyphAssistantController(DesignSpaceSelector_EZUI):
                     width=columnFontName,
                     minWidth=columnFontName*0.9,
                     maxWidth=columnFontName*2,
+                    sortable=True,
                 ),
                 dict(
                     identifier="units",
                     title="units",
                     width=columnMeasurements,
+                    sortable=True,
                     cellDescription=dict(
                         cellType='TextField',
                         valueType='integer',
@@ -328,6 +330,7 @@ class VarGlyphAssistantController(DesignSpaceSelector_EZUI):
                     identifier="permill",
                     title="permill",
                     width=columnMeasurements,
+                    sortable=True,
                     cellDescription=dict(
                         cellType='TextField',
                         valueType='integer',
@@ -337,6 +340,7 @@ class VarGlyphAssistantController(DesignSpaceSelector_EZUI):
                     identifier="scale_d",
                     title="d-scale",
                     width=columnMeasurements,
+                    sortable=True,
                     cellDescription=dict(
                         valueToCellConverter=scaleValueToCellConverter,
                         cellToValueConverter=scaleCellToValueConverter,
