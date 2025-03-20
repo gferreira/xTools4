@@ -7,16 +7,17 @@ reload(xTools4.modules.measurements)
 import os, json
 from random import random
 import ezui
-from merz import MerzView
+from merz import MerzView, MerzPen
 from mojo import drawingTools as ctx
 from mojo.UI import PutFile, GetFile, CurrentFontWindow
 from mojo.roboFont import OpenFont, CurrentFont, CurrentGlyph
 from mojo.subscriber import Subscriber, registerGlyphEditorSubscriber, unregisterGlyphEditorSubscriber, registerRoboFontSubscriber, unregisterRoboFontSubscriber, registerSubscriberEvent, roboFontSubscriberEventRegistry
 from mojo.events import postEvent, addObserver, removeObserver
 from xTools4.modules.linkPoints2 import readMeasurements, getPointAtIndex, getIndexForPoint, getAnchorPoint
-from xTools4.modules.measurements import Measurement
+from xTools4.modules.measurements import Measurement, offsetAngledPoint
 from xTools4.modules.measurementsViewer import MeasurementsViewer
 from xTools4.modules.messages import showMessage
+from xTools4.modules.measureHandles import vector, getVector
 
 '''
 M E A S U R E M E N T S v4
@@ -1074,16 +1075,20 @@ class MeasurementsSubscriberGlyphEditor(Subscriber):
         self._drawGlyphMeasurements()
 
     def _drawGlyphMeasurements(self):
-        table         = self.controller.w.getItem("glyphMeasurements")
-        items         = table.get()
-        selectedItems = table.getSelectedItems()
-        color         = self.controller.w.getItem("colorButton").get()
-        preview       = self.controller.w.getItem("preview").get()
+        table            = self.controller.w.getItem("glyphMeasurements")
+        items            = table.get()
+        selectedItems    = table.getSelectedItems()
+        color            = self.controller.w.getItem("colorButton").get()
+        preview          = self.controller.w.getItem("preview").get()
+        italicCorrection = self.controller.w.getItem("italicCorrection").get()
 
         self.measurementsLayer.clearSublayers()
 
         if not preview:
             return
+
+        R, G, B, A = color
+        sw = 10000000
 
         with self.measurementsLayer.sublayerGroup():
             for item in items:
@@ -1104,26 +1109,43 @@ class MeasurementsSubscriberGlyphEditor(Subscriber):
                     continue
 
                 if item in selectedItems:
-                    direction = item['direction']
-                    if direction == 'x':
-                        P1 = pt1.x, pt1.y
-                        P2 = pt2.x, pt1.y
-                    elif direction == 'y':
-                        P1 = pt2.x, pt1.y
-                        P2 = pt2.x, pt2.y
-                    else: # angled
-                        P1 = pt1.x, pt1.y
-                        P2 = pt2.x, pt2.y
 
-                    R, G, B, a = color
-                    self.measurementsLayer.appendLineSublayer(
-                        startPoint=P1,
-                        endPoint=P2,
-                        strokeColor=(R, G, B, 0.3),
-                        strokeWidth=100000,
+                    d, a = getVector((pt1.x, pt1.y), (pt2.x, pt2.y))
+
+                    direction = item['direction']
+
+                    if direction == 'x':
+                        angle = 90
+                    elif direction == 'y':
+                        angle = 180
+                    else:
+                        angle = a - 90
+
+                    if italicCorrection and direction != 'y':
+                        italicAngle = self.controller.font.info.italicAngle
+                        if italicAngle:
+                            angle += italicAngle
+
+                    pA = vector((pt1.x, pt1.y), angle, sw)
+                    pB = vector((pt2.x, pt2.y), angle, sw)
+                    pC = vector((pt2.x, pt2.y), 180 + angle, sw)
+                    pD = vector((pt1.x, pt1.y), 180 + angle, sw)
+
+                    pathLayer = self.measurementsLayer.appendPathSublayer(
+                        fillColor=(R, G, B, 0.3),
+                        stroke=None,
                     )
 
-                strokeDash = (3, 3) if item not in selectedItems else None
+                    pen = MerzPen()
+                    pen.moveTo(pA)
+                    pen.lineTo(pB)
+                    pen.lineTo(pC)
+                    pen.lineTo(pD)
+                    pen.closePath()
+
+                    pathLayer.setPath(pen.path)
+
+                strokeDash  = (3, 3) if item not in selectedItems else None
                 strokeWidth = 2 if item in selectedItems else 1
                 self.measurementsLayer.appendLineSublayer(
                     startPoint=(pt1.x, pt1.y),
