@@ -10,24 +10,7 @@ A tool to create and visualize font- and glyph-level measurements.
 <span class="badge text-bg-success rounded-0">RF4</span> Rewritten using the new RoboFont 4 APIs.  
 
 
-Font
-----
-
-Use the **font** tab to create and edit font-level measurements.
-
 ![]({{ site.url }}/images/variable/Measurements_font.png){: .img-fluid}
-
-add (+)
-: Add a new empty font-level measurement to the list.  
-
-remove (-)
-: Delete the selected font-level measurement(s) from the list.  
-
-p-threshold
-: Treshold value for validating the scale of the font measurement in relation to its parent value.
-
-d-threshold
-: Treshold value for validating the scale of the font measurement in relation to the default font.
 
 load…
 : Load measurement data from an external JSON file into the UI.
@@ -40,6 +23,27 @@ default…
 
 PDF…
 : Save a visual overview of all measurements to a PDF file.
+
+italic correction
+: Enable or disable italic angle and offset correction.
+
+
+Font
+----
+
+Use the **font** tab to create and edit font-level measurements.
+
+add (+)
+: Add a new empty font-level measurement to the list.  
+
+remove (-)
+: Delete the selected font-level measurement(s) from the list.  
+
+p-threshold
+: Treshold value for validating the scale of the font measurement in relation to its parent value.
+
+d-threshold
+: Treshold value for validating the scale of the font measurement in relation to the default font.
 
 <div class="card bg-light my-3 rounded-0">
 <div class="card-header">note</div>
@@ -75,6 +79,9 @@ display
 color
 : Choose a color for the measurement lines and captions in the Glyph Editor visualization.
 
+permill
+: Switch interactive measurements from units to permill values.
+
 flip
 : Invert the direction of selected measurements by swapping point indexes 1 and 2.
 
@@ -103,7 +110,14 @@ Glyphs containing measurements are marked with a letter **M** in the Font Overvi
 
 The Glyph View displays a visualization of the measurements in the current glyph:
 
+<div class='row'>
+<div class='col-lg' markdown='1'>
 ![]({{ site.url }}/images/variable/Measurements_preview.png){: .img-fluid}
+</div>
+<div class='col-lg' markdown='1'>
+![]({{ site.url }}/images/variable/Measurements_preview-italic.png){: .img-fluid}
+</div>
+</div>
 
 - Dotted lines indicate a measurement between pairs of points.
 - Select one or more measurements in the list to highlight and show their direction and distance.

@@ -8,13 +8,14 @@ import os, json
 from random import random
 import ezui
 from merz import MerzView, MerzPen
+from fontParts.fontshell.point import RPoint
 from mojo import drawingTools as ctx
 from mojo.UI import PutFile, GetFile, CurrentFontWindow
 from mojo.roboFont import OpenFont, CurrentFont, CurrentGlyph
 from mojo.subscriber import Subscriber, registerGlyphEditorSubscriber, unregisterGlyphEditorSubscriber, registerRoboFontSubscriber, unregisterRoboFontSubscriber, registerSubscriberEvent, roboFontSubscriberEventRegistry
 from mojo.events import postEvent, addObserver, removeObserver
 from xTools4.modules.linkPoints2 import readMeasurements, getPointAtIndex, getIndexForPoint, getAnchorPoint
-from xTools4.modules.measurements import Measurement, offsetAngledPoint
+from xTools4.modules.measurements import Measurement
 from xTools4.modules.measurementsViewer import MeasurementsViewer
 from xTools4.modules.messages import showMessage
 from xTools4.modules.measureHandles import vector, getVector
@@ -1087,8 +1088,14 @@ class MeasurementsSubscriberGlyphEditor(Subscriber):
         if not preview:
             return
 
+        if self.controller.font is None:
+            return
+
         R, G, B, A = color
         sw = 10000000
+
+        italicAngle  = self.controller.font.info.italicAngle
+        italicOffset = self.controller.font.lib.get('com.typemytype.robofont.italicSlantOffset')
 
         with self.measurementsLayer.sublayerGroup():
             for item in items:
@@ -1099,7 +1106,6 @@ class MeasurementsSubscriberGlyphEditor(Subscriber):
                     pt1 = getPointAtIndex(self.controller.glyph, int(pt1_index))
                 except:
                     pt1 = getAnchorPoint(self.controller.font, pt1_index)
-
                 try:
                     pt2 = getPointAtIndex(self.controller.glyph, int(pt2_index))
                 except:
@@ -1121,10 +1127,8 @@ class MeasurementsSubscriberGlyphEditor(Subscriber):
                     else:
                         angle = a - 90
 
-                    if italicCorrection and direction != 'y':
-                        italicAngle = self.controller.font.info.italicAngle
-                        if italicAngle:
-                            angle += italicAngle
+                    if italicCorrection and italicAngle and direction != 'y':
+                        angle += italicAngle
 
                     pA = vector((pt1.x, pt1.y), angle, sw)
                     pB = vector((pt2.x, pt2.y), angle, sw)
@@ -1135,7 +1139,6 @@ class MeasurementsSubscriberGlyphEditor(Subscriber):
                         fillColor=(R, G, B, 0.3),
                         stroke=None,
                     )
-
                     pen = MerzPen()
                     pen.moveTo(pA)
                     pen.lineTo(pB)

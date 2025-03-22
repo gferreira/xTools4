@@ -3,7 +3,6 @@ import xTools4.modules.linkPoints2
 reload(xTools4.modules.linkPoints2)
 
 import os, csv
-from math import tan, radians
 # from lib.tools.bezierTools import angledPoint
 from fontTools.agl import UV2AGL
 from fontParts.world import RFont
@@ -13,15 +12,6 @@ from xTools4.modules.linkPoints2 import *
 def permille(value, unitsPerEm):
     '''Converts a value in font units to a permille value (thousands of em).'''
     return round(value * 1000 / unitsPerEm)
-
-def angledPoint(point, angle):
-    x, y = point
-    d = tan(radians(angle)) * y
-    return x - d, y
-
-def offsetAngledPoint(point, angle, offset):
-    x, y = angledPoint(point, -angle)
-    return x - offset, y
 
 
 class FontMeasurements:

@@ -12,7 +12,7 @@ A tool to validate glyphs in the current font against glyphs from another source
 
 <div class='row'>
 <div class='col-4' markdown='1'>
-![]({{ site.url }}/images/variable/GlyphValidator_checks.png){: .img-fluid}
+![]({{ site.url }}/images/variable/GlyphValidator.png){: .img-fluid}
 </div>
 <div class='col-8' markdown='1'>
 get default…
@@ -24,6 +24,15 @@ reload
 checks
 : Select which glyph attributes to check and report on.
 
+mark groups
+: Apply mark colors to indicate different validation groups.
+
+validation groups
+: Select which validation groups to use to filter the font overview.
+
+filter glyphs
+: Filter the font overview to show only glyphs in the selected validation group(s).
+
 font window
 : Show/hide check results in the Font Overview’s glyph cells.
 
@@ -32,18 +41,26 @@ glyph window
 </div>
 </div>
 
-### Validation groups
-{: .h5 }
+
+Checks
+------
+
+Glyph attributes in the current font are checked against attributes of the same glyph in the default font.
+
+- width
+- left
+- right
+- points
+- components
+- anchors
+- unicode
+
+
+Validation groups
+-----------------
 
 Based on the results of the attribute checks, a glyph can be categorized as belonging to one of five validation groups.
 
-Use the checkboxes to show/hide glyphs from individual validation groups from the Font Overview.
-
-<div class='row'>
-<div class='col-4' markdown='1'>
-![]({{ site.url }}/images/variable/GlyphValidator_filters.png){: .img-fluid}
-</div>
-<div class='col-8' markdown='1'>
 = contours
 : Glyphs consisting only of contours (or empty), equal to the default.
 
@@ -59,19 +76,17 @@ Use the checkboxes to show/hide glyphs from individual validation groups from th
 ‼ not allowed
 : Glyphs which are not allowed: nested contours, mixed contours and components.
 
-mark glyphs
-: Apply mark colors to identify the different types of glyphs.
-</div>
-</div>
 
-
-Check results
--------------
+Display options
+---------------
 
 ### Font window
 {: .h5 }
 
-Labels with check results are shown in the Font Overview’s glyph cells if the option *font window* is activated.
+If the option *font window* is activated, the validation results are shown in the Font Overview’s glyph cells:
+
+- labels with check results are displayed at the top left of each cell
+- a colored triangular patch indicating the validation group is shown at the top right (see below)
 
 ![]({{ site.url }}/images/variable/GlyphValidator_font-window.png){: .img-fluid}
 
@@ -248,7 +263,7 @@ Glyph attributes are considered **identical** if the following conditions are me
   </tr>
 </table>
 
-### Mark colors
+### Validation group colors
 {: .h5 }
 
 See [GlyphSetProofer > Validation details > Cell colors](../glyphset-proofer) for the meaning of each color.

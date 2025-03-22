@@ -1,5 +1,5 @@
 import json
-from math import sqrt, tan, pi
+from math import sqrt, tan, pi, radians
 from fontParts.fontshell.point import RPoint
 
 '''
@@ -10,6 +10,17 @@ Tools to make various kinds of measurements in a font.
 '''
 
 KEY = 'com.xTools4.measurements'
+
+
+def angledPoint(point, angle):
+    x, y = point
+    d = tan(radians(angle)) * y
+    return x - d, y
+
+def offsetAngledPoint(point, angle, offset):
+    x, y = angledPoint(point, -angle)
+    return x - offset, y
+
 
 def getPointAtIndex(glyph, ptIndex, isDefcon=False):
     '''Get the point at the given linear point index.
@@ -31,18 +42,27 @@ def getPointAtIndex(glyph, ptIndex, isDefcon=False):
         for pi, p in enumerate(pointsList):
             points[n] = ci, pi
             n += 1
+
+    offset = glyph.font.lib.get('com.typemytype.robofont.italicSlantOffset')
+
     # n+1 : right margin
     if ptIndex > len(points)-1:
         P = RPoint()
         P.x = glyph.width
         P.y = 0
+        if offset:
+            P.x += offset
         return P
+
     # -1 : left margin
     if ptIndex < 0:
         P = RPoint()
         P.x = 0
         P.y = 0
+        if offset:
+            P.x += offset
         return P
+
     # get point at index
     ci, pi = points[ptIndex]
     return glyph[ci].points[pi] if not isDefcon else glyph[ci][pi]
@@ -56,12 +76,7 @@ def getAnchorPoint(font, anchor):
     X -> xheight
     '''
     P = RPoint()
-
-    # if font.info.italicAngle:
-    #     P.x = tan(font.info.italicAngle * pi / 180)
-    # else:
     P.x = 0
-
     if anchor == 'X':
         P.y = font.info.xHeight
     elif anchor == 'C':
@@ -72,6 +87,12 @@ def getAnchorPoint(font, anchor):
         P.y = font.info.ascender
     else: # baseline
         P.y = 0
+
+    # angle  = font.info.italicAngle
+    # offset = font.lib.get('com.typemytype.robofont.italicSlantOffset') or 0
+    # if angle or offset:
+    #     x, y = offsetAngledPoint((P.x, P.y), angle, offset)
+    #     P.x = x
 
     return P
 

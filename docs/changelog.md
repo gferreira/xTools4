@@ -9,6 +9,14 @@ All notable changes to xTools4 are documented in this file.
 {: .lead }
 
 
+0.1.6
+-----
+
+- <span class='badge rounded-0'>Added</span> Adding italic angle correction and value mode option to the Measurements tool.
+- <span class='badge rounded-0'>Changed</span> Rewriting GlyphValidator filters to improve performance.
+{: ._changelog .mb-4 }
+
+
 0.1.5
 -----
 
