@@ -26,13 +26,13 @@ class BuildConstructionDialog(GlyphsDialogBase):
 
     '''
 
-    title = 'constructions'
-    key   = f'{GlyphsDialogBase.key}.constructions'
+    title = 'construct'
+    key   = f'{GlyphsDialogBase.key}.construct'
     settings = {}
     glyphConstructionPath = None
 
     def __init__(self):
-        self.height = 300 # self.textHeight * 3 + self.padding * 4
+        self.height = 280
         self.w = self.window(
             (self.width, self.height),
             self.title,

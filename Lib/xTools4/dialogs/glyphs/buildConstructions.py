@@ -3,7 +3,7 @@ import ezui
 
 class BuildConstructionDialog(ezui.WindowController):
 
-    title   = 'constructions'
+    title   = 'construct'
     width   = 123
     margins = 10
 

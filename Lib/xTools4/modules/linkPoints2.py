@@ -74,6 +74,7 @@ def getAnchorPoint(font, anchor):
     C -> capheight
     D -> descender
     X -> xheight
+
     '''
     P = RPoint()
     P.x = 0
@@ -88,11 +89,9 @@ def getAnchorPoint(font, anchor):
     else: # baseline
         P.y = 0
 
-    # angle  = font.info.italicAngle
     # offset = font.lib.get('com.typemytype.robofont.italicSlantOffset') or 0
-    # if angle or offset:
-    #     x, y = offsetAngledPoint((P.x, P.y), angle, offset)
-    #     P.x = x
+    # if offset:
+    #     P.x += x
 
     return P
 

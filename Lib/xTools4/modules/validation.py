@@ -308,15 +308,22 @@ def assignValidationGroup(g1, g2):
         else:
             # components equal to default
             if all(checkResults['compatibility']) and checkResults['equality']['components']:
-                validationGroup = 'componentsEqual'
+                # width equal to default
+                if g1.width == g2.width:
+                    validationGroup = 'componentsEqual'
+                # width different from default
+                else:
+                    validationGroup = 'componentsDifferent'
             # components different from default
             else:
                 validationGroup = 'componentsDifferent'
     else:
         # contours equal to default
         if checkResults['compatibility']['points'] and checkResults['equality']['points']:
+            # width equal to default
             if g1.width == g2.width:
                 validationGroup = 'contoursEqual'
+            # width different from default
             else:
                 validationGroup = 'contoursDifferent'
         else:
@@ -442,49 +449,8 @@ def applyValidationColors(font, defaultFont, colors=None, glyphNames=None):
 
         defaultGlyph = defaultFont[glyphName]
 
-        results = {
-            'compatibility' : checkCompatibility(currentGlyph, defaultGlyph),
-            'equality'      : checkEquality(currentGlyph, defaultGlyph),
-        }
-
-        if currentGlyph.components:
-            levels = getNestingLevels(currentGlyph)
-            # warning: nested components of mixed contour/components
-            if levels > 1 or len(currentGlyph.contours):
-                currentGlyph.markColor = colors['warning']
-            else:
-                # components equal to default
-                if all(results['compatibility']) and results['equality']['components']:
-                    # width equal to default
-                    if currentGlyph.width == defaultGlyph.width:
-                        currentGlyph.markColor = colors['componentsEqual']
-                    # width different from default
-                    else:
-                        currentGlyph.markColor = colors['componentsDifferent']
-                # components different from default
-                else:
-                    currentGlyph.markColor = colors['componentsDifferent']
-        else:
-            # contours equal to default
-            if results['compatibility']['points'] and results['equality']['points']:
-                # width equal to default
-                if currentGlyph.width == defaultGlyph.width:
-                    currentGlyph.markColor = colors['contoursEqual']
-                # width different from default
-                else:
-                    currentGlyph.markColor = colors['contoursDifferent']
-            else:
-                # empty glyphs
-                if not len(defaultGlyph) and not len(currentGlyph):
-                    # width equal to default
-                    if currentGlyph.width == defaultGlyph.width:
-                        currentGlyph.markColor = colors['contoursEqual']
-                    # width different from default
-                    else:
-                        currentGlyph.markColor = colors['contoursDifferent']
-                # contours different from default
-                else:
-                    currentGlyph.markColor = colors['contoursDifferent']
+        validationGroup = assignValidationGroup(currentGlyph, defaultGlyph)
+        currentGlyph.markColor = colors[validationGroup]
 
     font.changed()
 
