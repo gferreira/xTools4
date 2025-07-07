@@ -367,12 +367,12 @@ class GlyphValidatorGlyphEditor(Subscriber):
 
     def build(self):
         glyphEditor = self.getGlyphEditor()
+
+        # check results
         sizeX, sizeY = 400, 40
-
-        self.merzView = MerzView((0, -sizeY, sizeX, sizeY))
-        container = self.merzView.getMerzContainer()
-
         color = 0, 0.5, 1, 1
+        self.merzViewCheckResults = MerzView((0, -sizeY, sizeX, sizeY))
+        container = self.merzViewCheckResults.getMerzContainer()
         self.checkResultsLayer = container.appendTextBoxSublayer(
             name=f'{KEY}.report',
             position=(0, 0),
@@ -384,7 +384,23 @@ class GlyphValidatorGlyphEditor(Subscriber):
             horizontalAlignment="left",
             verticalAlignment="bottom",
         )
-        glyphEditor.addGlyphEditorSubview(self.merzView)
+        glyphEditor.addGlyphEditorSubview(self.merzViewCheckResults)
+
+        # validation group
+        size = 50
+        self.merzViewValidationGroup = MerzView((-size, -size, 0, size))
+        container = self.merzViewValidationGroup.getMerzContainer()
+        self.validationGroupLayer = container.appendPathSublayer(
+            name=f'{KEY}.validationGroup',
+            position=(-0, 0),
+            fillColor=(1, 1, 1, 0),
+        )
+        pen = self.validationGroupLayer.getPen()
+        pen.moveTo((0, 0))
+        pen.lineTo((size, 0))
+        pen.lineTo((size, size))
+        pen.closePath()
+        glyphEditor.addGlyphEditorSubview(self.merzViewValidationGroup)
 
         # initialize preview
         self.controller.glyph = CurrentGlyph()
@@ -392,7 +408,8 @@ class GlyphValidatorGlyphEditor(Subscriber):
 
     def destroy(self):
         glyphEditor = self.getGlyphEditor()
-        glyphEditor.removeGlyphEditorSubview(self.merzView)
+        glyphEditor.removeGlyphEditorSubview(self.merzViewCheckResults)
+        glyphEditor.removeGlyphEditorSubview(self.merzViewValidationGroup)
 
     def glyphValidatorDidChange(self, info):
         self._drawCheckResults()
@@ -446,6 +463,22 @@ class GlyphValidatorGlyphEditor(Subscriber):
         with self.checkResultsLayer.propertyGroup():
             self.checkResultsLayer.setText(txt)
             self.checkResultsLayer.setVisible(True)
+
+        # draw validation group
+
+        validationGroup = self.controller.glyph.getRepresentation(f"{KEY}.validationGroup", defaultGlyph=defaultGlyph)
+        validationColors = {
+            'componentsEqual'     : colorComponentsEqual,
+            'componentsDifferent' : colorComponentsDifferent,
+            'contoursEqual'       : colorContoursEqual,
+            'contoursDifferent'   : colorContoursDifferent,
+            'warning'             : colorWarning,
+        }
+        validationColor = validationColors[validationGroup]
+        if validationColor is None:
+            validationColor = 1, 1, 1, 1
+
+        self.validationGroupLayer.setFillColor(validationColor)
 
 
 glyphValidatorEvent = f"{KEY}.changed"

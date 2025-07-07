@@ -44,3 +44,5 @@ def copyAnchors(sourceGlyph, targetGlyph, clear=True, proportional=False):
         targetGlyph.appendAnchor(anchor, (x, y))
         targetGlyph.changed()
 
+def renameAnchor(glyph, anchorName):
+    pass

@@ -1,3 +1,3 @@
-# menuTitle : auto smooth points
+# menuTitle : auto smooth
 
 print('not implemented yet')
