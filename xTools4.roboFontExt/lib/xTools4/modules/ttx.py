@@ -1,4 +1,4 @@
-import os
+import os, sys
 import time
 from io import StringIO
 from xml.etree.ElementTree import parse
@@ -31,7 +31,7 @@ def ttx2otf(ttxPath, otfPath=None):
     '''
     # make otf path
     if not otfPath:
-        otfPath = '%s.otf' % os.path.splitext(ttxPath)[0]
+        otfPath = ttxPath.replace('.ttx', '.otf')
     # save otf font
     with SuppressPrint():
         tt = TTFont()
@@ -51,10 +51,52 @@ def otf2ttx(otfPath, ttxPath=None):
     '''
     # make ttx path
     if not ttxPath:
-        ttxPath = '%s.ttx' % os.path.splitext(otfPath)[0]
+        ttxPath = otfPath.replace('.otf', '.ttx')
     # save ttx font
     with SuppressPrint():
         tt = TTFont(otfPath)
+        tt.verbose = False
+        tt.saveXML(ttxPath)
+        tt.close()
+
+def ttx2ttf(ttxPath, ttfPath=None):
+    '''
+    Generate a .ttf font from a .ttx file.
+
+    Args:
+        ttxPath: Path of the .ttx font source.
+        ttfPath: Path of the target .ttf font.
+
+    '''
+    # make ttf path
+    if not ttfPath:
+        ttfPath = ttxPath.replace('.ttx', '.ttf')
+    if os.path.exists(ttfPath):
+        os.remove(ttfPath)
+    # save ttf font
+    with SuppressPrint():
+        tt = TTFont()
+        tt.verbose = False
+        tt.importXML(ttxPath)
+        tt.save(ttfPath)
+        tt.close()
+
+def ttf2ttx(ttfPath, ttxPath=None):
+    '''
+    Generate a .ttx font from a .ttf file.
+
+    Args:
+        ttfPath: Path of the .ttf font source.
+        ttxPath: Path of the target .ttx font.
+
+    '''
+    # make ttx path
+    ttxPath = ttfPath.replace('.ttf', '.ttx')
+    if os.path.exists(ttxPath):
+        os.remove(ttxPath)
+    # save ttx font
+    with SuppressPrint():
+        tt = TTFont(ttfPath)
         tt.verbose = False
         tt.saveXML(ttxPath)
         tt.close()
@@ -253,4 +295,5 @@ def clearDSIG(otfPath, verbose=True):
         print("font does not have a 'DSIG' table")
     finally:
         ttFont.close()
+
 
