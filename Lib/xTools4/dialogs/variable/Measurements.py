@@ -58,7 +58,7 @@ def scaleColorFormatter(attributes, threshold):
 def parentScaleColorFormatter(attributes):
     scaleColorFormatter(attributes, thresholdFontParent)
 
-def defaultScaleFontkColorFormatter(attributes):
+def defaultScaleFontColorFormatter(attributes):
     scaleColorFormatter(attributes, thresholdFontDefault)
 
 def fontScaleColorFormatter(attributes):
@@ -948,6 +948,8 @@ class MeasurementsController(ezui.WindowController):
         items = table.get()
         italicCorrection = self.w.getItem("italicCorrection").get()
 
+        isTempFont = self.font.lib.get(tempEditModeKey) == 'glyphs'
+
         # get font-level values
         fontMeasurements = self.w.getItem("fontMeasurements").get()
         fontValues       = { i['name']: i['units']  for i in fontMeasurements }
@@ -1007,7 +1009,13 @@ class MeasurementsController(ezui.WindowController):
 
             # get default value
             if self.defaultFont:
-                distanceDefault = M.measure(self.defaultFont, italicCorrection=italicCorrection)
+
+                # if the font is temporary, get stored measurement values from the font lib
+                if isTempFont and defaultMeasurementsKey in self.font.lib:
+                    distanceDefault = self.font.lib[defaultMeasurementsKey]['glyph'][name]
+                else:
+                    distanceDefault = M.measure(self.defaultFont, italicCorrection=italicCorrection)
+
                 item['default'] = distanceDefault
                 # calculate d-scale
                 if distanceUnits and distanceDefault:
