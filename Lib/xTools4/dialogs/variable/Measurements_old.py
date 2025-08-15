@@ -39,9 +39,7 @@ thresholdFontDefault  = 0.1
 thresholdGlyphFont    = 0.2
 thresholdGlyphDefault = 0.1
 
-tempEditModeKey        = 'com.xTools4.tempEdit.mode'
-fontMeasurementsKey    = 'com.xTools4.measurements.font'
-defaultMeasurementsKey = 'com.xTools4.measurements.default'
+tempEditModeKey = 'com.xTools4.tempEdit.mode'
 
 
 def scaleColorFormatter(attributes, threshold):
@@ -58,7 +56,7 @@ def scaleColorFormatter(attributes, threshold):
 def parentScaleColorFormatter(attributes):
     scaleColorFormatter(attributes, thresholdFontParent)
 
-def defaultScaleFontkColorFormatter(attributes):
+def defaultScaleFontColorFormatter(attributes):
     scaleColorFormatter(attributes, thresholdFontDefault)
 
 def fontScaleColorFormatter(attributes):
@@ -830,13 +828,11 @@ class MeasurementsController(ezui.WindowController):
 
         table = self.w.getItem("fontMeasurements")
         items = table.get()
-        italicCorrection = self.w.getItem("italicCorrection").get()
 
-        isTempFont = self.font.lib.get(tempEditModeKey) == 'glyphs'
+        italicCorrection = self.w.getItem("italicCorrection").get()
 
         needReload = []
         for itemIndex, item in enumerate(items):
-            # initiate the font measuring object
             try:
                 pt1_index = int(item['point1'])
             except:
@@ -853,13 +849,7 @@ class MeasurementsController(ezui.WindowController):
                 item['glyph2'], pt2_index,
                 item['parent']
             )
-
-            # if the font is temporary, get stored measurement values from the glyph lib
-            if isTempFont and fontMeasurementsKey in self.glyph.lib:
-                distanceUnits = self.glyph.lib[fontMeasurementsKey][item['name']]
-            else:
-                distanceUnits = M.measure(self.font, italicCorrection=italicCorrection)
-
+            distanceUnits = M.measure(self.font, italicCorrection=italicCorrection)
             item['units'] = distanceUnits
 
             if distanceUnits and self.font.info.unitsPerEm:
@@ -899,8 +889,8 @@ class MeasurementsController(ezui.WindowController):
             table.set(items)
             return
 
-        # handle temp fonts: discard extension to get default glyph name
-        if self.glyph.font.lib.get(tempEditModeKey) == 'glyphs':
+        # get default glyph from temp glyph
+        if self.glyph.lib.get(tempEditModeKey) == 'glyphs':
             glyphName = self.glyph.name[:self.glyph.name.rfind('.')]
         else:
             glyphName = self.glyph.name

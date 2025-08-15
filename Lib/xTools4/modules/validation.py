@@ -12,7 +12,7 @@ colorContoursDifferent   = None
 colorContoursEqual       = 0.00, 0.65, 1.00, 0.35
 colorWarning             = 1.00, 0.00, 0.00, 0.65
 
-tempEditModeKey = 'com.hipertipo.tempEdit.mode'
+tempEditModeKey = 'com.xTools4.tempEdit.mode'
 
 # ----------------------
 # glyph-level validation

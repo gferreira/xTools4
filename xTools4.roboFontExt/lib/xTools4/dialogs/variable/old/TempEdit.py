@@ -46,7 +46,7 @@ def setupNewFont(font, showPoints=True):
 class TempEdit:
 
     title      = 'TempEdit'
-    key        = 'com.hipertipo.tempEdit'
+    key        = 'com.xTools4.tempEdit'
     width      = 123*3
     height     = 640
     padding    = 10

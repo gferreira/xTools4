@@ -3,10 +3,11 @@ import xTools4.modules.linkPoints2
 reload(xTools4.modules.linkPoints2)
 
 import os, csv
-# from lib.tools.bezierTools import angledPoint
 from fontTools.agl import UV2AGL
 from fontParts.world import RFont
 from xTools4.modules.linkPoints2 import *
+
+tempEditModeKey = 'com.xTools4.tempEdit.mode'
 
 
 def permille(value, unitsPerEm):
@@ -54,6 +55,61 @@ class FontMeasurements:
     def print(self):
         for k, v in self.values.items():
             print(k, v)
+
+
+class GlyphMeasurements:
+    '''
+    M = GlyphMeasurements(font, glyphName)
+    M.read(jsonPath)
+    M.measure(g)
+
+    print(M.definitions)
+    print(M.values)
+
+    '''
+
+    def __init__(self, font, glyphName, definitions=[]):
+        self.font        = font
+        self.glyphName   = glyphName
+        self.definitions = definitions
+        self.values      = {}
+
+    def read(self, jsonPath):
+        M = readMeasurements(jsonPath)
+
+        measurements = M['glyphs'].get(self.glyphName)
+        if not measurements:
+            print('no measurements for glyph!')
+            return
+
+        self.definitions = []
+        for key, attrs in measurements.items():
+            parts = key.split()
+            if len(parts) == 2:
+                pt1, pt2 = parts
+            else:
+                continue
+
+            try:
+                pt1 = int(pt1)
+            except:
+                pass
+            try:
+                pt2 = int(pt2)
+            except:
+                pass
+
+            self.definitions.append((attrs['name'], attrs['direction'], self.glyphName, pt1, self.glyphName, pt2))
+
+    def measure(self, glyph=None, roundToInt=True, absolute=False):
+
+        for d in self.definitions:
+            if glyph is not None:
+                d = list(d)
+                d[2] = d[4] = glyph.name
+
+            M = Measurement(*d)
+            self.values[M.name] = M.measure(self.font, roundToInt=roundToInt, absolute=absolute)
 
 
 class Measurement:
@@ -155,4 +211,5 @@ class Measurement:
             print('...done.\n')
 
         return d
+
 

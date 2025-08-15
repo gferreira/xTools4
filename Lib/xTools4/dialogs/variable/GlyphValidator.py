@@ -17,7 +17,7 @@ from xTools4.dialogs.variable.Measurements import colorCheckTrue, colorCheckFals
 
 
 KEY = 'com.xTools4.glyphValidator'
-tempEditModeKey = 'com.hipertipo.tempEdit.mode'
+tempEditModeKey = 'com.xTools4.tempEdit.mode'
 
 
 def checkResultsFactory(glyph, defaultGlyph=None):
@@ -52,8 +52,8 @@ class GlyphValidatorController(ezui.WindowController):
     ( reload ↺ )       @reloadButton
 
     [X] width          @widthCheck
-    [ ] left           @leftCheck
-    [ ] right          @rightCheck
+    [X] left           @leftCheck
+    [X] right          @rightCheck
     [X] points         @pointsCheck
     [X] components     @componentsCheck
     [X] anchors        @anchorsCheck
@@ -272,7 +272,7 @@ class GlyphValidatorController(ezui.WindowController):
         glyph = notification['glyph']
 
         # get default glyph from temp glyph
-        if glyph.lib.get(tempEditModeKey) == 'glyphs':
+        if glyph.font.lib.get(tempEditModeKey) == 'glyphs':
             defaultGlyphName = glyph.name[:glyph.name.rfind('.')]
         else:
             defaultGlyphName = glyph.name
