@@ -12,6 +12,8 @@ colorContoursDifferent   = None
 colorContoursEqual       = 0.00, 0.65, 1.00, 0.35
 colorWarning             = 1.00, 0.00, 0.00, 0.65
 
+tempEditModeKey = 'com.hipertipo.tempEdit.mode'
+
 # ----------------------
 # glyph-level validation
 # ----------------------
@@ -444,10 +446,16 @@ def applyValidationColors(font, defaultFont, colors=None, glyphNames=None):
         currentGlyph = font[glyphName]
         currentGlyph.markColor = None
 
-        if glyphName not in defaultFont:
+        # get default glyph from temp glyph
+        if currentGlyph.lib.get(tempEditModeKey) == 'glyphs':
+            defaultGlyphName = glyphName[:glyphName.rfind('.')]
+        else:
+            defaultGlyphName = glyphName
+
+        if defaultGlyphName not in defaultFont:
             continue
 
-        defaultGlyph = defaultFont[glyphName]
+        defaultGlyph = defaultFont[defaultGlyphName]
 
         validationGroup = assignValidationGroup(currentGlyph, defaultGlyph)
         currentGlyph.markColor = colors[validationGroup]

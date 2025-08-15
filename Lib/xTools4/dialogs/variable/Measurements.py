@@ -39,6 +39,8 @@ thresholdFontDefault  = 0.1
 thresholdGlyphFont    = 0.2
 thresholdGlyphDefault = 0.1
 
+tempEditModeKey = 'com.hipertipo.tempEdit.mode'
+
 
 def scaleColorFormatter(attributes, threshold):
     value = attributes['value']
@@ -887,7 +889,13 @@ class MeasurementsController(ezui.WindowController):
             table.set(items)
             return
 
-        measurements = self.glyphMeasurements.get(self.glyph.name)
+        # get default glyph from temp glyph
+        if self.glyph.lib.get(tempEditModeKey) == 'glyphs':
+            glyphName = self.glyph.name[:self.glyph.name.rfind('.')]
+        else:
+            glyphName = self.glyph.name
+
+        measurements = self.glyphMeasurements.get(glyphName)
 
         if measurements is None:
             table.set(items)
