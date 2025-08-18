@@ -20,6 +20,7 @@ from xTools4.modules.measurementsViewer import MeasurementsViewer
 from xTools4.modules.messages import showMessage
 from xTools4.modules.measureHandles import vector, getVector
 
+
 '''
 M E A S U R E M E N T S v4
 
@@ -147,9 +148,10 @@ class MeasurementsController(ezui.WindowController):
     [X] italic correction @italicCorrection
 
     ( load… )       @loadButton
-    ( save… )       @saveButton
+    ( save  )       @saveButton
     ( default… )    @defaultButton
-    ( PDF… )        @makePdfButton
+    # ( PDF… )      @makePdfButton
+
     """
 
     descriptionData = dict(
@@ -494,14 +496,14 @@ class MeasurementsController(ezui.WindowController):
     # ---------
 
     def loadButtonCallback(self, sender):
-        measurementsPath = GetFile(message='Select JSON file with measurements:')
-        if measurementsPath is None:
+        self.measurementsPath = GetFile(message='Select JSON file with measurements:')
+        if self.measurementsPath is None:
             return
 
         if self.verbose:
-            print(f'loading data from {os.path.split(measurementsPath)[-1]}... ', end='')
+            print(f'loading data from {os.path.split(self.measurementsPath)[-1]}... ', end='')
 
-        self.measurements = readMeasurements(measurementsPath)
+        self.measurements = readMeasurements(self.measurementsPath)
 
         self._loadFontMeasurements()
         self._loadGlyphMeasurements()
@@ -530,13 +532,14 @@ class MeasurementsController(ezui.WindowController):
         self.measurements['font'] = fontMeasurements
 
         # get JSON file path
-        jsonFileName = 'measurements.json'
-        jsonPath = PutFile(message='Save measurements to JSON file:', fileName=jsonFileName)
-
-        if jsonPath is None:
-            if self.verbose:
-                print('[cancelled]\n')
-            return
+        jsonPath = self.measurementsPath
+        if not jsonPath:
+            jsonFileName = 'measurements.json'
+            jsonPath = PutFile(message='Save measurements to JSON file:', fileName=jsonFileName)
+            if jsonPath is None:
+                if self.verbose:
+                    print('[cancelled]\n')
+                return
 
         if os.path.exists(jsonPath):
             os.remove(jsonPath)
@@ -1009,7 +1012,6 @@ class MeasurementsController(ezui.WindowController):
 
             # get default value
             if self.defaultFont:
-
                 # if the font is temporary, get stored measurement values from the font lib
                 if isTempFont and defaultMeasurementsKey in self.font.lib:
                     distanceDefault = self.font.lib[defaultMeasurementsKey]['glyph'][name]
@@ -1080,6 +1082,11 @@ class MeasurementsSubscriberRoboFont(Subscriber):
 class MeasurementsSubscriberGlyphEditor(Subscriber):
 
     controller = None
+
+    strokeDash          = 1, 5
+    strokeWidth         = 2
+    strokeWidthSelected = 2
+    strokeCap           = "round"
 
     def build(self):
         glyphEditor = self.getGlyphEditor()
@@ -1174,14 +1181,15 @@ class MeasurementsSubscriberGlyphEditor(Subscriber):
 
                     pathLayer.setPath(pen.path)
 
-                strokeDash  = (3, 3) if item not in selectedItems else None
-                strokeWidth = 2 if item in selectedItems else 1
+                strokeDash  = self.strokeDash if item not in selectedItems else None
+                strokeWidth = self.strokeWidthSelected if item in selectedItems else self.strokeWidth
                 self.measurementsLayer.appendLineSublayer(
                     startPoint=(pt1.x, pt1.y),
                     endPoint=(pt2.x, pt2.y),
                     strokeColor=color,
                     strokeWidth=strokeWidth,
                     strokeDash=strokeDash,
+                    strokeCap=self.strokeCap,
                 )
 
                 if item in selectedItems:

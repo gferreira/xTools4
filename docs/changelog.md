@@ -9,6 +9,13 @@ All notable changes to xTools4 are documented in this file.
 {: .lead }
 
 
+0.1.8
+-----
+
+- <span class='badge rounded-0'>Changed</span> Making measurement and validation tools work with temporary fonts.
+{: ._changelog .mb-4 }
+
+
 0.1.7
 -----
 

@@ -20,6 +20,7 @@ from xTools4.modules.measurementsViewer import MeasurementsViewer
 from xTools4.modules.messages import showMessage
 from xTools4.modules.measureHandles import vector, getVector
 
+
 '''
 M E A S U R E M E N T S v4
 
@@ -38,6 +39,10 @@ thresholdFontParent   = 0.1
 thresholdFontDefault  = 0.1
 thresholdGlyphFont    = 0.2
 thresholdGlyphDefault = 0.1
+
+tempEditModeKey        = 'com.xTools4.tempEdit.mode'
+fontMeasurementsKey    = 'com.xTools4.measurements.font'
+defaultMeasurementsKey = 'com.xTools4.measurements.default'
 
 
 def scaleColorFormatter(attributes, threshold):
@@ -143,9 +148,10 @@ class MeasurementsController(ezui.WindowController):
     [X] italic correction @italicCorrection
 
     ( load… )       @loadButton
-    ( save… )       @saveButton
+    ( save  )       @saveButton
     ( default… )    @defaultButton
-    ( PDF… )        @makePdfButton
+    # ( PDF… )      @makePdfButton
+
     """
 
     descriptionData = dict(
@@ -490,14 +496,14 @@ class MeasurementsController(ezui.WindowController):
     # ---------
 
     def loadButtonCallback(self, sender):
-        measurementsPath = GetFile(message='Select JSON file with measurements:')
-        if measurementsPath is None:
+        self.measurementsPath = GetFile(message='Select JSON file with measurements:')
+        if self.measurementsPath is None:
             return
 
         if self.verbose:
-            print(f'loading data from {os.path.split(measurementsPath)[-1]}... ', end='')
+            print(f'loading data from {os.path.split(self.measurementsPath)[-1]}... ', end='')
 
-        self.measurements = readMeasurements(measurementsPath)
+        self.measurements = readMeasurements(self.measurementsPath)
 
         self._loadFontMeasurements()
         self._loadGlyphMeasurements()
@@ -526,13 +532,14 @@ class MeasurementsController(ezui.WindowController):
         self.measurements['font'] = fontMeasurements
 
         # get JSON file path
-        jsonFileName = 'measurements.json'
-        jsonPath = PutFile(message='Save measurements to JSON file:', fileName=jsonFileName)
-
-        if jsonPath is None:
-            if self.verbose:
-                print('[cancelled]\n')
-            return
+        jsonPath = self.measurementsPath
+        if not jsonPath:
+            jsonFileName = 'measurements.json'
+            jsonPath = PutFile(message='Save measurements to JSON file:', fileName=jsonFileName)
+            if jsonPath is None:
+                if self.verbose:
+                    print('[cancelled]\n')
+                return
 
         if os.path.exists(jsonPath):
             os.remove(jsonPath)
@@ -826,11 +833,13 @@ class MeasurementsController(ezui.WindowController):
 
         table = self.w.getItem("fontMeasurements")
         items = table.get()
-
         italicCorrection = self.w.getItem("italicCorrection").get()
+
+        isTempFont = self.font.lib.get(tempEditModeKey) == 'glyphs'
 
         needReload = []
         for itemIndex, item in enumerate(items):
+            # initiate the font measuring object
             try:
                 pt1_index = int(item['point1'])
             except:
@@ -847,7 +856,13 @@ class MeasurementsController(ezui.WindowController):
                 item['glyph2'], pt2_index,
                 item['parent']
             )
-            distanceUnits = M.measure(self.font, italicCorrection=italicCorrection)
+
+            # if the font is temporary, get stored measurement values from the glyph lib
+            if isTempFont and fontMeasurementsKey in self.glyph.lib:
+                distanceUnits = self.glyph.lib[fontMeasurementsKey][item['name']]
+            else:
+                distanceUnits = M.measure(self.font, italicCorrection=italicCorrection)
+
             item['units'] = distanceUnits
 
             if distanceUnits and self.font.info.unitsPerEm:
@@ -887,7 +902,13 @@ class MeasurementsController(ezui.WindowController):
             table.set(items)
             return
 
-        measurements = self.glyphMeasurements.get(self.glyph.name)
+        # handle temp fonts: discard extension to get default glyph name
+        if self.glyph.font.lib.get(tempEditModeKey) == 'glyphs':
+            glyphName = self.glyph.name[:self.glyph.name.rfind('.')]
+        else:
+            glyphName = self.glyph.name
+
+        measurements = self.glyphMeasurements.get(glyphName)
 
         if measurements is None:
             table.set(items)
@@ -929,6 +950,8 @@ class MeasurementsController(ezui.WindowController):
         table = self.w.getItem("glyphMeasurements")
         items = table.get()
         italicCorrection = self.w.getItem("italicCorrection").get()
+
+        isTempFont = self.font.lib.get(tempEditModeKey) == 'glyphs'
 
         # get font-level values
         fontMeasurements = self.w.getItem("fontMeasurements").get()
@@ -989,7 +1012,12 @@ class MeasurementsController(ezui.WindowController):
 
             # get default value
             if self.defaultFont:
-                distanceDefault = M.measure(self.defaultFont, italicCorrection=italicCorrection)
+                # if the font is temporary, get stored measurement values from the font lib
+                if isTempFont and defaultMeasurementsKey in self.font.lib:
+                    distanceDefault = self.font.lib[defaultMeasurementsKey]['glyph'][name]
+                else:
+                    distanceDefault = M.measure(self.defaultFont, italicCorrection=italicCorrection)
+
                 item['default'] = distanceDefault
                 # calculate d-scale
                 if distanceUnits and distanceDefault:
@@ -1054,6 +1082,11 @@ class MeasurementsSubscriberRoboFont(Subscriber):
 class MeasurementsSubscriberGlyphEditor(Subscriber):
 
     controller = None
+
+    strokeDash          = 1, 5
+    strokeWidth         = 2
+    strokeWidthSelected = 2
+    strokeCap           = "round"
 
     def build(self):
         glyphEditor = self.getGlyphEditor()
@@ -1148,14 +1181,15 @@ class MeasurementsSubscriberGlyphEditor(Subscriber):
 
                     pathLayer.setPath(pen.path)
 
-                strokeDash  = (3, 3) if item not in selectedItems else None
-                strokeWidth = 2 if item in selectedItems else 1
+                strokeDash  = self.strokeDash if item not in selectedItems else None
+                strokeWidth = self.strokeWidthSelected if item in selectedItems else self.strokeWidth
                 self.measurementsLayer.appendLineSublayer(
                     startPoint=(pt1.x, pt1.y),
                     endPoint=(pt2.x, pt2.y),
                     strokeColor=color,
                     strokeWidth=strokeWidth,
                     strokeDash=strokeDash,
+                    strokeCap=self.strokeCap,
                 )
 
                 if item in selectedItems:
