@@ -8,5 +8,6 @@ theoretical knowledge · understanding-oriented · useful when studying
 {: .lead }
 
 - [overview](overview)
-- [about](about)
+- [about xTools4](about)
+- [variable font production tools](variable-font-production)
 - [about this documentation](explanations/about-docs)

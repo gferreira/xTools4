@@ -19,6 +19,7 @@ explanations
 
 - [overview](explanations/overview)
 - [about xTools4](explanations/about)
+- [variable font production tools](explanations/variable-font-production)
 - [about this documentation](explanations/about-docs)
 </div>
 
