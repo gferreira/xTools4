@@ -42,6 +42,18 @@ save
 </div>
 
 
+Step-by-step
+------------
+
+1. Open the GlyphMeme tool from the menu *xTools4 > variable > glyph meme*.
+2. Use the buttons at the bottom to load the necessary data files (designspace, measurements, smart sets).
+3. Use the first drop-down menu to select a group of glyphs, and the second one to choose one glyph for editing.
+4. Select which parameters of this glyph you would like to edit.
+5. Click the “open” button to import glyphs from the corresponding sources into a temporary font.
+6. Multiple glyphs can be opened this way, with one temporary font for each.
+7. Edit glyphs as needed, and then use the “save” button to export the selected glyphs back to their UFOs.
+
+
 Example
 -------
 
