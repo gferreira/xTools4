@@ -960,6 +960,8 @@ class MeasurementsController(ezui.WindowController):
 
         needReload = []
         for itemIndex, item in enumerate(items):
+            measurementName = item['name']
+
             # measure distance
             try:
                 pt1_index = int(item['point1'])
@@ -971,7 +973,7 @@ class MeasurementsController(ezui.WindowController):
                 pt2_index = item['point2']
 
             M = Measurement(
-                item['name'],
+                measurementName,
                 item['direction'],
                 self.glyph.name, pt1_index,
                 self.glyph.name, pt2_index,
@@ -999,11 +1001,10 @@ class MeasurementsController(ezui.WindowController):
                     item['permill'] = None
 
                 # get font-level value
-                name = item['name']
-                if name in fontValues:
-                    distanceFont = fontValues.get(name)
+                if measurementName in fontValues:
+                    distanceFont = fontValues.get(measurementName)
                     item['font'] = distanceFont
-                    item['glyph_f'] = fontGlyphs.get(name)
+                    item['glyph_f'] = fontGlyphs.get(measurementName)
                     # calculate f-scale
                     if distanceUnits and distanceFont:
                         item['scale_f'] = distanceUnits / distanceFont
@@ -1014,7 +1015,7 @@ class MeasurementsController(ezui.WindowController):
             if self.defaultFont:
                 # if the font is temporary, get stored measurement values from the font lib
                 if isTempFont and defaultMeasurementsKey in self.font.lib:
-                    distanceDefault = self.font.lib[defaultMeasurementsKey]['glyph'][name]
+                    distanceDefault = self.font.lib[defaultMeasurementsKey]['glyph'].get(measurementName)
                 else:
                     distanceDefault = M.measure(self.defaultFont, italicCorrection=italicCorrection)
 

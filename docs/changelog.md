@@ -9,6 +9,13 @@ All notable changes to xTools4 are documented in this file.
 {: .lead }
 
 
+0.1.9
+-----
+
+- <span class='badge rounded-0'>Added</span> Adding new tool GlyphMeme to quickly open all parametric sources of a single glyph for editing.
+{: ._changelog .mb-4 }
+
+
 0.1.8
 -----
 
