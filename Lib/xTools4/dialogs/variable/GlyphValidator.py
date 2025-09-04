@@ -436,14 +436,20 @@ class GlyphValidatorGlyphEditor(Subscriber):
 
         glyphName = self.controller.glyph.name
 
-        if self.controller.defaultFont is None or glyphName not in self.controller.defaultFont:
+        # get default glyph from temp glyph
+        if self.controller.glyph.font.lib.get(tempEditModeKey) == 'glyphs':
+            defaultGlyphName = glyphName[:glyphName.rfind('.')]
+        else:
+            defaultGlyphName = glyphName
+
+        if self.controller.defaultFont is None or defaultGlyphName not in self.controller.defaultFont:
             return
 
         if not self.controller.w.getItem('displayGlyphWindow').get():
             self.checkResultsLayer.setVisible(False)
             return
 
-        defaultGlyph = self.controller.defaultFont[glyphName]
+        defaultGlyph = self.controller.defaultFont[defaultGlyphName]
         checkResults = self.controller.glyph.getRepresentation(f"{KEY}.checkResults", defaultGlyph=defaultGlyph)
 
         isEqualResults      = checkResults['equality']
