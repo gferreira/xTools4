@@ -31,6 +31,7 @@ class MaskDialog(hDialog, BaseWindowController):
         self.height  = self.textHeight * 9
         self.height += self.padding * 6 -5
         self.w = self.window((self.width, self.height), self.title)
+        self.w.workspaceWindowIdentifier = "LayerMask"
 
         x = p = self.padding
         y = p - 3
