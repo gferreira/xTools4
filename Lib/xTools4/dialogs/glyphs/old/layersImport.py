@@ -7,6 +7,9 @@ from xTools4.modules.pens import DecomposePointPen
 from xTools4.dialogs.old import hDialog
 
 
+tempEditModeKey = 'com.xTools4.tempEdit.mode'
+
+
 class ImportGlyphsIntoLayerDialog(hDialog):
 
     '''
@@ -170,10 +173,16 @@ class ImportGlyphsIntoLayerDialog(hDialog):
 
         for glyphName in glyphNames:
 
-            if not glyphName in self.sourceFont:
+            # get default glyph from temp glyph
+            if font.lib.get(tempEditModeKey) == 'glyphs':
+                defaultGlyphName = glyphName[:glyphName.rfind('.')]
+            else:
+                defaultGlyphName = glyphName
+
+            if not defaultGlyphName in self.sourceFont:
                 continue
 
-            sourceGlyph = self.sourceFont[glyphName].getLayer(self.sourceLayer)
+            sourceGlyph = self.sourceFont[defaultGlyphName].getLayer(self.sourceLayer)
 
             targetGlyph = font[glyphName].getLayer(self.targetLayer)
             pen = targetGlyph.getPointPen()
