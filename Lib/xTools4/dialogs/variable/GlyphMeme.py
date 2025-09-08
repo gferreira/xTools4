@@ -88,6 +88,7 @@ class GlyphMemeController(ezui.WindowController):
             minSize=(123, 300),
             maxSize=(123, 960),
         )
+        self.w.workspaceWindowIdentifier = "GlyphMeme"
         self.w.getNSWindow().setTitlebarAppearsTransparent_(True)
         self.w.getItem("glyphMeme").getNSTableView().setRowHeight_(17)
         self.w.open()
