@@ -34,6 +34,7 @@ class ImportGlyphsIntoLayerDialog(hDialog):
         self.height  = self.textHeight * 8
         self.height += self.padding * 9
         self.w = self.window((self.width, self.height), self.title)
+        self.w.workspaceWindowIdentifier = "LayerImport"
 
         x = y = p = self.padding
         self.w.getFile = Button(

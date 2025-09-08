@@ -106,6 +106,7 @@ class GlyphValidatorController(ezui.WindowController):
             margins=self.margins,
             size=(self.width, 'auto'),
         )
+        self.w.workspaceWindowIdentifier = "GlyphValidator"
         self.w.getNSWindow().setTitlebarAppearsTransparent_(True)
         self.w.open()
 
