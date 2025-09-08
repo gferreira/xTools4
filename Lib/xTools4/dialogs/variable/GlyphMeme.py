@@ -22,7 +22,7 @@ defaultMeasurementsKey = 'com.xTools4.measurements.default'
 
 class GlyphMemeController(ezui.WindowController):
 
-    title   = 'glyph meme'
+    title   = 'parameters'
     margins = 10
     verbose = True
 
