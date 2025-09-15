@@ -1,4 +1,4 @@
-# menuTitle: GlyphParameters
+# menuTitle: GlyphMeme
 
 from importlib import reload
 import xTools4.dialogs.variable.GlyphMeme
