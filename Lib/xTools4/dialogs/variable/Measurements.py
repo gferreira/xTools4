@@ -858,11 +858,14 @@ class MeasurementsController(ezui.WindowController):
                 item['parent']
             )
 
-            # if the font is temporary, get stored measurement values from the glyph lib
-            if isTempFont and fontMeasurementsKey in self.glyph.lib:
-                distanceUnits = self.glyph.lib[fontMeasurementsKey][item['name']]
-            else:
+            if not self.glyph or not isTempFont:
                 distanceUnits = M.measure(self.font, italicCorrection=italicCorrection)
+            else:
+                # if the font is temporary, get stored measurement values from the glyph lib
+                if isTempFont and fontMeasurementsKey in self.glyph.lib:
+                    distanceUnits = self.glyph.lib[fontMeasurementsKey][item['name']]
+                else:
+                    distanceUnits = None
 
             item['units'] = distanceUnits
 
@@ -1016,7 +1019,7 @@ class MeasurementsController(ezui.WindowController):
             if self.defaultFont:
                 # if the font is temporary, get stored measurement values from the font lib
                 if isTempFont and defaultMeasurementsKey in self.font.lib:
-                    distanceDefault = self.font.lib[defaultMeasurementsKey]['glyph'].get(measurementName)
+                    distanceDefault = self.font.lib[defaultMeasurementsKey]['glyph'][itemIndex]
                 else:
                     distanceDefault = M.measure(self.defaultFont, italicCorrection=italicCorrection)
 
