@@ -959,7 +959,9 @@ class MeasurementsController(ezui.WindowController):
         items = table.get()
         italicCorrection = self.w.getItem("italicCorrection").get()
 
-        isTempFont = self.font.lib.get(tempEditModeKey) == 'glyphs'
+        isTempFont = False
+        if self.font and self.font.lib.get(tempEditModeKey) == 'glyphs':
+            isTempFont = True
 
         # get font-level values
         fontMeasurements = self.w.getItem("fontMeasurements").get()
