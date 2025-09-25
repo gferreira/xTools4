@@ -22,7 +22,7 @@ defaultMeasurementsKey = 'com.xTools4.measurements.default'
 
 class GlyphMemeController(ezui.WindowController):
 
-    title   = 'glyph meme'
+    title   = 'GlyphMeme'
     margins = 10
     verbose = True
 
@@ -88,12 +88,10 @@ class GlyphMemeController(ezui.WindowController):
             minSize=(123, 300),
             maxSize=(123, 960),
         )
+        self.w.workspaceWindowIdentifier = "GlyphMeme"
         self.w.getNSWindow().setTitlebarAppearsTransparent_(True)
         self.w.getItem("glyphMeme").getNSTableView().setRowHeight_(17)
         self.w.open()
-
-    # def started(self):
-    #     pass
 
     @property
     def familyName(self):
@@ -191,15 +189,29 @@ class GlyphMemeController(ezui.WindowController):
 
         # get parametric sources for current glyph
         sources = {}
-        for src in self.designspace.sources:
-            for measurementName in selectedMeasurements:
+        for measurementName in selectedMeasurements:
+            measurementHasSources = False
+            for src in self.designspace.sources:
                 if measurementName in src.styleName:
                     sources[src.filename] = src.path
+                    measurementHasSources = True
+            if not measurementHasSources:
+                print(f'no sources for {measurementName}')
+
+
+        # get measurements from default font
+        FM = FontMeasurements()
+        FM.read(self.measurementsPath)
+        FM.measure(self.defaultFont)
+
+        # get measurements from default glyph
+        GM = GlyphMeasurements(self.defaultFont, glyphName)
+        GM.read(self.measurementsPath)
+        GM.measure()
 
         print('opening glyphs...\n')
 
         for i, sourceFile in enumerate(sources.keys()):
-            # ufoPath = os.path.join(sourcesFolder, sourceFile)
             ufoPath = sources[sourceFile]
             srcFont = OpenFont(ufoPath, showInterface=False)
 
@@ -227,17 +239,7 @@ class GlyphMemeController(ezui.WindowController):
             # store the import mode in the font lib
             tmpFont.lib[tempEditModeKey] = 'glyphs'
 
-            # get default font measurements
-            FM = FontMeasurements()
-            FM.read(self.measurementsPath)
-            FM.measure(self.defaultFont)
-
-            # get default glyph measurements
-            GM = GlyphMeasurements(self.defaultFont, glyphName)
-            GM.read(self.measurementsPath)
-            GM.measure()
-
-            # store default measurements in the font lib
+            # store default fontmeasurements in the font lib
             tmpFont.lib[defaultMeasurementsKey] = {
                 'font'  : FM.values,
                 'glyph' : GM.values,
@@ -246,7 +248,7 @@ class GlyphMemeController(ezui.WindowController):
             # store path to glyphset in the glyph lib
             tmpFont[tmpGlyphName].lib[glyphSetPathKey] = glyphsFolder
 
-            # store current font measurements in glyph lib
+            # store current font measurements in the glyph lib
             FM.measure(srcFont)
             tmpFont[tmpGlyphName].lib[fontMeasurementsKey] = FM.values
 

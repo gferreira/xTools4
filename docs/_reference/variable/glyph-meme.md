@@ -63,10 +63,11 @@ Example
 <div class="card bg-light my-3 rounded-0">
 <div class="card-header">note</div>
 <div class="card-body" markdown='1'>
-Temporary fonts created with GlyphMeme are compatible with [GlyphValidator] and [Measurements] tools.
+Temporary fonts created with GlyphMeme are compatible with [GlyphValidator], [Measurements] and [Import Layer] tools.
 {: .card-text }
 </div>
 </div>
 
 [GlyphValidator]: ../glyph-validator
 [Measurements]: ../measurements
+[Import Layer]: ../../glyphs/layers/import/

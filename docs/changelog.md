@@ -9,6 +9,15 @@ All notable changes to xTools4 are documented in this file.
 {: .lead }
 
 
+0.2.0
+-----
+
+- <span class='badge rounded-0'>Added</span> Adding workspace window identifier to some tools (experimental).
+- <span class='badge rounded-0'>Changed</span> Improving support for temporary fonts in various tools.
+- <span class='badge rounded-0'>Changed</span> Adding Italian and Indonesian to the languages module.
+{: ._changelog .mb-4 }
+
+
 0.1.9
 -----
 
@@ -26,7 +35,7 @@ All notable changes to xTools4 are documented in this file.
 0.1.7
 -----
 
-- <span class='badge rounded-0'>Changed</span> Improving TempEdit temp font setup.
+- <span class='badge rounded-0'>Changed</span> Improving TempEdit temporary font setup.
 {: ._changelog .mb-4 }
 
 

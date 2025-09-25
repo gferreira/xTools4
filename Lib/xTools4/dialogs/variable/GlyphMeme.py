@@ -93,9 +93,6 @@ class GlyphMemeController(ezui.WindowController):
         self.w.getItem("glyphMeme").getNSTableView().setRowHeight_(17)
         self.w.open()
 
-    # def started(self):
-    #     pass
-
     @property
     def familyName(self):
         if self.defaultFont is None:

@@ -71,9 +71,9 @@ tutorials
 development
 -----------
 
+- [changelog](changelog)
 - [source code](http://github.com/gferreira/xTools4)
 - [issues](http://github.com/gferreira/xTools4/issues)
-- [changelog](changelog)
 
 {% comment %}
 <script>

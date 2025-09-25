@@ -72,7 +72,7 @@ class GlyphMeasurements:
         self.font        = font
         self.glyphName   = glyphName
         self.definitions = definitions
-        self.values      = {}
+        self.values      = []
 
     def read(self, jsonPath):
         M = readMeasurements(jsonPath)
@@ -109,7 +109,7 @@ class GlyphMeasurements:
                 d[2] = d[4] = glyph.name
 
             M = Measurement(*d)
-            self.values[M.name] = M.measure(self.font, roundToInt=roundToInt, absolute=absolute)
+            self.values.append(M.measure(self.font, roundToInt=roundToInt, absolute=absolute))
 
 
 class Measurement:

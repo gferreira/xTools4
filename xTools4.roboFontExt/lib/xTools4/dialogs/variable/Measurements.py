@@ -458,6 +458,7 @@ class MeasurementsController(ezui.WindowController):
             size=(800, 600),
             minSize=(600, 400),
         )
+        self.w.workspaceWindowIdentifier = "Measurements"
         self.w.getNSWindow().setTitlebarAppearsTransparent_(True)
         self.w.getItem("fontMeasurements").getNSTableView().setRowHeight_(17)
         self.w.getItem("glyphMeasurements").getNSTableView().setRowHeight_(17)
@@ -678,6 +679,10 @@ class MeasurementsController(ezui.WindowController):
         if not g:
             return
 
+        # editing measurements not supported in temp fonts!
+        if self.font.lib.get(tempEditModeKey) == 'glyphs':
+            return
+
         table = self.w.getItem("glyphMeasurements")
 
         if not len(g.selectedPoints) == 2:
@@ -857,11 +862,14 @@ class MeasurementsController(ezui.WindowController):
                 item['parent']
             )
 
-            # if the font is temporary, get stored measurement values from the glyph lib
-            if isTempFont and fontMeasurementsKey in self.glyph.lib:
-                distanceUnits = self.glyph.lib[fontMeasurementsKey][item['name']]
-            else:
+            if not self.glyph or not isTempFont:
                 distanceUnits = M.measure(self.font, italicCorrection=italicCorrection)
+            else:
+                # if the font is temporary, get stored measurement values from the glyph lib
+                if isTempFont and fontMeasurementsKey in self.glyph.lib:
+                    distanceUnits = self.glyph.lib[fontMeasurementsKey][item['name']]
+                else:
+                    distanceUnits = None
 
             item['units'] = distanceUnits
 
@@ -951,7 +959,9 @@ class MeasurementsController(ezui.WindowController):
         items = table.get()
         italicCorrection = self.w.getItem("italicCorrection").get()
 
-        isTempFont = self.font.lib.get(tempEditModeKey) == 'glyphs'
+        isTempFont = False
+        if self.font and self.font.lib.get(tempEditModeKey) == 'glyphs':
+            isTempFont = True
 
         # get font-level values
         fontMeasurements = self.w.getItem("fontMeasurements").get()
@@ -1015,7 +1025,10 @@ class MeasurementsController(ezui.WindowController):
             if self.defaultFont:
                 # if the font is temporary, get stored measurement values from the font lib
                 if isTempFont and defaultMeasurementsKey in self.font.lib:
-                    distanceDefault = self.font.lib[defaultMeasurementsKey]['glyph'].get(measurementName)
+                    try:
+                        distanceDefault = self.font.lib[defaultMeasurementsKey]['glyph'][itemIndex]
+                    except:
+                        distanceDefault = None
                 else:
                     distanceDefault = M.measure(self.defaultFont, italicCorrection=italicCorrection)
 
@@ -1048,7 +1061,13 @@ class MeasurementsController(ezui.WindowController):
                 'direction' : item['direction'],
             }
 
-        self.measurements['glyphs'][self.glyph.name] = measurements
+        # handle temp fonts: discard extension to get default glyph name
+        if self.font.lib.get(tempEditModeKey) == 'glyphs':
+            glyphName = self.glyph.name[:self.glyph.name.rfind('.')]
+        else:
+            glyphName = self.glyph.name
+
+        self.measurements['glyphs'][glyphName] = measurements
 
 
 class MeasurementsSubscriberRoboFont(Subscriber):
