@@ -3,6 +3,7 @@ from fontParts.world import OpenFont, RGlyph
 from fontPens.digestPointPen import DigestPointPen
 from defcon.pens.transformPointPen import TransformPointPen
 from defcon.objects.component import _defaultTransformation
+from fontTools.designspaceLib import DesignSpaceDocument
 from xTools4.modules.decomposePointPen import DecomposePointPen
 
 
@@ -466,29 +467,48 @@ def applyValidationColors(font, defaultFont, colors=None, glyphNames=None):
 # designspace validation
 # ----------------------
 
-# DEPRECATED: use `validateFonts` instead
+def validateDesignspace(designspacePath, sources=True, instances=True):
 
-def validateDesignspace(designspace):
-    txt = 'validating designspace...\n\n'
-    defaultSrc = designspace.findDefault()
-    defaultFont = OpenFont(defaultSrc.path, showInterface=False)
-    txt += f'\tdefault source: {defaultSrc.filename}\n\n'
-    for src in designspace.sources:
-        if src == defaultSrc:
-            continue
-        srcFont = OpenFont(src.path, showInterface=False)
-        txt += f'\tchecking {src.filename}...\n\n'
-        for gName in defaultFont.glyphOrder:
-            g1 = srcFont[gName]
-            g2 = defaultFont[gName]
-            checks = validateGlyph(g1, g2)
-            if not all(checks.values()):
-                txt += f'\t\t{gName}:\n'
-                for check, result in checks.items():
-                    if result is False:
-                        txt += f"\t\t- {check} not matching\n"
-                txt += '\n'
-        srcFont.close()
-    txt += '...done.\n\n'
-    return txt
+    doc = DesignSpaceDocument()
+    doc.read(designspacePath)
+
+    # validate sources
+    if sources:
+        locations   = []
+        sourceNames = []
+        print('validating source locations...\n')
+        for src in doc.sources:
+            if src.location not in locations:
+                locations.append(src.location)
+                sourceNames.append(src.styleName)
+            else:
+                for i, loc in enumerate(locations):
+                    if src.location == loc:
+                        print(f'duplicated location: {src.styleName} ({sourceNames[i]})')
+                        # print(src.location)
+                print()
+        print('...done!\n')
+
+    # validate instances
+    if instances:
+        expandAxes = {}
+        print('validating AmstelvarA2 instance locations...\n')
+        axes = { axis.tag: axis for axis in doc.axes }
+        for instance in doc.instances:
+            for axisName, value in instance.designLocation.items():
+                axis = axes[axisName]
+                if not axis.minimum <= value <= axis.maximum:
+                    if axisName not in expandAxes:
+                        expandAxes[axisName] = []
+                    expandAxes[axisName].append(value)
+
+        for axisName, values in expandAxes.items():
+            print(f'{axisName}:')
+            if min(values) < axes[axisName].minimum:
+                print(f'\t- {min(values)} ({axes[axisName].minimum})')
+            if max(values) > axes[axisName].maximum:
+                print(f'\t+ {max(values)} ({axes[axisName].maximum})')
+            print()
+
+        print('...done!\n')
 

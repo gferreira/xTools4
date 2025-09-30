@@ -7,6 +7,7 @@ from fontTools.agl import UV2AGL
 from fontParts.world import RFont
 from xTools4.modules.linkPoints2 import *
 
+
 tempEditModeKey = 'com.xTools4.tempEdit.mode'
 
 
@@ -213,3 +214,111 @@ class Measurement:
         return d
 
 
+
+
+
+#-------------------
+# measurement tools
+#-------------------
+
+def extractMeasurements(ufos, measurementsPath, parametricAxes):
+    sources = {}
+    print('extracting measurements from UFOs...')
+    for ufoPath in sorted(ufos):
+        fontName = os.path.splitext(os.path.split(ufoPath)[-1])[0]
+        styleName = '_'.join(fontName.split('_')[1:])
+        f = OpenFont(ufoPath, showInterface=False)
+        print(f'\tmeasuring {fontName}…')
+        M = FontMeasurements()
+        M.read(measurementsPath)
+        M.measure(f)
+        sources[styleName] = { k: permille(v, f.info.unitsPerEm) for k, v in M.values.items() if k in parametricAxes }
+    print('...done!\n')
+    return sources
+
+def renameGlyphMeasurements(measurementsPath, glyphNames, renameDict):
+
+    measurements = readMeasurements(measurementsPath)
+
+    print(f"renaming glyph measurements...\n")
+
+    for glyphName in glyphNames:
+        print(f"\trenaming measurements in /{glyphName}...")
+        if glyphName not in measurements['glyphs']:
+            continue
+
+        glyphMeasurements = {}
+        for ID, m in measurements['glyphs'][glyphName].items():
+            if m['name'] in renameDict:
+                newName = renameDict[m['name']]
+                print(f"\t\trenaming {m['name']} to {newName}...")
+                glyphMeasurements[ID] = {
+                    'name'      : newName,
+                    'direction' : m['direction'],
+                }
+            else:
+                glyphMeasurements[ID] = m
+
+        measurements['glyphs'][glyphName] = glyphMeasurements
+        print()
+
+    print('\tsaving measurements...')
+    with open(measurementsPath, 'w', encoding='utf-8') as f:
+        json.dump(measurements, f, indent=2)
+
+    print('...done.')
+
+
+def setSourceNamesFromMeasurements(sourcesFolder, familyName, measurementsPath, preflight=True, ignoreTags=[]):
+
+    ### expects semi-correct source names -- ex: FamilyName_AXISmin.ufo
+
+    allSources = glob.glob(f'{sourcesFolder}/*.ufo')
+
+    allSourceNames = []
+    for sourcePath in sorted(allSources):
+        tag = os.path.splitext(os.path.split(sourcePath)[-1])[0].split('_')[-1][:4]
+
+        # set family name
+        f = OpenFont(sourcePath, showInterface=False)
+        if f.info.familyName != familyName:
+            print(f'family name: {f.info.familyName} --> {familyName}' )
+            if not preflight:
+                f.info.familyName = familyName
+
+        # measure source
+        if tag not in ignoreTags:
+            m = FontMeasurements()
+            m.read(measurementsPath)
+            m.measure(f)
+            newValue = m.values[tag]
+            newValue1000 = round(newValue * 1000 / f.info.unitsPerEm)
+
+        # exception: get tag value from file name
+        else:
+            newValue = newValue1000 = int(os.path.splitext(os.path.split(sourcePath)[-1])[0].split('_')[-1][4:])
+
+        # set style name
+        newStyleName = f'{tag}{newValue1000}'
+        allSourceNames.append(newStyleName)
+        if newStyleName != f.info.styleName:
+            print(f'updating style name:\n\t{f.info.styleName} --> {newStyleName}\n' )
+            if not preflight:
+                f.info.styleName = newStyleName
+
+        # rename UFO file
+        newSourceName = f'{familyName.replace(' ', '-')}_{newStyleName}.ufo'
+        newSourcePath = os.path.join(sourcesFolder, newSourceName)
+        if not preflight:
+            f.save()
+        f.close()
+
+        if sourcePath != newSourcePath:
+            print(f'updating file name:\n\t{os.path.split(sourcePath)[-1]} --> {newSourceName}\n' )
+            if not preflight:
+                shutil.move(ufo, newSourcePath)
+
+    # find duplicate styles
+    duplicates = [k for k, v in Counter(allSourceNames).items() if v > 1]
+    print('duplicate style names:')
+    print(duplicates)
