@@ -214,9 +214,6 @@ class Measurement:
         return d
 
 
-
-
-
 #-------------------
 # measurement tools
 #-------------------
@@ -267,7 +264,6 @@ def renameGlyphMeasurements(measurementsPath, glyphNames, renameDict):
         json.dump(measurements, f, indent=2)
 
     print('...done.')
-
 
 def setSourceNamesFromMeasurements(sourcesFolder, familyName, measurementsPath, preflight=True, ignoreTags=[]):
 
@@ -322,3 +318,38 @@ def setSourceNamesFromMeasurements(sourcesFolder, familyName, measurementsPath, 
     duplicates = [k for k, v in Counter(allSourceNames).items() if v > 1]
     print('duplicate style names:')
     print(duplicates)
+
+
+
+def copyFontMeasurements(measurementsPathSrc, measurementsPathDst, measurementNames):
+    measurementsSrc = readMeasurements(measurementsPathSrc)
+    measurementsDst = readMeasurements(measurementsPathDst)
+
+    print('copying font-level measurements...')
+    # copy font-level measurements
+    for measurementName in measurementNames:
+        print(f'\tcopying {measurementName}...')
+        measurementsDst['font'][measurementName] = measurementsSrc['font'][measurementName]
+
+    print('\tsaving measurements...')
+    with open(measurementsPathDst, 'w', encoding='utf-8') as f:
+        json.dump(measurementsDst, f, indent=2)
+
+    print('...done.\n')
+
+def copyGlyphMeasurements(measurementsPathSrc, measurementsPathDst, glyphNames):
+    measurementsSrc = readMeasurements(measurementsPathSrc)
+    measurementsDst = readMeasurements(measurementsPathDst)
+
+    print('copying glyph-level measurements...')
+    for glyphName in glyphNames:
+        print(f'\tcopying {glyphName}...')
+        if glyphName not in measurementsSrc['glyphs']:
+            continue
+        measurementsDst['glyphs'][glyphName] = measurementsSrc['glyphs'][glyphName]
+
+    print('\tsaving measurements...')
+    with open(measurementsPathDst, 'w', encoding='utf-8') as f:
+        json.dump(measurementsDst, f, indent=2)
+
+    print('...done.\n')
