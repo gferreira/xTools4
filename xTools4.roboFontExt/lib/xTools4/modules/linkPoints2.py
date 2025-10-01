@@ -21,7 +21,6 @@ def offsetAngledPoint(point, angle, offset):
     x, y = angledPoint(point, -angle)
     return x - offset, y
 
-
 def getPointAtIndex(glyph, ptIndex, isDefcon=False):
     '''Get the point at the given linear point index.
 
@@ -479,4 +478,6 @@ def importMeasurements(font, jsonPath, verbose=True, key=KEY):
 
     if verbose:
         print('...done.\n')
+
+
 

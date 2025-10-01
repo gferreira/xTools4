@@ -488,3 +488,4 @@ def findGlyphComponents(font, srcName):
                     if glyphName not in composed:
                         composed.append(glyphName)
     return composed
+
