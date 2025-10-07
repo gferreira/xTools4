@@ -896,7 +896,7 @@ class MeasurementsController(ezui.WindowController):
                 for i in items:
                     if i['name'] == item['parent']:
                         distanceParent = i['units']
-                if distanceParent:
+                if distanceParent and item['units']:
                     scaleParent = item['units'] / distanceParent
                     item['scale_p'] = scaleParent
 
