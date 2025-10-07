@@ -9,6 +9,13 @@ All notable changes to xTools4 are documented in this file.
 {: .lead }
 
 
+0.2.1
+-----
+
+- <span class='badge rounded-0'>Added</span> Adding RoundingTools to assist in the creation of min/max round sources.
+{: ._changelog .mb-4 }
+
+
 0.2.0
 -----
 
