@@ -39,7 +39,7 @@ def selectPoints(glyph, pointIndexes):
     for p in pointIndexes:
         glyph[p[0]].points[p[1]].selected = True
 
-def pointIndexesToIDs(glyph, pts):
+def circularPointIndexesToIDs(glyph, pts):
     pointIDs = []
     for ci, pi in pts:
         pt = glyph[ci].points[pi]
@@ -47,7 +47,7 @@ def pointIndexesToIDs(glyph, pts):
         pointIDs.append(ptID)
     return pointIDs
 
-def pointIDsToIndexes(glyph, pts):
+def pointIDsToCircularIndexes(glyph, pts):
     pointIndexes = []
     for ptID in pts:
         for ci, c in enumerate(glyph):
@@ -55,6 +55,28 @@ def pointIDsToIndexes(glyph, pts):
                 if pt.identifier == ptID:
                     pointIndexes.append((ci, pi))
     return pointIndexes
+
+def getLinearPointIndexesFromCircular(glyph, indexesCircular):
+    indexesLinear = []
+    for _ci, _pi in indexesCircular:
+        n = 0
+        for ci, c in enumerate(glyph.contours):
+            for pi, p in enumerate(c.points):
+                if ci == _ci and pi == _pi:
+                    indexesLinear.append(n)
+                n += 1
+    return indexesLinear
+
+def getCircularPointIndexesFromLinear(glyph, indexesLinear):
+    indexesCircular = []
+    for n in indexesLinear:
+        i = 0
+        for ci, c in enumerate(glyph.contours):
+            for pi, p in enumerate(c.points):
+                if i == n:
+                    indexesCircular.append((ci, pi))
+                i += 1
+    return indexesCircular
 
 
 class RoundingCapPointPen(AbstractPointPen):
@@ -295,19 +317,28 @@ def applyRounding(glyph, roundCaps, roundCorners, mode=1, radius=100):
         applyRounding(g, roundCaps, roundCorners, mode=1, radius=96)
 
     '''
-    roundCaps_IDs = [pointIndexesToIDs(glyph, pts) for pts in roundCaps]
-    roundCorners_IDs = [pointIndexesToIDs(glyph, pts) for pts in roundCorners]
+    if roundCaps is None:
+        roundCaps = []
+
+    if roundCorners is None:
+        roundCorners = []
 
     deselectAllPoints(glyph)
 
+    roundCaps_    = [getCircularPointIndexesFromLinear(glyph, pts) for pts in roundCaps]
+    roundCaps_IDs    = [circularPointIndexesToIDs(glyph, pts) for pts in roundCaps_]
+
+    roundCorners_ = [getCircularPointIndexesFromLinear(glyph, pts) for pts in roundCorners]
+    roundCorners_IDs = [circularPointIndexesToIDs(glyph, pts) for pts in roundCorners_]
+
     for ptIDs in roundCaps_IDs:
-        pts = pointIDsToIndexes(glyph, ptIDs)
+        pts = pointIDsToCircularIndexes(glyph, ptIDs)
         selectPoints(glyph, pts)
         addRoundingCap(glyph, mode=mode)
         deselectAllPoints(glyph)
 
     for ptIDs in roundCorners_IDs:
-        pts = pointIDsToIndexes(glyph, ptIDs)
+        pts = pointIDsToCircularIndexes(glyph, ptIDs)
         selectPoints(glyph, pts)
         addRoundingCorner(glyph, mode=mode, radius=radius)
         deselectAllPoints(glyph)

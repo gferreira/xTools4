@@ -40,11 +40,11 @@ class RoundingController(ezui.WindowController):
 
     * Group @roundCorners
     > Corners
-    > |----------------|
-    > | point | radius | @roundCornersTable
-    > |-------|--------|
-    > |       |        |
-    > |----------------|
+    > |-------|
+    > | point | @roundCornersTable
+    > |-------|
+    > |       |
+    > |-------|
     >> (+-) @roundCornersAddRemoveButton
 
     =============
@@ -89,8 +89,8 @@ class RoundingController(ezui.WindowController):
                     editable=True,
                 ),
                 dict(
-                    identifier="radius",
-                    title="radius",
+                    identifier="scale",
+                    title="scale",
                     width=55,
                     editable=True,
                     continuous=False,
@@ -128,22 +128,69 @@ class RoundingController(ezui.WindowController):
         self.w.getItem("roundCornersTable").getNSTableView().setRowHeight_(17)
         self.w.open()
 
-    # def started(self):
-    #     MeasurementsSubscriberRoboFont.controller = self
-    #     registerRoboFontSubscriber(MeasurementsSubscriberRoboFont)
-    #     MeasurementsSubscriberGlyphEditor.controller = self
-    #     registerGlyphEditorSubscriber(MeasurementsSubscriberGlyphEditor)
-    #     addObserver(self, "drawLabelCell", "glyphCellDrawBackground")
-    #     self.font  = CurrentFont()
-    #     self.glyph = CurrentGlyph()
+    def started(self):
+        RoundingSubscriberRoboFont.controller = self
+        registerRoboFontSubscriber(RoundingSubscriberRoboFont)
+        RoundingSubscriberGlyphEditor.controller = self
+        registerGlyphEditorSubscriber(RoundingSubscriberGlyphEditor)
+        addObserver(self, "drawLabelCell", "glyphCellDrawBackground")
+        self.font  = CurrentFont()
+        self.glyph = CurrentGlyph()
 
-    # def destroy(self):
-    #     unregisterRoboFontSubscriber(MeasurementsSubscriberRoboFont)
-    #     MeasurementsSubscriberRoboFont.controller = None
-    #     unregisterGlyphEditorSubscriber(MeasurementsSubscriberGlyphEditor)
-    #     MeasurementsSubscriberGlyphEditor.controller = None
-    #     removeObserver(self, "glyphCellDrawBackground")
+    def destroy(self):
+        unregisterRoboFontSubscriber(RoundingSubscriberRoboFont)
+        RoundingSubscriberRoboFont.controller = None
+        unregisterGlyphEditorSubscriber(RoundingSubscriberGlyphEditor)
+        RoundingSubscriberGlyphEditor.controller = None
+        removeObserver(self, "glyphCellDrawBackground")
+
+    # ---------
+    # callbacks
+    # ---------
+
+    def loadButtonCallback(self, sender):
+        pass
+
+    def saveButtonCallback(self, sender):
+        pass
+
+    def roundCapsAddRemoveButtonCallback(self, sender):
+        pass
+
+    def roundCornersAddRemoveButtonCallback(self, sender):
+        pass
+
+    def previewCallback(self, sender):
+        pass
+
+    def colorButtonCallback(self, sender):
+        pass
+
+    def drawLabelCell(self, notification):
+        pass
+
+    # -------
+    # methods
+    # -------
+
+    def _loadRoundingData(self):
+        pass
+
+    def _updateRoundingDict(self):
+        pass
+
+
+class RoundingSubscriberRoboFont(Subscriber):
+    pass
+
+
+class RoundingSubscriberGlyphEditor(Subscriber):
+    pass
+
+
 
 if __name__ == '__main__':
 
     OpenWindow(RoundingController)
+
+
