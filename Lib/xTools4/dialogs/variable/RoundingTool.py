@@ -303,7 +303,7 @@ class RoundingController(ezui.WindowController):
         self.glyph.changed()
 
     def previewCallback(self, sender):
-        pass
+        postEvent(f"{self.key}.changed")
 
     def colorButtonCallback(self, sender):
         postEvent(f"{self.key}.changed")
@@ -434,15 +434,15 @@ class RoundingSubscriberGlyphEditor(Subscriber):
         preview = self.controller.w.getItem("preview").get()
         color   = self.controller.w.getItem("colorButton").get()
 
+        self.roundingLayer.clearSublayers()
+        self.roundingLayerPreview.clearSublayers()
+
         if not preview:
             return
 
         glyph = self.controller.glyph
         if glyph is None:
             return
-
-        self.roundingLayer.clearSublayers()
-        self.roundingLayerPreview.clearSublayers()
 
         roundingDict = self.controller.roundingDict.get(glyph.name)
 
