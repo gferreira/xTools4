@@ -9,10 +9,17 @@ All notable changes to xTools4 are documented in this file.
 {: .lead }
 
 
+0.2.2
+-----
+
+- <span class='badge rounded-0'>Added</span> Adding RoundingTool UI to create and preview rounded stroke caps and corners.
+{: ._changelog .mb-4 }
+
+
 0.2.1
 -----
 
-- <span class='badge rounded-0'>Added</span> Adding RoundingTools to assist in the creation of min/max round sources.
+- <span class='badge rounded-0'>Added</span> Adding RoundingTools module to assist in the creation of min/max round sources.
 {: ._changelog .mb-4 }
 
 

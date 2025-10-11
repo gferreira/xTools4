@@ -1,7 +1,7 @@
 ---
-title     : RoundingTools
+title     : Rounding scripts
 layout    : default
-permalink : /reference/tools/variable/rounding-tools/
+permalink : /reference/tools/variable/rounding-scripts/
 ---
 
 A collection of scripts to add cap and corner points for min/max round sources.

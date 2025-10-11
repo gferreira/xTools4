@@ -30,6 +30,54 @@ def vector(pos, distance, angle):
     y += sin(radians(angle)) * distance
     return x, y
 
+def deselectAllPoints(glyph):
+    for c in glyph:
+        for p in c.points:
+            p.selected = False
+
+def selectPoints(glyph, pointIndexes):
+    for p in pointIndexes:
+        glyph[p[0]].points[p[1]].selected = True
+
+def circularPointIndexesToIDs(glyph, pts):
+    pointIDs = []
+    for ci, pi in pts:
+        pt = glyph[ci].points[pi]
+        ptID = pt.identifier if pt.identifier else pt.getIdentifier()
+        pointIDs.append(ptID)
+    return pointIDs
+
+def pointIDsToCircularIndexes(glyph, pts):
+    pointIndexes = []
+    for ptID in pts:
+        for ci, c in enumerate(glyph):
+            for pi, pt in enumerate(c.points):
+                if pt.identifier == ptID:
+                    pointIndexes.append((ci, pi))
+    return pointIndexes
+
+def getLinearPointIndexesFromCircular(glyph, indexesCircular):
+    indexesLinear = []
+    for _ci, _pi in indexesCircular:
+        n = 0
+        for ci, c in enumerate(glyph.contours):
+            for pi, p in enumerate(c.points):
+                if ci == _ci and pi == _pi:
+                    indexesLinear.append(n)
+                n += 1
+    return indexesLinear
+
+def getCircularPointIndexesFromLinear(glyph, indexesLinear):
+    indexesCircular = []
+    for n in indexesLinear:
+        i = 0
+        for ci, c in enumerate(glyph.contours):
+            for pi, p in enumerate(c.points):
+                if i == n:
+                    indexesCircular.append((ci, pi))
+                i += 1
+    return indexesCircular
+
 
 class RoundingCapPointPen(AbstractPointPen):
 
@@ -224,7 +272,6 @@ def addRoundingCorner(srcGlyph, mode=0, radius=100):
 
     srcGlyph.performUndo()
 
-
 def addRoundingCap(srcGlyph, mode=0):
 
     srcGlyph.prepareUndo('add new points for rounded stroke cap')
@@ -250,3 +297,49 @@ def addRoundingCap(srcGlyph, mode=0):
         srcGlyph.appendGlyph(dstGlyph)
 
     srcGlyph.performUndo()
+
+def applyRounding(glyph, roundCaps, roundCorners, mode=1, radius=100):
+    '''
+    Apply rounding settings to glyph.
+
+    ::
+
+        roundCaps = [
+            ((0, 2), (0, 3)),
+            ((1, 2), (1, 3)),
+            ((0, 6), (0, 7)),
+        ]
+        roundCorners = [
+            ((0, 0),),
+            ((0, 1),),
+        ]
+        g = CurrentGlyph()
+        applyRounding(g, roundCaps, roundCorners, mode=1, radius=96)
+
+    '''
+    if roundCaps is None:
+        roundCaps = []
+
+    if roundCorners is None:
+        roundCorners = []
+
+    deselectAllPoints(glyph)
+
+    roundCaps_    = [getCircularPointIndexesFromLinear(glyph, pts) for pts in roundCaps]
+    roundCaps_IDs    = [circularPointIndexesToIDs(glyph, pts) for pts in roundCaps_]
+
+    roundCorners_ = [getCircularPointIndexesFromLinear(glyph, pts) for pts in roundCorners]
+    roundCorners_IDs = [circularPointIndexesToIDs(glyph, pts) for pts in roundCorners_]
+
+    for ptIDs in roundCaps_IDs:
+        pts = pointIDsToCircularIndexes(glyph, ptIDs)
+        selectPoints(glyph, pts)
+        addRoundingCap(glyph, mode=mode)
+        deselectAllPoints(glyph)
+
+    for ptIDs in roundCorners_IDs:
+        pts = pointIDsToCircularIndexes(glyph, ptIDs)
+        selectPoints(glyph, pts)
+        addRoundingCorner(glyph, mode=mode, radius=radius)
+        deselectAllPoints(glyph)
+
