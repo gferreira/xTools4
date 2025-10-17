@@ -9,6 +9,14 @@ All notable changes to xTools4 are documented in this file.
 {: .lead }
 
 
+0.2.3
+-----
+
+- <span class='badge rounded-0'>Fixed</span> Fixing copy width bug in mask tool.
+- <span class='badge rounded-0'>Fixed</span> Fixing lost glyph set path when flipping layers in GlyphMeme tool.
+{: ._changelog .mb-4 }
+
+
 0.2.2
 -----
 

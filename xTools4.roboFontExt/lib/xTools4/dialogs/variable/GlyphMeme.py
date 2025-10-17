@@ -247,6 +247,8 @@ class GlyphMemeController(ezui.WindowController):
 
             # store path to glyphset in the glyph lib
             tmpFont[tmpGlyphName].lib[glyphSetPathKey] = glyphsFolder
+            # also in the background layer (in case we switch layers)
+            tmpFont[tmpGlyphName].getLayer('background').lib[glyphSetPathKey] = glyphsFolder
 
             # store current font measurements in the glyph lib
             FM.measure(srcFont)

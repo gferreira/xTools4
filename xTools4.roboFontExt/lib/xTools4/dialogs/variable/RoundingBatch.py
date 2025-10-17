@@ -11,9 +11,9 @@ class RoundingBatchController(ezui.WindowController):
     buttonWidth = 80
 
     content = """
-    |-files----| @fileTable
-    |          |
-    |----------|
+    |-------| @sources
+    |       |
+    |-------|
 
     =============
 

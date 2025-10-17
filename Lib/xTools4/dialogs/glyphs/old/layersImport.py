@@ -17,7 +17,7 @@ class ImportGlyphsIntoLayerDialog(hDialog):
 
     ::
 
-        from hTools3.dialogs.glyphs.layersImport import ImportGlyphsIntoLayerDialog
+        from xTools4.dialogs.glyphs.old.layersImport import ImportGlyphsIntoLayerDialog
         ImportGlyphsIntoLayerDialog()
 
     '''

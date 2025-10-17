@@ -5,7 +5,7 @@ from defconAppKit.windows.baseWindow import BaseWindowController
 from xTools4.dialogs.old import hDialog
 from xTools4.modules.anchors import copyAnchors
 
-# TODO: add observers for layerset changes
+# TO-DO: add observers for layerset changes
 # update UI when adding/deleting/renaming layers
 
 class MaskDialog(hDialog, BaseWindowController):
@@ -15,7 +15,7 @@ class MaskDialog(hDialog, BaseWindowController):
 
     ::
 
-        from hTools3.dialogs.glyphs.layersMask import MaskDialog
+        from xTools4.dialogs.glyphs.old.layersMask import MaskDialog
         MaskDialog()
 
     '''
@@ -164,13 +164,9 @@ class MaskDialog(hDialog, BaseWindowController):
             return
 
         for glyphName in glyphNames:
-            g = font[glyphName]
-            g.flipLayers(self.sourceLayer, self.maskLayer)
-
-            if self.lockLayerWidths:
-                sourceGlyph = font[glyphName].getLayer(self.sourceLayer)
-                maskGlyph   = font[glyphName].getLayer(self.maskLayer)
-                maskGlyph.width = sourceGlyph.width
+            srcGlyph = font[glyphName].getLayer(self.sourceLayer)
+            srcWidth = srcGlyph.width
+            srcGlyph.flipLayers(self.sourceLayer, self.maskLayer)
 
     def clearMaskCallback(self, sender):
         '''
@@ -205,18 +201,17 @@ class MaskDialog(hDialog, BaseWindowController):
             return
 
         for glyphName in glyphNames:
-            g = font[glyphName].getLayer(self.sourceLayer)
-            g.copyToLayer(self.maskLayer, clear=False)
+            srcGlyph = font[glyphName].getLayer(self.sourceLayer)
+            srcGlyph.copyToLayer(self.maskLayer, clear=False)
+
+            maskGlyph = font[glyphName].getLayer(self.maskLayer)
 
             if self.lockLayerWidths:
-                sourceGlyph = font[glyphName].getLayer(self.sourceLayer)
-                maskGlyph   = font[glyphName].getLayer(self.maskLayer)
-                maskGlyph.width = sourceGlyph.width
+                maskGlyph.width = srcGlyph.width
+                maskGlyph.changed()
 
             if self.copyAnchors:
-                sourceGlyph = font[glyphName].getLayer(self.sourceLayer)
-                maskGlyph   = font[glyphName].getLayer(self.maskLayer)
-                copyAnchors(sourceGlyph, maskGlyph, clear=False, proportional=False)
+                copyAnchors(srcGlyph, maskGlyph, clear=False, proportional=False)
 
     # -------
     # methods
