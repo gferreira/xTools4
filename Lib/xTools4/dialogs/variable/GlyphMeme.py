@@ -198,7 +198,6 @@ class GlyphMemeController(ezui.WindowController):
             if not measurementHasSources:
                 print(f'no sources for {measurementName}')
 
-
         # get measurements from default font
         FM = FontMeasurements()
         FM.read(self.measurementsPath)
