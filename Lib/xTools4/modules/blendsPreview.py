@@ -1,6 +1,7 @@
 import os, time
 from functools import cached_property
 import drawBot as DB
+import uharfbuzz as hb
 from defcon.objects.glyph import Glyph
 from defcon.objects.font import Font
 from fontTools.ttLib import TTFont
@@ -37,7 +38,7 @@ def drawGlyphTTF(ttfPath, glyphName):
     B.text(char, font=ttfPath, fontSize=upm)
     DB.drawPath(B)
 
-def getGlyphTTF(ttfPath, glyphName, location):
+def getGlyphTTF_old(ttfPath, glyphName, location):
     char = psname2char(glyphName)
     glyphSet = TTFont(ttfPath).getGlyphSet()
     ttGlyph = glyphSet[glyphName]
@@ -54,6 +55,39 @@ def getVarDistance(location, defaultLocation):
         if value != defaultValue:
             n += 1
     return n
+
+def getGlyphTTF(ttfPath, glyphName, location):
+
+    char = psname2char(glyphName)
+
+    hb_text = char
+    hb_blob = hb.Blob.from_file_path(ttfPath)
+    hb_face = hb.Face(hb_blob)
+    hb_font = hb.Font(hb_face)
+
+    hb_font.set_variations(location)
+
+    buf = hb.Buffer()
+    buf.add_str(hb_text)
+    buf.guess_segment_properties()
+
+    features = {"kern": True, "liga": True}
+    hb.shape(hb_font, buf, features)
+
+    info = buf.glyph_infos[0]
+    positions = buf.glyph_positions[0]
+
+    gid = info.codepoint
+    x_advance = positions.x_advance
+
+    glyph = Glyph()
+    pen = glyph.getPen()
+
+    hb_font.draw_glyph_with_pen(gid, pen)
+
+    glyph.width = x_advance
+
+    return glyph
 
 
 class BlendsPreview:
@@ -308,14 +342,17 @@ class BlendsPreview:
                     # draw reference glyph
                     if self.compare and self.compareFont:
 
-                        T = DB.FormattedString()
-                        T.font(self.compareFontPath)
-                        T.fontVariations(**blendedLocation)
-                        T.fontSize(unitsPerEm2)
-                        T.appendGlyph(glyphName)
+                        # TO-DO: switch to uharfbuzz
+                        # T = DB.FormattedString()
+                        # T.font(self.compareFontPath)
+                        # T.fontVariations(**blendedLocation)
+                        # T.fontSize(unitsPerEm2)
+                        # T.appendGlyph(glyphName)
 
-                        B = DB.BezierPath()
-                        B.text(T, (0, 0))
+                        # B = DB.BezierPath()
+                        # B.text(T, (0, 0))
+
+                        g1 = getGlyphTTF(self.compareFontPath, glyphName, blendedLocation)
 
                         if self.wireframe:
                             DB.strokeWidth(2)
@@ -334,20 +371,35 @@ class BlendsPreview:
                         else:
                             DB.stroke(stroke1)
 
-                        DB.drawPath(B)
+                        # DB.drawPath(B)
+
+                        # if self.wireframe and points1 is not None:
+                        #     DB.stroke(None)
+                        #     DB.fill(*points1)
+                        #     for p in B.points:
+                        #         DB.oval(p[0]-r, p[1]-r, r*2, r*2)
+
+                        # if self.margins:
+                        #     g1_width = DB.textSize(T)[0]
+                        #     DB.strokeWidth(1)
+                        #     DB.stroke(*colors['strokeMargins1'])
+                        #     DB.line((0, yBottom), (0, yTop))
+                        #     DB.line((g1_width, yBottom), (g1_width, yTop))
+
+                        drawGlyph(g1)
 
                         if self.wireframe and points1 is not None:
-                            DB.stroke(None)
                             DB.fill(*points1)
-                            for p in B.points:
-                                DB.oval(p[0]-r, p[1]-r, r*2, r*2)
+                            DB.stroke(None)
+                            for c in g1:
+                                for p in c:
+                                    DB.oval(p.x-r, p.y-r, r*2, r*2)
 
                         if self.margins:
-                            g1_width = DB.textSize(T)[0]
                             DB.strokeWidth(1)
                             DB.stroke(*colors['strokeMargins1'])
                             DB.line((0, yBottom), (0, yTop))
-                            DB.line((g1_width, yBottom), (g1_width, yTop))
+                            DB.line((g1.width, yBottom), (g1.width, yTop))
 
                     DB.restore()
 

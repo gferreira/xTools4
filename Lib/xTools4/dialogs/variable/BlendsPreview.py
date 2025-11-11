@@ -1,9 +1,11 @@
+from importlib import reload
+import xTools4.modules.blendsPreview
+reload(xTools4.modules.blendsPreview)
+
 import os, time
 import drawBot as DB
 from drawBot.ui.drawView import DrawView
 from vanilla import Window, Button, CheckBox, TextBox, Slider, List
-# from defcon.objects.glyph import Glyph
-# from defcon.objects.font import Font
 from mojo.UI import GetFile
 from mojo.roboFont import OpenWindow, OpenFont, CurrentFont, CurrentGlyph
 from ufoProcessor.ufoOperator import UFOOperator
@@ -102,7 +104,7 @@ class BlendsPreviewController:
             # callback=self.updatePreviewCallback,
             sizeStyle='small')
 
-        y += self.lineHeight # + p
+        y += self.lineHeight
         self.w.levelsShowLabel = TextBox(
             (x, y + 4, self.colWidth/2, self.lineHeight),
             'show levels',
