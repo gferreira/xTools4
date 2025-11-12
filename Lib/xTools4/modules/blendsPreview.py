@@ -1,4 +1,4 @@
-import os, time
+import os
 from functools import cached_property
 import drawBot as DB
 import uharfbuzz as hb
@@ -7,11 +7,9 @@ from defcon.objects.font import Font
 from fontTools.ttLib import TTFont
 from fontTools.varLib.avar.build import build as avar2_build
 from fontTools.varLib.avar.map import map as avar2_map
-from ufoProcessor.ufoOperator import UFOOperator
 from mutatorMath.objects.location import Location
-from xTools4.modules.encoding import psname2char
-from xTools4.modules.sys import timer
-
+from ufoProcessor.ufoOperator import UFOOperator
+from glyphNameFormatter.reader import n2u
 
 def getEffectiveLocation(designspacePath, blendedLocation):
     font = TTFont()
@@ -32,14 +30,13 @@ def drawGlyph(g):
     DB.drawPath(B)
 
 def drawGlyphTTF(ttfPath, glyphName):
-    char = psname2char(glyphName)
+    char = chr(n2u(glyphName))
     upm = TTFont(ttfPath)['head'].unitsPerEm
     B = BezierPath()
     B.text(char, font=ttfPath, fontSize=upm)
     DB.drawPath(B)
 
 def getGlyphTTF_old(ttfPath, glyphName, location):
-    char = psname2char(glyphName)
     glyphSet = TTFont(ttfPath).getGlyphSet()
     ttGlyph = glyphSet[glyphName]
     glyph = RGlyph()
@@ -56,10 +53,7 @@ def getVarDistance(location, defaultLocation):
             n += 1
     return n
 
-def getGlyphTTF(ttfPath, glyphName, location):
-
-    char = psname2char(glyphName)
-
+def getTTFGlyphForChar(ttfPath, char, location):
     hb_text = char
     hb_blob = hb.Blob.from_file_path(ttfPath)
     hb_face = hb.Face(hb_blob)
@@ -88,6 +82,13 @@ def getGlyphTTF(ttfPath, glyphName, location):
     glyph.width = x_advance
 
     return glyph
+
+def getGlyphTTF(ttfPath, glyphName, location):
+    char = chr(n2u(glyphName))
+    if not char:
+        return
+
+    return getTTFGlyphForChar(ttfPath, char, location)
 
 
 class BlendsPreview:
@@ -341,18 +342,12 @@ class BlendsPreview:
 
                     # draw reference glyph
                     if self.compare and self.compareFont:
-
-                        # TO-DO: switch to uharfbuzz
-                        # T = DB.FormattedString()
-                        # T.font(self.compareFontPath)
-                        # T.fontVariations(**blendedLocation)
-                        # T.fontSize(unitsPerEm2)
-                        # T.appendGlyph(glyphName)
-
-                        # B = DB.BezierPath()
-                        # B.text(T, (0, 0))
-
-                        g1 = getGlyphTTF(self.compareFontPath, glyphName, blendedLocation)
+                        if not defaultFont[glyphName].unicodes:
+                            return
+                        char = chr(defaultFont[glyphName].unicodes[0])
+                        g1 = getTTFGlyphForChar(self.compareFontPath, char, blendedLocation)
+                        if g1 is None:
+                            return
 
                         if self.wireframe:
                             DB.strokeWidth(2)
@@ -370,21 +365,6 @@ class BlendsPreview:
                             DB.stroke(*stroke1)
                         else:
                             DB.stroke(stroke1)
-
-                        # DB.drawPath(B)
-
-                        # if self.wireframe and points1 is not None:
-                        #     DB.stroke(None)
-                        #     DB.fill(*points1)
-                        #     for p in B.points:
-                        #         DB.oval(p[0]-r, p[1]-r, r*2, r*2)
-
-                        # if self.margins:
-                        #     g1_width = DB.textSize(T)[0]
-                        #     DB.strokeWidth(1)
-                        #     DB.stroke(*colors['strokeMargins1'])
-                        #     DB.line((0, yBottom), (0, yTop))
-                        #     DB.line((g1_width, yBottom), (g1_width, yTop))
 
                         drawGlyph(g1)
 
@@ -408,37 +388,3 @@ class BlendsPreview:
     def save(self, pdfPath):
         DB.saveImage(pdfPath)
 
-
-if __name__ == '__main__':
-
-    start = time.time()
-
-    srcFolder = '/Users/gferreira/hipertipo/fonts/fontbureau/amstelvar-avar2/'
-    designspacePath = os.path.join(srcFolder, 'Sources', 'Roman', 'AmstelvarA2-Roman_avar2.designspace')
-    compareFontPath = os.path.join(srcFolder, 'Fonts', 'legacy', 'Amstelvar-Roman[GRAD,XOPQ,XTRA,YOPQ,YTAS,YTDE,YTFI,YTLC,YTUC,wdth,wght,opsz].ttf')
-
-    axesList = [
-        ('opsz', (8, 14, 144)),
-        ('wght', (100, 400, 1000)),
-        ('wdth', (50, 100, 125)),
-    ]
-
-    glyphNames = ['P']
-
-    B = BlendsPreview(designspacePath)
-    B.compareFontPath = compareFontPath
-    B.axesList = axesList
-
-    # proof settings
-    B.compare    = True
-    B.margins    = True
-    B.labels     = True
-    B.levels     = False
-    B.wireframe  = False
-    B.levelsShow = 2
-
-    for glyphName in glyphNames:
-        B.draw(glyphName)
-
-    end = time.time()
-    timer(start, end)

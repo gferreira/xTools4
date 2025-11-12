@@ -94,7 +94,7 @@ class GlyphSetProoferUI:
         group2.canvas = DrawView((x, y, -p, -p))
 
         self._groups = [
-            dict(view=group1, identifier="pane1", size=123*2, minSize=123*2, maxSize=123*3, canCollapse=False),
+            dict(view=group1, identifier="pane1", size=123*2, minSize=123*1.5, maxSize=123*3, canCollapse=False),
             dict(view=group2, identifier="pane2", canCollapse=False),
         ]
         self.w.splitView = SplitView((0, 0, -0, -0), self._groups, dividerStyle='thin')

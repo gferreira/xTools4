@@ -5,7 +5,7 @@ reload(xTools4.modules.blendsPreview)
 import os, time
 import drawBot as DB
 from drawBot.ui.drawView import DrawView
-from vanilla import Window, Button, CheckBox, TextBox, Slider, List
+from vanilla import Window, Button, CheckBox, TextBox, Slider, List, Group, SplitView
 from mojo.UI import GetFile
 from mojo.roboFont import OpenWindow, OpenFont, CurrentFont, CurrentGlyph
 from ufoProcessor.ufoOperator import UFOOperator
@@ -24,7 +24,7 @@ class BlendsPreviewController:
     lineHeight  = 20
     verbose     = True
     buttonWidth = 75
-    colWidth    = 123*1.4
+    # colWidth    = 123*1.4
 
     axesList   = []
     ignoreAxes = ['XTSP']
@@ -40,79 +40,83 @@ class BlendsPreviewController:
                 title=self.title,
                 minSize=(self.width*0.7, self.height*0.7))
 
-        x = y = p = self.padding
-        self.w.canvas = DrawView((x + self.colWidth + p, y, -p, -p))
+        group1 = Group((0, 0, -0, -0))
 
-        self.w.loadDesignspaceButton = Button(
-                (x, y, self.colWidth, self.lineHeight),
+        x = y = p = self.padding
+
+        group1.loadDesignspaceButton = Button(
+                (x, y, -p, self.lineHeight),
                 'designspace…',
                 callback=self.loadDesignspaceCallback,
                 sizeStyle='small')
 
         y += self.lineHeight + p
         tableHeight = self.lineHeight * 5
-        self.w.axesList = List(
-            (x, y, self.colWidth, tableHeight),
+        group1.axesList = List(
+            (x, y, -p, tableHeight),
             [],
-            columnDescriptions=[{"title": "axis", "width": 40,}, {"title": "values"}],
+            columnDescriptions=[
+                {"title": "axis", "width": 40 },
+                {"title": "values", "editable" : True },
+            ],
         )
 
         y += tableHeight + p
-        self.w.loadReferenceFontButton = Button(
-                (x, y, self.colWidth, self.lineHeight),
+        group1.loadReferenceFontButton = Button(
+                (x, y, -p, self.lineHeight),
                 'reference font…',
                 callback=self.loadReferenceFontCallback,
                 sizeStyle='small')
 
         y += self.lineHeight + p
-        self.w.compare = CheckBox(
-            (x+3, y, self.colWidth, self.lineHeight),
+        group1.compare = CheckBox(
+            (x+3, y, -p, self.lineHeight),
             'compare',
             value=False,
             # callback=self.updatePreviewCallback,
             sizeStyle='small')
 
         y += self.lineHeight
-        self.w.margins = CheckBox(
-            (x+3, y, self.colWidth, self.lineHeight),
+        group1.margins = CheckBox(
+            (x+3, y, -p, self.lineHeight),
             'margins',
             value=True,
             # callback=self.updatePreviewCallback,
             sizeStyle='small')
 
         y += self.lineHeight
-        self.w.wireframe = CheckBox(
-            (x+3, y, self.colWidth, self.lineHeight),
+        group1.wireframe = CheckBox(
+            (x+3, y, -p, self.lineHeight),
             'points',
             value=False,
             # callback=self.updatePreviewCallback,
             sizeStyle='small')
 
         y += self.lineHeight
-        self.w.labels = CheckBox(
-            (x+3, y, self.colWidth, self.lineHeight),
+        group1.labels = CheckBox(
+            (x+3, y, -p, self.lineHeight),
             'labels',
             value=True,
             # callback=self.updatePreviewCallback,
             sizeStyle='small')
 
         y += self.lineHeight
-        self.w.levels = CheckBox(
-            (x+3, y, self.colWidth, self.lineHeight),
+        group1.levels = CheckBox(
+            (x+3, y, -p, self.lineHeight),
             'levels',
             value=False,
             # callback=self.updatePreviewCallback,
             sizeStyle='small')
 
         y += self.lineHeight
-        self.w.levelsShowLabel = TextBox(
-            (x, y + 4, self.colWidth/2, self.lineHeight),
+        group1.levelsShowLabel = TextBox(
+            (x, y + 4, 90, self.lineHeight),
             'show levels',
             # callback=self.updatePreviewCallback,
             sizeStyle='small')
 
-        self.w.levelsShow = Slider(
-            (x+self.colWidth/2, y, self.colWidth/2, self.lineHeight),
+        group1.levelsShow = Slider(
+            (x + 90, y, -p, self.lineHeight),
             minValue=1,
             maxValue=4,
             value=2,
@@ -122,18 +126,29 @@ class BlendsPreviewController:
             sizeStyle='small')
 
         y = -(self.lineHeight*2 + p*1.5)
-        self.w.updatePreviewButton = Button(
-                (x, y, self.colWidth, self.lineHeight),
+        group1.updatePreviewButton = Button(
+                (x, y, -p, self.lineHeight),
                 'update preview',
                 callback=self.updatePreviewCallback,
                 sizeStyle='small')
 
         y += self.lineHeight + p/2
-        self.w.savePDFButton = Button(
-                (x, y, self.colWidth, self.lineHeight),
+        group1.savePDFButton = Button(
+                (x, y, -p, self.lineHeight),
                 'save pdf…',
                 callback=self.savePDFCallback,
                 sizeStyle='small')
+
+        group2 = Group((0, 0, -0, -0))
+        x = p = self.padding
+        y = 0
+        group2.canvas = DrawView((x, y, -p, -p))
+
+        self._groups = [
+            dict(view=group1, identifier="pane1", size=123*2, minSize=123*1.5, maxSize=123*3, canCollapse=False),
+            dict(view=group2, identifier="pane2", canCollapse=False),
+        ]
+        self.w.splitView = SplitView((0, 0, -0, -0), self._groups, dividerStyle='thin')
 
         # self._updatePreview()
 
@@ -142,28 +157,36 @@ class BlendsPreviewController:
         self.w.open()
 
     @property
+    def _group1(self):
+        return self._groups[0]['view']
+
+    @property
+    def _group2(self):
+        return self._groups[1]['view']
+
+    @property
     def compare(self):
-        return self.w.compare.get()
+        return self._group1.compare.get()
 
     @property
     def margins(self):
-        return self.w.margins.get()
+        return self._group1.margins.get()
 
     @property
     def wireframe(self):
-        return self.w.wireframe.get()
+        return self._group1.wireframe.get()
 
     @property
     def labels(self):
-        return self.w.labels.get()
+        return self._group1.labels.get()
 
     @property
     def levels(self):
-        return int(self.w.levels.get())
+        return int(self._group1.levels.get())
 
     @property
     def levelsShow(self):
-        return self.w.levelsShow.get()
+        return self._group1.levelsShow.get()
 
     @property
     def parametricAxes(self):
@@ -211,13 +234,15 @@ class BlendsPreviewController:
         self._updatePreview()
 
     def savePDFCallback(self, sender):
-        pass
+        pdfPath = PutFile(
+                message="Choose a location for this PDF",
+                fileName="blending-preview.pdf"
+            )
+        DB.saveImage(pdfPath)
 
     # methods
 
     def _updateAxesList(self):
-        axesList = self.w.axesList.get()
-
         axesItems = []
         for axis in self.operator.doc.axes:
             for axisName in self.blendedAxes:
@@ -229,7 +254,7 @@ class BlendsPreviewController:
                         'values': f'{int(axis.minimum)} {int(axis.default)} {int(axis.maximum)}',
                     })
 
-        self.w.axesList.set(axesItems)
+        self._group1.axesList.set(axesItems)
 
     def _updatePreview(self):
 
@@ -254,7 +279,7 @@ class BlendsPreviewController:
             else:
                 glyphName = None
 
-        axesListItems = self.w.axesList.get()
+        axesListItems = self._group1.axesList.get()
         axesList = [ (item['axis'], [int(v) for v in item['values'].split()]) for item in axesListItems ]
 
         # make PDF proof
@@ -275,7 +300,7 @@ class BlendsPreviewController:
         # display pdf
 
         pdfData = DB.pdfImage()
-        self.w.canvas.setPDFDocument(pdfData)
+        self._group2.canvas.setPDFDocument(pdfData)
 
 
 
