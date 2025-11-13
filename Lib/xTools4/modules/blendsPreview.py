@@ -1,4 +1,5 @@
 import os
+from datetime import datetime
 from functools import cached_property
 import drawBot as DB
 import uharfbuzz as hb
@@ -95,7 +96,6 @@ class BlendsPreview:
 
     margin      = 40
     glyphScale  = 0.045
-    cellSize    = 2000
     labelsSize  = 5
 
     compare     = False
@@ -104,10 +104,6 @@ class BlendsPreview:
     labels      = False
     levels      = False
     levelsShow  = 1
-
-    opszs = [8, 14, 144]
-    wghts = [100, 400, 1000]
-    wdths = [50, 100, 125]
 
     pointRadius = 10
 
@@ -138,6 +134,14 @@ class BlendsPreview:
     @cached_property
     def compareFont(self):
         return TTFont(self.compareFontPath)
+
+    @cached_property
+    def defaultFont(self):
+        return Font(self.operator.doc.default.path)
+
+    @property
+    def cellSize(self):
+        return self.defaultFont.info.unitsPerEm
 
     @property
     def parametricAxes(self):
@@ -218,8 +222,12 @@ class BlendsPreview:
         cellWidth  = self.cellSize * self.glyphScale * 1.5
         cellHeight = self.cellSize * self.glyphScale
 
-        w = cellWidth  * len(self.wdths) + self.margin * 2
-        h = cellHeight * len(self.wghts) * len(self.opszs) + self.margin * 2
+        axis1Tag, axis1Values = self.axesList[0]
+        axis2Tag, axis2Values = self.axesList[1]
+        axis3Tag, axis3Values = self.axesList[2]
+
+        w = cellWidth  * len(axis3Values) + self.margin * 2
+        h = cellHeight * len(axis2Values) * len(axis1Values) + self.margin * 2
         x = y = self.margin
 
         DB.newPage(w, h)
@@ -232,24 +240,26 @@ class BlendsPreview:
         # get color scheme for current settings
         colors = self.getColors()
 
-        defaultFont = Font(self.operator.doc.default.path)
         defaultBlendedLocation = { a.tag : a.default for a in self.operator.doc.axes if a.name in self.blendedAxes }
 
-        # draw page header: font name(s) / glyph name
+        # draw page header: font name(s), glyph name, date & time
+        now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
         with DB.savedState():
             m = self.margin / 2
             DB.translate(0, DB.height()-m)
             DB.fill(*colors['fillHeader2'])
-            DB.text(defaultFont.info.familyName, (m, 0))
+            DB.text(self.defaultFont.info.familyName, (m, 0))
             if self.compare:
                 DB.save()
-                DB.translate(DB.textSize(f'{defaultFont.info.familyName} ')[0] + m, 0)
+                DB.translate(DB.textSize(f'{self.defaultFont.info.familyName} ')[0] + m, 0)
                 DB.fill(*colors['fillHeader1'])
                 DB.text(self.compareFont['name'].getDebugName(1), (0, 0))
                 DB.restore()
 
             DB.fill(0,)
-            DB.text(glyphName, (DB.width()-m, 0), align='right')
+            DB.text(glyphName, (DB.width()/2, 0), align='center')
+            DB.text(now, (DB.width()-m, 0), align='right')
 
         #-------------
         # draw glyphs
@@ -258,10 +268,6 @@ class BlendsPreview:
         r = self.pointRadius
 
         DB.translate(x, y)
-
-        axis1Tag, axis1Values = self.axesList[0]
-        axis2Tag, axis2Values = self.axesList[1]
-        axis3Tag, axis3Values = self.axesList[2]
 
         # get UPM of the reference font (if available)
         if self.compare and self.compareFont:
@@ -289,7 +295,9 @@ class BlendsPreview:
                     if n >= self.levelsShow:
                         continue
 
-                    colors = self.getColors(n)
+                    colors  = self.getColors(n)
+                    yBottom = self.defaultFont.info.descender
+                    yTop    = self.defaultFont.info.unitsPerEm - abs(yBottom)
 
                     DB.save()
                     DB.translate(k * cellWidth, j * cellHeight)
@@ -333,8 +341,6 @@ class BlendsPreview:
                                 DB.oval(p.x-r, p.y-r, r*2, r*2)
 
                     if self.margins:
-                        yBottom = defaultFont.info.descender
-                        yTop    = defaultFont.info.unitsPerEm - abs(yBottom)
                         DB.strokeWidth(1)
                         DB.stroke(*colors['strokeMargins2'])
                         DB.line((0, yBottom), (0, yTop))
@@ -342,9 +348,9 @@ class BlendsPreview:
 
                     # draw reference glyph
                     if self.compare and self.compareFont:
-                        if not defaultFont[glyphName].unicodes:
+                        if not self.defaultFont[glyphName].unicodes:
                             return
-                        char = chr(defaultFont[glyphName].unicodes[0])
+                        char = chr(self.defaultFont[glyphName].unicodes[0])
                         g1 = getTTFGlyphForChar(self.compareFontPath, char, blendedLocation)
                         if g1 is None:
                             return
