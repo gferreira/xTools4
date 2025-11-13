@@ -6,8 +6,8 @@ import os, time
 import drawBot as DB
 from drawBot.ui.drawView import DrawView
 from vanilla import Window, Button, CheckBox, TextBox, Slider, List, Group, SplitView
-from mojo.UI import GetFile
-from mojo.roboFont import OpenWindow, OpenFont, CurrentFont, CurrentGlyph
+from mojo.UI import GetFile, PutFile
+from mojo.roboFont import OpenWindow, CurrentFont, CurrentGlyph
 from ufoProcessor.ufoOperator import UFOOperator
 from xTools4.modules.encoding import psname2char
 from xTools4.modules.sys import timer
@@ -150,8 +150,6 @@ class BlendsPreviewController:
         ]
         self.w.splitView = SplitView((0, 0, -0, -0), self._groups, dividerStyle='thin')
 
-        # self._updatePreview()
-
         self.w.getNSWindow().setTitlebarAppearsTransparent_(True)
         self.w.workspaceWindowIdentifier = "BlendsPreview"
         self.w.open()
@@ -224,8 +222,6 @@ class BlendsPreviewController:
 
         if self.verbose:
             print(f'loading reference font {os.path.split(self.referenceFontPath)[-1]}... ', end='')
-
-        self.referenceFont = OpenFont(self.referenceFontPath, showInterface=False)
 
         if self.verbose:
             print('done.\n')

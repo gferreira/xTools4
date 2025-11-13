@@ -267,9 +267,9 @@ class BlendsPreview:
         if self.compare and self.compareFont:
             unitsPerEm2 = self.compareFont['head'].unitsPerEm
 
-        for i, axisValue1 in enumerate(axis1Values):
-            for j, axisValue2 in enumerate(axis2Values):
-                for k, axisValue3 in enumerate(axis3Values):
+        for i, axisValue1 in enumerate(sorted(axis1Values)):
+            for j, axisValue2 in enumerate(reversed(sorted(axis2Values))):
+                for k, axisValue3 in enumerate(sorted(axis3Values)):
                     blendedLocation = {
                         axis1Tag: axisValue1,
                         axis2Tag: axisValue2,
