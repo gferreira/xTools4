@@ -23,7 +23,7 @@ unicodesExtra = {
     # extended latin uc
     'AEmacron'        : '01E2',
     'Schwa'           : '018F',
-    'Uppercaseeszett' : '1E9E',
+    'Germandbls'      : '1E9E',
 
     # ligatures
     'fi'              : 'FB01',

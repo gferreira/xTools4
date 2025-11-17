@@ -46,7 +46,7 @@ class GlyphMemeController(ezui.WindowController):
 
     ( designspace…  )  @getDesignspaceButton
     ( measurements… )  @getMeasurementsButton
-    ( smart sets…   )  @getSmartSetsButton
+    ( glyph sets…   )  @getSmartSetsButton
 
     """
 
@@ -197,7 +197,6 @@ class GlyphMemeController(ezui.WindowController):
                     measurementHasSources = True
             if not measurementHasSources:
                 print(f'no sources for {measurementName}')
-
 
         # get measurements from default font
         FM = FontMeasurements()

@@ -9,6 +9,13 @@ All notable changes to xTools4 are documented in this file.
 {: .lead }
 
 
+0.2.4
+-----
+
+- <span class='badge rounded-0'>Added</span> Adding BlendsPreview tool to preview locations in blended axes of a parametric designspace.
+{: ._changelog .mb-4 }
+
+
 0.2.3
 -----
 

@@ -46,7 +46,7 @@ class GlyphMemeController(ezui.WindowController):
 
     ( designspace…  )  @getDesignspaceButton
     ( measurements… )  @getMeasurementsButton
-    ( smart sets…   )  @getSmartSetsButton
+    ( glyph sets…   )  @getSmartSetsButton
 
     """
 
