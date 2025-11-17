@@ -15,7 +15,9 @@ designspace…
 : Load designspace data from an external file.
 
 blended axes
-: A list of blended axes (mappings) and values in the loaded designspace.
+: ^
+  A list of blended axes (mappings) and values in the loaded designspace.
+  The list of values for each axis can be edited.
 
 reference font…
 : Load a conventional variable font for comparison.
@@ -43,3 +45,12 @@ update preview
 
 save PDF…
 : Save the current proof as a PDF file.
+
+
+<div class="card text-dark bg-light my-3 rounded-0">
+<div class="card-header"> note</div>
+<div class="card-body" markdown='1'>
+This tool requires the external library `uharfbuzz` which can be installed in RoboFont using the [Package Installer](http://robofont.com/documentation/reference/workspace/package-installer/).
+{: .card-text }
+</div>
+</div>
