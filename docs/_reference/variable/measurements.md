@@ -15,6 +15,9 @@ A tool to create and visualize font- and glyph-level measurements.
 designspace…
 : Load a designspace file and linked measurements data into the UI.
 
+reload
+: Reload the previously selected designspace file.
+
 save
 : Save the measurements data back to the external JSON file from which it was loaded.
 

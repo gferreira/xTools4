@@ -127,7 +127,7 @@ class BlendsPreviewController:
             (x + 90, y, -p, self.lineHeight),
             minValue=1,
             maxValue=4,
-            value=2,
+            value=4,
             tickMarkCount=4,
             stopOnTickMarks=True,
             # callback=self.updatePreviewCallback,
@@ -228,6 +228,8 @@ class BlendsPreviewController:
             return
         self.operator.read(self.designspacePath)
         self.operator.loadFonts()
+
+        self._updateAxesList()
 
     def loadReferenceFontCallback(self, sender):
         self.referenceFontPath = GetFile(message='Select reference font:')

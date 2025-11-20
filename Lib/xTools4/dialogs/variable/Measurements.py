@@ -151,6 +151,7 @@ class MeasurementsController(ezui.WindowController):
     [X] italic correction @italicCorrection
 
     ( designspace… ) @getDesignspaceButton
+    ( reload ↺ )     @reloadButton
     ( save  )        @saveButton
     # ( default… )   @defaultButton
     # ( PDF… )       @makePdfButton
@@ -438,6 +439,12 @@ class MeasurementsController(ezui.WindowController):
             maxValue=10.0,
             valueIncrement=0.01,
         ),
+        getDesignspaceButton=dict(
+            width=buttonWidth*1.5,
+        ),
+        reloadButton=dict(
+            width=buttonWidth,
+        ),
         saveButton=dict(
             width=buttonWidth,
         ),
@@ -515,30 +522,10 @@ class MeasurementsController(ezui.WindowController):
         self.designspacePath = GetFile(message='Select designspace file:', title=self.title)
         if self.designspacePath is None:
             return
+        self._loadDesignspace()
 
-        self.designspace = DesignSpaceDocument()
-        self.designspace.read(self.designspacePath)
-
-        if self.measurementsPath is None:
-            return
-
-        if self.verbose:
-            print(f'loading data from {os.path.split(self.measurementsPath)[-1]}... ', end='')
-
-        self.measurements = readMeasurements(self.measurementsPath)
-
-        self._loadFontMeasurements()
-        self._loadGlyphMeasurements()
-
-        if self.verbose:
-            print(f'loading default source from {os.path.split(defaultPath)[-1]}... ', end='')
-
-        self.defaultFont = OpenFont(self.defaultPath, showInterface=False)
-
-        if self.verbose:
-            print('done.\n')
-
-        postEvent(f"{self.key}.changed")
+    def reloadButtonCallback(self, sender):
+        self._loadDesignspace()
 
     def saveButtonCallback(self, sender):
         self._updateGlyphMeasurementsDict()
@@ -822,6 +809,32 @@ class MeasurementsController(ezui.WindowController):
     # -------
     # methods
     # -------
+
+    def _loadDesignspace(self):
+
+        self.designspace = DesignSpaceDocument()
+        self.designspace.read(self.designspacePath)
+
+        if self.measurementsPath is None:
+            return
+
+        if self.verbose:
+            print(f'loading data from {os.path.split(self.measurementsPath)[-1]}... ', end='')
+
+        self.measurements = readMeasurements(self.measurementsPath)
+
+        self._loadFontMeasurements()
+        self._loadGlyphMeasurements()
+
+        if self.verbose:
+            print(f'loading default source from {os.path.split(defaultPath)[-1]}... ', end='')
+
+        self.defaultFont = OpenFont(self.defaultPath, showInterface=False)
+
+        if self.verbose:
+            print('done.\n')
+
+        postEvent(f"{self.key}.changed")
 
     def _loadFontMeasurements(self):
         table = self.w.getItem("fontMeasurements")

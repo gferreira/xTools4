@@ -14,9 +14,12 @@ A tool for previewing blended locations from a parametric designspace and compar
 designspace…
 : Load designspace data from an external file.
 
+reload
+: Reload the previously selected designspace file.
+
 blended axes
 : ^
-  A list of blended axes (mappings) and values in the loaded designspace.  
+  A table with blended axes (mappings) and values in the loaded designspace.  
   The list of values for each axis can be edited.
 
 reference font…

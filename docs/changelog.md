@@ -13,6 +13,7 @@ All notable changes to xTools4 are documented in this file.
 -----
 
 - <span class='badge rounded-0'>Changed</span> Making designspace files the single entry point for variable tools.
+{: ._changelog .mb-4 }
 
 
 0.2.4

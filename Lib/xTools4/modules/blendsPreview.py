@@ -286,8 +286,8 @@ class BlendsPreview:
                     parametricLocation = getEffectiveLocation(self.designspacePath, blendedLocation)
                     g2 = instantiateGlyph(self.operator, glyphName, parametricLocation)
 
-                    if not g2:
-                        continue
+                    # if not g2:
+                    #     continue
 
                     # get var distance
                     n = getVarDistance(blendedLocation, defaultBlendedLocation)
@@ -389,7 +389,7 @@ class BlendsPreview:
 
                     DB.restore()
 
-            DB.translate(0, cellHeight*3)
+            DB.translate(0, cellHeight * len(axis2Values))
 
     def save(self, pdfPath):
         DB.saveImage(pdfPath)
