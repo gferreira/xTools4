@@ -14,22 +14,19 @@ A tool to open all parametric sources of a single glyph in a temporary font for 
 ![]({{ site.url }}/images/variable/GlyphMeme.png){: .img-fluid }
 </div>
 <div class='col-8' markdown='1'>
-get designspace…
+designspace…
 : Open a dialog to select a designspace file.
 
-get measurements…
-: Open a dialog to select a measurements file.
-
-get smart sets…
-: Open a dialog to select a smart sets file.
+reload
+: Reload the previously selected designspace file.
 
 glyph group
 : Select a glyph group from the list (imported from smart sets).
 
 glyph name
-: Select a glyph for which to show the memes.
+: Select a glyph from which to load parameters (meme).
 
-parameters (meme)
+glyph parameters (meme)
 : A list of all parameters involved in the variations of the selected glyph.
 
 open
@@ -37,10 +34,10 @@ open
 
 save
 : Export the selected glyphs back into the UFO sources from where they came from.
-
 </div>
 </div>
 
+<!-- move steps to a tutorial:
 
 Step-by-step
 ------------
@@ -52,6 +49,8 @@ Step-by-step
 5. Click the “open” button to import glyphs from the corresponding sources into a temporary font.
 6. Multiple glyphs can be opened this way, with one temporary font for each.
 7. Edit glyphs as needed, and then use the “save” button to export the selected glyphs back to their UFOs.
+
+-->
 
 
 Example

@@ -11,6 +11,7 @@ from fontTools.designspaceLib import DesignSpaceDocument
 from fontTools.ufoLib.glifLib import GlyphSet
 from xTools4.modules.linkPoints2 import readMeasurements
 from xTools4.modules.measurements import FontMeasurements, GlyphMeasurements
+from xTools4.modules.xproject import measurementsPathKey, smartSetsPathKey
 from xTools4.dialogs.variable.old.TempEdit import setupNewFont, splitall
 
 
@@ -18,9 +19,6 @@ glyphSetPathKey        = 'com.xTools4.tempEdit.glyphSetPath'
 tempEditModeKey        = 'com.xTools4.tempEdit.mode'
 fontMeasurementsKey    = 'com.xTools4.measurements.font'
 defaultMeasurementsKey = 'com.xTools4.measurements.default'
-
-# measurementsPathKey    = 'com.xTools4.xProject.measurementsPath'
-# smartSetsPathKey       = 'com.xTools4.xProject.smartSetsPath'
 
 
 class GlyphMemeController(ezui.WindowController):
@@ -37,6 +35,11 @@ class GlyphMemeController(ezui.WindowController):
     glyphGroups = {}
 
     content = """
+    ( designspace…  )  @getDesignspaceButton
+    ( reload ↺ )       @reloadButton
+
+    ---
+
     (groups ...)  @groupSelector
     (glyphs ...)  @glyphSelector
 
@@ -44,11 +47,6 @@ class GlyphMemeController(ezui.WindowController):
 
     ( open )  @openButton
     ( save )  @saveButton
-
-    ---
-
-    ( designspace…  )  @getDesignspaceButton
-    ( reload ↺ )       @reloadButton
 
     """
 

@@ -1,8 +1,8 @@
-# WARNING: THIS IS A WORK-IN-PROGRESS DRAFT, NOT USABLE YET
+# WARNING: THIS IS A WORK-IN-PROGRESS DRAFT, NOT USABLE YET!
 
-measurementsPathKey = 'com.xTools4.xProject.measurementsPath'
-smartSetsPathKey    = 'com.xTools4.xProject.smartSetsPath'
-smartSetsPathKey    = 'com.xTools4.xProject.glyphConstructionsPath'
+measurementsPathKey       = 'com.xTools4.xProject.measurementsPath'
+smartSetsPathKey          = 'com.xTools4.xProject.smartSetsPath'
+glyphConstructionsPathKey = 'com.xTools4.xProject.glyphConstructionsPath'
 
 class xProject:
     '''

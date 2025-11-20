@@ -12,17 +12,11 @@ A tool to create and visualize font- and glyph-level measurements.
 
 ![]({{ site.url }}/images/variable/Measurements_font.png){: .img-fluid}
 
-load…
-: Load measurement data from an external JSON file into the UI.
+designspace…
+: Load a designspace file and linked measurements data into the UI.
 
-save…
-: Save the current measurement data to an external JSON file.
-
-default…
-: Select and load the default font source for comparison.
-
-PDF…
-: Save a visual overview of all measurements to a PDF file.
+save
+: Save the measurements data back to the external JSON file from which it was loaded.
 
 italic correction
 : Enable or disable italic angle and offset correction.

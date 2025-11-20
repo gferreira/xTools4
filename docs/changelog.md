@@ -9,6 +9,12 @@ All notable changes to xTools4 are documented in this file.
 {: .lead }
 
 
+0.2.5
+-----
+
+- <span class='badge rounded-0'>Changed</span> Making designspace files the single entry point for variable tools.
+
+
 0.2.4
 -----
 

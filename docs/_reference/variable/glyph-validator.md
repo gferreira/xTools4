@@ -15,11 +15,11 @@ A tool to validate glyphs in the current font against glyphs from another source
 ![]({{ site.url }}/images/variable/GlyphValidator.png){: .img-fluid}
 </div>
 <div class='col-8' markdown='1'>
-get default…
-: Open a dialog to select the source to check against the _current font_ 
+designspace…
+: Open a dialog to select a designspace file.
 
 reload
-: Reload the selected source from disk (in case it has changed).
+: Reload the previously selected designspace file.
 
 checks
 : Select which glyph attributes to check and report on.
