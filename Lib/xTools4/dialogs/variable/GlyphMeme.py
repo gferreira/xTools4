@@ -19,8 +19,8 @@ tempEditModeKey        = 'com.xTools4.tempEdit.mode'
 fontMeasurementsKey    = 'com.xTools4.measurements.font'
 defaultMeasurementsKey = 'com.xTools4.measurements.default'
 
-measurementsPathKey    = 'com.xTools4.xProject.measurementsPath'
-smartSetsPathKey       = 'com.xTools4.xProject.smartSetsPath'
+# measurementsPathKey    = 'com.xTools4.xProject.measurementsPath'
+# smartSetsPathKey       = 'com.xTools4.xProject.smartSetsPath'
 
 
 class GlyphMemeController(ezui.WindowController):
