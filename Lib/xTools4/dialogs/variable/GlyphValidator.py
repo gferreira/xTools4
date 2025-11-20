@@ -5,6 +5,7 @@ reload(xTools4.modules.validation)
 import ezui
 from random import random
 from merz import MerzView
+from fontTools.designspaceLib import DesignSpaceDocument
 from defcon import Glyph, registerRepresentationFactory, unregisterRepresentationFactory
 from mojo import drawingTools as ctx
 from mojo.subscriber import Subscriber, registerGlyphEditorSubscriber, unregisterGlyphEditorSubscriber, registerRoboFontSubscriber, unregisterRoboFontSubscriber, registerSubscriberEvent, roboFontSubscriberEventRegistry
@@ -48,7 +49,7 @@ class GlyphValidatorController(ezui.WindowController):
     defaultFont = None
 
     content = """
-    ( get default… )   @getDefaultButton
+    ( designspace… )   @getDesignspaceButton
     ( reload ↺ )       @reloadButton
 
     [X] width          @widthCheck
@@ -83,7 +84,7 @@ class GlyphValidatorController(ezui.WindowController):
         filtersPanel=dict(
             closed=True
         ),
-        getDefaultButton=dict(
+        getDesignspaceButton=dict(
             width='fill',
         ),
         reloadButton=dict(
@@ -141,10 +142,19 @@ class GlyphValidatorController(ezui.WindowController):
             checksDisplay[checkName] = checkBox.get()
         return checksDisplay
 
+    @property
+    def defaultPath(self):
+        if self.designspace is None:
+            return
+        return self.designspace.default.path
+
     # callbacks
 
-    def getDefaultButtonCallback(self, sender):
-        self.defaultPath = GetFile(message='Get default source…', title=self.title)
+    def getDesignspaceButtonCallback(self, sender):
+        self.designspacePath = GetFile(message='Select designspace file:', title=self.title)
+        self.designspace = DesignSpaceDocument()
+        self.designspace.read(self.designspacePath)
+        # get default font
         self.defaultFont = OpenFont(self.defaultPath, showInterface=False)
         postEvent(f"{KEY}.changed")
         self.updateFontViewCallback(sender)

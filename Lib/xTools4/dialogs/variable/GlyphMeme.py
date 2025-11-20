@@ -115,7 +115,7 @@ class GlyphMemeController(ezui.WindowController):
             return os.path.join(self.sourcesFolder, fileName)
 
     def getDesignspaceButtonCallback(self, sender):
-        self.designspacePath = GetFile(message='Select designspace file:')
+        self.designspacePath = GetFile(message='Select designspace file:', title=self.title)
         if self.designspacePath is None:
             return
 

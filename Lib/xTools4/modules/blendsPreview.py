@@ -250,7 +250,7 @@ class BlendsPreview:
             DB.translate(0, DB.height()-m)
             DB.fill(*colors['fillHeader2'])
             DB.text(self.defaultFont.info.familyName, (m, 0))
-            if self.compare:
+            if self.compare and self.compareFont:
                 DB.save()
                 DB.translate(DB.textSize(f'{self.defaultFont.info.familyName} ')[0] + m, 0)
                 DB.fill(*colors['fillHeader1'])
