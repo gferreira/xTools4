@@ -16,11 +16,11 @@ designspace…
 
 blended axes
 : ^
-  A list of blended axes (mappings) and values in the loaded designspace.
+  A list of blended axes (mappings) and values in the loaded designspace.  
   The list of values for each axis can be edited.
 
 reference font…
-: Load a conventional variable font for comparison.
+: Load another variable font for comparison with the blends preview.
 
 compare
 : Show the reference font in the background for comparison.
@@ -50,7 +50,10 @@ save PDF…
 <div class="card text-dark bg-light my-3 rounded-0">
 <div class="card-header"> note</div>
 <div class="card-body" markdown='1'>
-This tool requires the external library `uharfbuzz` which can be installed in RoboFont using the [Package Installer](http://robofont.com/documentation/reference/workspace/package-installer/).
+This tool requires the external library [uharfbuzz], which can be installed in RoboFont using the [Package Installer].
 {: .card-text }
 </div>
 </div>
+
+[uharfbuzz]: http://github.com/harfbuzz/uharfbuzz
+[Package Installer]: http://robofont.com/documentation/reference/workspace/package-installer/

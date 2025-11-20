@@ -19,6 +19,9 @@ tempEditModeKey        = 'com.xTools4.tempEdit.mode'
 fontMeasurementsKey    = 'com.xTools4.measurements.font'
 defaultMeasurementsKey = 'com.xTools4.measurements.default'
 
+measurementsPathKey    = 'com.xTools4.xProject.measurementsPath'
+smartSetsPathKey       = 'com.xTools4.xProject.smartSetsPath'
+
 
 class GlyphMemeController(ezui.WindowController):
 
@@ -28,7 +31,7 @@ class GlyphMemeController(ezui.WindowController):
 
     designspacePath  = None
     measurementsPath = None
-    smartsetsPath    = None
+    smartSetsPath    = None
 
     defaultFont = None
     glyphGroups = {}
@@ -45,8 +48,7 @@ class GlyphMemeController(ezui.WindowController):
     ---
 
     ( designspace…  )  @getDesignspaceButton
-    ( measurements… )  @getMeasurementsButton
-    ( glyph sets…   )  @getSmartSetsButton
+    ( reload ↺ )       @reloadButton
 
     """
 
@@ -66,13 +68,10 @@ class GlyphMemeController(ezui.WindowController):
         saveButton=dict(
             width='fill',
         ),
-        getSmartSetsButton=dict(
-            width='fill',
-        ),
         getDesignspaceButton=dict(
             width='fill',
         ),
-        getMeasurementsButton=dict(
+        reloadButton=dict(
             width='fill',
         ),
     )
@@ -99,10 +98,30 @@ class GlyphMemeController(ezui.WindowController):
             return
         return self.defaultFont.info.familyName
 
+    @property
+    def sourcesFolder(self):
+        return os.path.dirname(self.designspacePath)
+
+    @property
+    def measurementsPath(self):
+        fileName = self.designspace.lib.get(measurementsPathKey)
+        if fileName:
+            return os.path.join(self.sourcesFolder, fileName)
+
+    @property
+    def smartSetsPath(self):
+        fileName = self.designspace.lib.get(smartSetsPathKey)
+        if fileName:
+            return os.path.join(self.sourcesFolder, fileName)
+
     def getDesignspaceButtonCallback(self, sender):
         self.designspacePath = GetFile(message='Select designspace file:')
         if self.designspacePath is None:
             return
+
+        self._loadDesignspace()
+
+    def _loadDesignspace(self):
 
         if self.verbose:
             print(f'loading designspace from {os.path.split(self.designspacePath)[-1]}... ', end='')
@@ -114,10 +133,10 @@ class GlyphMemeController(ezui.WindowController):
         if self.verbose:
             print('done.\n')
 
-    def getMeasurementsButtonCallback(self, sender):
-        self.measurementsPath = GetFile(message='Select measurements file:')
-        if self.measurementsPath is None:
-            return
+        self._loadMeasurements()
+        self._loadSmartSets()
+
+    def _loadMeasurements(self):
 
         if self.verbose:
             print(f'loading measurements from {os.path.split(self.measurementsPath)[-1]}... ', end='')
@@ -128,15 +147,12 @@ class GlyphMemeController(ezui.WindowController):
         if self.verbose:
             print('done.\n')
 
-    def getSmartSetsButtonCallback(self, sender):
-        self.smartsetsPath = GetFile(message='Select SmartSets file:')
-        if self.smartsetsPath is None:
-            return
+    def _loadSmartSets(self):
 
         if self.verbose:
-            print(f'loading glyph groups from {os.path.split(self.smartsetsPath)[-1]}... ', end='')
+            print(f'loading glyph groups from {os.path.split(self.smartSetsPath)[-1]}... ', end='')
 
-        smartSets = readSmartSets(self.smartsetsPath, useAsDefault=False, font=None)
+        smartSets = readSmartSets(self.smartSetsPath, useAsDefault=False, font=None)
 
         self.glyphGroups = {}
         for smartGroup in smartSets:
@@ -282,6 +298,8 @@ class GlyphMemeController(ezui.WindowController):
 
         print('\n...done!\n')
 
+    def reloadButtonCallback(self, sender):
+        self._loadDesignspace()
 
 
 if __name__ == '__main__':
