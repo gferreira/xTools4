@@ -8,6 +8,7 @@ import os, json
 from random import random
 import ezui
 from merz import MerzView, MerzPen
+from fontTools.designspaceLib import DesignSpaceDocument
 from fontParts.fontshell.point import RPoint
 from mojo import drawingTools as ctx
 from mojo.UI import PutFile, GetFile, CurrentFontWindow
@@ -44,6 +45,8 @@ tempEditModeKey        = 'com.xTools4.tempEdit.mode'
 fontMeasurementsKey    = 'com.xTools4.measurements.font'
 defaultMeasurementsKey = 'com.xTools4.measurements.default'
 
+measurementsPathKey    = 'com.xTools4.xProject.measurementsPath'
+smartSetsPathKey       = 'com.xTools4.xProject.smartSetsPath'
 
 def scaleColorFormatter(attributes, threshold):
     value = attributes['value']
@@ -147,10 +150,11 @@ class MeasurementsController(ezui.WindowController):
 
     [X] italic correction @italicCorrection
 
-    ( load… )       @loadButton
-    ( save  )       @saveButton
-    ( default… )    @defaultButton
-    # ( PDF… )      @makePdfButton
+    ( designspace… ) @getDesignspaceButton
+    ( reload ↺ )     @reloadButton
+    ( save  )        @saveButton
+    # ( default… )   @defaultButton
+    # ( PDF… )       @makePdfButton
 
     """
 
@@ -435,13 +439,13 @@ class MeasurementsController(ezui.WindowController):
             maxValue=10.0,
             valueIncrement=0.01,
         ),
-        loadButton=dict(
+        getDesignspaceButton=dict(
+            width=buttonWidth*1.5,
+        ),
+        reloadButton=dict(
             width=buttonWidth,
         ),
         saveButton=dict(
-            width=buttonWidth,
-        ),
-        defaultButton=dict(
             width=buttonWidth,
         ),
         makePdfButton=dict(
@@ -492,25 +496,36 @@ class MeasurementsController(ezui.WindowController):
     def glyphMeasurements(self):
         return self.measurements.get('glyphs')
 
+    @property
+    def sourcesFolder(self):
+        if self.designspacePath is None:
+            return
+        return os.path.dirname(self.designspacePath)
+
+    @property
+    def measurementsPath(self):
+        fileName = self.designspace.lib.get(measurementsPathKey)
+        if fileName:
+            return os.path.join(self.sourcesFolder, fileName)
+
+    @property
+    def defaultPath(self):
+        if self.designspace is None:
+            return
+        return self.designspace.default.path
+
     # ---------
     # callbacks
     # ---------
 
-    def loadButtonCallback(self, sender):
-        self.measurementsPath = GetFile(message='Select JSON file with measurements:')
-        if self.measurementsPath is None:
+    def getDesignspaceButtonCallback(self, sender):
+        self.designspacePath = GetFile(message='Select designspace file:', title=self.title)
+        if self.designspacePath is None:
             return
+        self._loadDesignspace()
 
-        if self.verbose:
-            print(f'loading data from {os.path.split(self.measurementsPath)[-1]}... ', end='')
-
-        self.measurements = readMeasurements(self.measurementsPath)
-
-        self._loadFontMeasurements()
-        self._loadGlyphMeasurements()
-
-        if self.verbose:
-            print('done.\n')
+    def reloadButtonCallback(self, sender):
+        self._loadDesignspace()
 
     def saveButtonCallback(self, sender):
         self._updateGlyphMeasurementsDict()
@@ -554,20 +569,7 @@ class MeasurementsController(ezui.WindowController):
         if self.verbose:
             print('done.\n')
 
-    def defaultButtonCallback(self, sender):
-        defaultPath = GetFile(message='Select default UFO source:')
-        if defaultPath is None:
-            return
 
-        if self.verbose:
-            print(f'loading default source from {os.path.split(defaultPath)[-1]}... ', end='')
-
-        self.defaultFont = OpenFont(defaultPath, showInterface=False)
-
-        if self.verbose:
-            print('done.\n')
-
-        postEvent(f"{self.key}.changed")
 
     # def makePdfButtonCallback(self, sender):
 
@@ -807,6 +809,32 @@ class MeasurementsController(ezui.WindowController):
     # -------
     # methods
     # -------
+
+    def _loadDesignspace(self):
+
+        self.designspace = DesignSpaceDocument()
+        self.designspace.read(self.designspacePath)
+
+        if self.measurementsPath is None:
+            return
+
+        if self.verbose:
+            print(f'loading data from {os.path.split(self.measurementsPath)[-1]}... ', end='')
+
+        self.measurements = readMeasurements(self.measurementsPath)
+
+        self._loadFontMeasurements()
+        self._loadGlyphMeasurements()
+
+        if self.verbose:
+            print(f'loading default source from {os.path.split(defaultPath)[-1]}... ', end='')
+
+        self.defaultFont = OpenFont(self.defaultPath, showInterface=False)
+
+        if self.verbose:
+            print('done.\n')
+
+        postEvent(f"{self.key}.changed")
 
     def _loadFontMeasurements(self):
         table = self.w.getItem("fontMeasurements")

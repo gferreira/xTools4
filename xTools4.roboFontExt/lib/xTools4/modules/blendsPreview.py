@@ -250,7 +250,7 @@ class BlendsPreview:
             DB.translate(0, DB.height()-m)
             DB.fill(*colors['fillHeader2'])
             DB.text(self.defaultFont.info.familyName, (m, 0))
-            if self.compare:
+            if self.compare and self.compareFont:
                 DB.save()
                 DB.translate(DB.textSize(f'{self.defaultFont.info.familyName} ')[0] + m, 0)
                 DB.fill(*colors['fillHeader1'])
@@ -286,8 +286,8 @@ class BlendsPreview:
                     parametricLocation = getEffectiveLocation(self.designspacePath, blendedLocation)
                     g2 = instantiateGlyph(self.operator, glyphName, parametricLocation)
 
-                    if not g2:
-                        continue
+                    # if not g2:
+                    #     continue
 
                     # get var distance
                     n = getVarDistance(blendedLocation, defaultBlendedLocation)
@@ -389,7 +389,7 @@ class BlendsPreview:
 
                     DB.restore()
 
-            DB.translate(0, cellHeight*3)
+            DB.translate(0, cellHeight * len(axis2Values))
 
     def save(self, pdfPath):
         DB.saveImage(pdfPath)

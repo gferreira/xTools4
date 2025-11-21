@@ -29,9 +29,10 @@ class BlendsPreviewController:
     axesList   = []
     ignoreAxes = ['XTSP']
 
-    designspacePath = None
-    designspace     = None
-    operator        = None
+    designspacePath   = None
+    designspace       = None
+    operator          = None
+    referenceFontPath = None
 
     def __init__(self):
 
@@ -48,6 +49,13 @@ class BlendsPreviewController:
                 (x, y, -p, self.lineHeight),
                 'designspace…',
                 callback=self.loadDesignspaceCallback,
+                sizeStyle='small')
+
+        y += self.lineHeight + p/2
+        group1.reloadButton = Button(
+                (x, y, -p, self.lineHeight),
+                'reload ↺',
+                callback=self.reloadCallback,
                 sizeStyle='small')
 
         y += self.lineHeight + p
@@ -119,7 +127,7 @@ class BlendsPreviewController:
             (x + 90, y, -p, self.lineHeight),
             minValue=1,
             maxValue=4,
-            value=2,
+            value=4,
             tickMarkCount=4,
             stopOnTickMarks=True,
             # callback=self.updatePreviewCallback,
@@ -215,13 +223,23 @@ class BlendsPreviewController:
 
         self._updateAxesList()
 
+    def reloadCallback(self, sender):
+        if not self.operator:
+            return
+        self.operator.read(self.designspacePath)
+        self.operator.loadFonts()
+
+        self._updateAxesList()
+
     def loadReferenceFontCallback(self, sender):
         self.referenceFontPath = GetFile(message='Select reference font:')
-        if self.referenceFontPath is None:
+        if not self.referenceFontPath:
             return
 
         if self.verbose:
             print(f'loading reference font {os.path.split(self.referenceFontPath)[-1]}... ', end='')
+
+        self._group1.compare.set(True)
 
         if self.verbose:
             print('done.\n')
