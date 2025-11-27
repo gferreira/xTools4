@@ -5,7 +5,7 @@ reload(xTools4.modules.blendsPreview)
 import os, time
 import drawBot as DB
 from drawBot.ui.drawView import DrawView
-from vanilla import Window, Button, CheckBox, TextBox, Slider, List, Group, SplitView
+from vanilla import Window, Button, CheckBox, TextBox, Slider, List, Group, SplitView, HorizontalLine
 from mojo.UI import GetFile, PutFile
 from mojo.roboFont import OpenWindow, CurrentFont, CurrentGlyph
 from ufoProcessor.ufoOperator import UFOOperator
@@ -133,7 +133,12 @@ class BlendsPreviewController:
             # callback=self.updatePreviewCallback,
             sizeStyle='small')
 
-        y = -(self.lineHeight*2 + p*1.5)
+        # y = -(self.lineHeight*2 + p*1.5)
+
+        y += self.lineHeight + p
+        group1.line = HorizontalLine((x, y, -p, 1))
+
+        y += p
         group1.updatePreviewButton = Button(
                 (x, y, -p, self.lineHeight),
                 'update preview',
