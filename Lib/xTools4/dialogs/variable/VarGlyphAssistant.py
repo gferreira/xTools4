@@ -133,7 +133,6 @@ class VarGlyphAssistantController(DesignSpaceSelector_EZUI):
     >> |----------|-------|---------|---------|
 
     >= HorizontalStack
-    >> ( load… )     @loadMeasurementsButton
     >> d-threshold
     >> [__](±)       @thresholdDefault
     '''
