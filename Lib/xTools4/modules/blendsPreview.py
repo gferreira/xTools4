@@ -105,11 +105,11 @@ class BlendsPreview:
     levels      = False
     levelsShow  = 1
 
-    pointRadius = 10
+    pointRadius = 8
 
     compareColors = [
-        (1, 0, 1), # blended font
-        (0, 1, 1), # reference font
+        (1, 0, 1), # reference font
+        (0, 1, 1), # blended font
     ]
 
     levelsColors = [
@@ -313,7 +313,10 @@ class BlendsPreview:
 
                     DB.scale(self.glyphScale)
 
+                    #--------------------
                     # draw blended glyph
+                    #--------------------
+
                     if self.wireframe:
                         DB.strokeWidth(2)
 
@@ -346,7 +349,10 @@ class BlendsPreview:
                         DB.line((0, yBottom), (0, yTop))
                         DB.line((g2.width, yBottom), (g2.width, yTop))
 
+                    #----------------------
                     # draw reference glyph
+                    #----------------------
+
                     if self.compare and self.compareFont:
                         if not self.defaultFont[glyphName].unicodes:
                             return

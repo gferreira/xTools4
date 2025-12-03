@@ -5,13 +5,14 @@ reload(xTools4.modules.blendsPreview)
 import os, time
 import drawBot as DB
 from drawBot.ui.drawView import DrawView
-from vanilla import Window, Button, CheckBox, TextBox, Slider, List, Group, SplitView, HorizontalLine
+from vanilla import Window, Button, CheckBox, TextBox, EditText, Slider, List, Group, SplitView, HorizontalLine, ColorWell
 from mojo.UI import GetFile, PutFile
 from mojo.roboFont import OpenWindow, CurrentFont, CurrentGlyph
 from ufoProcessor.ufoOperator import UFOOperator
 from xTools4.modules.encoding import psname2char
 from xTools4.modules.sys import timer
 from xTools4.modules.blendsPreview import BlendsPreview
+from xTools4.modules.color import rgb2nscolor, nscolor2rgb
 from xTools4.dialogs.variable.GlyphMeme import tempEditModeKey
 
 
@@ -24,10 +25,9 @@ class BlendsPreviewController:
     lineHeight  = 20
     verbose     = True
     buttonWidth = 75
-    # colWidth    = 123*1.4
 
-    axesList   = []
-    ignoreAxes = ['XTSP']
+    axesList    = []
+    ignoreAxes  = ['XTSP']
 
     designspacePath   = None
     designspace       = None
@@ -44,6 +44,7 @@ class BlendsPreviewController:
         group1 = Group((0, 0, -0, -0))
 
         x = y = p = self.padding
+        col1 = 90
 
         group1.loadDesignspaceButton = Button(
                 (x, y, -p, self.lineHeight),
@@ -81,7 +82,6 @@ class BlendsPreviewController:
             (x+3, y, -p, self.lineHeight),
             'compare',
             value=False,
-            # callback=self.updatePreviewCallback,
             sizeStyle='small')
 
         y += self.lineHeight
@@ -89,7 +89,6 @@ class BlendsPreviewController:
             (x+3, y, -p, self.lineHeight),
             'margins',
             value=True,
-            # callback=self.updatePreviewCallback,
             sizeStyle='small')
 
         y += self.lineHeight
@@ -97,7 +96,6 @@ class BlendsPreviewController:
             (x+3, y, -p, self.lineHeight),
             'points',
             value=False,
-            # callback=self.updatePreviewCallback,
             sizeStyle='small')
 
         y += self.lineHeight
@@ -105,7 +103,6 @@ class BlendsPreviewController:
             (x+3, y, -p, self.lineHeight),
             'labels',
             value=True,
-            # callback=self.updatePreviewCallback,
             sizeStyle='small')
 
         y += self.lineHeight
@@ -113,30 +110,63 @@ class BlendsPreviewController:
             (x+3, y, -p, self.lineHeight),
             'levels',
             value=False,
-            # callback=self.updatePreviewCallback,
             sizeStyle='small')
 
         y += self.lineHeight
         group1.levelsShowLabel = TextBox(
-            (x, y + 4, 90, self.lineHeight),
+            (x, y + 4, col1, self.lineHeight),
             'show levels',
-            # callback=self.updatePreviewCallback,
             sizeStyle='small')
 
         group1.levelsShow = Slider(
-            (x + 90, y, -p, self.lineHeight),
+            (x + col1, y, -p, self.lineHeight),
             minValue=1,
             maxValue=4,
             value=4,
             tickMarkCount=4,
             stopOnTickMarks=True,
-            # callback=self.updatePreviewCallback,
             sizeStyle='small')
 
-        # y = -(self.lineHeight*2 + p*1.5)
-
         y += self.lineHeight + p
-        group1.line = HorizontalLine((x, y, -p, 1))
+        group1.line1 = HorizontalLine((x, y, -p, 1))
+
+        # y += p
+        # group1.pointsSizeLabel = TextBox(
+        #     (x, y + 4, col1, self.lineHeight),
+        #     'points size',
+        #     sizeStyle='small')
+
+        # group1.pointsSize = Slider(
+        #     (x + col1, y, -p, self.lineHeight),
+        #     minValue=12,
+        #     maxValue=18,
+        #     value=14,
+        #     tickMarkCount=4,
+        #     stopOnTickMarks=True,
+        #     sizeStyle='small')
+
+        # y += self.lineHeight
+        # group1.blendsColorLabel = TextBox(
+        #     (x, y + 4, col1, self.lineHeight),
+        #     'blends',
+        #     sizeStyle='small')
+
+        # group1.blendsColor = ColorWell(
+        #         (x + col1, y, -p, self.lineHeight),
+        #         color=rgb2nscolor((0, 1, 1)))
+
+        # y += self.lineHeight
+        # group1.referenceColorLabel = TextBox(
+        #     (x, y + 4, col1, self.lineHeight),
+        #     'reference',
+        #     sizeStyle='small')
+
+        # group1.referenceColor = ColorWell(
+        #         (x + col1, y, -p, self.lineHeight),
+        #         color=rgb2nscolor((1, 0, 1)))
+
+        # y += self.lineHeight + p
+        # group1.line2 = HorizontalLine((x, y, -p, 1))
 
         y += p
         group1.updatePreviewButton = Button(
@@ -158,7 +188,7 @@ class BlendsPreviewController:
         group2.canvas = DrawView((x, y, -p, -p))
 
         self._groups = [
-            dict(view=group1, identifier="pane1", size=123*2, minSize=123*1.5, maxSize=123*3, canCollapse=False),
+            dict(view=group1, identifier="pane1", size=123*2, minSize=123*1.5, maxSize=123*2.5, canCollapse=False),
             dict(view=group2, identifier="pane2", canCollapse=False),
         ]
         self.w.splitView = SplitView((0, 0, -0, -0), self._groups, dividerStyle='thin')
