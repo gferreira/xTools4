@@ -20,6 +20,8 @@ tempEditModeKey        = 'com.xTools4.tempEdit.mode'
 fontMeasurementsKey    = 'com.xTools4.measurements.font'
 defaultMeasurementsKey = 'com.xTools4.measurements.default'
 
+italicOffsetKey = 'com.typemytype.robofont.italicSlantOffset'
+
 
 class GlyphMemeController(ezui.WindowController):
 
@@ -35,11 +37,6 @@ class GlyphMemeController(ezui.WindowController):
     glyphGroups = {}
 
     content = """
-    ( designspace…  )  @getDesignspaceButton
-    ( reload ↺ )       @reloadButton
-
-    ---
-
     (groups ...)  @groupSelector
     (glyphs ...)  @glyphSelector
 
@@ -47,6 +44,11 @@ class GlyphMemeController(ezui.WindowController):
 
     ( open )  @openButton
     ( save )  @saveButton
+
+    ---
+
+    ( designspace…  )  @getDesignspaceButton
+    ( reload ↺ )       @reloadButton
 
     """
 
@@ -112,13 +114,6 @@ class GlyphMemeController(ezui.WindowController):
         if fileName:
             return os.path.join(self.sourcesFolder, fileName)
 
-    def getDesignspaceButtonCallback(self, sender):
-        self.designspacePath = GetFile(message='Select designspace file:', title=self.title)
-        if self.designspacePath is None:
-            return
-
-        self._loadDesignspace()
-
     def _loadDesignspace(self):
 
         if self.verbose:
@@ -175,6 +170,13 @@ class GlyphMemeController(ezui.WindowController):
         if self.verbose:
             print('done.\n')
 
+    def getDesignspaceButtonCallback(self, sender):
+        self.designspacePath = GetFile(message='Select designspace file:', title=self.title)
+        if self.designspacePath is None:
+            return
+
+        self._loadDesignspace()
+
     def groupSelectorCallback(self, sender):
         groupSelector = self.w.getItem("groupSelector")
         glyphSelector = self.w.getItem("glyphSelector")
@@ -198,8 +200,8 @@ class GlyphMemeController(ezui.WindowController):
         # create temp font
         tmpFont = NewFont(familyName='tempEdit')
         setupNewFont(tmpFont)
-        tmpFont.info.familyName = f'{self.familyName}'
-        tmpFont.info.styleName  = glyphName
+        tmpFont.info.familyName  = f'{self.familyName}'
+        tmpFont.info.styleName   = glyphName
 
         # get parametric sources for current glyph
         sources = {}
@@ -228,11 +230,14 @@ class GlyphMemeController(ezui.WindowController):
             ufoPath = sources[sourceFile]
             srcFont = OpenFont(ufoPath, showInterface=False)
 
-            # copy vertical metrics from 1st source
+            # copy vertical metrics etc. from 1st source
             if i == 0:
-                for attr in ['unitsPerEm', 'xHeight', 'capHeight', 'descender', 'ascender']:
+                for attr in ['unitsPerEm', 'xHeight', 'capHeight', 'descender', 'ascender', 'italicAngle']:
                     value = getattr(srcFont.info, attr)
                     setattr(tmpFont.info, attr, value)
+                italicOffset = srcFont.lib.get(italicOffsetKey)
+                if italicOffset:
+                    tmpFont.lib[italicOffsetKey] = italicOffset
 
             # make temp glyph name
             glyphsFolder = os.path.join(ufoPath, 'glyphs')

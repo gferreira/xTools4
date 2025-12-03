@@ -116,11 +116,6 @@ class VarGlyphAssistantController(DesignSpaceSelector_EZUI):
     > | file name | W | L | R | C | P | A | C |  @attributesValues
     > |-----------|---|---|---|---|---|---|---|
 
-    # * Tab: points                      @pointsTab
-    # > |-----------|---|---|---|-----|
-    # > | file name | 0 | 1 | 2 | ... |  @pointsTable
-    # > |-----------|---|---|---|-----|
-
     * Tab: measurements  @measurementsTab
     >= HorizontalStack
 
@@ -135,6 +130,12 @@ class VarGlyphAssistantController(DesignSpaceSelector_EZUI):
     >= HorizontalStack
     >> d-threshold
     >> [__](±)       @thresholdDefault
+
+    # * Tab: points                    @pointsTab
+    # > |-----------|---|---|---|---|
+    # > | file name | x | y | t | s |  @pointsTable
+    # > |-----------|---|---|---|---|
+
     '''
 
     buttonWidth = DesignSpaceSelector_EZUI.buttonWidth
@@ -254,20 +255,20 @@ class VarGlyphAssistantController(DesignSpaceSelector_EZUI):
         #     alternatingRowColors=True,
         #     width=columnLeft,
         # ),
-        # pointsTable=dict(
-        #     alternatingRowColors=True,
-        #     showColumnTitles=True,
-        #     columnDescriptions=[
-        #         dict(
-        #             identifier="fileName",
-        #             title="file name",
-        #             width=columnFontName,
-        #             minWidth=columnFontName*0.9,
-        #             maxWidth=columnFontName*2,
-        #             sortable=True,
-        #         ),
-        #     ],
-        # ),
+        pointsTable=dict(
+            alternatingRowColors=True,
+            showColumnTitles=True,
+            columnDescriptions=[
+                dict(
+                    identifier="fileName",
+                    title="file name",
+                    width=columnFontName,
+                    minWidth=columnFontName*0.9,
+                    maxWidth=columnFontName*2,
+                    sortable=True,
+                ),
+            ],
+        ),
         # loadPointsButton=dict(
         #     width=buttonWidth,
         # ),

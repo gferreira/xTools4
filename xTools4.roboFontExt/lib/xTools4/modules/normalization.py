@@ -4,7 +4,7 @@ from ufonormalizer import normalizeUFO
 from fontParts.world import OpenFont
 
 
-def cleanupSources(sourcesFolder, clearFontLibs=True, clearGlyphLibs=True, clearMarks=True, clearLayers=True, preflight=True, verbose=False, ignoreFontLibs=[], ignoreLayers=[]):
+def cleanupSources(sourcesFolder, clearFontLibs=True, clearGlyphLibs=True, clearFontGuides=True, clearGlyphGuides=True, clearMarks=True, clearLayers=True, preflight=True, verbose=False, ignoreFontLibs=[], ignoreLayers=[]):
 
     ufoPaths  = glob.glob(f'{sourcesFolder}/*.ufo')
 
@@ -51,6 +51,19 @@ def cleanupSources(sourcesFolder, clearFontLibs=True, clearGlyphLibs=True, clear
                     if k not in glyphLibKeys:
                         glyphLibKeys.append(k)
                     del g.lib[k]
+
+        if clearFontGuides:
+            if verbose:
+                print(f'\t\tcleaning up font guidelines...')
+            f.clearGuidelines()
+
+        if clearGlyphGuides:
+            if verbose:
+                print(f'\t\tcleaning up glyph guidelines...')
+            for g in f:
+                if not len(g.guidelines):
+                    continue
+                g.clearGuidelines()
 
         if clearMarks:
             if verbose:
