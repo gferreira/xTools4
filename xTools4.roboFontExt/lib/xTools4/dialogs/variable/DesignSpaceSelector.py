@@ -5,6 +5,7 @@ from mojo.UI import GetFile
 from mojo.roboFont import OpenWindow, OpenFont
 from fontTools.designspaceLib import DesignSpaceDocument
 from xTools4.modules.linkPoints2 import readMeasurements # getPointAtIndex, getIndexForPoint, getAnchorPoint
+from xTools4.modules.xproject import measurementsPathKey
 
 
 def getSourceName(src):
@@ -133,6 +134,8 @@ class DesignSpaceSelector_EZUI(ezui.WindowController):
         selectedDesignspace = designspacesSelection[0]
         designspacePath = selectedDesignspace['path']
 
+        sourcesFolder = os.path.dirname(designspacePath)
+
         self.designspace = DesignSpaceDocument()
         self.designspace.read(designspacePath)
 
@@ -149,6 +152,13 @@ class DesignSpaceSelector_EZUI(ezui.WindowController):
             sourcesItems.append(dict(name=getSourceName(src)))
 
         sourcesTable.set(sourcesItems)
+
+        # load measurements
+        measurementsFile = self.designspace.lib.get(measurementsPathKey)
+        if measurementsFile:
+            measurementsPath = os.path.join(sourcesFolder, measurementsFile)
+            self._measurementsData = readMeasurements(measurementsPath)
+            self._loadMeasurements()
 
     # def sourcesDoubleClickCallback(self, sender):
     #     self.openButtonCallback(None)
@@ -199,16 +209,16 @@ class DesignSpaceSelector_EZUI(ezui.WindowController):
         if self.verbose:
             print('done...\n')
 
-    def loadMeasurementsButtonCallback(self, sender):
-        jsonPath = GetFile(message='Select JSON file with measurements:')
-        if jsonPath is None:
-            return
+    # def loadMeasurementsButtonCallback(self, sender):
+    #     jsonPath = GetFile(message='Select JSON file with measurements:')
+    #     if jsonPath is None:
+    #         return
 
-        if self.verbose:
-            print(f'loading data from {os.path.split(jsonPath)[-1]}... ')
+    #     if self.verbose:
+    #         print(f'loading data from {os.path.split(jsonPath)[-1]}... ')
 
-        self._measurementsData = readMeasurements(jsonPath)
-        self._loadMeasurements()
+    #     self._measurementsData = readMeasurements(jsonPath)
+    #     self._loadMeasurements()
 
     def _updateLists(self):
         # implement method when subclassing object

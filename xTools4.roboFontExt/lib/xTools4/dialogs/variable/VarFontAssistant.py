@@ -7,7 +7,7 @@ reload(xTools4.modules.validation)
 import ezui
 from mojo.roboFont import OpenWindow, OpenFont
 from xTools4.dialogs.variable.DesignSpaceSelector import DesignSpaceSelector_EZUI, getSourceName
-from xTools4.dialogs.variable.Measurements import *
+from xTools4.dialogs.variable.Measurements import colorCheckTrue, colorCheckFalse, colorCheckNone
 from xTools4.dialogs.variable.VarGlyphAssistant import intToCellConverter, cellToIntConverter, numberColorFormatter
 from xTools4.modules.validation import validateFonts
 
@@ -154,7 +154,6 @@ class VarFontAssistant_EZUI(DesignSpaceSelector_EZUI):
     >> |----------|-------|---------|---------|
 
     >= HorizontalStack
-    >> ( load… )         @loadMeasurementsButton
     >> d-threshold
     >> [__](±)           @thresholdDefault
 
