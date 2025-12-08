@@ -24,7 +24,7 @@ Additional data formats linked to designspace files and used by different tools 
   </tr>
   <tr>
     <td>used by</td>
-    <td><a href='../measurements/'>Measurements</a>, <a href='../glyph-meme/'>GlyphMeme</a>, <a href='../varfont-assistant/'>VarFontAssistant</a>, <a href='../varglyph-assistant/'>VarGlyphAssistant</a></td>
+    <td><a href='../tools/variable/measurements/'>Measurements</a>, <a href='../tools/variable/glyph-meme/'>GlyphMeme</a>, <a href='../tools/variable/varfont-assistant/'>VarFontAssistant</a>, <a href='../tools/variable/varglyph-assistant/'>VarGlyphAssistant</a></td>
   </tr>
 </table>
 
@@ -45,7 +45,7 @@ Additional data formats linked to designspace files and used by different tools 
   </tr>
   <tr>
   <td>used by</td>
-  <td><a href='#'>GlyphMeme</a></td>
+  <td><a href='../tools/variable/glyph-meme/'>GlyphMeme</a></td>
   </tr>
 </table>
 
@@ -66,7 +66,7 @@ Additional data formats linked to designspace files and used by different tools 
   </tr>
   <tr>
     <td>used by</td>
-  <td><a href='#'>GlyphMeme</a></td>
+  <td><a href='../tools/variable/glyph-meme/'>GlyphMeme</a></td>
   </tr>
 </table>
 
