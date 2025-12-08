@@ -78,6 +78,7 @@ def cleanupSources(sourcesFolder, clearFontLibs=True, clearGlyphLibs=True, clear
 
         f.close()
 
+    print()
     if clearFontLibs:
         print('deleted font libs:')
         for k in fontLibKeys:
@@ -96,7 +97,7 @@ def cleanupSources(sourcesFolder, clearFontLibs=True, clearGlyphLibs=True, clear
             print(f'- {k}')
         print()
 
-    print('\n...done!\n')
+    print('...done!\n')
 
 
 def normalizeSources(sourcesFolder, verbose=True):
