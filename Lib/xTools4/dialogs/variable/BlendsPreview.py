@@ -92,7 +92,7 @@ class BlendsPreviewController:
             sizeStyle='small')
 
         y += self.lineHeight
-        group1.wireframe = CheckBox(
+        group1.points = CheckBox(
             (x+3, y, -p, self.lineHeight),
             'points',
             value=False,
@@ -112,61 +112,71 @@ class BlendsPreviewController:
             value=False,
             sizeStyle='small')
 
-        y += self.lineHeight
-        group1.levelsShowLabel = TextBox(
-            (x, y + 4, col1, self.lineHeight),
-            'show levels',
-            sizeStyle='small')
-
-        group1.levelsShow = Slider(
-            (x + col1, y, -p, self.lineHeight),
-            minValue=1,
-            maxValue=4,
-            value=4,
-            tickMarkCount=4,
-            stopOnTickMarks=True,
-            sizeStyle='small')
-
-        y += self.lineHeight + p
-        group1.line1 = HorizontalLine((x, y, -p, 1))
-
-        # y += p
-        # group1.pointsSizeLabel = TextBox(
+        # y += self.lineHeight
+        # group1.levelsShowLabel = TextBox(
         #     (x, y + 4, col1, self.lineHeight),
-        #     'points size',
+        #     'show levels',
         #     sizeStyle='small')
 
-        # group1.pointsSize = Slider(
+        # group1.levelsShow = Slider(
         #     (x + col1, y, -p, self.lineHeight),
-        #     minValue=12,
-        #     maxValue=18,
-        #     value=14,
+        #     minValue=1,
+        #     maxValue=4,
+        #     value=4,
         #     tickMarkCount=4,
         #     stopOnTickMarks=True,
         #     sizeStyle='small')
 
-        # y += self.lineHeight
-        # group1.blendsColorLabel = TextBox(
-        #     (x, y + 4, col1, self.lineHeight),
-        #     'blends',
-        #     sizeStyle='small')
+        y += self.lineHeight + p
+        group1.line1 = HorizontalLine((x, y, -p, 1))
 
-        # group1.blendsColor = ColorWell(
-        #         (x + col1, y, -p, self.lineHeight),
-        #         color=rgb2nscolor((0, 1, 1)))
+        y += p
+        group1.monovar = CheckBox(
+            (x+3, y, -p, self.lineHeight),
+            'monovar',
+            value=True,
+            sizeStyle='small')
 
-        # y += self.lineHeight
-        # group1.referenceColorLabel = TextBox(
-        #     (x, y + 4, col1, self.lineHeight),
-        #     'reference',
-        #     sizeStyle='small')
+        y += self.lineHeight
+        group1.duovars = CheckBox(
+            (x+3, y, -p, self.lineHeight),
+            'duovars',
+            value=True,
+            sizeStyle='small')
 
-        # group1.referenceColor = ColorWell(
-        #         (x + col1, y, -p, self.lineHeight),
-        #         color=rgb2nscolor((1, 0, 1)))
+        y += self.lineHeight
+        group1.trivars = CheckBox(
+            (x+3, y, -p, self.lineHeight),
+            'trivars',
+            value=True,
+            sizeStyle='small')
 
-        # y += self.lineHeight + p
-        # group1.line2 = HorizontalLine((x, y, -p, 1))
+        y += self.lineHeight
+        group1.quadravars = CheckBox(
+            (x+3, y, -p, self.lineHeight),
+            'quadvars',
+            value=True,
+            sizeStyle='small')
+
+        y += self.lineHeight + p
+        group1.line2 = HorizontalLine((x, y, -p, 1))
+
+        y += p
+        group1.header = CheckBox(
+            (x+3, y, -p, self.lineHeight),
+            'header',
+            value=True,
+            sizeStyle='small')
+
+        y += self.lineHeight
+        group1.footer = CheckBox(
+            (x+3, y, -p, self.lineHeight),
+            'footer',
+            value=False,
+            sizeStyle='small')
+
+        y += self.lineHeight + p
+        group1.line3 = HorizontalLine((x, y, -p, 1))
 
         y += p
         group1.updatePreviewButton = Button(
@@ -214,8 +224,8 @@ class BlendsPreviewController:
         return self._group1.margins.get()
 
     @property
-    def wireframe(self):
-        return self._group1.wireframe.get()
+    def points(self):
+        return self._group1.points.get()
 
     @property
     def labels(self):
@@ -226,8 +236,25 @@ class BlendsPreviewController:
         return int(self._group1.levels.get())
 
     @property
+    def header(self):
+        return int(self._group1.header.get())
+
+    @property
+    def footer(self):
+        return int(self._group1.footer.get())
+
+    @property
     def levelsShow(self):
-        return self._group1.levelsShow.get()
+        levels = []
+        if self._group1.monovar.get():
+            levels.append(1)
+        if self._group1.duovars.get():
+            levels.append(2)
+        if self._group1.trivars.get():
+            levels.append(3)
+        if self._group1.quadravars.get():
+            levels.append(4)
+        return levels # self._group1.levelsShow.get()
 
     @property
     def parametricAxes(self):
@@ -283,10 +310,9 @@ class BlendsPreviewController:
         self._updatePreview()
 
     def savePDFCallback(self, sender):
-        pdfPath = PutFile(
-                message="Choose a location for this PDF",
-                fileName="blending-preview.pdf"
-            )
+        pdfPath = PutFile(message="Choose a location for this PDF", fileName="blending-preview.pdf")
+        if not pdfPath:
+            return
         DB.saveImage(pdfPath)
 
     # methods
@@ -295,7 +321,7 @@ class BlendsPreviewController:
         axesItems = []
         for axis in self.operator.doc.axes:
             for axisName in self.blendedAxes:
-                if axisName in self.ignoreAxes:
+                if axisName in self.ignoreAxes or axisName.startswith('TN'):
                     continue
                 if axisName == axis.name:
                     axesItems.append({
@@ -337,12 +363,17 @@ class BlendsPreviewController:
         B.compareFontPath = self.referenceFontPath
         B.axesList = axesList
 
-        B.compare    = self.compare
-        B.margins    = self.margins
-        B.labels     = self.labels
-        B.levels     = self.levels
-        B.wireframe  = self.wireframe
-        B.levelsShow = self.levelsShow
+        for attr in [
+                'compare',
+                'margins',
+                'labels',
+                'levels',
+                'levelsShow',
+                'points',
+                'header',
+                'footer',
+            ]:
+            setattr(B, attr, getattr(self, attr))
 
         B.draw(glyphName)
 

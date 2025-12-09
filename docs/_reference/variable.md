@@ -20,14 +20,18 @@ Tools to visualize and edit variable font sources.
 - <span class="badge text-bg-success rounded-0">RF4</span> [VarFontAssistant](varfont-assistant)
 - <span class="badge text-bg-success rounded-0">RF4</span> [VarGlyphAssistant](varglyph-assistant)
 - <span class="badge text-bg-success rounded-0">RF4</span> [VarGlyphViewer](varglyph-viewer)
+</div>
 
+<div class='col' markdown='1'>
 ##### Rounding
 
 - <span class="badge text-bg-success rounded-0">RF4</span> [RoundingTool](rounding-tool)
 - <span class="badge text-bg-success rounded-0">RF4</span> [rounding scripts](rounding-scripts)
 </div>
 
-<div class='col' markdown='1'>
+</div>
+
+{% comment %}
 ## Old versions which will soon be retired
 {: .h5 }
 
@@ -35,9 +39,7 @@ Tools to visualize and edit variable font sources.
 - <span class="badge text-bg-warning rounded-0">RF3</span> [Measurements](old/measurements)
 - <span class="badge text-bg-warning rounded-0">RF3</span> [VarFontAssistant](old/varfont-assistant)
 - <span class="badge text-bg-warning rounded-0">RF3</span> [VarGlyphAssistant](old/varglyph-assistant)
-</div>
-
-</div>
+{% endcomment %}
 
 - - -
 

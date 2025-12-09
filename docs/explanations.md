@@ -10,4 +10,4 @@ theoretical knowledge · understanding-oriented · useful when studying
 - [overview](overview)
 - [about xTools4](about)
 - [variable font production tools](variable-font-production)
-- [about this documentation](explanations/about-docs)
+- [about this documentation](about-docs)

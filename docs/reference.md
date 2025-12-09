@@ -26,5 +26,6 @@ Formats
 - [Measurements format](measurements-format)
 - [Measurement scales and thresholds](measurement-scales-thresholds)
 - [Rounding format](rounding-format)
+- [Custom designspace libs](custom-designspace-libs)
 </div>
 </div>
