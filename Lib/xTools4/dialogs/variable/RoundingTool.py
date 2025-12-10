@@ -146,6 +146,7 @@ class RoundingController(ezui.WindowController):
         self.w.getNSWindow().setTitlebarAppearsTransparent_(True)
         self.w.getItem("roundCapsTable").getNSTableView().setRowHeight_(17)
         self.w.getItem("roundCornersTable").getNSTableView().setRowHeight_(17)
+        self.w.workspaceWindowIdentifier = KEY
         self.w.open()
 
     def started(self):

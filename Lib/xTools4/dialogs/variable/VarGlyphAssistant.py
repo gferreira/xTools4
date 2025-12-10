@@ -386,6 +386,7 @@ class VarGlyphAssistantController(DesignSpaceSelector_EZUI):
         self.w.getNSWindow().setTitlebarAppearsTransparent_(True)
         for itemName in self._tables:
             self.w.getItem(itemName).getNSTableView().setRowHeight_(self.rowHeight)
+        self.w.workspaceWindowIdentifier = KEY
         self.w.open()
 
     def started(self):

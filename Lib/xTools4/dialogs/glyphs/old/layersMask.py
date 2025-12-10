@@ -7,6 +7,7 @@ from xTools4.modules.anchors import copyAnchors
 
 # TO-DO: add observers for layerset changes
 # update UI when adding/deleting/renaming layers
+KEY = 'com.xTools4.layersMask'
 
 class MaskDialog(hDialog, BaseWindowController):
 
@@ -31,7 +32,7 @@ class MaskDialog(hDialog, BaseWindowController):
         self.height  = self.textHeight * 9
         self.height += self.padding * 6 -5
         self.w = self.window((self.width, self.height), self.title)
-        self.w.workspaceWindowIdentifier = "LayerMask"
+        self.w.workspaceWindowIdentifier = KEY
 
         x = p = self.padding
         y = p - 3

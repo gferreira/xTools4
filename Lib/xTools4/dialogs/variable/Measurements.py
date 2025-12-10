@@ -462,7 +462,7 @@ class MeasurementsController(ezui.WindowController):
             size=(800, 600),
             minSize=(600, 400),
         )
-        self.w.workspaceWindowIdentifier = "Measurements"
+        self.w.workspaceWindowIdentifier = KEY
         self.w.getNSWindow().setTitlebarAppearsTransparent_(True)
         self.w.getItem("fontMeasurements").getNSTableView().setRowHeight_(17)
         self.w.getItem("glyphMeasurements").getNSTableView().setRowHeight_(17)

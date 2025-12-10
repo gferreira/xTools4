@@ -8,6 +8,7 @@ from xTools4.dialogs.old import hDialog
 
 
 tempEditModeKey = 'com.xTools4.tempEdit.mode'
+KEY = 'com.xTools4.layersImport'
 
 
 class ImportGlyphsIntoLayerDialog(hDialog):
@@ -34,7 +35,7 @@ class ImportGlyphsIntoLayerDialog(hDialog):
         self.height  = self.textHeight * 8
         self.height += self.padding * 9
         self.w = self.window((self.width, self.height), self.title)
-        self.w.workspaceWindowIdentifier = "LayerImport"
+        self.w.workspaceWindowIdentifier = KEY
 
         x = y = p = self.padding
         self.w.getFile = Button(
