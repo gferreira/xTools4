@@ -13,7 +13,7 @@ from glyphConstruction import ParseGlyphConstructionListFromString, GlyphConstru
 from xTools4.dialogs.glyphs.old.base import GlyphsDialogBase
 from xTools4.modules.accents import buildGlyphConstruction
 
-
+KEY = 'com.xTools4.buildConstructions'
 class BuildConstructionDialog(GlyphsDialogBase):
 
     '''
@@ -37,6 +37,7 @@ class BuildConstructionDialog(GlyphsDialogBase):
             (self.width, self.height),
             self.title,
             minSize=(self.width, self.height))
+        self.w.workspaceWindowIdentifier = KEY
 
         x = y = p = self.padding
         self.w.importButton = Button(

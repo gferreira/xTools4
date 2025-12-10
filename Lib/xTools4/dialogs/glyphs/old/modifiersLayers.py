@@ -4,7 +4,7 @@ from mojo.roboFont import CurrentFont
 from defconAppKit.windows.baseWindow import BaseWindowController
 from xTools4.dialogs.old import hDialog
 
-
+KEY = 'com.xTools4.modifiersLayers'
 class SelectLayersDialog(hDialog, BaseWindowController):
 
     title      = "layers"
@@ -17,6 +17,7 @@ class SelectLayersDialog(hDialog, BaseWindowController):
             (self.width, self.height), self.title,
             maxSize=(self.width, self.height * 1.5),
             minSize=(self.width, self.height))
+        self.w.workspaceWindowIdentifier = KEY
 
         x = y = p = self.padding
         self.w.fontName = TextBox(
