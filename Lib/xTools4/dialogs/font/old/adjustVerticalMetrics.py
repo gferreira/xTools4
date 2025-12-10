@@ -8,6 +8,7 @@ from xTools4.modules.messages import noFontOpen, showMessage
 from xTools4.dialogs.old import hDialog
 from xTools4.dialogs.old.misc.numberEditText01 import NumberEditText_01
 
+KEY = 'com.xTools4.adjustVerticalMetrics'
 
 class AdjustVerticalMetricsDialog(hDialog, BaseWindowController):
 
@@ -36,6 +37,7 @@ class AdjustVerticalMetricsDialog(hDialog, BaseWindowController):
         self.height += self.padding * (len(self.vMetrics) + 1)
         self.width  *= 1.2
         self.w = self.window((self.width, self.height), self.title)
+        self.w.workspaceWindowIdentifier = KEY
 
         x = y = p = self.padding
         # self.w.box = Box((x, y, -p, self.textHeight * 1.2))

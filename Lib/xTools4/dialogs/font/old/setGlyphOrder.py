@@ -5,7 +5,7 @@ from xTools4.dialogs.old import hDialog
 from xTools4.modules.encoding import importEncoding, setGlyphOrder, psname2char, importGroupsFromEncoding, paintGroups
 from xTools4.modules.fontutils import clearMarkColors
 
-
+KEY = 'com.xTools4.setGlyphOrder'
 class SetGlyphOrderDialog(hDialog):
 
     title    = 'font'
@@ -16,6 +16,7 @@ class SetGlyphOrderDialog(hDialog):
         self.height  = self.textHeight * 4
         self.height += self.padding * 4
         self.w = self.window((self.width, self.height), self.title)
+        self.w.workspaceWindowIdentifier = KEY
 
         x = y = p = self.padding
         self.w.getFileButton = Button(

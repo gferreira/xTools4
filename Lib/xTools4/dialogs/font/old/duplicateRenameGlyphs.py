@@ -4,7 +4,7 @@ from mojo.roboFont import CurrentFont
 from xTools4.dialogs.old import hDialog
 from xTools4.modules.color import rgb2nscolor, nscolor2rgb
 
-
+KEY = 'com.xTools4.duplicateRenameGlypphs'
 class DuplicateRenameGlyphsDialog(hDialog):
 
     '''
@@ -22,6 +22,7 @@ class DuplicateRenameGlyphsDialog(hDialog):
         self.height += self.textHeight * 12
         self.height += self.padding * 10
         self.w = self.window((self.width * 3, self.height), self.title)
+        self.w.workspaceWindowIdentifier = KEY
 
         x = y = p = self.padding
         self.w.addSelectionToList = SquareButton(
