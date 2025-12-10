@@ -8,6 +8,7 @@ from mojo.UI import AccordionView
 from mojo.roboFont import OpenFont, NewFont, CurrentFont
 
 
+KEY = 'com.xTools4.tempEdit'
 def splitall(path):
     # copied from http://www.oreilly.com/library/view/python-cookbook/0596001673/ch04s16.html
     allparts = []
@@ -146,6 +147,7 @@ class TempEdit:
         self.w.accordionView = AccordionView((0, 0, -0, -0), descriptions)
 
         self.w.getNSWindow().setTitlebarAppearsTransparent_(True)
+        self.w.workspaceWindowIdentifier = KEY
         self.w.open()
 
     # -------------

@@ -43,6 +43,7 @@ class TempEditController(ezui.WindowController):
         )
         self.w.getNSWindow().setTitlebarAppearsTransparent_(True)
         self.w.getItem("designspaces").getNSTableView().setRowHeight_(17)
+        self.w.workspaceWindowIdentifier = KEY
         self.w.open()
 
 

@@ -15,6 +15,7 @@ from xTools4.modules.blendsPreview import BlendsPreview
 from xTools4.modules.color import rgb2nscolor, nscolor2rgb
 from xTools4.dialogs.variable.GlyphMeme import tempEditModeKey
 
+KEY = 'com.xTools4.blendsPreview'
 
 class BlendsPreviewController:
 
@@ -204,7 +205,7 @@ class BlendsPreviewController:
         self.w.splitView = SplitView((0, 0, -0, -0), self._groups, dividerStyle='thin')
 
         self.w.getNSWindow().setTitlebarAppearsTransparent_(True)
-        self.w.workspaceWindowIdentifier = "BlendsPreview"
+        self.w.workspaceWindowIdentifier = KEY
         self.w.open()
 
     @property
