@@ -4,7 +4,7 @@ from vanilla import Button, CheckBox, Group
 from mojo.UI import AccordionView, PutFile, GetFile, CodeEditor
 from xTools4.dialogs.batch.base import BatchDialogBase
 
-
+KEY = 'com.xTools4.batchStyle'
 def getStyleMapStyle(isBold, isItalic):
     if isBold and isItalic:
         return 'bold italic'
@@ -108,6 +108,7 @@ class BatchSetStyleDataDialog(BatchDialogBase):
                 (self.width * 3, self.height),
                 self.title,
                 minSize=(self.width * 2, self.height))
+        self.w.workspaceWindowIdentifier = KEY
 
         # build groups
 
