@@ -4,7 +4,7 @@ from mojo.events import addObserver, removeObserver
 from defconAppKit.windows.baseWindow import BaseWindowController
 from xTools4.dialogs.old import hDialog
 
-
+KEY = 'com.xTools4.widthCopy'
 class CopyWidthDialog(hDialog, BaseWindowController):
 
     '''
@@ -28,6 +28,7 @@ class CopyWidthDialog(hDialog, BaseWindowController):
             (self.width, self.height), self.title,
             maxSize=(self.width * 1.5, self.height * 1.5),
             minSize=(self.width, self.height))
+        self.w.workspaceWindowIdentifier = KEY
 
         x = y = p = self.padding
         y -= 2

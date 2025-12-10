@@ -2,7 +2,7 @@ from vanilla import TextBox, EditText, CheckBox, Button, RadioGroup
 from xTools4.dialogs.old import hDialog
 from xTools4.modules.glyphutils import findReplaceGlyphName, addToGlyphName
 
-
+KEY = 'com.xTools4.namesSuffix'
 class PrefixSuffixGlyphNamesDialog(hDialog):
 
     '''
@@ -26,6 +26,7 @@ class PrefixSuffixGlyphNamesDialog(hDialog):
         self.height  = self.textHeight * 6
         self.height += self.padding * 4 + 5
         self.w = self.window((self.width, self.height), self.title)
+        self.w.workspaceWindowIdentifier = KEY
 
         x = y = p = self.padding
         y -= 3

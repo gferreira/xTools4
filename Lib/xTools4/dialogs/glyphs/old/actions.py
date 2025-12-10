@@ -10,7 +10,7 @@ from xTools4.modules.optimize import equalizeCurves
 from xTools4.modules.fontutils import isQuadratic
 from xTools4.dialogs.glyphs.old.base import GlyphsDialogBase
 
-
+KEY = 'com.xTools4.actions'
 def actionsGlyphFactory(glyph, actions=None):
 
     quadratic = isQuadratic(glyph.font)
@@ -78,6 +78,7 @@ class GlyphActionsDialog(GlyphsDialogBase):
             (self.width, self.height), self.title,
             maxSize=(self.width * 1.5, self.height+16),
             minSize=(self.width, self.height+16))
+        self.w.workspaceWindowIdentifier = KEY
 
         x = y = p = self.padding
         listHeight = self.textHeight * len(self.actions)

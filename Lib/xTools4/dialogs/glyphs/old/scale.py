@@ -5,7 +5,7 @@ from xTools4.dialogs.glyphs.old.base import GlyphsDialogBase
 from xTools4.dialogs.old.misc.origin import OriginPoint
 from xTools4.dialogs.old.misc.numberEditText0001 import NumberEditText_0001
 
-
+KEY = 'com.xTools4.scale'
 def scaleGlyphFactory():
     pass
 
@@ -35,6 +35,7 @@ class ScaleGlyphsDialog(GlyphsDialogBase):
         self.height += self.textHeight * 8
         self.height += self.padding * 5 - 3
         self.w = self.window((self.width, self.height), self.title)
+        self.w.workspaceWindowIdentifier = KEY
 
         x = y = p = self.padding
         col = (self.width - p*2) / 2

@@ -5,7 +5,7 @@ from mojo.events import addObserver, removeObserver
 from mojo.UI import UpdateCurrentGlyphView
 from xTools4.dialogs.old import hDialog
 
-
+KEY = 'com.xTools4.layersLock'
 class LockLayerWidthsDialog(hDialog, BaseWindowController):
 
     '''
@@ -26,6 +26,7 @@ class LockLayerWidthsDialog(hDialog, BaseWindowController):
         self.height  = self.textHeight * 3
         self.height += self.padding * 4 -2
         self.w = self.window((self.width, self.height), title=self.title)
+        self.w.workspaceWindowIdentifier = KEY
 
         x = y = p = self.padding
         self.w.lockLayers = Button(
