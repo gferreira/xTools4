@@ -5,7 +5,7 @@ from xTools4.modules.color import rgb2nscolor, nscolor2rgb
 from xTools4.modules.fontutils import findGlyphComponents
 from xTools4.dialogs.old import hDialog
 
-
+KEY = 'com.xTools4.componentsFind'
 class FindGlyphComponentsDialog(hDialog):
 
     '''
@@ -22,6 +22,7 @@ class FindGlyphComponentsDialog(hDialog):
     def __init__(self):
         self.height  = 360
         self.w = self.window((self.width, self.height), self.title, minSize=(self.width, self.height))
+        self.w.workspaceWindowIdentifier = KEY
 
         x = y = p = self.padding
         y -= 2

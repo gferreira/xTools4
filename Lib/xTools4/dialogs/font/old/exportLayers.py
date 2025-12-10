@@ -8,7 +8,7 @@ from xTools4.dialogs.old import hDialog
 from xTools4.modules.messages import noFontOpen, showMessage
 from xTools4.modules.fontutils import markGlyphs
 
-
+KEY = 'com.xTools4.exportLayers'
 class ExportLayersDialog(hDialog, BaseWindowController):
 
     title = 'layers'
@@ -22,6 +22,7 @@ class ExportLayersDialog(hDialog, BaseWindowController):
             (self.width, self.height), self.title,
             maxSize=(self.width*1.5, self.height*2),
             minSize=(self.width, self.height))
+        self.w.workspaceWindowIdentifier = KEY
         
         x = y = p = self.padding
         self.w.fontName = TextBox(
