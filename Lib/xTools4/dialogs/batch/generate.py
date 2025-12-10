@@ -2,7 +2,7 @@ from vanilla import *
 from mojo.UI import AccordionView
 from xTools4.dialogs.batch.base import BatchDialogBase
 
-
+KEY = 'com.xTools4.batchGenerate'
 class BatchGenerateDialog(BatchDialogBase):
 
     title = 'batch generate'
@@ -49,6 +49,7 @@ class BatchGenerateDialog(BatchDialogBase):
                 (self.width * 2, self.height),
                 self.title,
                 minSize=(self.width * 2, self.height))
+        self.w.workspaceWindowIdentifier = KEY
 
         # build groups
 

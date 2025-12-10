@@ -15,7 +15,7 @@ from xTools4.modules.anchors import copyAnchors
 from xTools4.modules.color import rgb2nscolor, nscolor2rgb
 from xTools4.dialogs.batch.base import BatchDialogBase
 
-
+KEY = 'com.xTools4.batchCopy'
 class BatchCopyDialog(BatchDialogBase):
 
     '''
@@ -54,6 +54,7 @@ class BatchCopyDialog(BatchDialogBase):
                 (self.width * 3, self.height),
                 self.title,
                 minSize=(self.width * 2, 280))
+        self.w.workspaceWindowIdentifier = KEY
 
         # build groups
         self.initFontSelectorGroup()
