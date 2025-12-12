@@ -8,7 +8,7 @@ from xTools4.modules.fontinfo import FontInfoAttributes, FontInfoAttributesIgnor
 from xTools4.modules.fontutils import clearMarkColors, clearUnicodes
 from xTools4.dialogs.batch.base import BatchDialogBase
 
-
+KEY = 'com.xTools4.dialogs.batch.Clear'
 class BatchClearDialog(BatchDialogBase):
 
     '''
@@ -52,6 +52,7 @@ class BatchClearDialog(BatchDialogBase):
                 (self.width * 3, self.height),
                 self.title,
                 minSize=(self.width * 2, self.height))
+        self.w.workspaceWindowIdentifier = KEY
 
         # build groups
 
