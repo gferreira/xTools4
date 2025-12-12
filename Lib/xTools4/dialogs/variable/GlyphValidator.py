@@ -17,7 +17,7 @@ from xTools4.modules.validation import *
 from xTools4.dialogs.variable.Measurements import colorCheckTrue, colorCheckFalse, colorCheckEqual
 
 
-KEY = 'com.xTools4.glyphValidator'
+KEY = 'com.xTools4.dialogs.variable.glyphValidator'
 tempEditModeKey = 'com.xTools4.tempEdit.mode'
 
 
@@ -107,7 +107,7 @@ class GlyphValidatorController(ezui.WindowController):
             margins=self.margins,
             size=(self.width, 'auto'),
         )
-        self.w.workspaceWindowIdentifier = "GlyphValidator"
+        self.w.workspaceWindowIdentifier = KEY
         self.w.getNSWindow().setTitlebarAppearsTransparent_(True)
         self.w.open()
 

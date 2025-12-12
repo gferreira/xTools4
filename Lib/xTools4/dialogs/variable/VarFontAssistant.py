@@ -12,7 +12,7 @@ from xTools4.dialogs.variable.VarGlyphAssistant import intToCellConverter, cellT
 from xTools4.modules.validation import validateFonts
 
 
-KEY = 'com.xTools4.VarFontAssistant'
+KEY = 'com.xTools4.dialogs.variable.VarFontAssistant'
 
 thresholdDefault = 0.1
 fontInfoDefault  = None
@@ -376,6 +376,7 @@ class VarFontAssistant_EZUI(DesignSpaceSelector_EZUI):
         self.w.getNSWindow().setTitlebarAppearsTransparent_(True)
         for itemName in self._tables:
             self.w.getItem(itemName).getNSTableView().setRowHeight_(self.rowHeight)
+        self.w.workspaceWindowIdentifier = KEY
         self.w.open()
 
     def started(self):
