@@ -395,7 +395,7 @@ class GlyphValidatorGlyphEditor(Subscriber):
             name=f'{KEY}.report',
             position=(0, 0),
             size=(sizeX, sizeY),
-            padding=(10, 10),
+            padding=(10, 2),
             font='LucidaGrande-Bold',
             fillColor=color,
             pointSize=15,
