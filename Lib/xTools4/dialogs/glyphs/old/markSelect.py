@@ -4,7 +4,7 @@ from xTools4.dialogs.old import hDialog
 from xTools4.modules.color import rgb2nscolor, nscolor2rgb
 from xTools4.modules.fontutils import markGlyphs, findMarkColor
 
-
+KEY = 'com.xTools4.dialogs.glyphs.markSelected'
 class MarkGlyphsDialog(hDialog):
 
     '''
@@ -28,6 +28,7 @@ class MarkGlyphsDialog(hDialog):
         self.height += self.buttonHeight
         self.height += self.padding * 7
         self.w = self.window((self.width, self.height), self.title)
+        self.w.workspaceWindowIdentifier = KEY
 
         x = y = self.padding
         self.w.getColorButton = Button(
