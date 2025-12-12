@@ -82,6 +82,7 @@ class LinkPointsController(ezui.WindowController):
             size=(self.width, 'auto'),
         )
         self.w.getNSWindow().setTitlebarAppearsTransparent_(True)
+        self.w.workspaceWindowIdentifier = KEY
         self.w.open()
 
     def started(self):

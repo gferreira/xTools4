@@ -8,7 +8,7 @@ from defcon import Glyph, registerRepresentationFactory, unregisterRepresentatio
 from xTools4.dialogs.glyphs.old.base import GlyphsDialogBase
 from xTools4.modules.glyphutils import roundPoints, roundBPoints, roundMargins, roundWidth, roundAnchors, roundComponents
 
-
+KEY = 'com.xTools4.dialogs.glyphs.gridfit'
 def gridfitGlyphFactory(glyph, gridsize, points=False, bPoints=True, margins=False, width=True, anchors=False, components=False):
 
     glyph = RGlyph(glyph).copy()
@@ -66,6 +66,7 @@ class RoundToGridDialog(GlyphsDialogBase):
         self.height  = self.textHeight * 10
         self.height += self.padding * 5
         self.w = self.window((self.width, self.height), self.title)
+        self.w.workspaceWindowIdentifier = KEY
 
         x = y = p = self.padding
         col = (self.width - p*2) / 2

@@ -14,7 +14,7 @@ from xTools4.dialogs.variable.DesignSpaceSelector import DesignSpaceSelector_EZU
 from xTools4.dialogs.variable.Measurements import *
 from xTools4.dialogs.variable.GlyphValidator import checkResultsFactory, validationGroupFactory
 
-KEY = 'com.xTools4.VarGlyphAssistant'
+KEY = 'com.xTools4.dialogs.variable.VarGlyphAssistant'
 
 # color formatting
 
@@ -386,6 +386,7 @@ class VarGlyphAssistantController(DesignSpaceSelector_EZUI):
         self.w.getNSWindow().setTitlebarAppearsTransparent_(True)
         for itemName in self._tables:
             self.w.getItem(itemName).getNSTableView().setRowHeight_(self.rowHeight)
+        self.w.workspaceWindowIdentifier = KEY
         self.w.open()
 
     def started(self):

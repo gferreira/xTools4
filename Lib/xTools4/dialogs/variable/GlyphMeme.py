@@ -15,6 +15,7 @@ from xTools4.modules.xproject import measurementsPathKey, smartSetsPathKey
 from xTools4.dialogs.variable.old.TempEdit import setupNewFont, splitall
 
 
+KEY = 'com.xTools4.dialogs.variable.glyphMeme'
 glyphSetPathKey        = 'com.xTools4.tempEdit.glyphSetPath'
 tempEditModeKey        = 'com.xTools4.tempEdit.mode'
 fontMeasurementsKey    = 'com.xTools4.measurements.font'
@@ -87,7 +88,7 @@ class GlyphMemeController(ezui.WindowController):
             minSize=(123, 300),
             maxSize=(123, 960),
         )
-        self.w.workspaceWindowIdentifier = "GlyphMeme"
+        self.w.workspaceWindowIdentifier = KEY
         self.w.getNSWindow().setTitlebarAppearsTransparent_(True)
         self.w.getItem("glyphMeme").getNSTableView().setRowHeight_(17)
         self.w.open()

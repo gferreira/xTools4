@@ -1,7 +1,7 @@
 import ezui
 
 
-KEY = 'com.xTools4.roundingBatch'
+KEY = 'com.xTools4.dialogs.variable.roundingBatch'
 
 
 class RoundingBatchController(ezui.WindowController):
@@ -42,6 +42,7 @@ class RoundingBatchController(ezui.WindowController):
         )
         self.w.workspaceWindowIdentifier = self.title
         self.w.getNSWindow().setTitlebarAppearsTransparent_(True)
+        self.w.workspaceWindowIdentifier = KEY
         self.w.open()
 
     def started(self):

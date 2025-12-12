@@ -1,7 +1,7 @@
 from vanilla import *
 from xTools4.dialogs.old import hDialog
 
-
+KEY = 'com.xTools4.dialogs.glyphs.glyphData'
 class SelectGlyphDataDialog(hDialog):
 
     title = "glyph data"
@@ -26,6 +26,7 @@ class SelectGlyphDataDialog(hDialog):
     def __init__(self):
         self.height = self.textHeight * len(self.glyphData) + self.padding * 2 - 3
         self.w = self.window((self.width, self.height), self.title)
+        self.w.workspaceWindowIdentifier = KEY
 
         x = y = p = self.padding
         y -= 3

@@ -4,7 +4,7 @@ from xTools4.dialogs.old import hDialog
 from xTools4.modules.color import rgb2nscolor, nscolor2rgb
 from xTools4.modules.fontutils import markGlyphs, findMarkColor
 
-
+KEY = 'com.xTools4.dialogs.glyphs.markTypes'
 def markGlyphType(g, colorsDict):
     # contours only
     if len(g.contours) and not len(g.components):
@@ -37,6 +37,7 @@ class MarkGlyphTypesDialog(hDialog):
         self.height += self.textHeight * 5
         self.height += self.padding * 8
         self.w = self.window((self.width, self.height), self.title)
+        self.w.workspaceWindowIdentifier = KEY
 
         x = y = p = self.padding
         self.w.labelContours = CheckBox(

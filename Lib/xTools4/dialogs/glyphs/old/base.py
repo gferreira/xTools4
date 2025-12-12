@@ -5,7 +5,7 @@ from mojo.UI import UpdateCurrentGlyphView
 from mojo.events import addObserver, removeObserver
 from xTools4.dialogs.old import hDialog
 
-
+KEY = 'com.xTools4.dialogs.glyphs.base'
 class GlyphsDialogBase(hDialog, BaseWindowController):
 
     '''
@@ -99,6 +99,7 @@ class GlyphsCopyDataDialogBase(hDialog, BaseWindowController):
             (self.width, self.height), self.title,
             maxSize=(self.width * 1.5, self.height * 1.5),
             minSize=(self.width, self.height))
+        self.w.workspaceWindowIdentifier = KEY
 
         x = y = p = self.padding
         y -= 2

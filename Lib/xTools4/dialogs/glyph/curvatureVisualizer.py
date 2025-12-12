@@ -6,7 +6,7 @@ from mojo.events import postEvent
 from xTools4.modules.curvatureVisualizer import *
 
 
-DEFAULT_KEY = 'com.hipertipo.xTools4.dialogs.glyph.curvatureVisualizer'
+KEY = 'com.hipertipo.xTools4.dialogs.glyph.curvatureVisualizer'
 
 
 def curvatureCombFactory(glyph, steps, scale):
@@ -66,22 +66,23 @@ class CurvatureVisualizerController(ezui.WindowController):
             size=(self.width, 'auto'),
         )
         self.w.getNSWindow().setTitlebarAppearsTransparent_(True)
+        self.w.workspaceWindowIdentifier = KEY
         self.w.open()
 
     def started(self):
-        registerRepresentationFactory(Glyph, f"{DEFAULT_KEY}.preview", curvatureCombFactory)
+        registerRepresentationFactory(Glyph, f"{KEY}.preview", curvatureCombFactory)
         CurvatureVisualizer.controller = self
         registerGlyphEditorSubscriber(CurvatureVisualizer)
 
     def destroy(self):
-        unregisterRepresentationFactory(Glyph, f"{DEFAULT_KEY}.preview")
+        unregisterRepresentationFactory(Glyph, f"{KEY}.preview")
         unregisterGlyphEditorSubscriber(CurvatureVisualizer)
         CurvatureVisualizer.controller = None
 
     # callbacks
 
     def settingsChangedCallback(self, sender):
-        postEvent(f"{DEFAULT_KEY}.changed")
+        postEvent(f"{KEY}.changed")
 
 
 class CurvatureVisualizer(Subscriber):
@@ -91,7 +92,7 @@ class CurvatureVisualizer(Subscriber):
     def build(self):
         glyphEditor = self.getGlyphEditor()
         container = glyphEditor.extensionContainer(
-            identifier=DEFAULT_KEY,
+            identifier=KEY,
             location="foreground",
         )
         self.curvatureVisualizerLayer = container.appendBaseSublayer()
@@ -100,7 +101,7 @@ class CurvatureVisualizer(Subscriber):
 
     def destroy(self):
         glyphEditor = self.getGlyphEditor()
-        container = glyphEditor.extensionContainer(DEFAULT_KEY)
+        container = glyphEditor.extensionContainer(KEY)
         container.clearSublayers()
 
     def curvatureVisualizerDidChange(self, info):
@@ -130,7 +131,7 @@ class CurvatureVisualizer(Subscriber):
         curvatureCombColor = self.controller.w.getItem("colorButton").get()
 
         lines, shapes = self.glyph.getRepresentation(
-                f"{DEFAULT_KEY}.preview",
+                f"{KEY}.preview",
                 steps=int(curvatureCombSteps),
                 scale=curvatureCombScale
             )
@@ -151,7 +152,7 @@ class CurvatureVisualizer(Subscriber):
                 visualizer._drawCurvatureComb(segmentLines, segmentShapes)
 
 
-curvatureVisualizerEvent = f"{DEFAULT_KEY}.changed"
+curvatureVisualizerEvent = f"{KEY}.changed"
 
 if curvatureVisualizerEvent not in roboFontSubscriberEventRegistry:
     registerSubscriberEvent(

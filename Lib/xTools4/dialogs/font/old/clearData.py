@@ -4,6 +4,7 @@ from xTools4.dialogs.old import hDialog
 from xTools4.modules.messages import noFontOpen, showMessage
 from xTools4.modules.fontutils import markGlyphs
 
+KEY = 'com.xTools4.dialogs.font.clearData'
 class ClearFontDataDialog(hDialog):
 
     '''
@@ -31,6 +32,7 @@ class ClearFontDataDialog(hDialog):
         self.height  = self.textHeight * (len(self.options) + 1)
         self.height += self.padding * 3 - 2
         self.w = self.window((self.width, self.height), self.title)
+        self.w.workspaceWindowIdentifier = KEY
 
         x = y = p = self.padding
         y -= 3
