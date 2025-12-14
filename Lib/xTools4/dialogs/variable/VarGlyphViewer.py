@@ -5,6 +5,9 @@ from mojo.subscriber import Subscriber, registerSubscriberEvent, roboFontSubscri
 from mojo.events import postEvent
 
 
+tempEditModeKey = 'com.xTools4.tempEdit.mode'
+
+
 def getImplicitSelectedPoints(glyph):
     '''
     http://forum.robofont.com/topic/742/easier-way-of-getting-all-selected-contour-points
@@ -101,11 +104,26 @@ class VarGlyphViewer(ezui.WindowController):
 
     @property
     def defaultGlyph(self):
+
         if self.glyph is None or self.defaultFont is None:
             return
-        if self.glyph.name not in self.defaultFont:
+
+        currentFont = self.glyph.font
+        if not currentFont:
             return
-        return self.defaultFont[self.glyph.name]
+
+        isTempFont = currentFont.lib.get(tempEditModeKey) == 'glyphs'
+
+        if isTempFont:
+            defaultGlyphName = self.glyph.name[:self.glyph.name.rfind('.')]
+        else:
+            defaultGlyphName = self.glyph.name
+
+        if defaultGlyphName not in self.defaultFont:
+            return
+
+        print(defaultGlyphName)
+        return self.defaultFont[defaultGlyphName]
 
     # callbacks
 
@@ -185,10 +203,14 @@ class VarGlyphViewerSubscriberGlyphEditor(Subscriber):
         if self.controller.defaultFont is None:
             return
 
-        if self.controller.glyph.name not in self.controller.defaultFont:
-            return
+        # if self.controller.glyph.name not in self.controller.defaultFont:
+        #     return
 
         defaultGlyph  = self.controller.defaultGlyph
+
+        if not defaultGlyph:
+            return
+
         selectionOnly = self.controller.w.getItem('selectionOnly').get()
         showEqual     = self.controller.w.getItem('showEqual').get()
         showDeltas    = self.controller.w.getItem('showDeltas').get()

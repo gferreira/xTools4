@@ -28,7 +28,11 @@ exclude:
   - Gemfile
   - Gemfile.lock
 
+plugins:
+  - jekyll-tidy
+
 jekyll_tidy:
   exclude: []
   # ignore_env: development
   compress_html: false
+

@@ -131,10 +131,10 @@ class VarGlyphAssistantController(DesignSpaceSelector_EZUI):
     >> d-threshold
     >> [__](±)       @thresholdDefault
 
-    # * Tab: points                    @pointsTab
-    # > |-----------|---|---|---|---|
-    # > | file name | x | y | t | s |  @pointsTable
-    # > |-----------|---|---|---|---|
+    * Tab: points                @pointsTab
+    > |-----------|---|---|---|
+    > | file name | x | y | t |  @pointsTable
+    > |-----------|---|---|---|
 
     '''
 
@@ -143,7 +143,7 @@ class VarGlyphAssistantController(DesignSpaceSelector_EZUI):
     _tables  = DesignSpaceSelector_EZUI._tables.copy()
     _tables += [
         'attributesValues',
-        # 'pointsTable',
+        'pointsTable',
         'measurements',
         'measurementValues'
     ]
@@ -266,6 +266,34 @@ class VarGlyphAssistantController(DesignSpaceSelector_EZUI):
                     minWidth=columnFontName*0.9,
                     maxWidth=columnFontName*2,
                     sortable=True,
+                ),
+                dict(
+                    identifier="x",
+                    title="x",
+                    width=columnValueAttrs,
+                    sortable=True,
+                    # cellDescription=dict(
+                    #     valueToCellConverter=intToCellConverter,
+                    #     cellToValueConverter=cellToIntConverter,
+                    #     stringFormatter=widthColorFormatter,
+                    # ),
+                ),
+                dict(
+                    identifier="y",
+                    title="y",
+                    width=columnValueAttrs,
+                    sortable=True,
+                    # cellDescription=dict(
+                    #     valueToCellConverter=intToCellConverter,
+                    #     cellToValueConverter=cellToIntConverter,
+                    #     stringFormatter=widthColorFormatter,
+                    # ),
+                ),
+                dict(
+                    identifier="type",
+                    title="t",
+                    width=columnValueAttrs,
+                    sortable=False,
                 ),
             ],
         ),

@@ -1089,7 +1089,7 @@ class MeasurementsController(ezui.WindowController):
                 'direction' : item['direction'],
             }
 
-        # handle temp fonts: discard extension to get default glyph name
+        # handle temp fonts: discard extension to get default glyph name ### IS THIS WORKING??
         if self.font.lib.get(tempEditModeKey) == 'glyphs':
             glyphName = self.glyph.name[:self.glyph.name.rfind('.')]
         else:
