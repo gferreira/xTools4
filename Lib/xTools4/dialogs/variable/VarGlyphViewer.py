@@ -294,9 +294,13 @@ class VarGlyphViewerSubscriberGlyphEditor(Subscriber):
                                 cy = p.y + (p2.y - p.y) * 0.5
                                 caption = ''
                                 if p2.x != p.x:
-                                    caption += f'x:{p.x-p2.x} '
+                                    if not isOrthogonal:
+                                        caption += 'x:'
+                                    caption += f'{p.x - p2.x} '
                                 if p2.y != p.y:
-                                    caption += f'y:{p.y-p2.y}'
+                                    if not isOrthogonal:
+                                        caption += 'y:'
+                                    caption += f'{p.y - p2.y}'
 
                                 self.displayLayer.appendTextLineSublayer(
                                     position=(cx, cy),
@@ -319,8 +323,8 @@ class VarGlyphViewerSubscriberGlyphEditor(Subscriber):
                     continue
                 a2 = defaultGlyph.anchors[ai]
 
-                isOrthogonal = p.x == p2.x or  p.y == p2.y
-                isEqual      = p.x == p2.x and p.y == p2.y
+                isOrthogonal = a.x == a2.x or  a.y == a2.y
+                isEqual      = a.x == a2.x and a.y == a2.y
                 color = colorCheckTrue if isOrthogonal else colorCheckFalse
 
                 if a.x == a2.x and a.y == a2.y:
@@ -363,9 +367,13 @@ class VarGlyphViewerSubscriberGlyphEditor(Subscriber):
                             cy = a.y + (a2.y - a.y) * 0.5
                             caption = ''
                             if a2.x != a.x:
-                                caption += f'x:{a.x-a2.x} '
+                                if not isOrthogonal:
+                                    caption += 'x:'
+                                caption += f'{a.x - a2.x} '
                             if a2.y != a.y:
-                                caption += f'y:{a.y-a2.y}'
+                                if not isOrthogonal:
+                                    caption += 'y:'
+                                caption += f'{a.y - a2.y}'
 
                             self.displayLayer.appendTextLineSublayer(
                                 position=(cx, cy),
