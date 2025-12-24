@@ -3,6 +3,8 @@ from mojo.UI import GetFile
 from mojo.roboFont import OpenWindow, OpenFont
 from mojo.subscriber import Subscriber, registerSubscriberEvent, roboFontSubscriberEventRegistry, registerGlyphEditorSubscriber, unregisterGlyphEditorSubscriber
 from mojo.events import postEvent
+from xTools4.modules.linkPoints2 import getDistance
+from xTools4.dialogs.variable.Measurements import colorCheckTrue, colorCheckFalse, colorCheckEqual
 
 
 tempEditModeKey = 'com.xTools4.tempEdit.mode'
@@ -37,7 +39,7 @@ def getImplicitSelectedPoints(glyph):
 class VarGlyphViewer(ezui.WindowController):
 
     title   = 'varglyph'
-    key     = 'com.fontBureau.varGlyphViewer'
+    key     = 'com.xTools4.varGlyphViewer'
     width   = 123
     margins = 10
 
@@ -49,16 +51,17 @@ class VarGlyphViewer(ezui.WindowController):
     ( get default… )  @getDefaultButton
     ( reload ↺ )      @reloadDefaultButton
 
-    * ColorWell       @color
+    # * ColorWell       @color
 
     [X] show equal    @showEqual
     [X] show deltas   @showDeltas
+    [X] show values   @showValues
     [ ] show default  @showDefault
     [ ] selection     @selectionOnly
 
     ((( – | + )))     @addSubtractButton
 
-    [X] showPreview   @showPreview
+    [X] display       @preview
     """
 
     descriptionData = dict(
@@ -72,7 +75,7 @@ class VarGlyphViewer(ezui.WindowController):
             width='fill',
         ),
         color=dict(
-            color=(0, 0.5, 1, 0.85),
+            color=(0.9860473871231079, 0.008333318866789341, 0.5019234418869019, 1.0),
             callback='settingsChangedCallback',
         ),
         addSubtractButton=dict(
@@ -122,7 +125,6 @@ class VarGlyphViewer(ezui.WindowController):
         if defaultGlyphName not in self.defaultFont:
             return
 
-        print(defaultGlyphName)
         return self.defaultFont[defaultGlyphName]
 
     # callbacks
@@ -147,8 +149,14 @@ class VarGlyphViewer(ezui.WindowController):
     def showDeltasCallback(self, sender):
         self.settingsChangedCallback(None)
 
+    def showValuesCallback(self, sender):
+        self.settingsChangedCallback(None)
+
     def showDefaultCallback(self, sender):
         self.settingsChangedCallback(None)
+
+    def previewCallback(self, sender):
+        postEvent(f"{self.key}.changed")
 
     def settingsChangedCallback(self, sender):
         postEvent(f"{self.key}.changed")
@@ -176,8 +184,8 @@ class VarGlyphViewerSubscriberGlyphEditor(Subscriber):
     def build(self):
         glyphEditor = self.getGlyphEditor()
         container = glyphEditor.extensionContainer(
-            identifier=f"{self.controller.key}.background",
-            location="background",
+            identifier=f"{self.controller.key}.foreground",
+            location="foreground",
         )
         self.displayLayer = container.appendBaseSublayer()
 
@@ -214,13 +222,21 @@ class VarGlyphViewerSubscriberGlyphEditor(Subscriber):
         selectionOnly = self.controller.w.getItem('selectionOnly').get()
         showEqual     = self.controller.w.getItem('showEqual').get()
         showDeltas    = self.controller.w.getItem('showDeltas').get()
+        showValues    = self.controller.w.getItem('showValues').get()
         showDefault   = self.controller.w.getItem('showDefault').get()
-        color         = self.controller.w.getItem('color').get()
+        preview       = self.controller.w.getItem("preview").get()
+
+        color1 = (0, 0.85, 0, 1)
+        color2 = (1, 0.5, 0, 1)
+
+        if not preview:
+            return
 
         if showDefault:
             defaultLayer = self.displayLayer.appendPathSublayer(
-                fillColor=color,
-                strokeColor=None,
+                fillColor=None,
+                strokeColor=(0.5, 0.5, 0.5, 1),
+                strokeWidth=2,
                 opacity=0.2,
             )
             glyphPath = defaultGlyph.getRepresentation("merz.CGPath")
@@ -239,7 +255,12 @@ class VarGlyphViewerSubscriberGlyphEditor(Subscriber):
                     if selectionOnly and p not in selectedPoints:
                         continue
                     p2 = defaultGlyph.contours[ci].points[pi]
-                    if p.x == p2.x and p.y == p2.y:
+
+                    isOrthogonal = p.x == p2.x or  p.y == p2.y
+                    isEqual      = p.x == p2.x and p.y == p2.y
+                    color = colorCheckTrue if isOrthogonal else colorCheckFalse
+
+                    if isEqual:
                         if showEqual:
                             pointEqual = self.displayLayer.appendSymbolSublayer(
                                 position=(p2.x, p2.y),
@@ -248,37 +269,58 @@ class VarGlyphViewerSubscriberGlyphEditor(Subscriber):
                                 dict(
                                     name="oval",
                                     size=(dotSize*4, dotSize*4),
-                                    strokeColor=color,
+                                    strokeColor=colorCheckEqual,
                                     strokeWidth=2,
                                     fillColor=None,
                                 )
                             )
                     else:
                         if showDeltas:
-                            pointDelta = self.displayLayer.appendSymbolSublayer(
-                                position=(p2.x, p2.y),
-                            )
-                            pointDelta.setImageSettings(
-                                dict(
-                                    name="oval",
-                                    size=(dotSize, dotSize),
-                                    strokeWidth=None,
-                                    fillColor=color,
-                                )
-                            )
                             line = self.displayLayer.appendLineSublayer(
                                 startPoint=(p.x, p.y),
                                 endPoint=(p2.x, p2.y),
                                 strokeWidth=1,
                                 strokeColor=color,
-                                strokeDash=dash if p.type == 'offcurve' else None,
+                                # strokeDash=dash if isOrthogonal else None,
                             )
+                            ovalSymbol = dict(
+                                    name="oval",
+                                    size=(dotSize, dotSize),
+                                    fillColor=color,
+                                )
+                            # line.setStartSymbol(ovalSymbol)
+                            line.setEndSymbol(ovalSymbol)
+
+                            if showValues:
+                                cx = p.x + (p2.x - p.x) * 0.5
+                                cy = p.y + (p2.y - p.y) * 0.5
+                                d = getDistance((p.x, p.y), (p2.x, p2.y))
+
+                                self.displayLayer.appendTextLineSublayer(
+                                    position=(cx, cy),
+                                    backgroundColor=color,
+                                    text=f"{int(d)}",
+                                    font="system",
+                                    weight="bold",
+                                    pointSize=9,
+                                    padding=(4, 0),
+                                    cornerRadius=4,
+                                    fillColor=(1, 1, 1, 1),
+                                    horizontalAlignment='center',
+                                    verticalAlignment='center',
+                                )
+
 
             # draw anchors
             for ai, a in enumerate(self.controller.glyph.anchors):
                 if selectionOnly and not a.selected:
                     continue
                 a2 = defaultGlyph.anchors[ai]
+
+                isOrthogonal = p.x == p2.x or  p.y == p2.y
+                isEqual      = p.x == p2.x and p.y == p2.y
+                color = colorCheckTrue if isOrthogonal else colorCheckFalse
+
                 if a.x == a2.x and a.y == a2.y:
                     if showEqual:
                         pointEqual = self.displayLayer.appendSymbolSublayer(
@@ -288,7 +330,7 @@ class VarGlyphViewerSubscriberGlyphEditor(Subscriber):
                             dict(
                                 name="oval",
                                 size=(dotSize*4, dotSize*4),
-                                strokeColor=color,
+                                strokeColor=colorCheckEqual,
                                 strokeWidth=2,
                                 fillColor=None,
                             )
@@ -306,15 +348,32 @@ class VarGlyphViewerSubscriberGlyphEditor(Subscriber):
                                 fillColor=color,
                             )
                         )
-                        lineDash = (2, 2)
                         line = self.displayLayer.appendLineSublayer(
                             startPoint=(a.x, a.y),
                             endPoint=(a2.x, a2.y),
                             strokeWidth=1,
                             strokeColor=color,
-                            strokeDash=lineDash,
+                            strokeDash=dash,
                         )
 
+                        if showValues:
+                            cx = a.x + (a2.x - a.x) * 0.5
+                            cy = a.y + (a2.y - a.y) * 0.5
+                            d = getDistance((a.x, a.y), (a2.x, a2.y))
+
+                            self.displayLayer.appendTextLineSublayer(
+                                position=(cx, cy),
+                                backgroundColor=color,
+                                text=f"{int(d)}",
+                                font="system",
+                                weight="bold",
+                                pointSize=9,
+                                padding=(4, 0),
+                                cornerRadius=4,
+                                fillColor=(1, 1, 1, 1),
+                                horizontalAlignment='center',
+                                verticalAlignment='center',
+                            )
 
 eventName = f"{VarGlyphViewer.key}.changed"
 

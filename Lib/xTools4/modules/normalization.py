@@ -1,5 +1,4 @@
 import os, glob, shutil
-from collections import Counter
 from ufonormalizer import normalizeUFO
 from fontParts.world import OpenFont
 

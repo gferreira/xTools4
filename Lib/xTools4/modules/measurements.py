@@ -2,9 +2,10 @@ from importlib import reload
 import xTools4.modules.linkPoints2
 reload(xTools4.modules.linkPoints2)
 
-import os, csv
+import os, glob, shutil
+from collections import Counter
 from fontTools.agl import UV2AGL
-from fontParts.world import RFont
+from fontParts.world import RFont, OpenFont
 from xTools4.modules.linkPoints2 import *
 
 
@@ -312,7 +313,7 @@ def setSourceNamesFromMeasurements(sourcesFolder, familyName, measurementsPath, 
         if sourcePath != newSourcePath:
             print(f'updating file name:\n\t{os.path.split(sourcePath)[-1]} --> {newSourceName}\n' )
             if not preflight:
-                shutil.move(ufo, newSourcePath)
+                shutil.move(sourcePath, newSourcePath)
 
     # find duplicate styles
     duplicates = [k for k, v in Counter(allSourceNames).items() if v > 1]
