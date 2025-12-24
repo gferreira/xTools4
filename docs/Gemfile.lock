@@ -51,6 +51,8 @@ GEM
     google-protobuf (4.32.0-x86_64-linux-musl)
       bigdecimal
       rake (>= 13)
+    htmlbeautifier (1.4.3)
+    htmlcompressor (0.4.0)
     http_parser.rb (0.8.0)
     i18n (1.14.7)
       concurrent-ruby (~> 1.0)
@@ -75,6 +77,10 @@ GEM
       webrick (~> 1.7)
     jekyll-sass-converter (3.1.0)
       sass-embedded (~> 1.75)
+    jekyll-tidy (0.2.2)
+      htmlbeautifier
+      htmlcompressor
+      jekyll
     jekyll-watch (2.2.1)
       listen (~> 3.0)
     json (2.13.2)
@@ -156,6 +162,7 @@ PLATFORMS
 
 DEPENDENCIES
   jekyll
+  jekyll-tidy
 
 BUNDLED WITH
    2.7.1
