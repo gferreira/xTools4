@@ -12,7 +12,7 @@ from xTools4.modules.fontutils import getFontID
 from xTools4.modules.unicode import unicodeHexToInt, unicodeIntToHex, clearUnicodes, autoUnicode
 from xTools4.dialogs.batch.base import BatchDialogBase
 
-
+KEY = 'com.xTools4.dialogs.batch.Set'
 class BatchSetDialog(BatchDialogBase):
 
     '''
@@ -43,6 +43,7 @@ class BatchSetDialog(BatchDialogBase):
                 (self.width * 3, self.height),
                 self.title,
                 minSize=(self.width * 2, 360))
+        self.w.workspaceWindowIdentifier = KEY
 
         # build groups
         self.initFontSelectorGroup()

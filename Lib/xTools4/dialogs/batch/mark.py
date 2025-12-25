@@ -5,7 +5,7 @@ from xTools4.modules.color import rgb2nscolor, nscolor2rgb
 from xTools4.modules.fontutils import *
 from xTools4.dialogs.batch.base import BatchDialogBase
 
-
+KEY = 'com.xTools4.dialogs.batch.MarkGlyphs'
 class BatchMarkGlyphsDialog(BatchDialogBase):
 
     '''
@@ -48,6 +48,7 @@ class BatchMarkGlyphsDialog(BatchDialogBase):
                 (self.width * 2, self.height),
                 self.title,
                 minSize=(self.width * 2, self.height))
+        self.w.workspaceWindowIdentifier = KEY
 
         # build groups
         self.initFontSelectorGroup()

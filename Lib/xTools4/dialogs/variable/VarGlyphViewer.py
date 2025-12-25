@@ -10,6 +10,7 @@ from xTools4.dialogs.variable.Measurements import colorCheckTrue, colorCheckFals
 tempEditModeKey = 'com.xTools4.tempEdit.mode'
 
 
+KEY = 'com.xTools4.dialogs.variable.VarGlyphViewer'
 def getImplicitSelectedPoints(glyph):
     '''
     http://forum.robofont.com/topic/742/easier-way-of-getting-all-selected-contour-points
@@ -94,6 +95,7 @@ class VarGlyphViewer(ezui.WindowController):
             size=(self.width, 'auto'),
         )
         self.w.getNSWindow().setTitlebarAppearsTransparent_(True)
+        self.w.workspaceWindowIdentifier = KEY
         self.w.open()
 
     def started(self):

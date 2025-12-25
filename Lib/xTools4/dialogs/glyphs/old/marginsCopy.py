@@ -4,7 +4,7 @@ from mojo.events import addObserver, removeObserver
 from defconAppKit.windows.baseWindow import BaseWindowController
 from xTools4.dialogs.old import hDialog
 
-
+KEY = 'com.xTools4.dialogs.glyphs.marginsCopy'
 class CopyMarginsDialog(hDialog, BaseWindowController):
 
     '''
@@ -25,6 +25,7 @@ class CopyMarginsDialog(hDialog, BaseWindowController):
         self.height  = self.textHeight * 8
         self.height += self.padding * 3.5
         self.w = self.window((self.width, self.height), self.title)
+        self.w.workspaceWindowIdentifier = KEY
 
         x = y = p = self.padding
         y -= 2

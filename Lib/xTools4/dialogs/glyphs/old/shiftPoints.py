@@ -7,7 +7,7 @@ from xTools4.dialogs.glyphs.old.base import GlyphsDialogBase
 
 ### WARNING: THIS TOOL CURRENTLY CRASHES RF4.5b (NOT SURE WHY)
 
-
+KEY = 'com.xTools4.dialogs.glyphs.shiftPoints'
 class ShiftPointsDialog(GlyphsDialogBase):
 
     title = 'shift'
@@ -25,6 +25,7 @@ class ShiftPointsDialog(GlyphsDialogBase):
         self.height  = self.textHeight * 7
         self.height += self.padding * 7.3
         self.w = self.window((self.width, self.height), self.title)
+        self.w.workspaceWindowIdentifier = KEY
 
         x = y = p = self.padding
         col = (self.width - p * 2) * 0.5

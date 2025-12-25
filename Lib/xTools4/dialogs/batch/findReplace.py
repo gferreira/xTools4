@@ -7,7 +7,7 @@ from mojo.roboFont import CurrentFont
 from mojo.UI import AccordionView
 from xTools4.dialogs.batch.base import BatchDialogBase
 
-
+KEY = 'com.xTools4.dialogs.batch.FindReplace'
 def findFontInfo(font, txtFind, attributes):
     matches = []
     for attr in attributes:
@@ -74,6 +74,7 @@ class BatchFindReplaceDialog(BatchDialogBase):
                 (self.width * 2, self.height),
                 self.title,
                 minSize=(self.width * 2, self.height))
+        self.w.workspaceWindowIdentifier = KEY
 
         x = y = p = self.padding
         self.w.findLabel = TextBox(

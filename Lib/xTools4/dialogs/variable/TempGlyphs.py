@@ -8,6 +8,7 @@ from fontTools.ufoLib.glifLib import GlyphSet
 from mojo.UI import AccordionView
 from mojo.roboFont import OpenFont, NewFont, CurrentFont
 
+KEY = 'com.xTools4.dialogs.variable.tempGlyphs'
 class TempGlyphs:
 
     '''
@@ -77,6 +78,7 @@ class TempGlyphs:
                 sizeStyle='small')
 
         self.w.getNSWindow().setTitlebarAppearsTransparent_(True)
+        self.w.workspaceWindowIdentifier = KEY
         self.w.open()
 
     @property

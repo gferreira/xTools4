@@ -17,7 +17,7 @@ from mojo.subscriber import Subscriber, registerGlyphEditorSubscriber, unregiste
 from mojo.events import postEvent, addObserver, removeObserver
 
 
-KEY = 'com.xTools4.roundingTool'
+KEY = 'com.xTools4.dialogs.variable.roundingTool'
 
 
 def roundedGlyphFactory(glyph):
@@ -146,6 +146,7 @@ class RoundingController(ezui.WindowController):
         self.w.getNSWindow().setTitlebarAppearsTransparent_(True)
         self.w.getItem("roundCapsTable").getNSTableView().setRowHeight_(17)
         self.w.getItem("roundCornersTable").getNSTableView().setRowHeight_(17)
+        self.w.workspaceWindowIdentifier = KEY
         self.w.open()
 
     def started(self):
