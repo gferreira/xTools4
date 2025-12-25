@@ -6,6 +6,7 @@ from mojo.smartSet import readSmartSets
 from fontTools.designspaceLib import DesignSpaceDocument
 from fontTools.ufoLib.glifLib import GlyphSet
 from xTools4.modules.xproject import measurementsPathKey, smartSetsPathKey
+from xTools4.modules.validation import assignValidationGroup
 from xTools4.dialogs.variable.old.TempEdit import setupNewFont, splitall
 
 
@@ -30,8 +31,6 @@ class GlyphTuningController(ezui.WindowController):
     content = """
     (groups ...)  @groupSelector
     (glyphs ...)  @glyphSelector
-
-    | | @glyphTuning
 
     [X] duovars   @duovars 
     [X] trivars   @trivars
@@ -78,13 +77,11 @@ class GlyphTuningController(ezui.WindowController):
             descriptionData=self.descriptionData,
             controller=self,
             margins=self.margins,
-            size=(123, 400),
-            minSize=(123, 300),
-            maxSize=(123*3, 960),
+            size=(123, 'auto'),
         )
         self.w.workspaceWindowIdentifier = "GlyphTuning"
         self.w.getNSWindow().setTitlebarAppearsTransparent_(True)
-        self.w.getItem("glyphTuning").getNSTableView().setRowHeight_(17)
+        # self.w.getItem("axesList").getNSTableView().setRowHeight_(17)
         self.w.open()
 
     @property
@@ -100,6 +97,24 @@ class GlyphTuningController(ezui.WindowController):
     @property
     def tuningSourcesFolder(self):
         return os.path.join(self.sourcesFolder, 'corners')
+
+    @property
+    def tuningSources(self):
+        return {
+            os.path.splitext(os.path.split(srcPath)[-1])[0] : OpenFont(srcPath, showInterface=False)
+            for srcPath in glob.glob(f'{self.tuningSourcesFolder}/*.ufo')
+        }
+
+    @property
+    def parametricAxes(self):
+        return self.designspace.default.location.keys()
+
+    @property
+    def blendedAxes(self):
+        return {
+            tag : [axis for axis in self.designspace.axes if axis.tag == tag][0] 
+            for tag in ['opsz', 'wght', 'wdth']
+        }
 
     @property
     def smartSetsPath(self):
@@ -119,7 +134,8 @@ class GlyphTuningController(ezui.WindowController):
         if self.verbose:
             print('done.\n')
 
-        self._loadTuningSources()
+        # self._loadTuningSources()
+        # self._loadAxes()
         self._loadSmartSets()
 
     def _loadSmartSets(self):
@@ -152,14 +168,22 @@ class GlyphTuningController(ezui.WindowController):
         if self.verbose:
             print('done.\n')
 
-    def _loadTuningSources(self):
-        if self.verbose:
-            print(f'loading tuning sources... ', end='')
+    # def _loadAxes(self):
+    #     if self.verbose:
+    #         print(f'loading blended axes... ', end='')
 
-        sources = glob.glob(f'{self.tuningSourcesFolder}/*.ufo')
-        for srcPath in sources:
-            styleName = os.path.splitext(os.path.split(srcPath)[-1])[0]
-            self.tuningSources[styleName] = OpenFont(srcPath, showInterface=False)
+    #     axesItems = []
+    #     for axis in self.designspace.axes:
+    #         for axisName in self.blendedAxes:
+    #             if axisName in self.ignoreAxes or axisName.startswith('TN'):
+    #                 continue
+    #             if axisName == axis.name:
+    #                 axesItems.append({
+    #                     'axis' : axis.tag,
+    #                     'values': f'{int(axis.minimum)} {int(axis.default)} {int(axis.maximum)}',
+    #                 })
+
+    #     self.w.getItem('axesList').set(axesItems)
 
     def getDesignspaceButtonCallback(self, sender):
         self.designspacePath = GetFile(message='Select designspace file:', title=self.title)
@@ -181,8 +205,27 @@ class GlyphTuningController(ezui.WindowController):
     def openButtonCallback(self, sender):
 
         glyphName = self.w.getItem("glyphSelector").getItem()
-        selectedTuningSources = self.w.getItem("glyphTuning").getSelectedItems()
-        print(selectedTuningSources)
+        duovars   = self.w.getItem("duovars").get()
+        trivars   = self.w.getItem("trivars").get()
+        quadvars  = self.w.getItem("quadvars").get()
+
+        axesList = []
+        for axisTag, axis in self.blendedAxes.items():
+            axisValues = [ int(v) for v in set([axis.minimum, axis.default, axis.maximum]) ]
+            axisValues.sort()
+            axesList.append((axisTag, axisValues))
+
+        axis1Tag, axis1Values = axesList[0]
+        axis2Tag, axis2Values = axesList[1]
+        axis3Tag, axis3Values = axesList[2]
+
+        for axis in self.designspace.axes:
+            if axis1Tag == axis.tag:
+                axis1Default = axis.default
+            elif axis2Tag == axis.tag:
+                axis2Default = axis.default
+            elif axis3Tag == axis.tag:
+                axis3Default = axis.default
 
         # create temp font
         tmpFont = NewFont(familyName='tempEdit')
@@ -192,41 +235,70 @@ class GlyphTuningController(ezui.WindowController):
 
         print('opening glyphs...\n')
 
-        for i, styleName in enumerate(selectedTuningSources):
-            srcFont = self.tuningSources[styleName]
+        for i, axisValue1 in enumerate(sorted(axis1Values)):
+            for j, axisValue2 in enumerate(reversed(sorted(axis2Values))):
+                for k, axisValue3 in enumerate(sorted(axis3Values)):
 
-            # copy vertical metrics etc. from 1st source
-            if i == 0:
-                for attr in ['unitsPerEm', 'xHeight', 'capHeight', 'descender', 'ascender', 'italicAngle']:
-                    value = getattr(srcFont.info, attr)
-                    setattr(tmpFont.info, attr, value)
-                italicOffset = srcFont.lib.get(italicOffsetKey)
-                if italicOffset:
-                    tmpFont.lib[italicOffsetKey] = italicOffset
+                    styleName = []
+                    if axisValue1 != axis1Default:
+                        styleName.append(f'{axis1Tag}{axisValue1}')
+                    if axisValue2 != axis2Default:
+                        styleName.append(f'{axis2Tag}{axisValue2}')
+                    if axisValue3 != axis3Default:
+                        styleName.append(f'{axis3Tag}{axisValue3}')
 
-            # make temp glyph name
-            glyphsFolder = os.path.join(srcFont.path, 'glyphs')
-            ufoName = splitall(glyphsFolder)[-2]
-            sourceFile = os.path.split(srcFont.path)[-1]
-            glyphNameExtension = os.path.splitext(sourceFile)[0]
-            tmpGlyphName = f'{glyphName}.{glyphNameExtension}'
+                    if len(styleName) == 0:
+                        continue
+                    elif len(styleName) == 1 and not duovars:
+                        continue
+                    elif len(styleName) == 2 and not trivars:
+                        continue
+                    elif len(styleName) == 3 and not quadvars:
+                        continue
 
-            # import source glyph into temp font
-            print(f'\timporting {glyphName} from {ufoName}...')
-            srcGlyph = srcFont[glyphName]
-            tmpFont.newGlyph(tmpGlyphName)
-            tmpFont[tmpGlyphName].appendGlyph(srcGlyph)
-            tmpFont[tmpGlyphName].width = srcGlyph.width
-            tmpFont[tmpGlyphName].unicodes = srcGlyph.unicodes
-            tmpFont.changed()
+                    styleName = '_'.join(styleName)
+                    if styleName not in self.tuningSources:
+                        continue
 
-            # store the import mode in the font lib
-            tmpFont.lib[tempEditModeKey] = 'glyphs'
+                    srcFont = self.tuningSources[styleName]
 
-            # store path to glyphset in the glyph lib
-            tmpFont[tmpGlyphName].lib[glyphSetPathKey] = glyphsFolder
-            # also in the background layer (in case we switch layers)
-            tmpFont[tmpGlyphName].getLayer('background').lib[glyphSetPathKey] = glyphsFolder
+                    # copy vertical metrics etc. from 1st source
+                    if i == 0:
+                        for attr in ['unitsPerEm', 'xHeight', 'capHeight', 'descender', 'ascender', 'italicAngle']:
+                            value = getattr(srcFont.info, attr)
+                            setattr(tmpFont.info, attr, value)
+                        italicOffset = srcFont.lib.get(italicOffsetKey)
+                        if italicOffset:
+                            tmpFont.lib[italicOffsetKey] = italicOffset
+
+                    # make temp glyph name
+                    glyphsFolder = os.path.join(srcFont.path, 'glyphs')
+                    ufoName = splitall(glyphsFolder)[-2]
+                    sourceFile = os.path.split(srcFont.path)[-1]
+                    glyphNameExtension = os.path.splitext(sourceFile)[0]
+                    tmpGlyphName = f'{glyphName}.{glyphNameExtension}'
+
+                    # import source glyph into temp font
+                    if glyphName in srcFont:
+                        print(f'\timporting {glyphName} from {ufoName}...')
+                        srcGlyph = srcFont[glyphName]
+                    else:
+                        print(f'\tcreating {glyphName} for {ufoName}...')
+                        srcGlyph = self.defaultFont[glyphName]
+
+                    tmpFont.newGlyph(tmpGlyphName)
+                    tmpFont[tmpGlyphName].appendGlyph(srcGlyph)
+                    tmpFont[tmpGlyphName].width = srcGlyph.width
+                    tmpFont[tmpGlyphName].unicodes = srcGlyph.unicodes
+                    tmpFont.changed()
+
+                    # store the import mode in the font lib
+                    tmpFont.lib[tempEditModeKey] = 'glyphs'
+
+                    # store path to glyphset in the glyph lib
+                    tmpFont[tmpGlyphName].lib[glyphSetPathKey] = glyphsFolder
+                    # also in the background layer (in case we switch layers)
+                    tmpFont[tmpGlyphName].getLayer('background').lib[glyphSetPathKey] = glyphsFolder
 
         print('\n...done!\n')
 
@@ -246,9 +318,15 @@ class GlyphTuningController(ezui.WindowController):
             if glyphSetPathKey not in glyph.lib:
                 continue
 
-            glyphsFolder = glyph.lib[glyphSetPathKey]
             srcGlyphName = glyphName[:glyphName.rfind('.')]
+            glyphsFolder = glyph.lib[glyphSetPathKey]
             ufoName = splitall(glyphsFolder)[-2]
+
+            defaultGlyph = self.defaultFont[srcGlyphName]
+            validationGroup = assignValidationGroup(glyph, defaultGlyph)
+            if validationGroup == 'contoursEqual':
+                print(f'\tskipping {srcGlyphName} in {ufoName} (same as default)...')
+                continue
 
             print(f'\texporting {srcGlyphName} to {ufoName}...')
             glyphSet = GlyphSet(glyphsFolder, validateWrite=True)
@@ -270,27 +348,28 @@ class GlyphTuningController(ezui.WindowController):
         self._updateTuningSources()
 
     def _updateTuningSources(self):
-        glyphName = self.w.getItem("glyphSelector").getItem()
-        duovars   = self.w.getItem("duovars").get()
-        trivars   = self.w.getItem("trivars").get()
-        quadvars  = self.w.getItem("quadvars").get()
+        pass
+        # glyphName = self.w.getItem("glyphSelector").getItem()
+        # duovars   = self.w.getItem("duovars").get()
+        # trivars   = self.w.getItem("trivars").get()
+        # quadvars  = self.w.getItem("quadvars").get()
 
-        tuningSources = []
-        for styleName, src in self.tuningSources.items():
-            styleNameParts = styleName.split('_')
-            if len(styleNameParts) == 1 and not duovars:
-                continue
-            elif len(styleNameParts) == 2 and not trivars:
-                continue
-            elif len(styleNameParts) == 3 and not quadvars:
-                continue
+        # tuningSources = []
+        # for styleName, src in self.tuningSources.items():
+        #     styleNameParts = styleName.split('_')
+        #     if len(styleNameParts) == 1 and not duovars:
+        #         continue
+        #     elif len(styleNameParts) == 2 and not trivars:
+        #         continue
+        #     elif len(styleNameParts) == 3 and not quadvars:
+        #         continue
 
-            if glyphName in src:
-                tuningSources.append(styleName)
+        #     if glyphName in src:
+        #         tuningSources.append(styleName)
 
-        glyphTuningTable = self.w.getItem("glyphTuning")
-        glyphTuningTable.set(sorted(tuningSources))
-        glyphTuningTable.setSelectedIndexes(range(len(tuningSources)))
+        # glyphTuningTable = self.w.getItem("axesList")
+        # glyphTuningTable.set(sorted(tuningSources))
+        # glyphTuningTable.setSelectedIndexes(range(len(tuningSources)))
 
 
 if __name__ == '__main__':
