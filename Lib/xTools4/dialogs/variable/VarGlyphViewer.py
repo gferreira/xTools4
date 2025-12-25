@@ -283,25 +283,31 @@ class VarGlyphViewerSubscriberGlyphEditor(Subscriber):
                                 endPoint=(p2.x, p2.y),
                                 strokeWidth=1,
                                 strokeColor=color,
-                                # strokeDash=dash if isOrthogonal else None,
                             )
                             ovalSymbol = dict(
-                                    name="oval",
-                                    size=(dotSize, dotSize),
-                                    fillColor=color,
-                                )
-                            # line.setStartSymbol(ovalSymbol)
+                                name="oval",
+                                size=(dotSize, dotSize),
+                                fillColor=color,
+                            )
                             line.setEndSymbol(ovalSymbol)
 
                             if showValues:
                                 cx = p.x + (p2.x - p.x) * 0.5
                                 cy = p.y + (p2.y - p.y) * 0.5
-                                d = getDistance((p.x, p.y), (p2.x, p2.y))
+                                caption = ''
+                                if p2.x != p.x:
+                                    if not isOrthogonal:
+                                        caption += 'x:'
+                                    caption += f'{p.x - p2.x} '
+                                if p2.y != p.y:
+                                    if not isOrthogonal:
+                                        caption += 'y:'
+                                    caption += f'{p.y - p2.y}'
 
                                 self.displayLayer.appendTextLineSublayer(
                                     position=(cx, cy),
                                     backgroundColor=color,
-                                    text=f"{int(d)}",
+                                    text=caption,
                                     font="system",
                                     weight="bold",
                                     pointSize=9,
@@ -319,8 +325,8 @@ class VarGlyphViewerSubscriberGlyphEditor(Subscriber):
                     continue
                 a2 = defaultGlyph.anchors[ai]
 
-                isOrthogonal = p.x == p2.x or  p.y == p2.y
-                isEqual      = p.x == p2.x and p.y == p2.y
+                isOrthogonal = a.x == a2.x or  a.y == a2.y
+                isEqual      = a.x == a2.x and a.y == a2.y
                 color = colorCheckTrue if isOrthogonal else colorCheckFalse
 
                 if a.x == a2.x and a.y == a2.y:
@@ -361,12 +367,20 @@ class VarGlyphViewerSubscriberGlyphEditor(Subscriber):
                         if showValues:
                             cx = a.x + (a2.x - a.x) * 0.5
                             cy = a.y + (a2.y - a.y) * 0.5
-                            d = getDistance((a.x, a.y), (a2.x, a2.y))
+                            caption = ''
+                            if a2.x != a.x:
+                                if not isOrthogonal:
+                                    caption += 'x:'
+                                caption += f'{a.x - a2.x} '
+                            if a2.y != a.y:
+                                if not isOrthogonal:
+                                    caption += 'y:'
+                                caption += f'{a.y - a2.y}'
 
                             self.displayLayer.appendTextLineSublayer(
                                 position=(cx, cy),
                                 backgroundColor=color,
-                                text=f"{int(d)}",
+                                text=caption,
                                 font="system",
                                 weight="bold",
                                 pointSize=9,

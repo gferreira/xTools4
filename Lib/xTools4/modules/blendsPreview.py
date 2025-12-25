@@ -114,6 +114,8 @@ class BlendsPreview:
     headerHeight = 20
     footerHeight = 20
 
+    axesList = []
+
     compareColors = [
         (1, 0, 1), # reference font
         (0, 1, 1), # blended font
