@@ -3,11 +3,13 @@ from mojo.UI import GetFile
 from mojo.roboFont import OpenWindow, OpenFont
 from mojo.subscriber import Subscriber, registerSubscriberEvent, roboFontSubscriberEventRegistry, registerGlyphEditorSubscriber, unregisterGlyphEditorSubscriber
 from mojo.events import postEvent
-from xTools4.modules.linkPoints2 import getDistance
 from xTools4.dialogs.variable.Measurements import colorCheckTrue, colorCheckFalse, colorCheckEqual
 
 
 tempEditModeKey = 'com.xTools4.tempEdit.mode'
+
+colorCheckTrueBG  = 0.7, 1.0, 0.7, 0.85
+colorCheckFalseBG = 1.0, 0.7, 0.7, 0.85
 
 
 def getImplicitSelectedPoints(glyph):
@@ -45,19 +47,16 @@ class VarGlyphViewer(ezui.WindowController):
 
     glyph       = None
     defaultPath = None
-    defaultFont = None
+    designspacePath = None
+    defaultFont     = None
 
     content = """
     ( get default… )  @getDefaultButton
     ( reload ↺ )      @reloadDefaultButton
 
-    # * ColorWell       @color
-
-    [X] show equal    @showEqual
-    [X] show deltas   @showDeltas
-    [X] show values   @showValues
-    [ ] show default  @showDefault
-    [ ] selection     @selectionOnly
+    [X] show default    @showDefault
+    [X] show distance   @showValues
+    [X] selection only  @selectionOnly
 
     ((( – | + )))     @addSubtractButton
 
@@ -73,10 +72,6 @@ class VarGlyphViewer(ezui.WindowController):
         ),
         reloadDefaultButton=dict(
             width='fill',
-        ),
-        color=dict(
-            color=(0.9860473871231079, 0.008333318866789341, 0.5019234418869019, 1.0),
-            callback='settingsChangedCallback',
         ),
         addSubtractButton=dict(
             sizeStyle="regular",
@@ -143,11 +138,11 @@ class VarGlyphViewer(ezui.WindowController):
     def selectionOnlyCallback(self, sender):
         self.settingsChangedCallback(None)
 
-    def showEqualCallback(self, sender):
-        self.settingsChangedCallback(None)
+    # def showEqualCallback(self, sender):
+    #     self.settingsChangedCallback(None)
 
-    def showDeltasCallback(self, sender):
-        self.settingsChangedCallback(None)
+    # def showDeltasCallback(self, sender):
+    #     self.settingsChangedCallback(None)
 
     def showValuesCallback(self, sender):
         self.settingsChangedCallback(None)
@@ -220,14 +215,11 @@ class VarGlyphViewerSubscriberGlyphEditor(Subscriber):
             return
 
         selectionOnly = self.controller.w.getItem('selectionOnly').get()
-        showEqual     = self.controller.w.getItem('showEqual').get()
-        showDeltas    = self.controller.w.getItem('showDeltas').get()
+        showEqual     = True # self.controller.w.getItem('showEqual').get()
+        showDeltas    = True # self.controller.w.getItem('showDeltas').get()
         showValues    = self.controller.w.getItem('showValues').get()
         showDefault   = self.controller.w.getItem('showDefault').get()
         preview       = self.controller.w.getItem("preview").get()
-
-        color1 = (0, 0.85, 0, 1)
-        color2 = (1, 0.5, 0, 1)
 
         if not preview:
             return
@@ -248,17 +240,21 @@ class VarGlyphViewerSubscriberGlyphEditor(Subscriber):
         selectedPoints = getImplicitSelectedPoints(self.controller.glyph)
 
         with self.displayLayer.sublayerGroup():
-            
+
+            #-------------
             # draw points
+            #-------------
+
             for ci, c in enumerate(self.controller.glyph):
                 for pi, p in enumerate(c.points):
-                    if selectionOnly and p not in selectedPoints:
-                        continue
+
                     p2 = defaultGlyph.contours[ci].points[pi]
 
                     isOrthogonal = p.x == p2.x or  p.y == p2.y
                     isEqual      = p.x == p2.x and p.y == p2.y
-                    color = colorCheckTrue if isOrthogonal else colorCheckFalse
+
+                    color   = colorCheckTrue   if isOrthogonal else colorCheckFalse
+                    colorBG = colorCheckTrueBG if isOrthogonal else colorCheckFalseBG
 
                     if isEqual:
                         if showEqual:
@@ -281,6 +277,7 @@ class VarGlyphViewerSubscriberGlyphEditor(Subscriber):
                                 endPoint=(p2.x, p2.y),
                                 strokeWidth=1,
                                 strokeColor=color,
+                                strokeDash=dash,
                             )
                             ovalSymbol = dict(
                                 name="oval",
@@ -290,34 +287,39 @@ class VarGlyphViewerSubscriberGlyphEditor(Subscriber):
                             line.setEndSymbol(ovalSymbol)
 
                             if showValues:
+                                if selectionOnly and p not in selectedPoints:
+                                    continue
+
                                 cx = p.x + (p2.x - p.x) * 0.5
                                 cy = p.y + (p2.y - p.y) * 0.5
                                 caption = ''
                                 if p2.x != p.x:
-                                    if not isOrthogonal:
-                                        caption += 'x:'
-                                    caption += f'{p.x - p2.x} '
+                                    # if not isOrthogonal:
+                                    #     caption += 'x:'
+                                    caption += f'{int(p.x - p2.x)} '
                                 if p2.y != p.y:
-                                    if not isOrthogonal:
-                                        caption += 'y:'
-                                    caption += f'{p.y - p2.y}'
+                                    # if not isOrthogonal:
+                                    #     caption += 'y:'
+                                    caption += f'{int(p.y - p2.y)}'
 
                                 self.displayLayer.appendTextLineSublayer(
                                     position=(cx, cy),
-                                    backgroundColor=color,
+                                    backgroundColor=colorBG,
                                     text=caption,
                                     font="system",
                                     weight="bold",
                                     pointSize=9,
                                     padding=(4, 0),
                                     cornerRadius=4,
-                                    fillColor=(1, 1, 1, 1),
+                                    fillColor=color,
                                     horizontalAlignment='center',
                                     verticalAlignment='center',
                                 )
 
-
+            #--------------
             # draw anchors
+            #--------------
+
             for ai, a in enumerate(self.controller.glyph.anchors):
                 if selectionOnly and not a.selected:
                     continue
@@ -326,6 +328,7 @@ class VarGlyphViewerSubscriberGlyphEditor(Subscriber):
                 isOrthogonal = a.x == a2.x or  a.y == a2.y
                 isEqual      = a.x == a2.x and a.y == a2.y
                 color = colorCheckTrue if isOrthogonal else colorCheckFalse
+                colorBG = color[0], color[1], color[2], 0.35
 
                 if a.x == a2.x and a.y == a2.y:
                     if showEqual:
@@ -367,24 +370,24 @@ class VarGlyphViewerSubscriberGlyphEditor(Subscriber):
                             cy = a.y + (a2.y - a.y) * 0.5
                             caption = ''
                             if a2.x != a.x:
-                                if not isOrthogonal:
-                                    caption += 'x:'
-                                caption += f'{a.x - a2.x} '
+                                # if not isOrthogonal:
+                                #     caption += 'x:'
+                                caption += f'{int(a.x - a2.x)} '
                             if a2.y != a.y:
-                                if not isOrthogonal:
-                                    caption += 'y:'
-                                caption += f'{a.y - a2.y}'
+                                # if not isOrthogonal:
+                                #     caption += 'y:'
+                                caption += f'{int(a.y - a2.y)}'
 
                             self.displayLayer.appendTextLineSublayer(
                                 position=(cx, cy),
-                                backgroundColor=color,
+                                backgroundColor=colorBG,
                                 text=caption,
                                 font="system",
                                 weight="bold",
                                 pointSize=9,
                                 padding=(4, 0),
                                 cornerRadius=4,
-                                fillColor=(1, 1, 1, 1),
+                                fillColor=color,
                                 horizontalAlignment='center',
                                 verticalAlignment='center',
                             )

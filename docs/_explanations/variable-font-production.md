@@ -11,18 +11,16 @@ Introducing the main ideas behind the variable font production tools in xTools4.
 {:toc}
 
 
-Variable Values
----------------
+Challenges in variable font production
+-------------------------------------
 
 When working on variable font sources, the designer needs to know, at a glance, what is changing in a source in relation to the default.
 
-Changes from the default should all be intentional, and not caused by errors and imprecision during the design process.
+Changes from the default should all be intentional, and not caused by errors and imprecision during a manual design process.
 
-Visual proof is not sufficient: glyphs that appear equal may be numerically different.
+Visual proof is not sufficient: glyphs that appear equal may be numerically different!
 
-As designspaces become larger, it becomes harder to keep track of what is changing where.
-
-xTools4 introduces a new set of tools to reduce the cognitive burden of dealing with very large designspaces, using colors to filter out the noise and focus the designer's attention towards the relevant bits of data.
+As designspaces become larger, it becomes exponentially harder to keep track of what is changing where.
 
 
 What do we want to track for changes?
@@ -44,30 +42,53 @@ B. glyph-level
 
 ##### 2. Validation groups (glyph-level)
 
-- equal to default / contours only
-- equal to default / components only
-- different from default / contours only
-- different from default / components only
-- error: mixed contours & components, or nested components
+- equal to default / different from default
+- contours only / components only
+- errors: mixed contours & components, nested components
 
 ##### 3. Measurements (font- and glyph-level)
 
 - distances between pairs of points
-- angles?
+
+##### 4. Point deltas in relation to the default
+
+- points which don’t move
+- points which move only in x/y direction
+- points which move in both x/y directions
 
 
-Using colors to see everything at a glance 
-------------------------------------------
+The approach of xTools4
+-----------------------
 
-Two color codes…
+Functionality of variable tools is divided across several specific tools that can work together, following the [general design pattern of hTools](overview#modular).
 
-1. check results (marks, values)
-2. validation groups (cell background)
+xTools4 reduces the cognitive burden of dealing with very large designspaces by using colors to filter out the noise and focus the designer’s attention at the relevant bits of font source data.
 
-…used consistently in separate tools:
+
+Color codes
+-----------
+
+Throughout the variable toolkit, two separate color codes are used consistently, allowing the designer to see everything he needs at a glance.
+
+##### Check colors
+
+| expression     | marks, values |
+| representation | low-level comparison of attributes, values |
+{: .table }
+
+##### Validation colors
+
+| expression     | cell color |
+| representation | categorization of glyphs based on low-level checks |
+{: .table }
+
+
+Variable Tools supporting color codes
+-------------------------------------
 
 - [GlyphValidator](../reference/tools/variable/glyph-validator/) (1+2)
 - [GlyphSetProofer](../reference/tools/variable/glyphset-proofer/) (2)
 - [Measurements](../reference/tools/variable/measurements/) (1)
 - [VarGlyphAssistant](../reference/tools/variable/varglyph-assistant/) (1)
 - [VarFontAssistant](../reference/tools/variable/varfont-assistant/) (1)
+- [VarGlyphViewer](../reference/tools/variable/varglyph-viewer/) (1)

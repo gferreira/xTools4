@@ -4,69 +4,41 @@ layout    : default
 permalink : /reference/custom-designspace-libs/
 ---
 
+<style>
+    td:nth-child(1) { width: 140px; }
+</style>
+
 Additional data formats linked to designspace files and used by different tools for variable fonts.
 {: .lead}
 
 ### Measurements 
 
-<table class='table'>
-  <tr>
-    <td width='140'>lib key</td>
-    <td><code>com.xTools4.xProject.measurementsPath</code></td>
-  </tr>
-  <tr>
-    <td>lib value</td>
-    <td>name of the measurements file (in the same folder as the designspace)</td>
-  </tr>
-  <tr>
-    <td>linked format</td>
-    <td><a href='../measurements-format/'>Measurements</a></td>
-  </tr>
-  <tr>
-    <td>used by</td>
-    <td><a href='../tools/variable/measurements/'>Measurements</a>, <a href='../tools/variable/glyph-meme/'>GlyphMeme</a>, <a href='../tools/variable/varfont-assistant/'>VarFontAssistant</a>, <a href='../tools/variable/varglyph-assistant/'>VarGlyphAssistant</a></td>
-  </tr>
-</table>
+| lib key       | `com.xTools4.xProject.measurementsPath` |
+| lib value     | name of the measurements file (in the same folder as the designspace) |
+| linked format | [Measurements format] | 
+| used by       | [Measurements], [GlyphMeme], [VarFontAssistant], [VarGlyphAssistant] |
+{: .table }
 
 ### Glyph Constructions
 
-<table class='table'>
-  <tr>
-    <td width='140'>lib key</td>
-    <td><code>com.xTools4.xProject.glyphConstructionsPath</code></td>
-  </tr>
-  <tr>
-    <td>lib value</td>
-    <td>name of the glyph construction file (in the same folder as the designspace)</td>
-  </tr>
-  <tr>
-    <td>linked format</td>
-    <td><a href='http://github.com/typemytype/GlyphConstruction'>GlyphConstruction</a></td>
-  </tr>
-  <tr>
-  <td>used by</td>
-  <td><a href='../tools/variable/glyph-meme/'>GlyphMeme</a></td>
-  </tr>
-</table>
+| lib key       | `com.xTools4.xProject.glyphConstructionsPath` |
+| lib value     | name of the glyph construction file (in the same folder as the designspace) | 
+| linked format | [GlyphConstruction] | 
+| used by       | [GlyphMeme] | 
+{: .table }
 
 ### Glyph Groups (Smart Sets)
 
-<table class='table'>
-  <tr>
-    <td width='140'>lib key</td>
-    <td><code>com.xTools4.xProject.smartSetsPath</code></td>
-  </tr>
-  <tr>
-    <td>lib value</td>
-    <td>name of the smart sets file (in the same folder as the designspace)</td>
-  </tr>
-  <tr>
-    <td>linked format</td>
-    <td><a href='http://robofont.com/documentation/topics/smartsets/'>Smart Sets</a></td>
-  </tr>
-  <tr>
-    <td>used by</td>
-  <td><a href='../tools/variable/glyph-meme/'>GlyphMeme</a></td>
-  </tr>
-</table>
+| lib key       | `com.xTools4.xProject.smartSetsPath` |
+| lib value     | name of the smart sets file (in the same folder as the designspace) | 
+| linked format | [Smart Sets] | 
+| used by       | [GlyphMeme] | 
+{: .table }
 
+[Measurements format]: ../measurements-format/
+[GlyphConstruction]: http://github.com/typemytype/GlyphConstruction
+[Smart Sets]: http://robofont.com/documentation/topics/smartsets/
+[Measurements]: ../tools/variable/measurements/
+[GlyphMeme]: ../tools/variable/glyph-meme/
+[VarFontAssistant]: ../tools/variable/varfont-assistant/
+[VarGlyphAssistant]: ../tools/variable/varglyph-assistant/

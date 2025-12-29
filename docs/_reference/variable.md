@@ -10,8 +10,9 @@ Tools to visualize and edit variable font sources.
 <div class='row'>
 
 <div class='col' markdown='1'>
-- <span class="badge text-bg-success rounded-0">RF3</span> [BlendsPreview](blends-preview)
+- <span class="badge text-bg-warning rounded-0">RF3</span> [BlendsPreview](blends-preview)
 - <span class="badge text-bg-success rounded-0">RF4</span> [GlyphMeme](glyph-meme)
+- <span class="badge text-bg-success rounded-0">RF4</span> [GlyphTuning](glyph-tuning)
 - <span class="badge text-bg-success rounded-0">RF4</span> [GlyphValidator](glyph-validator)
 - <span class="badge text-bg-warning rounded-0">RF3</span> [GlyphSetProofer](glyphset-proofer)
 - <span class="badge text-bg-success rounded-0">RF4</span> [Measurements](measurements)

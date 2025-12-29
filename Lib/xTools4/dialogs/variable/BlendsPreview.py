@@ -268,7 +268,12 @@ class BlendsPreviewController:
     # callbacks
 
     def loadDesignspaceCallback(self, sender):
-        self.designspacePath = GetFile(message='Select designspace file:')
+        self.designspacePath = GetFile(
+            message='Select designspace file:',
+            title=self.title, 
+            allowsMultipleSelection=False,
+            fileTypes=["designspace"]
+        )
         if self.designspacePath is None:
             return
 
@@ -294,7 +299,12 @@ class BlendsPreviewController:
         self._updateAxesList()
 
     def loadReferenceFontCallback(self, sender):
-        self.referenceFontPath = GetFile(message='Select reference font:')
+        self.referenceFontPath = GetFile(
+            message='Select reference font:',
+            title=self.title, 
+            allowsMultipleSelection=False,
+            fileTypes=["ttf", "otf"]
+        )
         if not self.referenceFontPath:
             return
 

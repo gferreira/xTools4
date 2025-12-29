@@ -17,7 +17,6 @@ from mojo.subscriber import Subscriber, registerGlyphEditorSubscriber, unregiste
 from mojo.events import postEvent, addObserver, removeObserver
 from xTools4.modules.linkPoints2 import readMeasurements, getPointAtIndex, getIndexForPoint, getAnchorPoint
 from xTools4.modules.measurements import Measurement
-# from xTools4.modules.measurementsViewer import MeasurementsViewer
 from xTools4.modules.messages import showMessage
 from xTools4.modules.measureHandles import vector, getVector
 
@@ -519,7 +518,13 @@ class MeasurementsController(ezui.WindowController):
     # ---------
 
     def getDesignspaceButtonCallback(self, sender):
-        self.designspacePath = GetFile(message='Select designspace file:', title=self.title)
+        self.designspacePath = GetFile(
+            message='Select designspace file:',
+            title=self.title, 
+            allowsMultipleSelection=False,
+            fileTypes=["designspace"]
+        )
+
         if self.designspacePath is None:
             return
         self._loadDesignspace()
@@ -568,28 +573,6 @@ class MeasurementsController(ezui.WindowController):
 
         if self.verbose:
             print('done.\n')
-
-
-
-    # def makePdfButtonCallback(self, sender):
-
-    #     if not self.measurements:
-    #         showMessage('no measurements available', self.messageMode)
-    #         return
-
-    #     if not self.defaultFont:
-    #         showMessage('no default font available', self.messageMode)
-    #         return
-
-    #     if self.verbose:
-    #         print('making PDF overview...')
-
-    #     pdfFileName = f'{self.defaultFont.info.familyName.replace(' ', '-')}_measurements.pdf'
-    #     pdfPath = PutFile(message='Save measurements preview as a PDF file:', fileName=pdfFileName)
-
-    #     M = MeasurementsViewer(self.measurements, self.defaultFont.path)
-    #     M.makePDF(fontMeasurements=True, glyphMeasurements=False, sectionTitle=False, title=False)
-    #     M.savePDF(pdfPath)
 
     # font
 

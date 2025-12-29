@@ -186,7 +186,12 @@ class GlyphTuningController(ezui.WindowController):
     #     self.w.getItem('axesList').set(axesItems)
 
     def getDesignspaceButtonCallback(self, sender):
-        self.designspacePath = GetFile(message='Select designspace file:', title=self.title)
+        self.designspacePath = GetFile(
+            message='Select designspace file:',
+            title=self.title, 
+            allowsMultipleSelection=False,
+            fileTypes=["designspace"]
+        )
         if self.designspacePath is None:
             return
 

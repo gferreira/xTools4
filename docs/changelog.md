@@ -9,6 +9,15 @@ All notable changes to xTools4 are documented in this file.
 {: .lead }
 
 
+0.2.6
+-----
+
+- <span class='badge rounded-0'>Added</span> Adding GlyphTuning tool to quickly open all corner tuning sources of a single glyph for editing.
+- <span class='badge rounded-0'>Added</span> Adding documentation of custom libs in temporary fonts, and tools that support them.
+- <span class='badge rounded-0'>Changed</span> Implemented color codes in VarGlyphViewer to differentiate three types of point delta.
+{: ._changelog .mb-4 }
+
+
 0.2.5
 -----
 

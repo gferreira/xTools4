@@ -4,7 +4,7 @@ layout    : default
 permalink : /reference/tools/variable/varglyph-viewer/
 ---
 
-A tool to visualize and highlight the differences between the current glyph and the same glyph in another font.
+A tool to visualize and highlight the differences between the current glyph and the same glyph in the default font.
 {: .lead}
 
 <span class="badge text-bg-success rounded-0">RF4</span> Rewritten using the new RoboFont 4 APIs.  
@@ -16,42 +16,33 @@ A tool to visualize and highlight the differences between the current glyph and 
 </div>
 <div class='col-8' markdown='1'>
 get default…
-: Open a dialog to select the source to check against the _current font_.
+: Open a dialog to select the source to check against the current font.
 
 reload
 : Reload the selected source from disk (in case it has changed).
 
-font value
-: Compare glyph measurements with their font-level value.
-
-color
-: Choose a color for the Glyph Editor visualization.
-
-show equal
-: Highlight points which have the same position as the default.
-
-show deltas
-: Show delta vectors for points which change position in relation to the default.
-
 show default
-: Show the default glyph shape in the background.
+: Show the default glyph in the background.
 
-selection
-: Show measurements in font units.
+show distance
+: Show x and/or y distance of each point in relation to the same point in the default.
 
-subtract
+selection only
+: Show the distance visualization only for selected points.
+
+subtract (-)
 : Subtract the default glyph from the current glyph.
 
-add
+add (+)
 : Add the default glyph to the current glyph.
 
-show preview
+display
 : Turn the visualisation on/off.
 </div>
 </div>
 
 
-Preview
+Display
 -------
 
 ![]({{ site.url }}/images/variable/VarGlyphViewer_preview.png){: .img-fluid}
