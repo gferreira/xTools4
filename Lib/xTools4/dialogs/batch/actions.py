@@ -10,7 +10,7 @@ from xTools4.dialogs.batch.base import BatchDialogBase
 
 
 # TODO: add a new section with transformations (scale, move, rotate, skew)
-
+KEY = 'com.xTools4.dialogs.batch.Actions'
 class BatchActionsDialog(BatchDialogBase):
 
     '''
@@ -56,6 +56,7 @@ class BatchActionsDialog(BatchDialogBase):
                 (self.width * 3, self.height),
                 self.title,
                 minSize=(self.width * 2, 280))
+        self.w.workspaceWindowIdentifier = KEY
 
         # build groups
         self.initFontSelectorGroup()

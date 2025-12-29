@@ -12,6 +12,7 @@ colorCheckTrueBG  = 0.7, 1.0, 0.7, 0.85
 colorCheckFalseBG = 1.0, 0.7, 0.7, 0.85
 
 
+KEY = 'com.xTools4.dialogs.variable.VarGlyphViewer'
 def getImplicitSelectedPoints(glyph):
     '''
     http://forum.robofont.com/topic/742/easier-way-of-getting-all-selected-contour-points
@@ -89,6 +90,7 @@ class VarGlyphViewer(ezui.WindowController):
             size=(self.width, 'auto'),
         )
         self.w.getNSWindow().setTitlebarAppearsTransparent_(True)
+        self.w.workspaceWindowIdentifier = KEY
         self.w.open()
 
     def started(self):
