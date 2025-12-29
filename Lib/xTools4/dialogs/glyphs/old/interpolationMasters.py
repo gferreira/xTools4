@@ -6,7 +6,7 @@ from mojo.UI import UpdateCurrentGlyphView
 from xTools4.dialogs.glyphs.old.base import GlyphsDialogBase
 from xTools4.dialogs.old.misc.numberEditText001 import NumberEditText_001
 
-
+KEY = 'com.xTools4.dialogs.glyphs.interpolationMasters'
 class InterpolateGlyphsDialog(GlyphsDialogBase):
 
     '''
@@ -32,6 +32,7 @@ class InterpolateGlyphsDialog(GlyphsDialogBase):
         self.height  = self.textHeight * 13
         self.height += self.padding * 10 + 3
         self.w = self.window((self.width, self.height), self.title)
+        self.w.workspaceWindowIdentifier = KEY
 
         x = y = p = self.padding
         col = (self.width - p*2) / 2
