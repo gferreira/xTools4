@@ -70,25 +70,33 @@ Color codes
 
 Throughout the variable toolkit, two separate color codes are used consistently, allowing the designer to see everything he needs at a glance.
 
-##### Check colors
+<style>
+    ._ td:nth-child(1) { width: 200px; }
+</style>
+
+##### 1. Check colors
 
 | expression     | marks, values |
 | representation | low-level comparison of attributes, values |
-{: .table }
+{: .table ._ }
 
-##### Validation colors
+##### 2. Validation colors
 
 | expression     | cell color |
 | representation | categorization of glyphs based on low-level checks |
-{: .table }
+{: .table ._ }
 
 
-Variable Tools supporting color codes
+Variable tools supporting color codes
 -------------------------------------
 
-- [GlyphValidator](../reference/tools/variable/glyph-validator/) (1+2)
-- [GlyphSetProofer](../reference/tools/variable/glyphset-proofer/) (2)
-- [Measurements](../reference/tools/variable/measurements/) (1)
-- [VarGlyphAssistant](../reference/tools/variable/varglyph-assistant/) (1)
-- [VarFontAssistant](../reference/tools/variable/varfont-assistant/) (1)
-- [VarGlyphViewer](../reference/tools/variable/varglyph-viewer/) (1)
+| tool | check colors | validation colors |
+|-------------|-------------|
+| [GlyphValidator](../reference/tools/variable/glyph-validator/) | <i class="bi bi-check2"></i> | <i class="bi bi-check2"></i> |
+| [GlyphSetProofer](../reference/tools/variable/glyphset-proofer/) |   | <i class="bi bi-check2"></i> |
+| [Measurements](../reference/tools/variable/measurements/) | <i class="bi bi-check2"></i> |   |
+| [VarGlyphAssistant](../reference/tools/variable/varglyph-assistant/) | <i class="bi bi-check2"></i> |   |
+| [VarFontAssistant](../reference/tools/variable/varfont-assistant/) | <i class="bi bi-check2"></i> |   |
+| [VarGlyphViewer](../reference/tools/variable/varglyph-viewer/) | <i class="bi bi-check2"></i> |   |
+{: .table .table-hover }
+

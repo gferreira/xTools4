@@ -1,7 +1,7 @@
 ---
 title     : About xTools4
 layout    : page
-permalink : /explanations/about
+permalink : /explanations/history
 ---
 
 xTools4 is a fusion of hTools3 and variableValues extensions, updated to the new RoboFont 4 APIs: Merz, Subscriber, and EZUI.

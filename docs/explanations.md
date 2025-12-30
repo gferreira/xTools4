@@ -7,7 +7,7 @@ permalink : /explanations/
 theoretical knowledge · understanding-oriented · useful when studying
 {: .lead }
 
-- [overview](overview)
-- [about xTools4](about)
-- [variable font production tools](variable-font-production)
-- [about this documentation](about-docs)
+- [The history of xTools4](history)
+- [xTools4 design principles](overview)
+- [Variable font production tools](variable-font-production)
+- [About this documentation](about-docs)
