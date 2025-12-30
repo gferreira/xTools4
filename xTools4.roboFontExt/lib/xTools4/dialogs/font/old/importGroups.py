@@ -3,6 +3,9 @@ from mojo.roboFont import CurrentFont
 from xTools4.dialogs.old import hDialog
 
 
+KEY = f'{hDialog.key}.font.importGroups'
+
+
 class ImportGroupsDialog(hDialog):
 
     '''
@@ -11,7 +14,7 @@ class ImportGroupsDialog(hDialog):
     '''
 
     title = 'groups'
-    key = '%s.font.importGroups' % hDialog.key
+    key = KEY
     settings = {}
     windowType = 1
 
@@ -47,6 +50,8 @@ class ImportGroupsDialog(hDialog):
                 "clear",
                 sizeStyle=self.sizeStyle,
                 callback=self.deleteCallback)
+
+        self.w.workspaceWindowIdentifier = KEY
 
         self.w.open()
 

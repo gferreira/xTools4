@@ -1,7 +1,3 @@
-from importlib import reload
-import xTools4.modules.glyphSetProofer
-reload(xTools4.modules.glyphSetProofer)
-
 import os, time
 import AppKit
 import drawBot as DB
@@ -12,6 +8,9 @@ from mojo.roboFont import OpenWindow
 from fontParts.world import OpenFont
 from xTools4.modules.designspacePlus import DesignSpacePlus
 from xTools4.modules.glyphSetProofer import GlyphSetProofer
+
+
+KEY = 'com.xTools4.dialogs.variable.glyphSetProofer'
 
 
 class GlyphSetProoferUI:
@@ -100,6 +99,7 @@ class GlyphSetProoferUI:
         self.w.splitView = SplitView((0, 0, -0, -0), self._groups, dividerStyle='thin')
 
         self.w.getNSWindow().setTitlebarAppearsTransparent_(True)
+        self.w.workspaceWindowIdentifier = KEY
         self.w.open()
 
     # dynamic attributes

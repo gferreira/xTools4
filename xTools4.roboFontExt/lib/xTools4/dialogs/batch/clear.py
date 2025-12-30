@@ -1,12 +1,11 @@
-# from importlib import reload
-# import xTools4.dialogs.batch.base
-# reload(xTools4.dialogs.batch.base)
-
 from vanilla import Group, CheckBox, Button
 from mojo.UI import AccordionView
 from xTools4.modules.fontinfo import FontInfoAttributes, FontInfoAttributesIgnorePrefix
 from xTools4.modules.fontutils import clearMarkColors, clearUnicodes
 from xTools4.dialogs.batch.base import BatchDialogBase
+
+
+KEY = f'{BatchDialogBase.key}.clear'
 
 
 class BatchClearDialog(BatchDialogBase):
@@ -22,7 +21,7 @@ class BatchClearDialog(BatchDialogBase):
     '''
 
     title = 'batch clear'
-    key   = f'{BatchDialogBase.key}.clear'
+    key   = KEY
 
     fontInfo = dict(FontInfoAttributes)
     del fontInfo['WOFF']

@@ -1,7 +1,3 @@
-from importlib import reload
-import xTools4.modules.accents
-reload(xTools4.modules.accents)
-
 from vanilla import Button, CheckBox
 from mojo import drawingTools as ctx
 from mojo.UI import GetFile, CodeEditor
@@ -12,6 +8,9 @@ from defcon import Glyph, registerRepresentationFactory, unregisterRepresentatio
 from glyphConstruction import ParseGlyphConstructionListFromString, GlyphConstructionBuilder
 from xTools4.dialogs.glyphs.old.base import GlyphsDialogBase
 from xTools4.modules.accents import buildGlyphConstruction
+
+
+KEY = f'{GlyphsDialogBase.key}.buildConstructions'
 
 
 class BuildConstructionDialog(GlyphsDialogBase):
@@ -27,7 +26,7 @@ class BuildConstructionDialog(GlyphsDialogBase):
     '''
 
     title = 'construct'
-    key   = f'{GlyphsDialogBase.key}.construct'
+    key = KEY
     settings = {}
     glyphConstructionPath = None
 

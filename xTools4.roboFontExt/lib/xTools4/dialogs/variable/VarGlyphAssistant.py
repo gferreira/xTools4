@@ -1,9 +1,3 @@
-from importlib import reload
-import xTools4.dialogs.variable.DesignSpaceSelector
-reload(xTools4.dialogs.variable.DesignSpaceSelector)
-import xTools4.dialogs.variable.Measurements
-reload(xTools4.dialogs.variable.Measurements)
-
 import os
 import ezui
 from defcon import Font
@@ -14,7 +8,9 @@ from xTools4.dialogs.variable.DesignSpaceSelector import DesignSpaceSelector_EZU
 from xTools4.dialogs.variable.Measurements import *
 from xTools4.dialogs.variable.GlyphValidator import checkResultsFactory, validationGroupFactory
 
-KEY = 'com.xTools4.VarGlyphAssistant'
+
+KEY = 'com.xTools4.dialogs.variable.varGlyphAssistant'
+
 
 # color formatting
 
@@ -131,10 +127,10 @@ class VarGlyphAssistantController(DesignSpaceSelector_EZUI):
     >> d-threshold
     >> [__](±)       @thresholdDefault
 
-    # * Tab: points                    @pointsTab
-    # > |-----------|---|---|---|---|
-    # > | file name | x | y | t | s |  @pointsTable
-    # > |-----------|---|---|---|---|
+    * Tab: points                @pointsTab
+    > |-----------|---|---|---|
+    > | file name | x | y | t |  @pointsTable
+    > |-----------|---|---|---|
 
     '''
 
@@ -143,7 +139,7 @@ class VarGlyphAssistantController(DesignSpaceSelector_EZUI):
     _tables  = DesignSpaceSelector_EZUI._tables.copy()
     _tables += [
         'attributesValues',
-        # 'pointsTable',
+        'pointsTable',
         'measurements',
         'measurementValues'
     ]
@@ -267,6 +263,34 @@ class VarGlyphAssistantController(DesignSpaceSelector_EZUI):
                     maxWidth=columnFontName*2,
                     sortable=True,
                 ),
+                dict(
+                    identifier="x",
+                    title="x",
+                    width=columnValueAttrs,
+                    sortable=True,
+                    # cellDescription=dict(
+                    #     valueToCellConverter=intToCellConverter,
+                    #     cellToValueConverter=cellToIntConverter,
+                    #     stringFormatter=widthColorFormatter,
+                    # ),
+                ),
+                dict(
+                    identifier="y",
+                    title="y",
+                    width=columnValueAttrs,
+                    sortable=True,
+                    # cellDescription=dict(
+                    #     valueToCellConverter=intToCellConverter,
+                    #     cellToValueConverter=cellToIntConverter,
+                    #     stringFormatter=widthColorFormatter,
+                    # ),
+                ),
+                dict(
+                    identifier="type",
+                    title="t",
+                    width=columnValueAttrs,
+                    sortable=False,
+                ),
             ],
         ),
         # loadPointsButton=dict(
@@ -386,6 +410,7 @@ class VarGlyphAssistantController(DesignSpaceSelector_EZUI):
         self.w.getNSWindow().setTitlebarAppearsTransparent_(True)
         for itemName in self._tables:
             self.w.getItem(itemName).getNSTableView().setRowHeight_(self.rowHeight)
+        self.w.workspaceWindowIdentifier = KEY
         self.w.open()
 
     def started(self):

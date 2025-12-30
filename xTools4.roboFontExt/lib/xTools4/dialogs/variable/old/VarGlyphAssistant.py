@@ -10,6 +10,9 @@ from xTools4.modules.linkPoints2 import readMeasurements
 from xTools4.modules.measurements import Measurement
 
 
+KEY = 'com.xTools4.dialogs.variable.old.varGlyphAssistant'
+
+
 def getSegmentTypes(glyph):
     segments = []
     for ci, c in enumerate(glyph.contours):
@@ -27,7 +30,7 @@ def getSegmentTypes(glyph):
 class VarGlyphAssistant(DesignSpaceSelector):
     
     title = 'VarGlyph Assistant'
-    key   = 'com.fontBureau.varGlyphAssistant'
+    key   = KEY
 
     _tabsTitles = ['designspace', 'glyphs', 'attributes', 'segments', 'measurements']
 

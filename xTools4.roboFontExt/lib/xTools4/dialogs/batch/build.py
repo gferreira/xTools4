@@ -1,7 +1,3 @@
-from importlib import reload
-import xTools4.dialogs.batch.base
-reload(xTools4.dialogs.batch.base)
-
 from vanilla import Group, EditText, CheckBox, ColorWell, Button, List
 from mojo.UI import AccordionView, PutFile, GetFile, CodeEditor
 from mojo.roboFont import CurrentFont
@@ -10,6 +6,9 @@ from xTools4.modules.color import rgb2nscolor, nscolor2rgb
 from xTools4.modules.accents import buildGlyphConstructions
 from xTools4.modules.messages import *
 from xTools4.dialogs.batch.base import BatchDialogBase
+
+
+KEY = f'{BatchDialogBase.key}.buildGlyphs'
 
 
 class BatchBuildGlyphsDialog(BatchDialogBase):
@@ -25,7 +24,7 @@ class BatchBuildGlyphsDialog(BatchDialogBase):
     '''
 
     title = 'batch build glyphs'
-    key   = f'{BatchDialogBase.key}.build'
+    key   = KEY
 
     def __init__(self):
         self.height = 400

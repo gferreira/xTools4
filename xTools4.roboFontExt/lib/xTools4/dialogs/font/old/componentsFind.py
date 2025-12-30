@@ -6,6 +6,9 @@ from xTools4.modules.fontutils import findGlyphComponents
 from xTools4.dialogs.old import hDialog
 
 
+KEY = f'{hDialog.key}.font.componentsFind'
+
+
 class FindGlyphComponentsDialog(hDialog):
 
     '''
@@ -14,7 +17,7 @@ class FindGlyphComponentsDialog(hDialog):
     '''
 
     title = "components"
-    key = '%s.font.componentsFind' % hDialog.key
+    key = KEY
     settings = {
         'markColor' : (0, 1, 1, 0.3),
     }
@@ -70,6 +73,8 @@ class FindGlyphComponentsDialog(hDialog):
                 'replace',
                 sizeStyle=self.sizeStyle,
                 callback=self.replaceComponentsCallback)
+
+        self.w.workspaceWindowIdentifier = KEY
 
         self.openWindow()
 

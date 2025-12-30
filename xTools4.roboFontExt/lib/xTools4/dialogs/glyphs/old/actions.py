@@ -11,6 +11,9 @@ from xTools4.modules.fontutils import isQuadratic
 from xTools4.dialogs.glyphs.old.base import GlyphsDialogBase
 
 
+KEY = f'{GlyphsDialogBase.key}.actions'
+
+
 def actionsGlyphFactory(glyph, actions=None):
 
     quadratic = isQuadratic(glyph.font)
@@ -57,7 +60,7 @@ class GlyphActionsDialog(GlyphsDialogBase):
     '''
 
     title = 'actions'
-    key   = f'{GlyphsDialogBase.key}.glyphs.actions'
+    key = KEY
     settings = {
         'previewPointRadius' : 5,
     }

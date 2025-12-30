@@ -1,7 +1,3 @@
-from importlib import reload
-import xTools4.modules.linkPoints
-reload(xTools4.modules.linkPoints)
-
 import ezui
 from mojo.subscriber import Subscriber, registerGlyphEditorSubscriber, registerSubscriberEvent, roboFontSubscriberEventRegistry, unregisterGlyphEditorSubscriber
 from mojo.roboFont import OpenWindow, CurrentGlyph
@@ -10,7 +6,7 @@ from xTools4.modules.linkPoints import *
 from xTools4.modules.measureHandles import getVector
 
 
-KEY = 'com.hipertipo.xTools4.dialogs.glyph.linkPoints'
+KEY = '{hDialog.key}.glyph.linkPoints'
 
 
 class LinkPointsController(ezui.WindowController):
@@ -82,6 +78,7 @@ class LinkPointsController(ezui.WindowController):
             size=(self.width, 'auto'),
         )
         self.w.getNSWindow().setTitlebarAppearsTransparent_(True)
+        self.w.workspaceWindowIdentifier = KEY
         self.w.open()
 
     def started(self):

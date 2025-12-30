@@ -6,8 +6,8 @@ KEY = 'com.xTools4.dialogs.variable.roundingBatch'
 
 class RoundingBatchController(ezui.WindowController):
 
-    title       = 'BatchRounding'
-    key         = KEY
+    title = 'BatchRounding'
+    key = KEY
     buttonWidth = 80
 
     content = """

@@ -1,9 +1,3 @@
-from importlib import reload
-import xTools4.modules.linkPoints2
-reload(xTools4.modules.linkPoints2)
-import xTools4.modules.measurements
-reload(xTools4.modules.measurements)
-
 import os, json
 from random import random
 import ezui
@@ -21,14 +15,8 @@ from xTools4.modules.messages import showMessage
 from xTools4.modules.measureHandles import vector, getVector
 
 
-'''
-M E A S U R E M E N T S v4
-
-RF4.5 + EZUI + Subscriber + Merz
-
-'''
-
 KEY = 'com.xTools4.dialogs.variable.measurements'
+
 
 colorCheckTrue  = 0.00, 0.85, 0.00, 1.00
 colorCheckFalse = 1.00, 0.00, 0.00, 1.00
@@ -46,6 +34,7 @@ defaultMeasurementsKey = 'com.xTools4.measurements.default'
 
 measurementsPathKey    = 'com.xTools4.xProject.measurementsPath'
 smartSetsPathKey       = 'com.xTools4.xProject.smartSetsPath'
+
 
 def scaleColorFormatter(attributes, threshold):
     value = attributes['value']

@@ -5,6 +5,9 @@ from defconAppKit.windows.baseWindow import BaseWindowController
 from xTools4.dialogs.old import hDialog
 
 
+KEY = f'{hDialog.key}.glyphs.marginsCopy'
+
+
 class CopyMarginsDialog(hDialog, BaseWindowController):
 
     '''
@@ -18,7 +21,7 @@ class CopyMarginsDialog(hDialog, BaseWindowController):
     '''
 
     title = 'margins'
-    key   = f'{hDialog.key}.glyphs.marginsCopy'
+    key = KEY
     allFonts = {}
 
     def __init__(self):
@@ -83,11 +86,16 @@ class CopyMarginsDialog(hDialog, BaseWindowController):
         self.updateSourceLayer()
         self.updateTargetFonts()
         self.updateTargetLayers()
+
         self.setUpBaseWindowBehavior()
+
+        self.w.workspaceWindowIdentifier = KEY
+
         addObserver(self, 'updateListsObserver', 'currentGlyphChanged')
         addObserver(self, 'updateListsObserver', 'newFontDidOpen')
         addObserver(self, 'updateListsObserver', 'fontDidOpen')
         addObserver(self, 'updateListsObserver', 'fontDidClose')
+
         self.openWindow()
 
     # -------------

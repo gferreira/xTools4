@@ -4,6 +4,9 @@ from xTools4.modules.anchors import copyAnchors
 from xTools4.dialogs.glyphs.old.base import GlyphsCopyDataDialogBase
 
 
+KEY = f'{GlyphsDialogBase.key}.anchorsCopy'
+
+
 class CopyAnchorsDialog(GlyphsCopyDataDialogBase):
 
     '''
@@ -17,7 +20,7 @@ class CopyAnchorsDialog(GlyphsCopyDataDialogBase):
     '''
 
     title = "anchors"
-    key   = f'{GlyphsCopyDataDialogBase.key}.anchorsCopy'
+    key = KEY
     settings = {}
 
     # -------
@@ -73,3 +76,5 @@ class CopyAnchorsDialog(GlyphsCopyDataDialogBase):
         targetFont.changed()
         if self.verbose:
             print('\n...done.\n')
+
+

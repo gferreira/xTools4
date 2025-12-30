@@ -1,11 +1,10 @@
-# from importlib import reload
-# import xTools4.dialogs.batch.base
-# reload(xTools4.dialogs.batch.base)
-
 from vanilla import TextBox, EditText, CheckBox, Button, Group, List
 from mojo.roboFont import CurrentFont
 from mojo.UI import AccordionView
 from xTools4.dialogs.batch.base import BatchDialogBase
+
+
+KEY = f'{BatchDialogBase.key}.findReplace'
 
 
 def findFontInfo(font, txtFind, attributes):
@@ -38,6 +37,7 @@ def replaceFontInfo(font, txtFind, txtReplace, attributes, preflight=False, inde
 class BatchFindReplaceDialog(BatchDialogBase):
 
     title = 'batch find & replace'
+    key = KEY
     settings = {}
 
     fontInfoAttributes = [

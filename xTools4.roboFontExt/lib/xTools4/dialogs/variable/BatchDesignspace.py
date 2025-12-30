@@ -429,10 +429,8 @@ class BatchDesignspace:
         for source in self.selectedSources:
             copyGlyphs(source, self.defaultFont, glyphNames)
 
-
     def getGlyphConstructionsCallback(self, sender):
         pass
-
 
     def buildGlyphsCallback(self, sender):
 
@@ -443,7 +441,6 @@ class BatchDesignspace:
         for source in self.selectedSources:
 
             buildGlyphs(source, glyphNames, self.glyphConstructionPath)
-
 
     def deleteGlyphsCallback(self, sender):
         pass

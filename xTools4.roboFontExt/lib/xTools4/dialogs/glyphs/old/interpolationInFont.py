@@ -6,6 +6,9 @@ from xTools4.dialogs.old.misc.spinnerSlider import SpinnerSlider
 from xTools4.modules.interpolation import interpolateStepsInFont
 
 
+KEY = 'com.xTools4.dialogs.glyphs.interpolationInFont'
+
+
 class InterpolateGlyphsInFontDialog(hDialog):
 
     '''
@@ -19,7 +22,8 @@ class InterpolateGlyphsInFontDialog(hDialog):
     '''
 
     title = 'interpol'
-    key   = f'{hDialog.key}.glyphs.interpolateGlyphsInFont'
+    key = KEY
+
     settings = {
         'interSteps' : 7,
         'extraSteps' : 3,
@@ -85,6 +89,8 @@ class InterpolateGlyphsInFontDialog(hDialog):
                 "interpolate",
                 callback=self.applyCallback,
                 sizeStyle=self.sizeStyle)
+
+        self.w.workspaceWindowIdentifier = KEY
 
         self.openWindow()
 

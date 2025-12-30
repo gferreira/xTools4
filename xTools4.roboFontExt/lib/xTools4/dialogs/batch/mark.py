@@ -6,6 +6,9 @@ from xTools4.modules.fontutils import *
 from xTools4.dialogs.batch.base import BatchDialogBase
 
 
+KEY = f'{BatchDialogBase.key}.markGlyphs'
+
+
 class BatchMarkGlyphsDialog(BatchDialogBase):
 
     '''
@@ -19,7 +22,7 @@ class BatchMarkGlyphsDialog(BatchDialogBase):
     '''
 
     title = 'batch mark'
-    key = '%s.mark' % BatchDialogBase.key
+    key = KEY
 
     settings = {
         'color'        : (1, 0.5, 0, 0.5),

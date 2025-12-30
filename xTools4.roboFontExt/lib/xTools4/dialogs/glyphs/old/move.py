@@ -4,6 +4,9 @@ from mojo.UI import NumberEditText
 from xTools4.dialogs.glyphs.old.base import GlyphsDialogBase
 
 
+KEY = f'{GlyphsDialogBase.key}.move'
+
+
 def moveGlyphFactory():
     pass
 
@@ -21,7 +24,7 @@ class MoveGlyphsDialog(GlyphsDialogBase):
     '''
 
     title = "move"
-    key   = f'{GlyphsDialogBase.key}.move'
+    key = KEY
     settings = {
         'moveValueX' : 70,
         'moveValueY' : 0,
@@ -77,6 +80,7 @@ class MoveGlyphsDialog(GlyphsDialogBase):
                 sizeStyle=self.sizeStyle)
 
         self.initGlyphsWindowBehaviour()
+
         self.openWindow()
 
     # -------------

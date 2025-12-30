@@ -1,9 +1,3 @@
-from importlib import reload
-import xTools4.dialogs.variable.DesignSpaceSelector
-reload(xTools4.dialogs.variable.DesignSpaceSelector)
-import xTools4.modules.validation
-reload(xTools4.modules.validation)
-
 import ezui
 from mojo.roboFont import OpenWindow, OpenFont
 from xTools4.dialogs.variable.DesignSpaceSelector import DesignSpaceSelector_EZUI, getSourceName
@@ -13,6 +7,7 @@ from xTools4.modules.validation import validateFonts
 
 
 KEY = 'com.xTools4.dialogs.variable.varFontAssistant'
+
 
 thresholdDefault = 0.1
 fontInfoDefault  = None

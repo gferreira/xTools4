@@ -1,9 +1,3 @@
-from importlib import reload
-import xTools4.dialogs.variable.DesignSpaceSelector
-reload(xTools4.dialogs.variable.DesignSpaceSelector)
-import xTools4.modules.validation
-reload(xTools4.modules.validation)
-
 import ezui
 from mojo.roboFont import OpenWindow, OpenFont
 from xTools4.dialogs.variable.DesignSpaceSelector import DesignSpaceSelector_EZUI, getSourceName
@@ -12,11 +6,13 @@ from xTools4.dialogs.variable.VarGlyphAssistant import intToCellConverter, cellT
 from xTools4.modules.validation import validateFonts
 
 
-KEY = 'com.xTools4.VarFontAssistant'
+KEY = 'com.xTools4.dialogs.variable.varFontAssistant'
+
 
 thresholdDefault = 0.1
 fontInfoDefault  = None
 kernValueDefault = None
+
 
 def defaultScaleColorFormatter(attributes):
     scaleColorFormatter(attributes, thresholdDefault)
@@ -376,6 +372,7 @@ class VarFontAssistant_EZUI(DesignSpaceSelector_EZUI):
         self.w.getNSWindow().setTitlebarAppearsTransparent_(True)
         for itemName in self._tables:
             self.w.getItem(itemName).getNSTableView().setRowHeight_(self.rowHeight)
+        self.w.workspaceWindowIdentifier = KEY
         self.w.open()
 
     def started(self):

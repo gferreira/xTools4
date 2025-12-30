@@ -6,6 +6,9 @@ from xTools4.dialogs.old.misc.origin import OriginPoint
 from xTools4.dialogs.old.misc.numberEditText0001 import NumberEditText_0001
 
 
+KEY = f'{GlyphsDialogBase.key}.scale'
+
+
 def scaleGlyphFactory():
     pass
 
@@ -23,7 +26,7 @@ class ScaleGlyphsDialog(GlyphsDialogBase):
     '''
 
     title = "scale"
-    key   = f'{GlyphsDialogBase.key}.scale'
+    key = KEY
     settings = {
         'xMetrics'   : False,
         'yMetrics'   : False,
@@ -98,6 +101,7 @@ class ScaleGlyphsDialog(GlyphsDialogBase):
                 sizeStyle=self.sizeStyle)
 
         self.initGlyphsWindowBehaviour()
+
         self.openWindow()
 
     # -------------

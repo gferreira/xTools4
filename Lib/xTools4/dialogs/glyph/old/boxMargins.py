@@ -1,5 +1,3 @@
-from importlib import reload
-
 from vanilla import *
 from mojo import drawingTools as ctx
 from mojo.UI import UpdateCurrentGlyphView, getDefault

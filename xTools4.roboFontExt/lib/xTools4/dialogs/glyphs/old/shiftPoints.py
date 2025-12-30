@@ -8,10 +8,13 @@ from xTools4.dialogs.glyphs.old.base import GlyphsDialogBase
 ### WARNING: THIS TOOL CURRENTLY CRASHES RF4.5b (NOT SURE WHY)
 
 
+KEY = f'{GlyphsDialogBase.key}.pointsShift'
+
+
 class ShiftPointsDialog(GlyphsDialogBase):
 
     title = 'shift'
-    key   = f'{GlyphsDialogBase.key}.pointsShift'
+    key = KEY
     settings = {
         'axis'      : 1,
         'side'      : 1,
@@ -109,6 +112,7 @@ class ShiftPointsDialog(GlyphsDialogBase):
                 sizeStyle=self.sizeStyle)
 
         self.initGlyphsWindowBehaviour()
+
         self.openWindow()
 
     # -------------

@@ -6,6 +6,9 @@ from mojo.tools import IntersectGlyphWithLine
 from xTools4.dialogs.glyphs.old.base import GlyphsDialogBase
 
 
+KEY = f'{GlyphsDialogBase.key}.marginsSet'
+
+
 class SetMarginsDialog(GlyphsDialogBase):
 
     '''
@@ -19,7 +22,7 @@ class SetMarginsDialog(GlyphsDialogBase):
     '''
 
     title = 'margins'
-    key   = f'{GlyphsDialogBase.key}.margins'
+    key = KEY
     settings = {
         'left'       : True,
         'leftMode'   : 0,
@@ -144,6 +147,9 @@ class SetMarginsDialog(GlyphsDialogBase):
                 sizeStyle=self.sizeStyle)
 
         self.initGlyphsWindowBehaviour()
+
+        self.w.workspaceWindowIdentifier = KEY
+
         self.openWindow()
 
     # -------------

@@ -5,6 +5,9 @@ from xTools4.dialogs.glyphs.old.base import GlyphsDialogBase
 from xTools4.modules.glyphutils import setGlyphWidth
 
 
+KEY = f'{GlyphsDialogBase.key}.widthSet'
+
+
 class SetWidthDialog(GlyphsDialogBase):
 
     '''
@@ -18,7 +21,7 @@ class SetWidthDialog(GlyphsDialogBase):
     '''
 
     title = 'width'
-    key   = f'{GlyphsDialogBase.key}.width'
+    key = KEY
     settings = {
         'widthValue' : 400,
         'mode'       : 0,
@@ -91,6 +94,9 @@ class SetWidthDialog(GlyphsDialogBase):
                 sizeStyle=self.sizeStyle)
 
         self.initGlyphsWindowBehaviour()
+
+        self.w.workspaceWindowIdentifier = KEY
+
         self.openWindow()
 
     # -------------

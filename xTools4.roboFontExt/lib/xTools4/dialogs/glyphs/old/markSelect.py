@@ -5,6 +5,9 @@ from xTools4.modules.color import rgb2nscolor, nscolor2rgb
 from xTools4.modules.fontutils import markGlyphs, findMarkColor
 
 
+KEY = f'{hDialog.key}.glyphs.markSelect'
+
+
 class MarkGlyphsDialog(hDialog):
 
     '''
@@ -18,7 +21,7 @@ class MarkGlyphsDialog(hDialog):
     '''
 
     title = 'mark'
-    key   = f'{hDialog.key}.glyphs.mark'
+    key   = KEY
     settings = {
         'markColor' : (1, 0, 0, 0.5),
     }
@@ -68,6 +71,8 @@ class MarkGlyphsDialog(hDialog):
                 "clear",
                 callback=self.clearCallback,
                 sizeStyle=self.sizeStyle)
+
+        self.w.workspaceWindowIdentifier = KEY
 
         self.openWindow()
 

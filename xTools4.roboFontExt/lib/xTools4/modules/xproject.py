@@ -111,3 +111,14 @@ class xProject:
     def varFontPath(self):
         return os.path.join(self.fontsFolder, f'{self.familyName}.ttf')
 
+
+
+    # -------
+    # methods
+    # -------
+
+    # setSourceNamesFromMeasurements
+    # cleanupNormalizeSources
+
+
+

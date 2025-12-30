@@ -9,10 +9,13 @@ from xTools4.modules.messages import noFontOpen, showMessage
 from xTools4.modules.fontutils import markGlyphs
 
 
+KEY = f'{hDialog.key}.font.exportLayers'
+
+
 class ExportLayersDialog(hDialog, BaseWindowController):
 
     title = 'layers'
-    key = '%s.font.exportLayers' % hDialog.key
+    key = KEY
     settings = {}
 
     def __init__(self):
@@ -57,6 +60,9 @@ class ExportLayersDialog(hDialog, BaseWindowController):
 
         addObserver(self, 'fontBecameCurrentCallback', "fontBecameCurrent")
         addObserver(self, 'fontDidCloseCallback', "fontDidClose")
+
+        self.w.workspaceWindowIdentifier = KEY
+
         self.setUpBaseWindowBehavior()
         self.setFont(CurrentFont())
         self.openWindow()

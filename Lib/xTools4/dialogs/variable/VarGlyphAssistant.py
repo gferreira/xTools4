@@ -1,9 +1,3 @@
-from importlib import reload
-import xTools4.dialogs.variable.DesignSpaceSelector
-reload(xTools4.dialogs.variable.DesignSpaceSelector)
-import xTools4.dialogs.variable.Measurements
-reload(xTools4.dialogs.variable.Measurements)
-
 import os
 import ezui
 from defcon import Font
@@ -14,7 +8,9 @@ from xTools4.dialogs.variable.DesignSpaceSelector import DesignSpaceSelector_EZU
 from xTools4.dialogs.variable.Measurements import *
 from xTools4.dialogs.variable.GlyphValidator import checkResultsFactory, validationGroupFactory
 
+
 KEY = 'com.xTools4.dialogs.variable.varGlyphAssistant'
+
 
 # color formatting
 
@@ -26,7 +22,6 @@ attributesPoints     = 0
 attributesComponents = 0
 attributesAnchors    = 0
 thresholdDefault     = 0.1
-
 
 def intToCellConverter(value):
     if value is None:

@@ -1,7 +1,3 @@
-from importlib import reload
-import xTools4.modules.measurements
-reload(xTools4.modules.measurements)
-
 import os
 import ezui
 from mojo.UI import GetFile
@@ -16,6 +12,7 @@ from xTools4.dialogs.variable.old.TempEdit import setupNewFont, splitall
 
 
 KEY = 'com.xTools4.dialogs.variable.glyphMeme'
+
 
 glyphSetPathKey        = 'com.xTools4.tempEdit.glyphSetPath'
 tempEditModeKey        = 'com.xTools4.tempEdit.mode'

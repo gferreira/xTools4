@@ -6,6 +6,9 @@ from xTools4.dialogs.glyphs.old.base import GlyphsDialogBase
 from xTools4.dialogs.old.misc.numberEditText01 import NumberEditText_01
 
 
+KEY = f'{GlyphsDialogBase.key}.skew'
+
+
 def skewGlyphFactory():
     pass
 
@@ -23,7 +26,7 @@ class SkewGlyphsDialog(GlyphsDialogBase):
     '''
 
     title = "skew"
-    key   = f'{GlyphsDialogBase.key}.skew'
+    key = KEY
     settings = {
         'xOffset'   : True,
         'skewValue' : 7.0,
@@ -96,6 +99,7 @@ class SkewGlyphsDialog(GlyphsDialogBase):
                 sizeStyle=self.sizeStyle)
 
         self.initGlyphsWindowBehaviour()
+
         self.openWindow()
 
     # -------------

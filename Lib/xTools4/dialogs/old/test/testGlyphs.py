@@ -1,7 +1,7 @@
-# import hTools3.dialogs.glyphs
-# for obj in dir(hTools3.dialogs.glyphs):
+# import xTools4.dialogs.glyphs
+# for obj in dir(xTools4.dialogs.glyphs):
 #     if not obj.startswith('_'):
-#         moduleName = 'hTools3.dialogs.glyphs.%s\n' % obj
+#         moduleName = 'xTools4.dialogs.glyphs.%s\n' % obj
 #         code  = 'import %s\n' % moduleName
 #         code += 'for D in dir(%s):\n' % moduleName
 #         code += '\tif D.endswith("Dialog") and D is not "hDialog":\n'
@@ -10,7 +10,7 @@
 #         # code += '\t\tprint(dialog, dialog.title)\n'
 #         exec(code)
 
-from hTools3.dialogs import hDialog
+from xTools4.dialogs import hDialog
 from vanilla import SquareButton, List
 
 class testAllGlyphsDialogs(hDialog):
@@ -65,9 +65,9 @@ class testAllGlyphsDialogs(hDialog):
 
     def openDialog(self, dialogTitle):
         moduleName, dialogName = self.dialogs[dialogTitle]
-        code  = 'import hTools3.dialogs.glyphs.%s\n' % moduleName
-        code += 'reload(hTools3.dialogs.glyphs.%s)\n' % moduleName
-        code += 'from hTools3.dialogs.glyphs.%s import %s as _%s\n' % (moduleName, dialogName, dialogName)
+        code  = 'import xTools4.dialogs.glyphs.%s\n' % moduleName
+        code += 'reload(xTools4.dialogs.glyphs.%s)\n' % moduleName
+        code += 'from xTools4.dialogs.glyphs.%s import %s as _%s\n' % (moduleName, dialogName, dialogName)
         if self.verbose:
             code += 'D = _%s()\n' % dialogName
             code += 'print(D)'

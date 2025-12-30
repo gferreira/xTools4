@@ -6,6 +6,9 @@ from mojo.UI import UpdateCurrentGlyphView
 from xTools4.dialogs.old import hDialog
 
 
+KEY = f'{hDialog.key}.glyphs.layersLock'
+
+
 class LockLayerWidthsDialog(hDialog, BaseWindowController):
 
     '''
@@ -19,7 +22,7 @@ class LockLayerWidthsDialog(hDialog, BaseWindowController):
     '''
 
     title = 'widths'
-    key   = f'{hDialog.key}.glyphs.layers.lock'
+    key = KEY
     # windowType = 1
 
     def __init__(self):
@@ -50,6 +53,9 @@ class LockLayerWidthsDialog(hDialog, BaseWindowController):
                 sizeStyle=self.sizeStyle)
 
         self.setUpBaseWindowBehavior()
+
+        self.w.workspaceWindowIdentifier = KEY
+
         addObserver(self, "drawCallback",     "drawBackground")
         addObserver(self, "drawCallback",     "spaceCenterDraw")
         addObserver(self, "drawCellCallback", "glyphCellDrawBackground")

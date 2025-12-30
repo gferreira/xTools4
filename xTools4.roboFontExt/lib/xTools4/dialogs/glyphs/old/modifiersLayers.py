@@ -5,10 +5,13 @@ from defconAppKit.windows.baseWindow import BaseWindowController
 from xTools4.dialogs.old import hDialog
 
 
+KEY = f'{hDialog.key}.glyphs.layersSelect'
+
+
 class SelectLayersDialog(hDialog, BaseWindowController):
 
-    title      = "layers"
-    key        = f'{hDialog.key}.glyphs.layersSelect'
+    title = "layers"
+    key = KEY
     windowType = 0
 
     def __init__(self):
@@ -37,6 +40,8 @@ class SelectLayersDialog(hDialog, BaseWindowController):
 
         self.setUpBaseWindowBehavior()
         self.setFont(CurrentFont())
+
+        self.w.workspaceWindowIdentifier = KEY
 
         self.w.vanillaWrapper = self
         self.openWindow()

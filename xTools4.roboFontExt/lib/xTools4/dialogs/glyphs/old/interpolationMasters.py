@@ -7,6 +7,9 @@ from xTools4.dialogs.glyphs.old.base import GlyphsDialogBase
 from xTools4.dialogs.old.misc.numberEditText001 import NumberEditText_001
 
 
+KEY = f'{GlyphsDialogBase.key}.interpolationMasters'
+
+
 class InterpolateGlyphsDialog(GlyphsDialogBase):
 
     '''
@@ -20,7 +23,7 @@ class InterpolateGlyphsDialog(GlyphsDialogBase):
     '''
 
     title = 'interpolate'
-    key   = f'{GlyphsDialogBase.key}.interpolationMasters'
+    key = KEY
     settings = {
         'factorX'      : 0.5,
         'factorY'      : 0.5,
@@ -138,10 +141,13 @@ class InterpolateGlyphsDialog(GlyphsDialogBase):
         self.updateFonts()
         self.updateFontLists()
         self.updateLayerLists()
+
         self.initGlyphsWindowBehaviour()
+
         addObserver(self, "updateFontsCallback", "newFontDidOpen")
         addObserver(self, "updateFontsCallback", "fontDidOpen")
         addObserver(self, "updateFontsCallback", "fontDidClose")
+
         self.openWindow()
 
     # -------------

@@ -1,9 +1,3 @@
-from importlib import reload
-import xTools4.modules.linkPoints2
-reload(xTools4.modules.linkPoints2)
-import xTools4.modules.measurements
-reload(xTools4.modules.measurements)
-
 import os, json
 from random import random
 import ezui
@@ -17,19 +11,12 @@ from mojo.subscriber import Subscriber, registerGlyphEditorSubscriber, unregiste
 from mojo.events import postEvent, addObserver, removeObserver
 from xTools4.modules.linkPoints2 import readMeasurements, getPointAtIndex, getIndexForPoint, getAnchorPoint
 from xTools4.modules.measurements import Measurement
-# from xTools4.modules.measurementsViewer import MeasurementsViewer
 from xTools4.modules.messages import showMessage
 from xTools4.modules.measureHandles import vector, getVector
 
 
-'''
-M E A S U R E M E N T S v4
+KEY = 'com.xTools4.dialogs.variable.measurements'
 
-RF4.5 + EZUI + Subscriber + Merz
-
-'''
-
-KEY = 'com.xTools4.measurements'
 
 colorCheckTrue  = 0.00, 0.85, 0.00, 1.00
 colorCheckFalse = 1.00, 0.00, 0.00, 1.00
@@ -47,6 +34,7 @@ defaultMeasurementsKey = 'com.xTools4.measurements.default'
 
 measurementsPathKey    = 'com.xTools4.xProject.measurementsPath'
 smartSetsPathKey       = 'com.xTools4.xProject.smartSetsPath'
+
 
 def scaleColorFormatter(attributes, threshold):
     value = attributes['value']
@@ -462,7 +450,7 @@ class MeasurementsController(ezui.WindowController):
             size=(800, 600),
             minSize=(600, 400),
         )
-        self.w.workspaceWindowIdentifier = "Measurements"
+        self.w.workspaceWindowIdentifier = KEY
         self.w.getNSWindow().setTitlebarAppearsTransparent_(True)
         self.w.getItem("fontMeasurements").getNSTableView().setRowHeight_(17)
         self.w.getItem("glyphMeasurements").getNSTableView().setRowHeight_(17)
@@ -519,7 +507,13 @@ class MeasurementsController(ezui.WindowController):
     # ---------
 
     def getDesignspaceButtonCallback(self, sender):
-        self.designspacePath = GetFile(message='Select designspace file:', title=self.title)
+        self.designspacePath = GetFile(
+            message='Select designspace file:',
+            title=self.title, 
+            allowsMultipleSelection=False,
+            fileTypes=["designspace"]
+        )
+
         if self.designspacePath is None:
             return
         self._loadDesignspace()
@@ -568,28 +562,6 @@ class MeasurementsController(ezui.WindowController):
 
         if self.verbose:
             print('done.\n')
-
-
-
-    # def makePdfButtonCallback(self, sender):
-
-    #     if not self.measurements:
-    #         showMessage('no measurements available', self.messageMode)
-    #         return
-
-    #     if not self.defaultFont:
-    #         showMessage('no default font available', self.messageMode)
-    #         return
-
-    #     if self.verbose:
-    #         print('making PDF overview...')
-
-    #     pdfFileName = f'{self.defaultFont.info.familyName.replace(' ', '-')}_measurements.pdf'
-    #     pdfPath = PutFile(message='Save measurements preview as a PDF file:', fileName=pdfFileName)
-
-    #     M = MeasurementsViewer(self.measurements, self.defaultFont.path)
-    #     M.makePDF(fontMeasurements=True, glyphMeasurements=False, sectionTitle=False, title=False)
-    #     M.savePDF(pdfPath)
 
     # font
 
@@ -1089,7 +1061,7 @@ class MeasurementsController(ezui.WindowController):
                 'direction' : item['direction'],
             }
 
-        # handle temp fonts: discard extension to get default glyph name
+        # handle temp fonts: discard extension to get default glyph name ### IS THIS WORKING??
         if self.font.lib.get(tempEditModeKey) == 'glyphs':
             glyphName = self.glyph.name[:self.glyph.name.rfind('.')]
         else:

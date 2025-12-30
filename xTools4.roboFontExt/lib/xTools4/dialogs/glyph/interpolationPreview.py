@@ -6,7 +6,7 @@ from mojo.events import postEvent
 from mojo.UI import UpdateCurrentGlyphView
 
 
-KEY = 'com.hipertipo.xTools4.dialogs.glyph.interpolationPreview'
+KEY = '{hDialog.key}.glyph.interpolationPreview'
 
 
 class InterpolationPreviewController(ezui.WindowController):
@@ -91,6 +91,7 @@ class InterpolationPreviewController(ezui.WindowController):
             size=(self.width, 'auto'),
         )
         self.w.getNSWindow().setTitlebarAppearsTransparent_(True)
+        self.w.workspaceWindowIdentifier = KEY
         self.w.open()
 
     def started(self):

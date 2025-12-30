@@ -1,7 +1,3 @@
-from importlib import reload
-import xTools4.modules.linkPoints
-reload(xTools4.modules.linkPoints)
-
 import ezui
 from mojo.subscriber import Subscriber, registerGlyphEditorSubscriber, registerSubscriberEvent, roboFontSubscriberEventRegistry, unregisterGlyphEditorSubscriber
 from mojo.roboFont import OpenWindow, CurrentGlyph

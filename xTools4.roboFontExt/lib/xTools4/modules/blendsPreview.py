@@ -1,4 +1,5 @@
 import os
+from random import random
 from datetime import datetime
 from functools import cached_property
 import drawBot as DB
@@ -47,7 +48,7 @@ def getGlyphTTF_old(ttfPath, glyphName, location):
     return glyph
 
 def getVarDistance(location, defaultLocation):
-    n = 0
+    n = 1
     for key, value in location.items():
         defaultValue = defaultLocation.get(key)
         if value != defaultValue:
@@ -94,18 +95,26 @@ def getGlyphTTF(ttfPath, glyphName, location):
 
 class BlendsPreview:
 
-    margin      = 40
+    margin      = 20, 10
     glyphScale  = 0.045
-    labelsSize  = 5
+    labelsSize  = 4
 
     compare     = False
-    wireframe   = False
+    points      = False
     margins     = False
     labels      = False
     levels      = False
-    levelsShow  = 1
-
+    header      = True
+    footer      = True
+    levelsShow  = [1, 2, 3, 4]
     pointRadius = 8
+
+    debug = False
+
+    headerHeight = 20
+    footerHeight = 20
+
+    axesList = []
 
     compareColors = [
         (1, 0, 1), # reference font
@@ -152,7 +161,7 @@ class BlendsPreview:
         allAxes = [axis.name for axis in self.operator.doc.axes]
         return list(set(allAxes).difference(set(self.parametricAxes)))
 
-    def getColors(self, level=0):
+    def getColors(self, level=1):
         colors = {
             'fillHeader2'    : (0,),
             'fill2'          : (0,),
@@ -160,12 +169,12 @@ class BlendsPreview:
             'points2'        : None,
             'strokeMargins2' : (0,),
         }
-        if self.wireframe:
+        if self.points:
             colors['fill2']   = None
             colors['stroke2'] = 0,
             colors['points2'] = 0,
 
-        levelColor = self.levelsColors[level]
+        levelColor = self.levelsColors[level-1]
 
         if self.compare and not self.levels:
             colors['fillHeader2']    = self.compareColors[1]
@@ -178,7 +187,7 @@ class BlendsPreview:
             colors['stroke1']        = None
             colors['points1']        = None
 
-            if self.wireframe:
+            if self.points:
                 colors['fill2']   = None
                 colors['stroke2'] = self.compareColors[1]
                 colors['points2'] = self.compareColors[1]
@@ -191,7 +200,7 @@ class BlendsPreview:
             colors['fill2']          = levelColor
             colors['strokeMargins2'] = levelColor
 
-            if self.wireframe:
+            if self.points:
                 colors['fill2']   = None
                 colors['stroke2'] = levelColor
                 colors['points2'] = levelColor
@@ -206,7 +215,7 @@ class BlendsPreview:
             colors['points1']        = None
             colors['strokeMargins1'] = 0.8,
 
-            if self.wireframe:
+            if self.points:
                 colors['fill1']   = None
                 colors['stroke1'] = 0.7,
                 colors['points1'] = 0.7,
@@ -226,9 +235,17 @@ class BlendsPreview:
         axis2Tag, axis2Values = self.axesList[1]
         axis3Tag, axis3Values = self.axesList[2]
 
-        w = cellWidth  * len(axis3Values) + self.margin * 2
-        h = cellHeight * len(axis2Values) * len(axis1Values) + self.margin * 2
-        x = y = self.margin
+        w = cellWidth  * len(axis3Values) + self.margin[0] * 2
+        h = cellHeight * len(axis2Values) * len(axis1Values) + self.margin[1] * 2
+
+        x, y = self.margin
+
+        if self.header:
+            h += self.headerHeight
+
+        if self.footer:
+            h += self.footerHeight
+            y += self.footerHeight
 
         DB.newPage(w, h)
         DB.blendMode('multiply')
@@ -242,24 +259,40 @@ class BlendsPreview:
 
         defaultBlendedLocation = { a.tag : a.default for a in self.operator.doc.axes if a.name in self.blendedAxes }
 
-        # draw page header: font name(s), glyph name, date & time
-        now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        #------------------
+        # draw page header
+        #------------------
 
-        with DB.savedState():
-            m = self.margin / 2
-            DB.translate(0, DB.height()-m)
-            DB.fill(*colors['fillHeader2'])
-            DB.text(self.defaultFont.info.familyName, (m, 0))
-            if self.compare and self.compareFont:
-                DB.save()
-                DB.translate(DB.textSize(f'{self.defaultFont.info.familyName} ')[0] + m, 0)
-                DB.fill(*colors['fillHeader1'])
-                DB.text(self.compareFont['name'].getDebugName(1), (0, 0))
-                DB.restore()
+        m = self.margin[0]
 
-            DB.fill(0,)
-            DB.text(glyphName, (DB.width()/2, 0), align='center')
-            DB.text(now, (DB.width()-m, 0), align='right')
+        if self.header:
+            with DB.savedState():
+                DB.translate(0, DB.height() - self.headerHeight )
+                if self.debug:
+                    with DB.savedState():
+                        DB.fill(0, 0.1)
+                        DB.rect(0, 0, w, self.headerHeight)
+
+                DB.fill(*colors['fillHeader2'])
+                DB.text(self.defaultFont.info.familyName, (m, self.headerHeight/3))
+                if self.compare and self.compareFont:
+                    DB.save()
+                    DB.translate(DB.textSize(f'{self.defaultFont.info.familyName} ')[0] + m, 0)
+                    DB.fill(*colors['fillHeader1'])
+                    DB.text(self.compareFont['name'].getDebugName(1), (0, self.headerHeight * 0.3))
+                    DB.restore()
+
+                DB.fill(0,)
+                DB.text(glyphName, (DB.width()-m, self.headerHeight/3), align='right')
+
+        if self.footer:
+            now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            with DB.savedState():
+                if self.debug:
+                    DB.fill(0, 0.1)
+                    DB.rect(0, 0, w, self.footerHeight)
+                DB.fill(0,)
+                DB.text(now, (DB.width()/2, self.footerHeight/3), align='center')
 
         #-------------
         # draw glyphs
@@ -281,7 +314,7 @@ class BlendsPreview:
                         axis2Tag: axisValue2,
                         axis3Tag: axisValue3,
                     }
-                    styleName = f'{axis1Tag}{axisValue1} {axis2Tag}{axisValue2} {axis3Tag}{axisValue3}'
+                    styleName = f'{axis1Tag} {axisValue1}\n{axis2Tag} {axisValue2}\n{axis3Tag} {axisValue3}'
 
                     parametricLocation = getEffectiveLocation(self.designspacePath, blendedLocation)
                     g2 = instantiateGlyph(self.operator, glyphName, parametricLocation)
@@ -292,7 +325,7 @@ class BlendsPreview:
                     # get var distance
                     n = getVarDistance(blendedLocation, defaultBlendedLocation)
 
-                    if n >= self.levelsShow:
+                    if n not in self.levelsShow:
                         continue
 
                     colors  = self.getColors(n)
@@ -302,14 +335,22 @@ class BlendsPreview:
                     DB.save()
                     DB.translate(k * cellWidth, j * cellHeight)
 
-                    # draw location name
+                    if self.debug:
+                        with DB.savedState():
+                            DB.fill(random(), random(), random(), 0.2)
+                            DB.rect(0, 0, cellWidth, cellHeight)
+
+                    #------------
+                    # draw label
+                    #------------
+
                     if self.labels:
                         with DB.savedState():
-                            DB.rotate(90)
                             DB.fill(0)
                             DB.font('Menlo')
                             DB.fontSize(self.labelsSize)
-                            DB.text(styleName, (0, 10))
+                            DB.lineHeight(self.labelsSize * 1.25)
+                            DB.text(styleName, (4, 4 + self.labelsSize*2.5))
 
                     DB.scale(self.glyphScale)
 
@@ -317,7 +358,7 @@ class BlendsPreview:
                     # draw blended glyph
                     #--------------------
 
-                    if self.wireframe:
+                    if self.points:
                         DB.strokeWidth(2)
 
                     fill2   = colors['fill2']
@@ -334,9 +375,11 @@ class BlendsPreview:
                     else:
                         DB.stroke(stroke2)
 
-                    drawGlyph(g2)
+                    if DB.savedState():
+                        DB.translate(0, -yBottom)
+                        drawGlyph(g2)
 
-                    if self.wireframe and points2 is not None:
+                    if self.points and points2 is not None:
                         DB.fill(*points2)
                         DB.stroke(None)
                         for c in g2:
@@ -361,7 +404,7 @@ class BlendsPreview:
                         if g1 is None:
                             return
 
-                        if self.wireframe:
+                        if self.points:
                             DB.strokeWidth(2)
 
                         fill1   = colors['fill1']
@@ -378,9 +421,11 @@ class BlendsPreview:
                         else:
                             DB.stroke(stroke1)
 
-                        drawGlyph(g1)
+                        if DB.savedState():
+                            # DB.translate(0, -yBottom)
+                            drawGlyph(g1)
 
-                        if self.wireframe and points1 is not None:
+                        if self.points and points1 is not None:
                             DB.fill(*points1)
                             DB.stroke(None)
                             for c in g1:

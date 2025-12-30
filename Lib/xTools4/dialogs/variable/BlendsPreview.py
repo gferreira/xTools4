@@ -1,7 +1,3 @@
-from importlib import reload
-import xTools4.modules.blendsPreview
-reload(xTools4.modules.blendsPreview)
-
 import os, time
 import drawBot as DB
 from drawBot.ui.drawView import DrawView
@@ -15,7 +11,9 @@ from xTools4.modules.blendsPreview import BlendsPreview
 from xTools4.modules.color import rgb2nscolor, nscolor2rgb
 from xTools4.dialogs.variable.GlyphMeme import tempEditModeKey
 
+
 KEY = 'com.xTools4.dialogs.variable.blendsPreview'
+
 
 class BlendsPreviewController:
 

@@ -5,6 +5,9 @@ from xTools4.dialogs.old import hDialog
 from xTools4.modules.color import rgb2nscolor, nscolor2rgb
 
 
+KEY = f'{hDialog.key}.font.duplicateRename'
+
+
 class DuplicateRenameGlyphsDialog(hDialog):
 
     '''
@@ -13,7 +16,7 @@ class DuplicateRenameGlyphsDialog(hDialog):
     '''
 
     title = 'duplicate glyphs'
-    key = '%s.font.duplicateRename' % hDialog.key
+    key = KEY
     windowType = 1
     settings = {}
 
@@ -105,6 +108,8 @@ class DuplicateRenameGlyphsDialog(hDialog):
         self.w.markColor = ColorWell(
                 (x, y, -p, self.buttonHeight),
                 color=nsColor)
+
+        self.w.workspaceWindowIdentifier = KEY
 
         self.w.open()
 

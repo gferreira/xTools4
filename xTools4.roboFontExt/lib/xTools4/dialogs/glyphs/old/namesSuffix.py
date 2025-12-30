@@ -3,6 +3,9 @@ from xTools4.dialogs.old import hDialog
 from xTools4.modules.glyphutils import findReplaceGlyphName, addToGlyphName
 
 
+KEY = f'{hDialog.key}.glyphs.namesSuffix'
+
+
 class PrefixSuffixGlyphNamesDialog(hDialog):
 
     '''
@@ -16,7 +19,7 @@ class PrefixSuffixGlyphNamesDialog(hDialog):
     '''
 
     title = 'suffix'
-    key   = f'{hDialog.key}.glyphs.prefixSuffixGlyphNames'
+    key = KEY
     settings = {
         'overwrite' : True,
         'duplicate' : False,
@@ -69,6 +72,8 @@ class PrefixSuffixGlyphNamesDialog(hDialog):
                 "duplicate",
                 value=self.settings['duplicate'],
                 sizeStyle=self.sizeStyle)
+
+        self.w.workspaceWindowIdentifier = KEY
 
         self.openWindow()
 

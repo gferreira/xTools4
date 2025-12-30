@@ -5,6 +5,9 @@ from xTools4.modules.color import rgb2nscolor, nscolor2rgb
 from xTools4.modules.fontutils import markGlyphs, findMarkColor
 
 
+KEY = f'{hDialog.key}.font.markTypes'
+
+
 def markGlyphType(g, colorsDict):
     # contours only
     if len(g.contours) and not len(g.components):
@@ -23,8 +26,7 @@ def markGlyphType(g, colorsDict):
 class MarkGlyphTypesDialog(hDialog):
 
     title = 'mark'
-    key   = f'{hDialog.key}.font.markTypes'
-
+    key = KEY
     settings = {
         'contours'           : (0, 1, 0, 0.5), # green
         'components'         : (0, 0, 1, 0.5), # blue
@@ -92,6 +94,8 @@ class MarkGlyphTypesDialog(hDialog):
                 "apply",
                 callback=self.markGlyphsCallback,
                 sizeStyle=self.sizeStyle)
+
+        self.w.workspaceWindowIdentifier = KEY
 
         self.openWindow()
 

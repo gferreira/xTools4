@@ -1,7 +1,3 @@
-from importlib import reload
-import xTools4.modules.validation
-reload(xTools4.modules.validation)
-
 import ezui
 from random import random
 from merz import MerzView
@@ -17,7 +13,9 @@ from xTools4.modules.validation import *
 from xTools4.dialogs.variable.Measurements import colorCheckTrue, colorCheckFalse, colorCheckEqual
 
 
-KEY = 'com.xTools4.glyphValidator'
+KEY = 'com.xTools4.dialogs.variable.glyphValidator'
+
+
 tempEditModeKey = 'com.xTools4.tempEdit.mode'
 
 
@@ -107,7 +105,7 @@ class GlyphValidatorController(ezui.WindowController):
             margins=self.margins,
             size=(self.width, 'auto'),
         )
-        self.w.workspaceWindowIdentifier = "GlyphValidator"
+        self.w.workspaceWindowIdentifier = KEY
         self.w.getNSWindow().setTitlebarAppearsTransparent_(True)
         self.w.open()
 
@@ -151,7 +149,12 @@ class GlyphValidatorController(ezui.WindowController):
     # callbacks
 
     def getDesignspaceButtonCallback(self, sender):
-        self.designspacePath = GetFile(message='Select designspace file:', title=self.title)
+        self.designspacePath = GetFile(
+            message='Select designspace file:',
+            title=self.title, 
+            allowsMultipleSelection=False,
+            fileTypes=["designspace"]
+        )
         self.designspace = DesignSpaceDocument()
         self.designspace.read(self.designspacePath)
         # get default font

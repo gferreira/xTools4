@@ -1,7 +1,3 @@
-from importlib import reload
-import xTools4.modules.rounding
-reload(xTools4.modules.rounding)
-
 import os, json
 from random import random
 import ezui
@@ -17,7 +13,7 @@ from mojo.subscriber import Subscriber, registerGlyphEditorSubscriber, unregiste
 from mojo.events import postEvent, addObserver, removeObserver
 
 
-KEY = 'com.xTools4.roundingTool'
+KEY = 'com.xTools4.dialogs.variable.roundingTool'
 
 
 def roundedGlyphFactory(glyph):
@@ -34,11 +30,11 @@ def roundedGlyphFactory(glyph):
 
 class RoundingController(ezui.WindowController):
 
-    title       = 'RoundingEdit'
-    key         = KEY
+    title = 'RoundingEdit'
+    key = KEY
     buttonWidth = 75
 
-    verbose     = True
+    verbose = True
     messageMode = 1
 
     jsonPath = None
@@ -146,6 +142,7 @@ class RoundingController(ezui.WindowController):
         self.w.getNSWindow().setTitlebarAppearsTransparent_(True)
         self.w.getItem("roundCapsTable").getNSTableView().setRowHeight_(17)
         self.w.getItem("roundCornersTable").getNSTableView().setRowHeight_(17)
+        self.w.workspaceWindowIdentifier = KEY
         self.w.open()
 
     def started(self):

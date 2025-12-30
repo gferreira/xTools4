@@ -5,6 +5,9 @@ from defconAppKit.windows.baseWindow import BaseWindowController
 from xTools4.dialogs.old import hDialog
 
 
+KEY = f'{hDialog.key}.glyphs.widthCopy'
+
+
 class CopyWidthDialog(hDialog, BaseWindowController):
 
     '''
@@ -18,7 +21,7 @@ class CopyWidthDialog(hDialog, BaseWindowController):
     '''
 
     title = 'width'
-    key   = f'{hDialog.key}.glyphs.widthCopy'
+    key = KEY
     allFonts = {}
 
     def __init__(self):
@@ -72,11 +75,16 @@ class CopyWidthDialog(hDialog, BaseWindowController):
         self.updateSourceLayer()
         self.updateTargetFonts()
         self.updateTargetLayers()
+
         self.setUpBaseWindowBehavior()
+
+        self.w.workspaceWindowIdentifier = KEY
+
         addObserver(self, 'updateListsObserver', 'currentGlyphChanged')
         addObserver(self, 'updateListsObserver', 'newFontDidOpen')
         addObserver(self, 'updateListsObserver', 'fontDidOpen')
         addObserver(self, 'updateListsObserver', 'fontDidClose')
+
         self.openWindow()
 
     # -------------

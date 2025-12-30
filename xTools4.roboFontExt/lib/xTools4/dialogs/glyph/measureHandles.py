@@ -6,7 +6,7 @@ from mojo.events import postEvent
 from xTools4.modules.measureHandles import MeasureHandlesMaker, MeasureSegmentsMaker
 
 
-KEY = 'com.hipertipo.xTools4.dialogs.glyph.measureHandles'
+KEY = '{hDialog.key}.glyph.measureHandles'
 
 
 def measureHandlesFactory(glyph):
@@ -94,6 +94,7 @@ class MeasureHandlesController(ezui.WindowController):
             size=(self.width, 'auto'),
         )
         self.w.getNSWindow().setTitlebarAppearsTransparent_(True)
+        self.w.workspaceWindowIdentifier = KEY
         self.w.open()
 
     def started(self):

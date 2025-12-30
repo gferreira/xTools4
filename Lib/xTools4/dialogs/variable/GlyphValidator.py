@@ -1,7 +1,3 @@
-from importlib import reload
-import xTools4.modules.validation
-reload(xTools4.modules.validation)
-
 import ezui
 from random import random
 from merz import MerzView
@@ -18,6 +14,7 @@ from xTools4.dialogs.variable.Measurements import colorCheckTrue, colorCheckFals
 
 
 KEY = 'com.xTools4.dialogs.variable.glyphValidator'
+
 
 tempEditModeKey = 'com.xTools4.tempEdit.mode'
 

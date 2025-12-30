@@ -3,10 +3,13 @@ from mojo.UI import AccordionView
 from xTools4.dialogs.batch.base import BatchDialogBase
 
 
+KEY = f'{BatchDialogBase.key}.generate'
+
+
 class BatchGenerateDialog(BatchDialogBase):
 
     title = 'batch generate'
-
+    key = KEY
     settings = {
         'suffix'        : '%Y%m%d-%H%M%S',
         'versionString' : '{openTypeOS2VendorID} : {familyName} {styleName} {versionMajor}.{versionMinor}',

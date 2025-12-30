@@ -5,6 +5,9 @@ from xTools4.dialogs.old import hDialog
 from xTools4.modules.markFeature import markToBaseFeaBuilder
 
 
+KEY = f'{hDialog.key}.font.makeMark'
+
+
 def markToBaseList2Dict(marksList):
     marksDict = {}
     for baseGlyph, markGlyph, anchorName in marksList:
@@ -22,7 +25,7 @@ class MakeMarkFeatureDialog(hDialog):
     '''
 
     title = 'make mark'
-    key = '%s.font.makeMark' % hDialog.key
+    key = KEY
     windowType = 0
     settings = {}
 
@@ -95,6 +98,8 @@ class MakeMarkFeatureDialog(hDialog):
                 'append feature',
                 value=False,
                 sizeStyle=self.sizeStyle)
+
+        self.w.workspaceWindowIdentifier = KEY
 
         self.w.open()
 
@@ -212,6 +217,7 @@ class MakeMarkFeatureDialog(hDialog):
             outputFile.write(txt)
         # done
         print('…done.\n')
+
 
 # -------
 # testing

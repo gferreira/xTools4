@@ -9,6 +9,9 @@ from xTools4.modules.color import rgb2nscolor, nscolor2rgb
 from xTools4.modules.optimize import equalizeCurves
 
 
+KEY = f'{GlyphsDialogBase.key}.optimizeContours'
+
+
 def optimizeContoursFactory(glyph, equalize=True, addExtremes=False, simplify=False, treshold=10):
     glyph = RGlyph(glyph).copy()
     glyph.clearComponents()
@@ -19,7 +22,7 @@ def optimizeContoursFactory(glyph, equalize=True, addExtremes=False, simplify=Fa
 class OptimizeContoursDialog(GlyphsDialogBase):
 
     title = 'optimize'
-    key   = f'{GlyphsDialogBase.key}.optimize'
+    key = KEY
     settings = {
         # 'previewStrokeColor' : (1, 0.5, 0),
         # 'previewStrokeWidth' : 2,
@@ -91,7 +94,9 @@ class OptimizeContoursDialog(GlyphsDialogBase):
         # UpdateCurrentGlyphView()
 
         self.initGlyphsWindowBehaviour()
+
         registerRepresentationFactory(Glyph, "%s.preview" % self.key, optimizeContoursFactory)
+
         self.openWindow()
 
     # -------------

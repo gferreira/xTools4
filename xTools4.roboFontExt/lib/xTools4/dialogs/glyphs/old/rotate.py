@@ -6,6 +6,9 @@ from xTools4.dialogs.glyphs.old.base import GlyphsDialogBase
 from xTools4.modules.glyphutils import getOriginPosition
 
 
+KEY = f'{GlyphsDialogBase.key}.rotate'
+
+
 def rotateGlyphFactory():
     pass
 
@@ -23,7 +26,7 @@ class RotateGlyphsDialog(GlyphsDialogBase):
     '''
 
     title = "rotate"
-    key = '%s.rotate' % GlyphsDialogBase.key
+    key = KEY
     settings = {
         'rotateValue' : 10,
     }
@@ -70,6 +73,7 @@ class RotateGlyphsDialog(GlyphsDialogBase):
                 sizeStyle=self.sizeStyle)
 
         self.initGlyphsWindowBehaviour()
+
         self.openWindow()
 
     # -------------

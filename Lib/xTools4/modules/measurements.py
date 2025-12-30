@@ -1,7 +1,3 @@
-from importlib import reload
-import xTools4.modules.linkPoints2
-reload(xTools4.modules.linkPoints2)
-
 import os, glob, shutil
 from collections import Counter
 from fontTools.agl import UV2AGL

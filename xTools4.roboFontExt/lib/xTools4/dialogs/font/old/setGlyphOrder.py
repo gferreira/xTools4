@@ -6,10 +6,13 @@ from xTools4.modules.encoding import importEncoding, setGlyphOrder, psname2char,
 from xTools4.modules.fontutils import clearMarkColors
 
 
+KEY = f'{hDialog.key}.font.setGlyphOrder'
+
+
 class SetGlyphOrderDialog(hDialog):
 
     title    = 'font'
-    key      = f'{hDialog.key}.font.glyphOrder'
+    key      = KEY
     settings = {}
 
     def __init__(self):
@@ -44,6 +47,8 @@ class SetGlyphOrderDialog(hDialog):
                 "paint groups",
                 value=False,
                 sizeStyle=self.sizeStyle)
+
+        self.w.workspaceWindowIdentifier = KEY
 
         self.openWindow()
 

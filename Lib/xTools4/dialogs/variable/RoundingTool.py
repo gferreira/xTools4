@@ -1,7 +1,3 @@
-from importlib import reload
-import xTools4.modules.rounding
-reload(xTools4.modules.rounding)
-
 import os, json
 from random import random
 import ezui
@@ -34,11 +30,11 @@ def roundedGlyphFactory(glyph):
 
 class RoundingController(ezui.WindowController):
 
-    title       = 'RoundingEdit'
-    key         = KEY
+    title = 'RoundingEdit'
+    key = KEY
     buttonWidth = 75
 
-    verbose     = True
+    verbose = True
     messageMode = 1
 
     jsonPath = None

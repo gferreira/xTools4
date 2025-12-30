@@ -1,5 +1,4 @@
 import os, glob, shutil
-from collections import Counter
 from ufonormalizer import normalizeUFO
 from fontParts.world import OpenFont
 
@@ -78,6 +77,7 @@ def cleanupSources(sourcesFolder, clearFontLibs=True, clearGlyphLibs=True, clear
 
         f.close()
 
+    print()
     if clearFontLibs:
         print('deleted font libs:')
         for k in fontLibKeys:
@@ -96,7 +96,7 @@ def cleanupSources(sourcesFolder, clearFontLibs=True, clearGlyphLibs=True, clear
             print(f'- {k}')
         print()
 
-    print('\n...done!\n')
+    print('...done!\n')
 
 
 def normalizeSources(sourcesFolder, verbose=True):

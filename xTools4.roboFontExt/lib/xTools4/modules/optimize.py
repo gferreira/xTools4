@@ -1,8 +1,3 @@
-# from importlib import reload
-# import xTools4.modules.pens
-# reload(xTools4.modules.pens)
-
-# from fontPens.thresholdPen import thresholdGlyph
 from fontParts.world import RGlyph
 from xTools4.extras.equalize import *
 from xTools4.modules.pens import LinePen

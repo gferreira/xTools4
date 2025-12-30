@@ -5,6 +5,9 @@ from mojo.UI import AccordionView, PutFile, GetFile, CodeEditor
 from xTools4.dialogs.batch.base import BatchDialogBase
 
 
+KEY = f'{BatchDialogBase.key}.style'
+
+
 def getStyleMapStyle(isBold, isItalic):
     if isBold and isItalic:
         return 'bold italic'
@@ -101,6 +104,7 @@ def buildStyleDataDict(ufos, styleData):
 class BatchSetStyleDataDialog(BatchDialogBase):
 
     title = 'batch style'
+    key = KEY
 
     def __init__(self):
         self.height = 400
@@ -134,7 +138,6 @@ class BatchSetStyleDataDialog(BatchDialogBase):
 
         self.initBatchWindowBehaviour()
         self.openWindow()
-        # self.w.open()
 
     # ------------
     # initializers

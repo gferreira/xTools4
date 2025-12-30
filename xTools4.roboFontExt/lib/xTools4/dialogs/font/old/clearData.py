@@ -4,6 +4,10 @@ from xTools4.dialogs.old import hDialog
 from xTools4.modules.messages import noFontOpen, showMessage
 from xTools4.modules.fontutils import markGlyphs
 
+
+KEY = f'{hDialog.key}.font.clearData'
+
+
 class ClearFontDataDialog(hDialog):
 
     '''
@@ -12,7 +16,7 @@ class ClearFontDataDialog(hDialog):
     '''
 
     title = 'clear'
-    key = '%s.font.clearData' % hDialog.key
+    key = KEY
     settings = {}
 
     options = [
@@ -50,6 +54,8 @@ class ClearFontDataDialog(hDialog):
                 "clear",
                 sizeStyle=self.sizeStyle,
                 callback=self.applyCallback)
+
+        self.w.workspaceWindowIdentifier = KEY
 
         self.openWindow()
 

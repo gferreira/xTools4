@@ -1,7 +1,3 @@
-# from importlib import reload
-# import xTools4.dialogs
-# reload(xTools4.dialogs)
-
 import os
 from AppKit import NSFilenamesPboardType, NSDragOperationCopy
 from vanilla import Group, TextBox, List, CheckBox, Button, PopUpButton
@@ -13,6 +9,9 @@ from xTools4.dialogs.old import hDialog
 from xTools4.modules.fontutils import getFontID
 
 
+KEY = f'{hDialog.key}.batch'
+
+
 class BatchDialogBase(hDialog, BaseWindowController):
 
     '''
@@ -21,7 +20,7 @@ class BatchDialogBase(hDialog, BaseWindowController):
     '''
 
     title = 'batch'
-    key   = f'{hDialog.key}.batch'
+    key   = KEY
 
     #: The type of the window.
     #: 
@@ -129,6 +128,8 @@ class BatchDialogBase(hDialog, BaseWindowController):
         addObserver(self, "addOpenFontsCallback", "newFontDidOpen")
         addObserver(self, "addOpenFontsCallback", "fontDidOpen")
         addObserver(self, "removeFontCallback",   "fontWillClose")
+
+        self.w.workspaceWindowIdentifier = self.key
 
         self.addOpenFonts()
         self.updateTargetFonts()

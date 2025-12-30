@@ -4,6 +4,9 @@ from mojo.UI import NumberEditText
 from xTools4.dialogs.glyphs.old.base import GlyphsDialogBase
 
 
+KEY = f'{GlyphsDialogBase.key}.anchorsCreate'
+
+
 class CreateAnchorsDialog(GlyphsDialogBase):
 
     '''
@@ -17,7 +20,7 @@ class CreateAnchorsDialog(GlyphsDialogBase):
     '''
 
     title = "anchors"
-    key   = f'{GlyphsDialogBase.key}.anchorsCreate'
+    key = KEY
     settings = {
         # 'relativeToXHeight' : True,
         'posY' : 100,

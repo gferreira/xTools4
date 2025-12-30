@@ -6,13 +6,13 @@ from mojo.events import postEvent
 from xTools4.dialogs.variable.Measurements import colorCheckTrue, colorCheckFalse, colorCheckEqual
 
 
+KEY = 'com.xTools4.dialogs.variable.varGlyphViewer'
+
+
 tempEditModeKey = 'com.xTools4.tempEdit.mode'
 
 colorCheckTrueBG  = 0.7, 1.0, 0.7, 0.85
 colorCheckFalseBG = 1.0, 0.7, 0.7, 0.85
-
-
-KEY = 'com.xTools4.dialogs.variable.varGlyphViewer'
 
 
 def getImplicitSelectedPoints(glyph):

@@ -1,7 +1,3 @@
-from importlib import reload
-import xTools4.modules.measurements
-reload(xTools4.modules.measurements)
-
 import os
 import ezui
 from mojo.UI import GetFile
@@ -13,6 +9,9 @@ from xTools4.modules.linkPoints2 import readMeasurements
 from xTools4.modules.measurements import FontMeasurements, GlyphMeasurements
 from xTools4.modules.xproject import measurementsPathKey, smartSetsPathKey
 from xTools4.dialogs.variable.old.TempEdit import setupNewFont, splitall
+
+
+KEY = 'com.xTools4.dialogs.variable.glyphMeme'
 
 
 glyphSetPathKey        = 'com.xTools4.tempEdit.glyphSetPath'
@@ -87,7 +86,7 @@ class GlyphMemeController(ezui.WindowController):
             minSize=(123, 300),
             maxSize=(123, 960),
         )
-        self.w.workspaceWindowIdentifier = "GlyphMeme"
+        self.w.workspaceWindowIdentifier = KEY
         self.w.getNSWindow().setTitlebarAppearsTransparent_(True)
         self.w.getItem("glyphMeme").getNSTableView().setRowHeight_(17)
         self.w.open()
@@ -171,7 +170,12 @@ class GlyphMemeController(ezui.WindowController):
             print('done.\n')
 
     def getDesignspaceButtonCallback(self, sender):
-        self.designspacePath = GetFile(message='Select designspace file:', title=self.title)
+        self.designspacePath = GetFile(
+            message='Select designspace file:',
+            title=self.title, 
+            allowsMultipleSelection=False,
+            fileTypes=["designspace"]
+        )
         if self.designspacePath is None:
             return
 

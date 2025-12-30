@@ -7,7 +7,9 @@ from fontTools.designspaceLib import DesignSpaceDocument
 from xTools4.modules.linkPoints2 import readMeasurements # getPointAtIndex, getIndexForPoint, getAnchorPoint
 from xTools4.modules.xproject import measurementsPathKey
 
+
 KEY = 'com.xTools4.dialogs.variable.designSpaceSelector'
+
 
 def getSourceName(src):
     return os.path.splitext(src.filename)[0]
