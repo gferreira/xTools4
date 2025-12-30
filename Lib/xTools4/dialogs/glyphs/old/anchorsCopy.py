@@ -20,7 +20,7 @@ class CopyAnchorsDialog(GlyphsCopyDataDialogBase):
     '''
 
     title = "anchors"
-    key   = KEY
+    key = KEY
     settings = {}
 
     # -------

@@ -2,7 +2,10 @@ from vanilla import Button, CheckBox
 from mojo.roboFont import CurrentFont
 from xTools4.dialogs.old import hDialog
 
-KEY = 'com.xTools4.dialogs.font.importGroups'
+
+KEY = f'{hDialog.key}.font.importGroups'
+
+
 class ImportGroupsDialog(hDialog):
 
     '''
@@ -11,7 +14,7 @@ class ImportGroupsDialog(hDialog):
     '''
 
     title = 'groups'
-    key = '%s.font.importGroups' % hDialog.key
+    key = KEY
     settings = {}
     windowType = 1
 
@@ -19,7 +22,6 @@ class ImportGroupsDialog(hDialog):
         self.height  = self.textHeight * 4
         self.height += self.padding * 5
         self.w = self.window((self.width, self.height), self.title)
-        self.w.workspaceWindowIdentifier = KEY
 
         x = y = p = self.padding
         self.w.paintGroups = Button(
@@ -48,6 +50,8 @@ class ImportGroupsDialog(hDialog):
                 "clear",
                 sizeStyle=self.sizeStyle,
                 callback=self.deleteCallback)
+
+        self.w.workspaceWindowIdentifier = KEY
 
         self.w.open()
 

@@ -4,7 +4,10 @@ from mojo.roboFont import CurrentFont
 from xTools4.dialogs.old import hDialog
 from xTools4.modules.markFeature import markToBaseFeaBuilder
 
-KEY = 'com.xTools4.dialogs.font.makeMarksFeature'
+
+KEY = f'{hDialog.key}.font.makeMark'
+
+
 def markToBaseList2Dict(marksList):
     marksDict = {}
     for baseGlyph, markGlyph, anchorName in marksList:
@@ -22,7 +25,7 @@ class MakeMarkFeatureDialog(hDialog):
     '''
 
     title = 'make mark'
-    key = '%s.font.makeMark' % hDialog.key
+    key = KEY
     windowType = 0
     settings = {}
 
@@ -31,7 +34,6 @@ class MakeMarkFeatureDialog(hDialog):
         self.height += self.textHeight * 11
         self.height += self.padding * 8
         self.w = self.window((self.width * 3, self.height), self.title)
-        self.w.workspaceWindowIdentifier = KEY
 
         x = y = p = self.padding
         self.w.importMarks = SquareButton(
@@ -96,6 +98,8 @@ class MakeMarkFeatureDialog(hDialog):
                 'append feature',
                 value=False,
                 sizeStyle=self.sizeStyle)
+
+        self.w.workspaceWindowIdentifier = KEY
 
         self.w.open()
 
@@ -213,6 +217,7 @@ class MakeMarkFeatureDialog(hDialog):
             outputFile.write(txt)
         # done
         print('…done.\n')
+
 
 # -------
 # testing

@@ -1,7 +1,3 @@
-from importlib import reload
-import xTools4.modules.glyphutils
-reload(xTools4.modules.glyphutils)
-
 from vanilla import TextBox, EditText, CheckBox, Button, RadioGroup
 from xTools4.dialogs.old import hDialog
 from xTools4.modules.glyphutils import findReplaceGlyphName, addToGlyphName
@@ -23,7 +19,7 @@ class FindReplaceGlyphNamesDialog(hDialog):
     '''
 
     title = 'replace'
-    key   = KEY
+    key = KEY
     settings = {
         'overwrite' : True,
         'duplicate' : False,

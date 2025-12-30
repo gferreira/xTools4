@@ -20,7 +20,7 @@ class CreateAnchorsDialog(GlyphsDialogBase):
     '''
 
     title = "anchors"
-    key   = KEY
+    key = KEY
     settings = {
         # 'relativeToXHeight' : True,
         'posY' : 100,

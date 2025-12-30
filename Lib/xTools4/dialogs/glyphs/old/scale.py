@@ -26,7 +26,7 @@ class ScaleGlyphsDialog(GlyphsDialogBase):
     '''
 
     title = "scale"
-    key   = KEY
+    key = KEY
     settings = {
         'xMetrics'   : False,
         'yMetrics'   : False,

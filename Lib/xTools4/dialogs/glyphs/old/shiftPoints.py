@@ -14,7 +14,7 @@ KEY = f'{GlyphsDialogBase.key}.pointsShift'
 class ShiftPointsDialog(GlyphsDialogBase):
 
     title = 'shift'
-    key   = KEY
+    key = KEY
     settings = {
         'axis'      : 1,
         'side'      : 1,

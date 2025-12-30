@@ -38,7 +38,7 @@ class OutlineGlyphsDialog(GlyphsDialogBase):
     '''
 
     title = 'outline'
-    key   = KEY
+    key = KEY
     settings = {
         'strokeWidth' : 20,
         'joinstyle'   : 1,

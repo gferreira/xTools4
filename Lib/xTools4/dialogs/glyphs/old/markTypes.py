@@ -26,8 +26,7 @@ def markGlyphType(g, colorsDict):
 class MarkGlyphTypesDialog(hDialog):
 
     title = 'mark'
-    key   = KEY
-
+    key = KEY
     settings = {
         'contours'           : (0, 1, 0, 0.5), # green
         'components'         : (0, 0, 1, 0.5), # blue

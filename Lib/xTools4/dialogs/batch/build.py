@@ -11,7 +11,10 @@ from xTools4.modules.accents import buildGlyphConstructions
 from xTools4.modules.messages import *
 from xTools4.dialogs.batch.base import BatchDialogBase
 
-KEY = 'com.xTools4.dialogs.batch.BuildGlyphs'
+
+KEY = f'{BatchDialogBase.key}.buildGlyphs'
+
+
 class BatchBuildGlyphsDialog(BatchDialogBase):
 
     '''
@@ -25,7 +28,7 @@ class BatchBuildGlyphsDialog(BatchDialogBase):
     '''
 
     title = 'batch build glyphs'
-    key   = f'{BatchDialogBase.key}.build'
+    key   = KEY
 
     def __init__(self):
         self.height = 400
@@ -33,7 +36,6 @@ class BatchBuildGlyphsDialog(BatchDialogBase):
                 (self.width * 3, self.height),
                 self.title,
                 minSize=(self.width * 2, self.height))
-        self.w.workspaceWindowIdentifier = KEY
 
         # build groups
         self.initFontSelectorGroup()

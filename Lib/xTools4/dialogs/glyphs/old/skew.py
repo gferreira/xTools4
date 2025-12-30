@@ -26,7 +26,7 @@ class SkewGlyphsDialog(GlyphsDialogBase):
     '''
 
     title = "skew"
-    key   = KEY
+    key = KEY
     settings = {
         'xOffset'   : True,
         'skewValue' : 7.0,

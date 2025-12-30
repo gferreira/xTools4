@@ -3,6 +3,9 @@ from mojo.UI import AccordionView
 from xTools4.dialogs.batch.base import BatchDialogBase
 
 
+KEY = f'{BatchDialogBase.key}.boilerplate'
+
+
 class BoilerplateBatchDialog(BatchDialogBase):
 
     '''
@@ -16,6 +19,7 @@ class BoilerplateBatchDialog(BatchDialogBase):
     '''
 
     title = 'batch something'
+    key = KEY
 
     options = [
         'one option',

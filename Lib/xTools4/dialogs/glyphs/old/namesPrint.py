@@ -19,7 +19,7 @@ class PrintGlyphNamesDialog(hDialog):
     '''
 
     title = 'print'
-    key   = KEY
+    key = KEY
     settings = {
         'printMode' : 0,
         'glyphMode' : 0,

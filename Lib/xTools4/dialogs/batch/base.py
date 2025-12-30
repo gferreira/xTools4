@@ -12,7 +12,10 @@ from mojo.events import addObserver, removeObserver
 from xTools4.dialogs.old import hDialog
 from xTools4.modules.fontutils import getFontID
 
-KEY = 'com.xTools4.dialogs.batch.Base'
+
+KEY = f'{hDialog.key}.batch'
+
+
 class BatchDialogBase(hDialog, BaseWindowController):
 
     '''
@@ -21,7 +24,7 @@ class BatchDialogBase(hDialog, BaseWindowController):
     '''
 
     title = 'batch'
-    key   = f'{hDialog.key}.batch'
+    key   = KEY
 
     #: The type of the window.
     #: 
@@ -40,7 +43,6 @@ class BatchDialogBase(hDialog, BaseWindowController):
                 (self.width, self.height),
                 self.title,
                 minSize=(self.width, self.height))
-        self.w.workspaceWindowIdentifier = KEY
 
         # build groups
         self.initFontSelectorGroup()
@@ -130,6 +132,8 @@ class BatchDialogBase(hDialog, BaseWindowController):
         addObserver(self, "addOpenFontsCallback", "newFontDidOpen")
         addObserver(self, "addOpenFontsCallback", "fontDidOpen")
         addObserver(self, "removeFontCallback",   "fontWillClose")
+
+        self.w.workspaceWindowIdentifier = self.key
 
         self.addOpenFonts()
         self.updateTargetFonts()

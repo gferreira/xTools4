@@ -50,7 +50,7 @@ class RoundToGridDialog(GlyphsDialogBase):
     '''
 
     title = 'gridfit'
-    key   = KEY
+    key = KEY
     settings = {
         'gridSize'    : 30,
         'gridSizeMin' : 2,

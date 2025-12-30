@@ -9,7 +9,9 @@ from xTools4.modules.xproject import measurementsPathKey, smartSetsPathKey
 from xTools4.modules.validation import assignValidationGroup
 from xTools4.dialogs.variable.old.TempEdit import setupNewFont, splitall
 
+
 KEY = 'com.xTools4.dialogs.variable.glyphTuning'
+
 
 glyphSetPathKey = 'com.xTools4.tempEdit.glyphSetPath'
 tempEditModeKey = 'com.xTools4.tempEdit.mode'

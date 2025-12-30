@@ -1,7 +1,3 @@
-# from importlib import reload
-# import xTools4.dialogs.batch.base
-# reload(xTools4.dialogs.batch.base)
-
 import AppKit
 from vanilla import Group, CheckBox, Button, List, RadioGroup, EditText, ColorWell
 from mojo.UI import AccordionView
@@ -10,7 +6,11 @@ from xTools4.dialogs.batch.base import BatchDialogBase
 
 
 # TODO: add a new section with transformations (scale, move, rotate, skew)
-KEY = 'com.xTools4.dialogs.batch.Actions'
+
+
+KEY = f'{BatchDialogBase.key}.actions'
+
+
 class BatchActionsDialog(BatchDialogBase):
 
     '''
@@ -24,7 +24,7 @@ class BatchActionsDialog(BatchDialogBase):
     '''
 
     title = 'batch glyph actions'
-    key   = f'{BatchDialogBase.key}.actions'
+    key   = KEY
 
     #: A list of available glyph actions.
     actions = [
@@ -56,7 +56,6 @@ class BatchActionsDialog(BatchDialogBase):
                 (self.width * 3, self.height),
                 self.title,
                 minSize=(self.width * 2, 280))
-        self.w.workspaceWindowIdentifier = KEY
 
         # build groups
         self.initFontSelectorGroup()

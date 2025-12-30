@@ -10,7 +10,7 @@ from xTools4.modules.linkPoints import *
 from xTools4.modules.measureHandles import getVector
 
 
-KEY = 'com.hipertipo.xTools4.dialogs.glyph.linkPoints'
+KEY = '{hDialog.key}.glyph.linkPoints'
 
 
 class LinkPointsController(ezui.WindowController):

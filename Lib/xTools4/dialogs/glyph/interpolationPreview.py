@@ -6,7 +6,7 @@ from mojo.events import postEvent
 from mojo.UI import UpdateCurrentGlyphView
 
 
-KEY = 'com.hipertipo.xTools4.dialogs.glyph.interpolationPreview'
+KEY = '{hDialog.key}.glyph.interpolationPreview'
 
 
 class InterpolationPreviewController(ezui.WindowController):

@@ -8,7 +8,9 @@ from xTools4.modules.messages import noFontOpen, showMessage
 from xTools4.dialogs.old import hDialog
 from xTools4.dialogs.old.misc.numberEditText01 import NumberEditText_01
 
-KEY = 'com.xTools4.dialogs.font.adjustVerticalMetrics'
+
+KEY = f'{hDialog.key}.font.adjustVerticalMetrics'
+
 
 class AdjustVerticalMetricsDialog(hDialog, BaseWindowController):
 
@@ -18,7 +20,7 @@ class AdjustVerticalMetricsDialog(hDialog, BaseWindowController):
     '''
 
     title = "dimensions"
-    key   = f'{hDialog.key}.font.verticalMetrics'
+    key   = KEY
     col1  = 80
 
     vMetrics = [
@@ -37,7 +39,6 @@ class AdjustVerticalMetricsDialog(hDialog, BaseWindowController):
         self.height += self.padding * (len(self.vMetrics) + 1)
         self.width  *= 1.2
         self.w = self.window((self.width, self.height), self.title)
-        self.w.workspaceWindowIdentifier = KEY
 
         x = y = p = self.padding
         # self.w.box = Box((x, y, -p, self.textHeight * 1.2))
@@ -68,6 +69,9 @@ class AdjustVerticalMetricsDialog(hDialog, BaseWindowController):
 
         addObserver(self, 'fontBecameCurrentCallback', "fontBecameCurrent")
         addObserver(self, 'fontDidCloseCallback', "fontDidClose")
+
+        self.w.workspaceWindowIdentifier = KEY
+
         self.setUpBaseWindowBehavior()
         self.loadFontValues()
         self.openWindow()

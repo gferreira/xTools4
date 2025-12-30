@@ -19,7 +19,7 @@ class PrefixSuffixGlyphNamesDialog(hDialog):
     '''
 
     title = 'suffix'
-    key   = KEY
+    key = KEY
     settings = {
         'overwrite' : True,
         'duplicate' : False,

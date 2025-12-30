@@ -1,9 +1,3 @@
-# from importlib import reload
-# import xTools4.modules.fontutils
-# reload(xTools4.modules.fontutils)
-# import xTools4.dialogs.batch.base
-# reload(xTools4.dialogs.batch.base)
-
 from AppKit import NSFilenamesPboardType, NSDragOperationCopy
 from vanilla import List, CheckBox, Button, TextBox, EditText, PopUpButton, Group, RadioGroup, ColorWell
 from mojo.events import addObserver, removeObserver
@@ -15,7 +9,10 @@ from xTools4.modules.anchors import copyAnchors
 from xTools4.modules.color import rgb2nscolor, nscolor2rgb
 from xTools4.dialogs.batch.base import BatchDialogBase
 
-KEY = 'com.xTools4.dialogs.batch.Copy'
+
+KEY = f'{BatchDialogBase.key}.copy'
+
+
 class BatchCopyDialog(BatchDialogBase):
 
     '''
@@ -29,7 +26,7 @@ class BatchCopyDialog(BatchDialogBase):
     '''
 
     title = 'batch copy'
-    key   = f'{BatchDialogBase.key}.copy'
+    key   = KEY
 
     fontInfo = dict(FontInfoAttributes)
     del fontInfo['WOFF']
@@ -54,7 +51,6 @@ class BatchCopyDialog(BatchDialogBase):
                 (self.width * 3, self.height),
                 self.title,
                 minSize=(self.width * 2, 280))
-        self.w.workspaceWindowIdentifier = KEY
 
         # build groups
         self.initFontSelectorGroup()

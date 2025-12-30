@@ -26,7 +26,7 @@ class MaskDialog(hDialog, BaseWindowController):
     '''
 
     title = 'mask'
-    key   = KEY
+    key = KEY
     settings = {
         'copyWidth'   : True,
         'copyAnchors' : True,

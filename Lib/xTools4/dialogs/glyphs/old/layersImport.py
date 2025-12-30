@@ -9,6 +9,7 @@ from xTools4.dialogs.old import hDialog
 
 KEY = f'{hDialog.key}.glyphs.layersImport'
 
+
 tempEditModeKey = 'com.xTools4.tempEdit.mode'
 
 
@@ -25,7 +26,7 @@ class ImportGlyphsIntoLayerDialog(hDialog):
     '''
 
     title = 'layers'
-    key   = KEY
+    key = KEY
     sourceFont = None
 
     settings = {

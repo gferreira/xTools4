@@ -5,7 +5,9 @@ from mojo.UI import UpdateCurrentGlyphView
 from mojo.events import addObserver, removeObserver
 from xTools4.dialogs.old import hDialog
 
-KEY = 'com.xTools4.dialogs.glyphs'
+
+KEY = f'{hDialog.key}.glyphs'
+
 
 class GlyphsDialogBase(hDialog, BaseWindowController):
 
@@ -15,7 +17,7 @@ class GlyphsDialogBase(hDialog, BaseWindowController):
     '''
 
     title = None
-    key   = KEY
+    key = KEY
     windowType = 0
 
     def initGlyphsWindowBehaviour(self):
@@ -90,7 +92,7 @@ class GlyphsDialogBase(hDialog, BaseWindowController):
 class GlyphsCopyDataDialogBase(hDialog, BaseWindowController):
 
     title = None
-    key = '%s.glyphs' % hDialog.key
+    key = KEY
     windowType = 0
     allFonts = {}
 
@@ -101,7 +103,6 @@ class GlyphsCopyDataDialogBase(hDialog, BaseWindowController):
             (self.width, self.height), self.title,
             maxSize=(self.width * 1.5, self.height * 1.5),
             minSize=(self.width, self.height))
-        self.w.workspaceWindowIdentifier = KEY
 
         x = y = p = self.padding
         y -= 2
@@ -147,6 +148,8 @@ class GlyphsCopyDataDialogBase(hDialog, BaseWindowController):
         self.updateTargetFonts()
         self.updateTargetLayers()
         self.setUpBaseWindowBehavior()
+
+        self.w.workspaceWindowIdentifier = self.key
 
         addObserver(self, 'updateListsObserver', 'currentGlyphChanged')
         addObserver(self, 'updateListsObserver', 'newFontDidOpen')
@@ -310,10 +313,3 @@ class GlyphsCopyDataDialogBase(hDialog, BaseWindowController):
         if self.verbose:
             print('\n...done.\n')
 
-# -------
-# testing
-# -------
-
-if __name__ == "__main__":
-
-    CopyWidthDialog()

@@ -10,8 +10,8 @@ KEY = f'{hDialog.key}.glyphs.layersSelect'
 
 class SelectLayersDialog(hDialog, BaseWindowController):
 
-    title      = "layers"
-    key        = KEY
+    title = "layers"
+    key = KEY
     windowType = 0
 
     def __init__(self):

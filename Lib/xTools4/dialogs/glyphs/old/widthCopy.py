@@ -21,7 +21,7 @@ class CopyWidthDialog(hDialog, BaseWindowController):
     '''
 
     title = 'width'
-    key   = KEY
+    key = KEY
     allFonts = {}
 
     def __init__(self):

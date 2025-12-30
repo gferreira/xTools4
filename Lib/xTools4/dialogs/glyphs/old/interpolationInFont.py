@@ -22,7 +22,7 @@ class InterpolateGlyphsInFontDialog(hDialog):
     '''
 
     title = 'interpol'
-    key   = KEY
+    key = KEY
 
     settings = {
         'interSteps' : 7,

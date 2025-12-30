@@ -6,7 +6,7 @@ from mojo.events import postEvent
 from xTools4.modules.measureHandles import MeasureHandlesMaker, MeasureSegmentsMaker
 
 
-KEY = 'com.hipertipo.xTools4.dialogs.glyph.measureHandles'
+KEY = '{hDialog.key}.glyph.measureHandles'
 
 
 def measureHandlesFactory(glyph):

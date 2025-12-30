@@ -39,7 +39,7 @@ class BooleanOperationsDialog(GlyphsDialogBase):
     '''
 
     title = 'boolean'
-    key   = KEY
+    key = KEY
     settings = {}
 
     operations = [

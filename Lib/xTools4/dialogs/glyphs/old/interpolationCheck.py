@@ -18,7 +18,7 @@ class CheckCompatibilityDialog(hDialog):
     '''
 
     title = 'check'
-    key   = KEY
+    key = KEY
     fonts = {}
 
     def __init__(self):

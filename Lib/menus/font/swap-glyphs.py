@@ -1,3 +1,5 @@
+# menuTitle: swap glyphs
+
 from xTools4.modules.fontutils import swapGlyphs
 
 font = CurrentFont()

@@ -24,7 +24,7 @@ class MoveGlyphsDialog(GlyphsDialogBase):
     '''
 
     title = "move"
-    key   = KEY
+    key = KEY
     settings = {
         'moveValueX' : 70,
         'moveValueY' : 0,

@@ -23,7 +23,7 @@ class InterpolateGlyphsDialog(GlyphsDialogBase):
     '''
 
     title = 'interpolate'
-    key   = KEY
+    key = KEY
     settings = {
         'factorX'      : 0.5,
         'factorY'      : 0.5,

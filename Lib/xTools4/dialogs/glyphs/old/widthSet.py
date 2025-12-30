@@ -21,7 +21,7 @@ class SetWidthDialog(GlyphsDialogBase):
     '''
 
     title = 'width'
-    key   = KEY
+    key = KEY
     settings = {
         'widthValue' : 400,
         'mode'       : 0,

@@ -22,7 +22,7 @@ class LockLayerWidthsDialog(hDialog, BaseWindowController):
     '''
 
     title = 'widths'
-    key   = KEY
+    key = KEY
     # windowType = 1
 
     def __init__(self):

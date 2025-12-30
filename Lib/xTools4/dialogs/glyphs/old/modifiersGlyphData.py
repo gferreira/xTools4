@@ -8,7 +8,7 @@ KEY = f'{hDialog.key}.glyphs.glyphData'
 class SelectGlyphDataDialog(hDialog):
 
     title = "glyph data"
-    key  = KEY
+    key = KEY
     glyphData = [
         'contours',
         'components',

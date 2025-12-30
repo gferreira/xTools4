@@ -21,7 +21,7 @@ class CopyMarginsDialog(hDialog, BaseWindowController):
     '''
 
     title = 'margins'
-    key   = KEY
+    key = KEY
     allFonts = {}
 
     def __init__(self):

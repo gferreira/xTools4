@@ -22,7 +22,7 @@ class SetMarginsDialog(GlyphsDialogBase):
     '''
 
     title = 'margins'
-    key   = KEY
+    key = KEY
     settings = {
         'left'       : True,
         'leftMode'   : 0,

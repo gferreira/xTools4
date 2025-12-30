@@ -1,7 +1,3 @@
-# from importlib import reload
-# import xTools4.dialogs.batch.base
-# reload(xTools4.dialogs.batch.base)
-
 import os
 import json
 import plistlib
@@ -12,7 +8,10 @@ from xTools4.modules.fontutils import getFontID
 from xTools4.modules.unicode import unicodeHexToInt, unicodeIntToHex, clearUnicodes, autoUnicode
 from xTools4.dialogs.batch.base import BatchDialogBase
 
-KEY = 'com.xTools4.dialogs.batch.Set'
+
+KEY = f'{BatchDialogBase.key}.set'
+
+
 class BatchSetDialog(BatchDialogBase):
 
     '''
@@ -26,7 +25,7 @@ class BatchSetDialog(BatchDialogBase):
     '''
 
     title = 'batch set'
-    key = '%s.set' % BatchDialogBase.key
+    key = KEY
 
     fontInfo = dict(FontInfoAttributes)
     del fontInfo['WOFF']
@@ -43,7 +42,6 @@ class BatchSetDialog(BatchDialogBase):
                 (self.width * 3, self.height),
                 self.title,
                 minSize=(self.width * 2, 360))
-        self.w.workspaceWindowIdentifier = KEY
 
         # build groups
         self.initFontSelectorGroup()

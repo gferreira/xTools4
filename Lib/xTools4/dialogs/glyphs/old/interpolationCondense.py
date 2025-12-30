@@ -23,7 +23,7 @@ class CondenseGlyphsDialog(GlyphsDialogBase):
     '''
 
     title = 'condense'
-    key   = KEY
+    key = KEY
     settings = {
         'regularStem' : 70,
         'boldStem'    : 170,
