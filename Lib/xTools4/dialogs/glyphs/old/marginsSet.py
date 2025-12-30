@@ -5,7 +5,10 @@ from mojo.UI import NumberEditText
 from mojo.tools import IntersectGlyphWithLine
 from xTools4.dialogs.glyphs.old.base import GlyphsDialogBase
 
-KEY = 'com.xTools4.dialogs.glyphs.marginsSet'
+
+KEY = f'{GlyphsDialogBase.key}.marginsSet'
+
+
 class SetMarginsDialog(GlyphsDialogBase):
 
     '''
@@ -19,7 +22,7 @@ class SetMarginsDialog(GlyphsDialogBase):
     '''
 
     title = 'margins'
-    key   = f'{GlyphsDialogBase.key}.margins'
+    key   = KEY
     settings = {
         'left'       : True,
         'leftMode'   : 0,
@@ -41,7 +44,6 @@ class SetMarginsDialog(GlyphsDialogBase):
         self.height = self.textHeight * 9
         self.height += self.padding * 10 - 2
         self.w = self.window((self.width, self.height), self.title)
-        self.w.workspaceWindowIdentifier = KEY
 
         x = y = p = self.padding
         col = (self.width - p*2) / 2
@@ -145,6 +147,9 @@ class SetMarginsDialog(GlyphsDialogBase):
                 sizeStyle=self.sizeStyle)
 
         self.initGlyphsWindowBehaviour()
+
+        self.w.workspaceWindowIdentifier = KEY
+
         self.openWindow()
 
     # -------------

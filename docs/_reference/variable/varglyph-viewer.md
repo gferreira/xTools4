@@ -48,11 +48,20 @@ Display
 ![]({{ site.url }}/images/variable/VarGlyphViewer_preview.png){: .img-fluid}
 
 
-<div class="card bg-light my-3 rounded-0">
+
+Color code
+----------
+
+| <span class='blue'>blue circle</span> | neither x nor y values changing | 
+| <span class='red'>red line</span> | only x or y value changing | 
+| <span class='green'>green line</span> | both x and y values changing | 
+{: .table .table-hover }
+
+
+<div class="card bg-light mt-5 mb-3 rounded-0">
 <div class="card-header">note</div>
 <div class="card-body" markdown='1'>
 For more info on adding and subtracting glyphs, see [Using GlyphMath](http://doc.robofont.com/documentation/tutorials/using-glyphmath/).
 {: .card-text }
 </div>
 </div>
-

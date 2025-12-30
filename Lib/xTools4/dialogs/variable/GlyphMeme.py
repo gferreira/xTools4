@@ -16,6 +16,7 @@ from xTools4.dialogs.variable.old.TempEdit import setupNewFont, splitall
 
 
 KEY = 'com.xTools4.dialogs.variable.glyphMeme'
+
 glyphSetPathKey        = 'com.xTools4.tempEdit.glyphSetPath'
 tempEditModeKey        = 'com.xTools4.tempEdit.mode'
 fontMeasurementsKey    = 'com.xTools4.measurements.font'

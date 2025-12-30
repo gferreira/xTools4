@@ -17,7 +17,8 @@ Requirements
 
 **The latest version of RoboFont 4.5 is recommended.**
 
-Some tools in xTools4 require [DrawBot](http://github.com/typemytype/drawBotRoboFontExtension).
+Some tools in xTools4 require that the [DrawBot Extension](http://github.com/typemytype/drawBotRoboFontExtension) is also installed.
+
 
 
 Installing with Mechanic

@@ -11,6 +11,9 @@ permalink : /reference/custom-designspace-libs/
 Additional data formats linked to designspace files and used by different tools for variable fonts.
 {: .lead}
 
+* Table of Contents
+{:toc}
+
 ### Measurements 
 
 | lib key       | `com.xTools4.xProject.measurementsPath` |

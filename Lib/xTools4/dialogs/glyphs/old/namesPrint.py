@@ -2,7 +2,10 @@ from vanilla import RadioGroup, Button, CheckBox
 from xTools4.dialogs.old import hDialog
 from xTools4.modules.encoding import psname2char
 
-KEY = 'com.xTools4.dialogs.glyphs.namesPrint'
+
+KEY = f'{hDialog.key}.glyphs.namesPrint'
+
+
 class PrintGlyphNamesDialog(hDialog):
 
     '''
@@ -16,7 +19,7 @@ class PrintGlyphNamesDialog(hDialog):
     '''
 
     title = 'print'
-    key   = f'{hDialog.key}.glyphs.glyphNamesPrint'
+    key   = KEY
     settings = {
         'printMode' : 0,
         'glyphMode' : 0,
@@ -27,7 +30,6 @@ class PrintGlyphNamesDialog(hDialog):
         self.height  = self.textHeight * 8
         self.height += self.padding * 5 - 2
         self.w = self.window((self.width, self.height), self.title)
-        self.w.workspaceWindowIdentifier = KEY
 
         x = y = p = self.padding
         self.w.glyphMode = RadioGroup(
@@ -58,6 +60,8 @@ class PrintGlyphNamesDialog(hDialog):
                 "sorted list",
                 value=self.settings['sortNames'],
                 sizeStyle=self.sizeStyle)
+
+        self.w.workspaceWindowIdentifier = KEY
 
         self.openWindow()
 

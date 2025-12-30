@@ -16,10 +16,13 @@ from xTools4.modules.measurements import Measurement
 from xTools4.modules.validation import validateFonts # checkCompatibility, checkEquality
 
 
+KEY = 'com.xTools4.dialogs.variable.old.varFontAssistant'
+
+
 class VarFontAssistant(DesignSpaceSelector):
     
     title = 'VarFont Assistant'
-    key   = 'com.fontBureau.varFontAssistant'
+    key   = KEY
 
     _tabsTitles = ['designspace', 'font info', 'kerning', 'measurements', 'validation']
 

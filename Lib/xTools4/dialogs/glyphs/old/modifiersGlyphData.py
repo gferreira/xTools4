@@ -1,14 +1,14 @@
 from vanilla import *
 from xTools4.dialogs.old import hDialog
 
-KEY = 'com.xTools4.dialogs.glyphs.glyphData'
+
+KEY = f'{hDialog.key}.glyphs.glyphData'
+
+
 class SelectGlyphDataDialog(hDialog):
 
     title = "glyph data"
-
-    # key  = hDialog.key
-    # key += '.glyphs.glyphDataSelect'
-
+    key  = KEY
     glyphData = [
         'contours',
         'components',
@@ -26,7 +26,6 @@ class SelectGlyphDataDialog(hDialog):
     def __init__(self):
         self.height = self.textHeight * len(self.glyphData) + self.padding * 2 - 3
         self.w = self.window((self.width, self.height), self.title)
-        self.w.workspaceWindowIdentifier = KEY
 
         x = y = p = self.padding
         y -= 3
@@ -42,7 +41,10 @@ class SelectGlyphDataDialog(hDialog):
             setattr(self.w, attrName, checkBox)
             y += self.textHeight
 
+        self.w.workspaceWindowIdentifier = KEY
+
         self.openWindow()
+
 
 if __name__ == "__main__":
 

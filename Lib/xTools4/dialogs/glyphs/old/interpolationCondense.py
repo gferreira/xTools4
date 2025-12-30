@@ -6,7 +6,10 @@ from xTools4.dialogs.glyphs.old.base import GlyphsDialogBase
 from xTools4.modules.interpolation import condenseGlyph
 from xTools4.dialogs.old.misc.numberEditText001 import NumberEditText_001
 
-KEY = 'com.xTools4.dialogs.glyphs.interpolationCondense'
+
+KEY = f'{GlyphsDialogBase.key}.interpolationCondense'
+
+
 class CondenseGlyphsDialog(GlyphsDialogBase):
 
     '''
@@ -20,7 +23,7 @@ class CondenseGlyphsDialog(GlyphsDialogBase):
     '''
 
     title = 'condense'
-    key   = f'{GlyphsDialogBase.key}.condense'
+    key   = KEY
     settings = {
         'regularStem' : 70,
         'boldStem'    : 170,
@@ -32,7 +35,6 @@ class CondenseGlyphsDialog(GlyphsDialogBase):
         self.height  = self.textHeight * 7
         self.height += self.padding * 6
         self.w = self.window((self.width, self.height), self.title)
-        self.w.workspaceWindowIdentifier = KEY
 
         x = y = p = self.padding
         col = (self.width - p*2) / 2
@@ -91,10 +93,13 @@ class CondenseGlyphsDialog(GlyphsDialogBase):
 
         self.updateFonts()
         self.updateFontLists()
+        
         self.initGlyphsWindowBehaviour()
+
         addObserver(self, "updateFontsCallback", "newFontDidOpen")
         addObserver(self, "updateFontsCallback", "fontDidOpen")
         addObserver(self, "updateFontsCallback", "fontDidClose")
+
         self.openWindow()
 
     # -------------

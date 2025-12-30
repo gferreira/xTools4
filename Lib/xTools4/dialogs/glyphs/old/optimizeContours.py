@@ -8,7 +8,10 @@ from xTools4.dialogs.glyphs.old.base import GlyphsDialogBase
 from xTools4.modules.color import rgb2nscolor, nscolor2rgb
 from xTools4.modules.optimize import equalizeCurves
 
-KEY = 'com.xTools4.dialogs.glyphs.optimizeContours'
+
+f'{GlyphsDialogBase.key}.optimizeContours'
+
+
 def optimizeContoursFactory(glyph, equalize=True, addExtremes=False, simplify=False, treshold=10):
     glyph = RGlyph(glyph).copy()
     glyph.clearComponents()
@@ -19,7 +22,7 @@ def optimizeContoursFactory(glyph, equalize=True, addExtremes=False, simplify=Fa
 class OptimizeContoursDialog(GlyphsDialogBase):
 
     title = 'optimize'
-    key   = f'{GlyphsDialogBase.key}.optimize'
+    key   = KEY
     settings = {
         # 'previewStrokeColor' : (1, 0.5, 0),
         # 'previewStrokeWidth' : 2,
@@ -32,7 +35,6 @@ class OptimizeContoursDialog(GlyphsDialogBase):
         self.height = self.textHeight * 7
         self.height += self.padding * 4 - 3
         self.w = self.window((self.width, self.height), self.title)
-        self.w.workspaceWindowIdentifier = KEY
 
         x = y = p = self.padding
         col = (self.width - p*2) / 2
@@ -92,7 +94,9 @@ class OptimizeContoursDialog(GlyphsDialogBase):
         # UpdateCurrentGlyphView()
 
         self.initGlyphsWindowBehaviour()
+
         registerRepresentationFactory(Glyph, "%s.preview" % self.key, optimizeContoursFactory)
+
         self.openWindow()
 
     # -------------

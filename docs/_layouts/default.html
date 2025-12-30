@@ -70,9 +70,16 @@
       {{ content }}
     </div>
   </main>
-  <footer class="container mx-auto px-auto px-md-4 my-4">
+  <footer class="container mx-auto px-auto px-md-4 my-4" markdown=1>
+    <ul class="list-inline">
+      <li class="list-inline-item"><a href='changelog'>changelog</a></li>
+      <li class="list-inline-item"><a href='http://github.com/gferreira/xTools4'>source code</a></li>
+      <li class="list-inline-item"><a href='http://github.com/gferreira/xTools4/issues'>issues</a></li>
+    </ul>
     <p class='small text-muted'>
       This work is licensed under <a href='http://creativecommons.org/licenses/by-sa/4.0/'>Creative Commons Attribution-ShareAlike 4.0 International</a>.
+    </p>
+    <p class='small text-muted'>
       <i class="bi bi-arrow-counterclockwise"></i> Last updated on {{ site.time | date_to_string }} {{ site.time | date: '%H:%M:%S' }}.
     </p>
   </footer>

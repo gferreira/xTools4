@@ -5,7 +5,10 @@ from mojo.UI import getDefault, NumberEditText
 from xTools4.dialogs.glyphs.old.base import GlyphsDialogBase
 from xTools4.dialogs.old.misc.numberEditText01 import NumberEditText_01
 
-KEY = 'com.xTools4.dialogs.glyphs.skew'
+
+KEY = f'{GlyphsDialogBase.key}.skew'
+
+
 def skewGlyphFactory():
     pass
 
@@ -23,7 +26,7 @@ class SkewGlyphsDialog(GlyphsDialogBase):
     '''
 
     title = "skew"
-    key   = f'{GlyphsDialogBase.key}.skew'
+    key   = KEY
     settings = {
         'xOffset'   : True,
         'skewValue' : 7.0,
@@ -35,7 +38,6 @@ class SkewGlyphsDialog(GlyphsDialogBase):
         self.height = self.textHeight * 5
         self.height += self.padding * 6
         self.w = self.window((self.width, self.height), self.title)
-        self.w.workspaceWindowIdentifier = KEY
 
         x = y = p = self.padding
         col = (self.width - p*2) / 2
@@ -97,6 +99,7 @@ class SkewGlyphsDialog(GlyphsDialogBase):
                 sizeStyle=self.sizeStyle)
 
         self.initGlyphsWindowBehaviour()
+
         self.openWindow()
 
     # -------------

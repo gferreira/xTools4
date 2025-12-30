@@ -7,7 +7,7 @@ from fontTools.designspaceLib import DesignSpaceDocument
 from xTools4.modules.linkPoints2 import readMeasurements # getPointAtIndex, getIndexForPoint, getAnchorPoint
 from xTools4.modules.xproject import measurementsPathKey
 
-KEY = 'com.xTools4.dialogs.variable.DesignSpaceSelector'
+KEY = 'com.xTools4.dialogs.variable.designSpaceSelector'
 
 def getSourceName(src):
     return os.path.splitext(src.filename)[0]
@@ -21,6 +21,8 @@ class DesignSpaceSelector_EZUI(ezui.WindowController):
     buttonWidth = 100
     rowHeight   = 17
     verbose     = True
+
+    key = KEY
 
     designspace = None
     sources     = []
@@ -103,7 +105,7 @@ class DesignSpaceSelector_EZUI(ezui.WindowController):
         self.w.getNSWindow().setTitlebarAppearsTransparent_(True)
         for itemName in self._tables:
             self.w.getItem(itemName).getNSTableView().setRowHeight_(self.rowHeight)
-        self.w.workspaceWindowIdentifier = KEY
+        self.w.workspaceWindowIdentifier = self.KEY
         self.w.open()
 
     # dynamic attrs

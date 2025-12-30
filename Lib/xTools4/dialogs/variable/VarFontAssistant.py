@@ -12,11 +12,12 @@ from xTools4.dialogs.variable.VarGlyphAssistant import intToCellConverter, cellT
 from xTools4.modules.validation import validateFonts
 
 
-KEY = 'com.xTools4.dialogs.variable.VarFontAssistant'
+KEY = 'com.xTools4.dialogs.variable.varFontAssistant'
 
 thresholdDefault = 0.1
 fontInfoDefault  = None
 kernValueDefault = None
+
 
 def defaultScaleColorFormatter(attributes):
     scaleColorFormatter(attributes, thresholdDefault)

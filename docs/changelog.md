@@ -15,6 +15,8 @@ All notable changes to xTools4 are documented in this file.
 - <span class='badge rounded-0'>Added</span> Adding GlyphTuning tool to quickly open all corner tuning sources of a single glyph for editing.
 - <span class='badge rounded-0'>Added</span> Adding documentation of custom libs in temporary fonts, and tools that support them.
 - <span class='badge rounded-0'>Changed</span> Implemented color codes in VarGlyphViewer to differentiate three types of point delta.
+- <span class='badge rounded-0'>Changed</span> Adding window identifiers to all dialogs for compatibility with the [Workspaces](http://github.com/typesupply/workspaces) extension.
+- <span class='badge rounded-0'>Removed</span> Removing GlyphGauge tool (superseded by the Measurements tool).
 {: ._changelog .mb-4 }
 
 

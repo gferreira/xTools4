@@ -4,7 +4,10 @@ from mojo.events import addObserver, removeObserver
 from defconAppKit.windows.baseWindow import BaseWindowController
 from xTools4.dialogs.old import hDialog
 
-KEY = 'com.xTools4.dialogs.glyphs.marginsCopy'
+
+KEY = f'{hDialog.key}.glyphs.marginsCopy'
+
+
 class CopyMarginsDialog(hDialog, BaseWindowController):
 
     '''
@@ -18,14 +21,13 @@ class CopyMarginsDialog(hDialog, BaseWindowController):
     '''
 
     title = 'margins'
-    key   = f'{hDialog.key}.glyphs.marginsCopy'
+    key   = KEY
     allFonts = {}
 
     def __init__(self):
         self.height  = self.textHeight * 8
         self.height += self.padding * 3.5
         self.w = self.window((self.width, self.height), self.title)
-        self.w.workspaceWindowIdentifier = KEY
 
         x = y = p = self.padding
         y -= 2
@@ -84,11 +86,16 @@ class CopyMarginsDialog(hDialog, BaseWindowController):
         self.updateSourceLayer()
         self.updateTargetFonts()
         self.updateTargetLayers()
+
         self.setUpBaseWindowBehavior()
+
+        self.w.workspaceWindowIdentifier = KEY
+
         addObserver(self, 'updateListsObserver', 'currentGlyphChanged')
         addObserver(self, 'updateListsObserver', 'newFontDidOpen')
         addObserver(self, 'updateListsObserver', 'fontDidOpen')
         addObserver(self, 'updateListsObserver', 'fontDidClose')
+
         self.openWindow()
 
     # -------------

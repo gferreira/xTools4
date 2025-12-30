@@ -11,6 +11,9 @@ permalink : /reference/temp-font-libs/
 Custom data to make temporary fonts interoperable with other tools.
 {: .lead}
 
+* Table of Contents
+{:toc}
+
 ### Temp edit mode
 
 | lib key    | `com.xTools4.tempEdit.mode` |

@@ -11,6 +11,10 @@ A tool for previewing blended locations from a parametric designspace and compar
 
 ![]({{ site.url }}/images/variable/BlendsPreview.png){: .img-fluid}
 
+
+<div class='row'>
+
+<div class='col-md' markdown=1>
 designspace…
 : Load designspace data from an external file.
 
@@ -25,6 +29,14 @@ blended axes
 reference font…
 : Load another variable font for comparison with the blends preview.
 
+update preview
+: Regenerate the preview PDF from the latest files.
+
+save PDF…
+: Save the current proof as a PDF file.
+</div>
+
+<div class='col-md' markdown=1>
 compare
 : Show the reference font in the background for comparison.
 
@@ -42,12 +54,9 @@ levels
 
 show levels
 : Show glyph samples only for the selected threshold levels.
+</div>
 
-update preview
-: Regenerate the preview PDF from the latest files.
-
-save PDF…
-: Save the current proof as a PDF file.
+</div>
 
 
 <div class="card text-dark bg-light my-3 rounded-0">

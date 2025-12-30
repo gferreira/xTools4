@@ -7,8 +7,9 @@ from xTools4.modules.pens import DecomposePointPen
 from xTools4.dialogs.old import hDialog
 
 
+KEY = f'{hDialog.key}.glyphs.layersImport'
+
 tempEditModeKey = 'com.xTools4.tempEdit.mode'
-KEY = 'com.xTools4.dialogs.glyphs.layersImport'
 
 
 class ImportGlyphsIntoLayerDialog(hDialog):
@@ -24,7 +25,7 @@ class ImportGlyphsIntoLayerDialog(hDialog):
     '''
 
     title = 'layers'
-    key   = f'{hDialog.key}.glyphs.layersImport'
+    key   = KEY
     sourceFont = None
 
     settings = {
@@ -35,7 +36,6 @@ class ImportGlyphsIntoLayerDialog(hDialog):
         self.height  = self.textHeight * 8
         self.height += self.padding * 9
         self.w = self.window((self.width, self.height), self.title)
-        self.w.workspaceWindowIdentifier = KEY
 
         x = y = p = self.padding
         self.w.getFile = Button(
@@ -90,6 +90,8 @@ class ImportGlyphsIntoLayerDialog(hDialog):
                 "import",
                 callback=self.applyCallback,
                 sizeStyle=self.sizeStyle)
+
+        self.w.workspaceWindowIdentifier = KEY
 
         self.openWindow()
 

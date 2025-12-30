@@ -5,9 +5,13 @@ from defconAppKit.windows.baseWindow import BaseWindowController
 from xTools4.dialogs.old import hDialog
 from xTools4.modules.anchors import copyAnchors
 
+
 # TO-DO: add observers for layerset changes
 # update UI when adding/deleting/renaming layers
-KEY = 'com.xTools4.dialogs.glyphs.layersMask'
+
+
+KEY = f'{hDialog.key}.glyphs.layersMask'
+
 
 class MaskDialog(hDialog, BaseWindowController):
 
@@ -22,7 +26,7 @@ class MaskDialog(hDialog, BaseWindowController):
     '''
 
     title = 'mask'
-    key   = f'{hDialog.key}.glyphs.layers.mask'
+    key   = KEY
     settings = {
         'copyWidth'   : True,
         'copyAnchors' : True,
@@ -32,7 +36,6 @@ class MaskDialog(hDialog, BaseWindowController):
         self.height  = self.textHeight * 9
         self.height += self.padding * 6 -5
         self.w = self.window((self.width, self.height), self.title)
-        self.w.workspaceWindowIdentifier = KEY
 
         x = p = self.padding
         y = p - 3
@@ -98,10 +101,14 @@ class MaskDialog(hDialog, BaseWindowController):
         self.updateSourceLayer()
         self.updateMaskLayersList()
         self.setUpBaseWindowBehavior()
+
+        self.w.workspaceWindowIdentifier = KEY
+
         addObserver(self, 'updateLayersObserver', 'currentGlyphChanged')
         addObserver(self, 'updateLayersObserver', 'newFontDidOpen')
         addObserver(self, 'updateLayersObserver', 'fontDidOpen')
         addObserver(self, 'updateLayersObserver', 'fontDidClose')
+
         self.openWindow()
 
     # -------------

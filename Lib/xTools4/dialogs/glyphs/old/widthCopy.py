@@ -4,7 +4,10 @@ from mojo.events import addObserver, removeObserver
 from defconAppKit.windows.baseWindow import BaseWindowController
 from xTools4.dialogs.old import hDialog
 
-KEY = 'com.xTools4.dialogs.glyphs.widthCopy'
+
+KEY = f'{hDialog.key}.glyphs.widthCopy'
+
+
 class CopyWidthDialog(hDialog, BaseWindowController):
 
     '''
@@ -18,7 +21,7 @@ class CopyWidthDialog(hDialog, BaseWindowController):
     '''
 
     title = 'width'
-    key   = f'{hDialog.key}.glyphs.widthCopy'
+    key   = KEY
     allFonts = {}
 
     def __init__(self):
@@ -28,7 +31,6 @@ class CopyWidthDialog(hDialog, BaseWindowController):
             (self.width, self.height), self.title,
             maxSize=(self.width * 1.5, self.height * 1.5),
             minSize=(self.width, self.height))
-        self.w.workspaceWindowIdentifier = KEY
 
         x = y = p = self.padding
         y -= 2
@@ -73,11 +75,16 @@ class CopyWidthDialog(hDialog, BaseWindowController):
         self.updateSourceLayer()
         self.updateTargetFonts()
         self.updateTargetLayers()
+
         self.setUpBaseWindowBehavior()
+
+        self.w.workspaceWindowIdentifier = KEY
+
         addObserver(self, 'updateListsObserver', 'currentGlyphChanged')
         addObserver(self, 'updateListsObserver', 'newFontDidOpen')
         addObserver(self, 'updateListsObserver', 'fontDidOpen')
         addObserver(self, 'updateListsObserver', 'fontDidClose')
+
         self.openWindow()
 
     # -------------

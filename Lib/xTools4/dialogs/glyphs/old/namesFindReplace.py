@@ -6,7 +6,10 @@ from vanilla import TextBox, EditText, CheckBox, Button, RadioGroup
 from xTools4.dialogs.old import hDialog
 from xTools4.modules.glyphutils import findReplaceGlyphName, addToGlyphName
 
-KEY = 'com.xTools4.dialogs.glyphs.namesFindReplace'
+
+KEY = f'{hDialog.key}.glyphs.findReplaceGlyphNames'
+
+
 class FindReplaceGlyphNamesDialog(hDialog):
 
     '''
@@ -20,7 +23,7 @@ class FindReplaceGlyphNamesDialog(hDialog):
     '''
 
     title = 'replace'
-    key   = f'{hDialog.key}.glyphs.findReplaceGlyphNames'
+    key   = KEY
     settings = {
         'overwrite' : True,
         'duplicate' : False,
@@ -30,7 +33,6 @@ class FindReplaceGlyphNamesDialog(hDialog):
         self.height  = self.textHeight * 7
         self.height += self.padding * 5 # - 5
         self.w = self.window((self.width, self.height), self.title)
-        self.w.workspaceWindowIdentifier = KEY
 
         x = y = p = self.padding
         y -= 3
@@ -79,6 +81,8 @@ class FindReplaceGlyphNamesDialog(hDialog):
                 "duplicate",
                 value=self.settings['duplicate'],
                 sizeStyle=self.sizeStyle)
+
+        self.w.workspaceWindowIdentifier = KEY
 
         self.openWindow()
 

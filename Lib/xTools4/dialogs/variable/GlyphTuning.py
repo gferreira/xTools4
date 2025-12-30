@@ -9,6 +9,7 @@ from xTools4.modules.xproject import measurementsPathKey, smartSetsPathKey
 from xTools4.modules.validation import assignValidationGroup
 from xTools4.dialogs.variable.old.TempEdit import setupNewFont, splitall
 
+KEY = 'com.xTools4.dialogs.variable.glyphTuning'
 
 glyphSetPathKey = 'com.xTools4.tempEdit.glyphSetPath'
 tempEditModeKey = 'com.xTools4.tempEdit.mode'
@@ -79,7 +80,7 @@ class GlyphTuningController(ezui.WindowController):
             margins=self.margins,
             size=(123, 'auto'),
         )
-        self.w.workspaceWindowIdentifier = "GlyphTuning"
+        self.w.workspaceWindowIdentifier = KEY
         self.w.getNSWindow().setTitlebarAppearsTransparent_(True)
         # self.w.getItem("axesList").getNSTableView().setRowHeight_(17)
         self.w.open()

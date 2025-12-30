@@ -357,10 +357,12 @@ class hDialog:
         '''
         if not hasattr(self, 'w'):
             return
+
         if self.windowType == 0:
             self.w.getNSWindow().setTitlebarAppearsTransparent_(True)
             # w.getNSWindow().standardWindowButton_(NSWindowMiniaturizeButton).setHidden_(True)
             # w.getNSWindow().standardWindowButton_(NSWindowZoomButton).setHidden_(True)
+
         self.w.open()
 
 

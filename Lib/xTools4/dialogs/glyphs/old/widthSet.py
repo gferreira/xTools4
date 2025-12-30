@@ -4,7 +4,10 @@ from mojo.UI import NumberEditText
 from xTools4.dialogs.glyphs.old.base import GlyphsDialogBase
 from xTools4.modules.glyphutils import setGlyphWidth
 
-KEY = 'com.xTools4.dialogs.glyphs.widthSet'
+
+KEY = f'{GlyphsDialogBase.key}.widthSet'
+
+
 class SetWidthDialog(GlyphsDialogBase):
 
     '''
@@ -18,7 +21,7 @@ class SetWidthDialog(GlyphsDialogBase):
     '''
 
     title = 'width'
-    key   = f'{GlyphsDialogBase.key}.width'
+    key   = KEY
     settings = {
         'widthValue' : 400,
         'mode'       : 0,
@@ -41,7 +44,6 @@ class SetWidthDialog(GlyphsDialogBase):
         self.height  = self.textHeight * 8
         self.height += self.padding * 6
         self.w = self.window((self.width, self.height), self.title)
-        self.w.workspaceWindowIdentifier = KEY
 
         x = y = p = self.padding
         col = (self.width - p*2) / 2
@@ -92,6 +94,9 @@ class SetWidthDialog(GlyphsDialogBase):
                 sizeStyle=self.sizeStyle)
 
         self.initGlyphsWindowBehaviour()
+
+        self.w.workspaceWindowIdentifier = KEY
+
         self.openWindow()
 
     # -------------

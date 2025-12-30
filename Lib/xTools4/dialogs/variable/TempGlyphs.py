@@ -1,5 +1,3 @@
-# menuTitle: TempGlyphs
-
 import os, sys
 from AppKit import NSFilenamesPboardType, NSDragOperationCopy
 from vanilla import FloatingWindow, List, Button, TextBox, EditText, RadioGroup, ProgressBar, Group
@@ -8,7 +6,10 @@ from fontTools.ufoLib.glifLib import GlyphSet
 from mojo.UI import AccordionView
 from mojo.roboFont import OpenFont, NewFont, CurrentFont
 
+
 KEY = 'com.xTools4.dialogs.variable.tempGlyphs'
+
+
 class TempGlyphs:
 
     '''

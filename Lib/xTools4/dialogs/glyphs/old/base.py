@@ -5,7 +5,8 @@ from mojo.UI import UpdateCurrentGlyphView
 from mojo.events import addObserver, removeObserver
 from xTools4.dialogs.old import hDialog
 
-KEY = 'com.xTools4.dialogs.glyphs.base'
+KEY = 'com.xTools4.dialogs.glyphs'
+
 class GlyphsDialogBase(hDialog, BaseWindowController):
 
     '''
@@ -14,7 +15,7 @@ class GlyphsDialogBase(hDialog, BaseWindowController):
     '''
 
     title = None
-    key   = f'{hDialog.key}.glyphs'
+    key   = KEY
     windowType = 0
 
     def initGlyphsWindowBehaviour(self):
@@ -22,6 +23,7 @@ class GlyphsDialogBase(hDialog, BaseWindowController):
         Initialize basic window behaviour.
 
         '''
+        self.w.workspaceWindowIdentifier = self.key
         self.setUpBaseWindowBehavior()
         addObserver(self, "backgroundPreview", "drawBackground")
         addObserver(self, "backgroundPreview", "drawPreview")

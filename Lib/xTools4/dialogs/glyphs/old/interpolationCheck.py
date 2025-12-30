@@ -1,7 +1,10 @@
 from vanilla import *
 from xTools4.dialogs.old import hDialog
 
+
 KEY = 'com.xTools4.dialogs.glyphs.interpolationCheck'
+
+
 class CheckCompatibilityDialog(hDialog):
 
     '''
@@ -15,13 +18,12 @@ class CheckCompatibilityDialog(hDialog):
     '''
 
     title = 'check'
-    key   = f'{hDialog.key}.glyphs.interpolationCheck'
+    key   = KEY
     fonts = {}
 
     def __init__(self):
         self.height = self.textHeight * 4 + self.padding * 4 + self.buttonHeight + 3
         self.w = self.window((self.width, self.height), self.title)
-        self.w.workspaceWindowIdentifier = KEY
 
         x = y = p = self.padding
         self.w.f1Label = TextBox(
@@ -59,5 +61,7 @@ class CheckCompatibilityDialog(hDialog):
     def applyCallback(self, sender):
         pass
 
+
 if __name__ == "__main__":
+
     CheckCompatibilityDialog()

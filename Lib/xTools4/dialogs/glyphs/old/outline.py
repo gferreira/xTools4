@@ -8,7 +8,10 @@ from xTools4.modules.outline import expandGlyph
 from xTools4.dialogs.glyphs.old.base import GlyphsDialogBase
 from xTools4.dialogs.old.misc.numberEditText01 import NumberEditText_01
 
-KEY = 'com.xTools4.dialogs.glyphs.outline'
+
+KEY = f'{GlyphsDialogBase.key}.outline'
+
+
 def outlineGlyphFactory(glyph, layerName, distance, join, cap, inner, outer):
 
     glyph = RGlyph(glyph).getLayer(layerName)
@@ -35,7 +38,7 @@ class OutlineGlyphsDialog(GlyphsDialogBase):
     '''
 
     title = 'outline'
-    key   = f'{GlyphsDialogBase.key}.outline'
+    key   = KEY
     settings = {
         'strokeWidth' : 20,
         'joinstyle'   : 1,
@@ -47,7 +50,6 @@ class OutlineGlyphsDialog(GlyphsDialogBase):
         self.height  = self.textHeight * 13
         self.height += self.padding * 9
         self.w = self.window((self.width, self.height), self.title)
-        self.w.workspaceWindowIdentifier = KEY
 
         x = y = p = self.padding
         col = (self.width - p*2) / 2
@@ -155,11 +157,14 @@ class OutlineGlyphsDialog(GlyphsDialogBase):
                 sizeStyle=self.sizeStyle)
 
         self.initGlyphsWindowBehaviour()
+
         addObserver(self, 'updateLayersObserver', 'currentGlyphChanged')
         addObserver(self, 'updateLayersObserver', 'newFontDidOpen')
         addObserver(self, 'updateLayersObserver', 'fontDidOpen')
         addObserver(self, 'updateLayersObserver', 'fontDidClose')
+
         registerRepresentationFactory(Glyph, f"{self.key}.preview", outlineGlyphFactory)
+
         self.updateSourceLayer()
         self.updateTargetLayer()
         self.openWindow()

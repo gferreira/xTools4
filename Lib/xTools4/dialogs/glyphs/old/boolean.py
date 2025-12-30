@@ -6,6 +6,9 @@ from defcon import Glyph, registerRepresentationFactory, unregisterRepresentatio
 from xTools4.dialogs.glyphs.old.base import GlyphsDialogBase
 
 
+KEY = f'{GlyphsDialogBase.key}.boolean'
+
+
 def booleanGlyphFactory(glyph, glyph1, glyph2, operation):
 
     if operation == 'subtract':
@@ -36,7 +39,7 @@ class BooleanOperationsDialog(GlyphsDialogBase):
     '''
 
     title = 'boolean'
-    key   = f'{GlyphsDialogBase.key}.boolean'
+    key   = KEY
     settings = {}
 
     operations = [

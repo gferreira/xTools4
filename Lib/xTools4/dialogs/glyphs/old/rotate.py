@@ -5,7 +5,10 @@ from xTools4.dialogs.old.misc.numberEditText01 import NumberEditText_01
 from xTools4.dialogs.glyphs.old.base import GlyphsDialogBase
 from xTools4.modules.glyphutils import getOriginPosition
 
-KEY = 'com.xTools4.dialogs.glyphs.rotate'
+
+KEY = f'{GlyphsDialogBase.key}.rotate'
+
+
 def rotateGlyphFactory():
     pass
 
@@ -23,7 +26,7 @@ class RotateGlyphsDialog(GlyphsDialogBase):
     '''
 
     title = "rotate"
-    key = '%s.rotate' % GlyphsDialogBase.key
+    key = KEY
     settings = {
         'rotateValue' : 10,
     }
@@ -33,7 +36,6 @@ class RotateGlyphsDialog(GlyphsDialogBase):
         self.height += self.textHeight * 3
         self.height += self.padding * 3 + 2
         self.w = self.window((self.width, self.height), self.title)
-        self.w.workspaceWindowIdentifier = KEY
 
         x = y = p = self.padding
         col = (self.width - p*2) / 2
@@ -71,6 +73,7 @@ class RotateGlyphsDialog(GlyphsDialogBase):
                 sizeStyle=self.sizeStyle)
 
         self.initGlyphsWindowBehaviour()
+
         self.openWindow()
 
     # -------------

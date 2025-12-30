@@ -14,7 +14,7 @@ from xTools4.dialogs.variable.DesignSpaceSelector import DesignSpaceSelector_EZU
 from xTools4.dialogs.variable.Measurements import *
 from xTools4.dialogs.variable.GlyphValidator import checkResultsFactory, validationGroupFactory
 
-KEY = 'com.xTools4.dialogs.variable.VarGlyphAssistant'
+KEY = 'com.xTools4.dialogs.variable.varGlyphAssistant'
 
 # color formatting
 
@@ -26,6 +26,7 @@ attributesPoints     = 0
 attributesComponents = 0
 attributesAnchors    = 0
 thresholdDefault     = 0.1
+
 
 def intToCellConverter(value):
     if value is None:

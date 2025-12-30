@@ -4,7 +4,7 @@ layout    : default
 permalink : /reference/measurement-scales-thresholds/
 ---
 
-Measurement scales reveal the proportion between a given measurement and its parent value, font value, or default value.
+Measurement scales reveal the proportion between a given measurement and another key value.
 {: .lead}
 
 * Table of Contents

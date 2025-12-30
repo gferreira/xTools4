@@ -6,7 +6,7 @@ permalink : /
 
 <span class='badge bg-secondary rounded-0'>version {{ site.version }}</span>
 
-xTools4 is a collection of expert tools for typeface design and font production in [RoboFont 4].
+xTools4 is a collection of expert tools for (parametric) variable font production in [RoboFont 4].
 {: .lead }
 
 [RoboFont 4]: http://robofont.com/
@@ -58,13 +58,24 @@ tutorials
 
 </div>
 
-<div id="carouselExample" class="carousel carousel-dark slide" data-bs-ride="carousel">
+{% endcomment %}
+
+<div id="carouselMain" class="carousel carousel-dark slide" data-bs-ride="carousel">
   <div class="carousel-inner">
     <div class="carousel-item active">
-      <img src="{{ site.url }}/images/variable/Measurements_font.png" class="d-block w-100" />
+      <img src="{{ site.url }}/images/variable/Measurements_glyph.png" class="d-block w-100" />
     </div>
     <div class="carousel-item">
-      <img src="{{ site.url }}/images/variable/Measurements_glyph.png" class="d-block w-100" />
+      <img src="{{ site.url }}/images/variable/GlyphMeme_font.png" class="d-block w-100" />
+    </div>
+    <div class="carousel-item">
+      <img src="{{ site.url }}/images/variable/VarGlyphViewer_preview.png" class="d-block w-100" />
+    </div>
+    <div class="carousel-item">
+      <img src="{{ site.url }}/images/variable/GlyphSetProofer.png" class="d-block w-100" />
+    </div>
+    <div class="carousel-item">
+      <img src="{{ site.url }}/images/variable/Measurements_preview.png" class="d-block w-100" />
     </div>
     <div class="carousel-item">
       <img src="{{ site.url }}/images/variable/VarGlyphAssistant-measurements.png" class="d-block w-100" />
@@ -72,21 +83,19 @@ tutorials
     <div class="carousel-item">
       <img src="{{ site.url }}/images/variable/BlendsPreview.png" class="d-block w-100" />
     </div>
-    <div class="carousel-item">
-      <img src="{{ site.url }}/images/variable/GlyphSetProofer.png" class="d-block w-100" />
-    </div>
   </div>
-  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+  <button class="carousel-control-prev" type="button" data-bs-target="#carouselMain" data-bs-slide="prev">
     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
     <span class="visually-hidden">Previous</span>
   </button>
-  <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+  <button class="carousel-control-next" type="button" data-bs-target="#carouselMain" data-bs-slide="next">
     <span class="carousel-control-next-icon" aria-hidden="true"></span>
     <span class="visually-hidden">Next</span>
   </button>
 </div>
 
-{% endcomment %}
+
+{% comment %}
 
 - - -
 {: .mb-4 }
@@ -99,7 +108,7 @@ development
 - [source code](http://github.com/gferreira/xTools4)
 - [issues](http://github.com/gferreira/xTools4/issues)
 
-{% comment %}
+
 <script>
 var imgs = [
   'xTools4_1.png',

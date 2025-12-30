@@ -3,7 +3,10 @@ from mojo import drawingTools as ctx
 from mojo.UI import NumberEditText
 from xTools4.dialogs.glyphs.old.base import GlyphsDialogBase
 
-KEY = 'com.xTools4.dialogs.glyphs.anchorsCreate'
+
+KEY = f'{GlyphsDialogBase.key}.anchorsCreate'
+
+
 class CreateAnchorsDialog(GlyphsDialogBase):
 
     '''
@@ -17,7 +20,7 @@ class CreateAnchorsDialog(GlyphsDialogBase):
     '''
 
     title = "anchors"
-    key   = f'{GlyphsDialogBase.key}.anchorsCreate'
+    key   = KEY
     settings = {
         # 'relativeToXHeight' : True,
         'posY' : 100,
@@ -29,7 +32,6 @@ class CreateAnchorsDialog(GlyphsDialogBase):
         self.height  = self.textHeight * 10
         self.height += self.padding * 6 - 3
         self.w = self.window((self.width, self.height), self.title)
-        self.w.workspaceWindowIdentifier = KEY
 
         x = y = p = self.padding
         col = (self.width - p*2) / 2
