@@ -106,43 +106,42 @@ class MeasurementsController(ezui.WindowController):
     = Tabs
 
     * Tab: font @fontTab
-    > |---------------------------------------------------------------------------------------------------------|
-    > | name | direction | glyph1 | point1 | glyph2 | point2 | units | permill | parent | p-scale | description |  @fontMeasurements
-    > |------|-----------|--------|--------|--------|--------|-------|---------|--------|---------|-------------|
-    > |      |           |        |        |        |        |       |         |        |         |             |
-    > |---------------------------------------------------------------------------------------------------------|
-    >> (+-)         @fontMeasurementsAddRemoveButton
+    > |-----------------------------------------------------------------------------------------------|
+    > | name | direction | glyph1 | point1 | glyph2 | point2 | value | parent | p-scale | description |  @fontMeasurements
+    > |------|-----------|--------|--------|--------|--------|-------|--------|---------|-------------|
+    > |      |           |        |        |        |        |       |        |         |             |
+    > |-----------------------------------------------------------------------------------------------|
+    >> (+-)                @fontMeasurementsAddRemoveButton
     >> p-threshold
-    >> [__](±)      @thresholdFontParent
+    >> [__](±)             @thresholdFontParent
     >> d-threshold
-    >> [__](±)      @thresholdFontDefault
-    >> (flip)       @flipButtonFont
+    >> [__](±)             @thresholdFontDefault
+    >> (flip)              @flipButtonFont
 
     * Tab: glyph @glyphsTab
-    > |-----------------------------------------------------------------------------------------------------|
-    > | name | direction | point1 | point2 | units | permill | font | f-scale | f-glyph | default | d-scale |  @glyphMeasurements
-    > |------|-----------|--------|--------|-------|---------|------|---------|---------|---------|---------|
-    > |      |           |        |        |       |         |      |         |         |         |         |
-    > |-----------------------------------------------------------------------------------------------------|
-    >> (+-)         @glyphMeasurementsAddRemoveButton
+    > |-------------------------------------------------------------------------------------------|
+    > | name | direction | point1 | point2 | value | font | f-scale | f-glyph | default | d-scale |  @glyphMeasurements
+    > |------|-----------|--------|--------|-------|------|---------|---------|---------|---------|
+    > |      |           |        |        |       |      |         |         |         |         |
+    > |-------------------------------------------------------------------------------------------|
+    >> (+-)                @glyphMeasurementsAddRemoveButton
     >> f-threshold
-    >> [__](±)      @thresholdGlyphFont
+    >> [__](±)             @thresholdGlyphFont
     >> d-threshold
-    >> [__](±)      @thresholdGlyphDefault
-    >> [X] display  @preview
-    >> * ColorWell  @colorButton
-    >> [ ] permill  @permill
-    >> (flip)       @flipButton
+    >> [__](±)             @thresholdGlyphDefault
+    >> [X] display         @preview
+    >> * ColorWell         @colorButton
+    >> (flip)              @flipButton
 
     =============
 
-    [X] italic correction @italicCorrection
+    [ ] permill            @permill
+    x                      @checkboxBreaker1
+    [X] italic correction  @italicCorrection
 
-    ( designspace… ) @getDesignspaceButton
-    ( reload ↺ )     @reloadButton
-    ( save  )        @saveButton
-    # ( default… )   @defaultButton
-    # ( PDF… )       @makePdfButton
+    ( designspace… )       @getDesignspaceButton
+    ( reload ↺ )           @reloadButton
+    ( save  )              @saveButton
 
     """
 
@@ -186,18 +185,8 @@ class MeasurementsController(ezui.WindowController):
                     editable=True,
                 ),
                 dict(
-                    identifier="units",
-                    title="units",
-                    width=colWidth,
-                    editable=False,
-                    cellDescription=dict(
-                        cellType='TextField',
-                        valueType='integer',
-                    ),
-                ),
-                dict(
-                    identifier="permill",
-                    title="permill",
+                    identifier="value",
+                    title="value",
                     width=colWidth,
                     editable=False,
                     cellDescription=dict(
@@ -259,8 +248,8 @@ class MeasurementsController(ezui.WindowController):
                 point1=None,
                 glyph2=None,
                 point2=None,
-                units=None,
-                permill=None,
+                value=None,
+                # permill=None,
                 parent=None,
                 scale_p=None,
                 default=None,
@@ -318,18 +307,8 @@ class MeasurementsController(ezui.WindowController):
                     continuous=False,
                 ),
                 dict(
-                    identifier="units",
-                    title="units",
-                    width=colWidth,
-                    editable=False,
-                    cellDescription=dict(
-                        cellType='TextField',
-                        valueType='integer',
-                    ),
-                ),
-                dict(
-                    identifier="permill",
-                    title="permill",
+                    identifier="value",
+                    title="value",
                     width=colWidth,
                     editable=False,
                     cellDescription=dict(
@@ -395,8 +374,8 @@ class MeasurementsController(ezui.WindowController):
                 direction=None,
                 point1=None,
                 point2=None,
-                units=None,
-                permill=None,
+                value=None,
+                # permill=None,
                 font=None,
                 scale_f=None,
                 glyph_f=None,
@@ -439,6 +418,9 @@ class MeasurementsController(ezui.WindowController):
         makePdfButton=dict(
             width=buttonWidth,
         ),
+        checkboxBreaker1=dict(
+            text=""
+        )
     )
 
     def build(self):
@@ -819,8 +801,7 @@ class MeasurementsController(ezui.WindowController):
                 point1=data.get('point 1'),
                 glyph2=data.get('glyph 2'),
                 point2=data.get('point 2'),
-                units=data.get('units'),
-                permill=data.get('permill'),
+                value=data.get('value'),
                 parent=data.get('parent'),
                 scale_p=data.get('scale_p'),
                 default=data.get('default'),
@@ -839,6 +820,7 @@ class MeasurementsController(ezui.WindowController):
         table = self.w.getItem("fontMeasurements")
         items = table.get()
         italicCorrection = self.w.getItem("italicCorrection").get()
+        permill = self.w.getItem("permill").get()
 
         isTempFont = self.font.lib.get(tempEditModeKey) == 'glyphs'
 
@@ -871,11 +853,12 @@ class MeasurementsController(ezui.WindowController):
                 else:
                     distanceUnits = None
 
-            item['units'] = distanceUnits
-
-            if distanceUnits and self.font.info.unitsPerEm:
-                distancePermill = round(distanceUnits * 1000 / self.font.info.unitsPerEm)
-                item['permill'] = distancePermill
+            if not permill:
+                item['value'] = distanceUnits
+            else:
+                if distanceUnits and self.font.info.unitsPerEm:
+                    distancePermill = round(distanceUnits * 1000 / self.font.info.unitsPerEm)
+                    item['value'] = distancePermill
 
             # get default value
             if self.defaultFont:
@@ -895,9 +878,9 @@ class MeasurementsController(ezui.WindowController):
                 distanceParent = None
                 for i in items:
                     if i['name'] == item['parent']:
-                        distanceParent = i['units']
-                if distanceParent and item['units']:
-                    scaleParent = item['units'] / distanceParent
+                        distanceParent = i['value']
+                if distanceParent and item['value']:
+                    scaleParent = item['value'] / distanceParent
                     item['scale_p'] = scaleParent
 
         table.reloadData(needReload)
@@ -933,7 +916,7 @@ class MeasurementsController(ezui.WindowController):
                 direction=measurements[key].get('direction'),
                 point1=index1,
                 point2=index2,
-                units=None,
+                value=None,
                 permill=None,
                 font=measurements[key].get('parent'),
                 scale_f=None,
@@ -958,6 +941,7 @@ class MeasurementsController(ezui.WindowController):
         table = self.w.getItem("glyphMeasurements")
         items = table.get()
         italicCorrection = self.w.getItem("italicCorrection").get()
+        permill = self.w.getItem("permill").get()
 
         isTempFont = False
         if self.font and self.font.lib.get(tempEditModeKey) == 'glyphs':
@@ -965,7 +949,7 @@ class MeasurementsController(ezui.WindowController):
 
         # get font-level values
         fontMeasurements = self.w.getItem("fontMeasurements").get()
-        fontValues       = { i['name']: i['units']  for i in fontMeasurements }
+        fontValues       = { i['name']: i['value']  for i in fontMeasurements }
         fontGlyphs       = { i['name']: i['glyph1'] for i in fontMeasurements }
 
         needReload = []
@@ -993,31 +977,39 @@ class MeasurementsController(ezui.WindowController):
 
             # no measurement value
             if distanceUnits is None:
-                item['units']   = None
-                item['permill'] = None
+                item['value']   = None
                 item['font']    = None
                 item['scale_f'] = None
                 item['glyph_f'] = None
 
             else:
-                item['units'] = distanceUnits
 
-                # calculate permille value
-                if distanceUnits and self.font.info.unitsPerEm:
-                    item['permill'] = round(distanceUnits * 1000 / self.font.info.unitsPerEm)
-                elif distanceUnits == 0:
-                    item['permill'] = 0
+                if not permill:
+                    item['value'] = distanceUnits
                 else:
-                    item['permill'] = None
+                    # calculate permille value
+                    if distanceUnits and self.font.info.unitsPerEm:
+                        distancePermill = round(distanceUnits * 1000 / self.font.info.unitsPerEm)
+                        item['value'] = distancePermill
+                    elif distanceUnits == 0:
+                        item['value'] = 0
+                    else:
+                        item['value'] = None
 
                 # get font-level value
                 if measurementName in fontValues:
                     distanceFont = fontValues.get(measurementName)
                     item['font'] = distanceFont
                     item['glyph_f'] = fontGlyphs.get(measurementName)
+
                     # calculate f-scale
+                    if not permill:
+                        distanceGlyph = distanceUnits
+                    else:
+                        distanceGlyph = distancePermill
+
                     if distanceUnits and distanceFont:
-                        item['scale_f'] = distanceUnits / distanceFont
+                        item['scale_f'] = distanceGlyph / distanceFont
                     else:
                         item['scale_f'] = None
 
@@ -1218,7 +1210,7 @@ class MeasurementsSubscriberGlyphEditor(Subscriber):
                     self.measurementsLayer.appendTextLineSublayer(
                         position=(cx, cy),
                         backgroundColor=color,
-                        text=f"{direction}:{item[self.controller.valueMode]}",
+                        text=f"{direction}:{item['value']}",
                         font="system",
                         weight="bold",
                         pointSize=9,
