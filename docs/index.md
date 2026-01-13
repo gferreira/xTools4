@@ -6,7 +6,7 @@ permalink : /
 
 <span class='badge bg-secondary rounded-0'>version {{ site.version }}</span>
 
-xTools4 is a collection of expert tools for (parametric) variable font production in [RoboFont 4].
+xTools4 is a collection of expert tools for variable font production in [RoboFont 4].
 {: .lead }
 
 [RoboFont 4]: http://robofont.com/

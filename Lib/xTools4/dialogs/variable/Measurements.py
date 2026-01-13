@@ -542,8 +542,9 @@ class MeasurementsController(ezui.WindowController):
         self.measurements['font'] = fontMeasurements
 
         # get JSON file path
-        jsonPath = self.measurementsPath
-        if not jsonPath:
+        if self.measurementsPath:
+            jsonPath = self.measurementsPath
+        else:
             jsonFileName = 'measurements.json'
             jsonPath = PutFile(message='Save measurements to JSON file:', fileName=jsonFileName)
             if jsonPath is None:

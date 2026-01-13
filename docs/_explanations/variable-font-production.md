@@ -1,5 +1,5 @@
 ---
-title     : Variable font production with xTools4
+title     : Expert tools for variable font production
 layout    : page
 permalink : /explanations/variable-font-production
 ---
@@ -12,7 +12,19 @@ Introducing the main ideas behind the variable font production tools in xTools4.
 
 
 Challenges in variable font production
--------------------------------------
+--------------------------------------
+
+{% comment %}
+
+rewrite incl. other general challenges:
+
+- visualizing variation in source font data (GlyphValidator + VarGlyphViewer + VarFontAssistant + VarGlyphAssistant + GlyphProofer)
+- creating measurements (Measurements tool + format + scales + production scripts: set UFO names, build parametric designspace)
+- editing glyph sources in RoboFont with temporary fonts (TempEdit + GlyphMeme + GlyphTuning + BlendsPreview + compatibility with other tools)
+- additional data formats linked to the designspace lib
+
+{% endcomment %}
+
 
 When working on variable font sources, the designer needs to know, at a glance, what is changing in a source in relation to the default.
 
@@ -22,6 +34,13 @@ Visual proof is not sufficient: glyphs that appear equal may be numerically diff
 
 As designspaces become larger, it becomes exponentially harder to keep track of what is changing where.
 
+While editing
+
+
+
+
+
+<!--
 
 What do we want to track for changes?
 -------------------------------------
@@ -100,3 +119,6 @@ Variable tools supporting color codes
 | [VarGlyphViewer](../reference/tools/variable/varglyph-viewer/) | <i class="bi bi-check2"></i> |   |
 {: .table .table-hover }
 
+
+
+-->

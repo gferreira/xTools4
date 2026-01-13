@@ -6,7 +6,7 @@ from xTools4.modules.linkPoints import *
 from xTools4.modules.measureHandles import getVector
 
 
-KEY = '{hDialog.key}.glyph.linkPoints'
+KEY = f'{hDialog.key}.glyph.linkPoints'
 
 
 class LinkPointsController(ezui.WindowController):

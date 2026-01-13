@@ -52,11 +52,11 @@ The **d-scale** (`A÷B`) is the scale of a font- or glyph-level measurement (`A`
 
 Example:
 
-| ref.    | description             | name   | glyph | source  | value |
-|---------|-------------------------|--------|-------|---------|-------|
-| `A`     | glyph-level measurement | `XOLC` | `u`   | current | 586   |
-| `B`     | glyph-level measurement | `XOLC` | `u`   | default | 168   |
-| `A÷B`   | d-scale                 |        |       |         | 3.488 |
+| ref.    | description                      | name   | glyph | source  | value |
+|---------|----------------------------------|--------|-------|---------|-------|
+| `A`     | font- or glyph-level measurement | `XOLC` | `u`   | current | 586   |
+| `B`     | font- or glyph-level measurement | `XOLC` | `u`   | default | 168   |
+| `A÷B`   |          d-scale                 |        |       |         | 3.488 |
 {: .table .table-hover }
 
 *“The thickness of a vertical stem in **u** is 348,8% thicker than that same stem in the default font.”*

@@ -59,7 +59,7 @@ class VarGlyphViewer(ezui.WindowController):
 
     [X] show default    @showDefault
     [X] show distance   @showValues
-    [X] selection only  @selectionOnly
+    [ ] selection only  @selectionOnly
 
     ((( – | + )))     @addSubtractButton
 

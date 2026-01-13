@@ -52,9 +52,9 @@ Display
 Color code
 ----------
 
-| <span class='blue'>blue circle</span> | neither x nor y values changing | 
-| <span class='red'>red line</span> | only x or y value changing | 
-| <span class='green'>green line</span> | both x and y values changing | 
+| <span class='blue'>blue</span>   | neither x nor y values changing | 
+| <span class='red'>red</span>     | only x or y value changing      | 
+| <span class='green'>green</span> | both x and y values changing    | 
 {: .table .table-hover }
 
 
