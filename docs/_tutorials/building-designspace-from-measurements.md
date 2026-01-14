@@ -4,4 +4,4 @@ layout    : default
 permalink : /tutorials/building-designspace-from-measurements/
 ---
 
-<span class='badge bg-danger rounded-0'>draft</span>
+<span class='badge bg-warning rounded-0'>draft</span>

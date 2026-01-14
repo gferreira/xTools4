@@ -7,8 +7,7 @@ permalink : /tutorials/creating-measurements/
 What measurements are, why they are useful, and how you can use them in your project.
 {: .lead }
 
-<span class='badge bg-danger rounded-0'>draft</span>
-
+<span class='badge bg-warning rounded-0'>draft</span>
 
 * Table of Contents
 {:toc}

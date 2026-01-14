@@ -30,9 +30,15 @@ Formats
 - [Rounding format](rounding-format)
 - [Custom designspace libs](custom-designspace-libs)
 - [Custom libs in temporary fonts](temp-font-libs)
-{% comment %}
-- [xProject (draft)](xproject)
-{% endcomment %}
+- [Color codes](color-codes)
+</div>
+
+<div class='col' markdown='1'>
+APIs
+----
+
+- [xProject](xproject)
+- [Measurements](measurements-api)
 </div>
 
 </div>
@@ -54,4 +60,3 @@ This documentation will be updated as more tools are updated or rewritten. Keep 
 {: .card-text }
 </div>
 </div>
-

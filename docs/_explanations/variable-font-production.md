@@ -34,13 +34,6 @@ Visual proof is not sufficient: glyphs that appear equal may be numerically diff
 
 As designspaces become larger, it becomes exponentially harder to keep track of what is changing where.
 
-While editing
-
-
-
-
-
-<!--
 
 What do we want to track for changes?
 -------------------------------------
@@ -90,7 +83,7 @@ Color codes
 Throughout the variable toolkit, two separate color codes are used consistently, allowing the designer to see everything he needs at a glance.
 
 <style>
-    ._ td:nth-child(1) { width: 200px; }
+._ td:nth-child(1) { width: 200px; }
 </style>
 
 ##### 1. Check colors
@@ -118,7 +111,3 @@ Variable tools supporting color codes
 | [VarFontAssistant](../reference/tools/variable/varfont-assistant/) | <i class="bi bi-check2"></i> |   |
 | [VarGlyphViewer](../reference/tools/variable/varglyph-viewer/) | <i class="bi bi-check2"></i> |   |
 {: .table .table-hover }
-
-
-
--->
