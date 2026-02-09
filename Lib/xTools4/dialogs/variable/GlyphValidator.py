@@ -149,12 +149,16 @@ class GlyphValidatorController(ezui.WindowController):
     # callbacks
 
     def getDesignspaceButtonCallback(self, sender):
-        self.designspacePath = GetFile(
+        designspacePath = GetFile(
             message='Select designspace file:',
             title=self.title, 
             allowsMultipleSelection=False,
             fileTypes=["designspace"]
         )
+        if not designspacePath:
+            return
+
+        self.designspacePath = designspacePath
         self.designspace = DesignSpaceDocument()
         self.designspace.read(self.designspacePath)
         # get default font

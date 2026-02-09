@@ -137,8 +137,6 @@ class GlyphTuningController(ezui.WindowController):
         if self.verbose:
             print('done.\n')
 
-        # self._loadTuningSources()
-        # self._loadAxes()
         self._loadSmartSets()
 
     def _loadSmartSets(self):
@@ -171,33 +169,16 @@ class GlyphTuningController(ezui.WindowController):
         if self.verbose:
             print('done.\n')
 
-    # def _loadAxes(self):
-    #     if self.verbose:
-    #         print(f'loading blended axes... ', end='')
-
-    #     axesItems = []
-    #     for axis in self.designspace.axes:
-    #         for axisName in self.blendedAxes:
-    #             if axisName in self.ignoreAxes or axisName.startswith('TN'):
-    #                 continue
-    #             if axisName == axis.name:
-    #                 axesItems.append({
-    #                     'axis' : axis.tag,
-    #                     'values': f'{int(axis.minimum)} {int(axis.default)} {int(axis.maximum)}',
-    #                 })
-
-    #     self.w.getItem('axesList').set(axesItems)
-
     def getDesignspaceButtonCallback(self, sender):
-        self.designspacePath = GetFile(
+        designspacePath = GetFile(
             message='Select designspace file:',
             title=self.title, 
             allowsMultipleSelection=False,
             fileTypes=["designspace"]
         )
-        if self.designspacePath is None:
+        if designspacePath is None:
             return
-
+        self.designspacePath = designspacePath
         self._loadDesignspace()
 
     def groupSelectorCallback(self, sender):

@@ -6,19 +6,40 @@ permalink : /tutorials/creating-parametric-sources/
 
 <span class='badge bg-warning rounded-0'>draft</span>
 
+- [XOPQ](XOPQ)
+- [YOPQ](YOPQ)
+- [XTRA](XTRA)
+- [YTRA](YTRA)
+- [XTSP](XTSP)
 
-XOPQ
-----
+### Serifs
 
-### Glyphs with slanted strokes
+- [XSHA](creating-parametric-sources_XSHA)
+- [YSHA](creating-parametric-sources_YSHA)
 
-- keep the slant angle!
+<!--
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 YOPQ
 ----
 
-...
+### Diagonals
+
+- keep the angle of the slanted stem
+
 
 
 XTRA
@@ -27,10 +48,12 @@ XTRA
 ...
 
 
+
 YTRA
 ----
 
 ...
+
 
 
 XTSP
@@ -39,14 +62,31 @@ XTSP
 ...
 
 
+
 XSHA
 ----
 
 ...
 
 
+
 YSHA
+----
+
+### Diagonals
+
+- keep the center alignment of the horizontal serif (change slante stem angle)
+
+
+XSVA
 ----
 
 ...
 
+
+YSVA
+----
+
+...
+
+-->

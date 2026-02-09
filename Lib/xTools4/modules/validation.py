@@ -488,6 +488,17 @@ def findUnwantedQuadraticOffCurvePoints(font):
 
     print('...done.\n')
 
+def findUnwantedQuadraticOffCurvePointsInGlyph(glyph):
+
+    print(f'checking glyph {glyph.name}:\n')
+    for contour in glyph.contours:
+        for segment in contour.segments:
+            if len(segment) in [1, 3]:
+                continue
+            print(f'- segment #{segment.index} has {len(segment)-1} off-curve point{"s" if len(segment)-1 !=1 else ""}')
+    print('\n...done.\n')
+
+
 # ----------------------
 # designspace validation
 # ----------------------

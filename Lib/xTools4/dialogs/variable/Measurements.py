@@ -87,7 +87,7 @@ class MeasurementsController(ezui.WindowController):
     key         = KEY
     buttonWidth = 75
     colWidth    = 55
-    verbose     = False
+    verbose     = True
 
     measurementsPath = None
     measurements = {
@@ -95,6 +95,7 @@ class MeasurementsController(ezui.WindowController):
         'glyphs' : {},
     }
 
+    designspace = None
     font        = None
     glyph       = None
     defaultFont = None
@@ -492,6 +493,8 @@ class MeasurementsController(ezui.WindowController):
 
     @property
     def measurementsPath(self):
+        if not self.designspace:
+            return
         fileName = self.designspace.lib.get(measurementsPathKey)
         if fileName:
             return os.path.join(self.sourcesFolder, fileName)
@@ -507,21 +510,22 @@ class MeasurementsController(ezui.WindowController):
     # ---------
 
     def getDesignspaceButtonCallback(self, sender):
-        self.designspacePath = GetFile(
+        designspacePath = GetFile(
             message='Select designspace file:',
             title=self.title, 
             allowsMultipleSelection=False,
             fileTypes=["designspace"]
         )
-
-        if self.designspacePath is None:
+        if designspacePath is None:
             return
+        self.designspacePath = designspacePath
         self._loadDesignspace()
 
     def reloadButtonCallback(self, sender):
         self._loadDesignspace()
 
     def saveButtonCallback(self, sender):
+
         self._updateGlyphMeasurementsDict()
 
         fontItems = self.w.getItem("fontMeasurements").get()
@@ -541,24 +545,34 @@ class MeasurementsController(ezui.WindowController):
 
         self.measurements['font'] = fontMeasurements
 
-        # get JSON file path
-        if self.measurementsPath:
-            jsonPath = self.measurementsPath
-        else:
-            jsonFileName = 'measurements.json'
-            jsonPath = PutFile(message='Save measurements to JSON file:', fileName=jsonFileName)
-            if jsonPath is None:
-                if self.verbose:
-                    print('[cancelled]\n')
+        if not self.designspace:
+            designspacePath = GetFile(
+                message='Select designspace file:',
+                title=self.title, 
+                allowsMultipleSelection=False,
+                fileTypes=["designspace"]
+            )
+            if designspacePath is None:
                 return
 
-        if os.path.exists(jsonPath):
-            os.remove(jsonPath)
+            self.designspacePath = designspacePath
+
+            # store the name of the measurements file in the designspace lib
+            if self.verbose:
+                print('saving path to measurements file in the designspace lib…')
+            self.designspace = DesignSpaceDocument()
+            self.designspace.read(self.designspacePath)
+            if measurementsPathKey not in self.designspace.lib:
+                self.designspace.lib[measurementsPathKey] = 'measurements.json'
+            self.designspace.write(self.designspacePath)
+
+        if os.path.exists(self.measurementsPath):
+            os.remove(self.measurementsPath)
 
         if self.verbose:
-            print(f'saving measurements to {jsonPath}...', end=' ')
+            print(f'saving measurements to {self.measurementsPath}...', end=' ')
 
-        with open(jsonPath, 'w', encoding='utf-8') as f:
+        with open(self.measurementsPath, 'w', encoding='utf-8') as f:
             json.dump(self.measurements, f, indent=2)
 
         if self.verbose:
@@ -800,7 +814,7 @@ class MeasurementsController(ezui.WindowController):
         self._loadGlyphMeasurements()
 
         if self.verbose:
-            print(f'loading default source from {os.path.split(defaultPath)[-1]}... ', end='')
+            print(f'loading default source from {os.path.split(self.defaultPath)[-1]}... ', end='')
 
         self.defaultFont = OpenFont(self.defaultPath, showInterface=False)
 
@@ -866,6 +880,8 @@ class MeasurementsController(ezui.WindowController):
             if not self.glyph or not isTempFont:
                 distanceUnits = M.measure(self.font, italicCorrection=italicCorrection)
             else:
+                # print(item['name'], self.glyph.lib[fontMeasurementsKey][item['name']])
+
                 # if the font is temporary, get stored measurement values from the glyph lib
                 if isTempFont and fontMeasurementsKey in self.glyph.lib:
                     distanceUnits = self.glyph.lib[fontMeasurementsKey][item['name']]
@@ -1092,6 +1108,7 @@ class MeasurementsSubscriberRoboFont(Subscriber):
                 return
         self.controller._updateGlyphMeasurementsDict()
         self.controller.glyph = info["glyph"]
+        self.controller._updateFontMeasurements()
         self.controller._loadGlyphMeasurements()
         self.controller._updateGlyphMeasurements()
 
