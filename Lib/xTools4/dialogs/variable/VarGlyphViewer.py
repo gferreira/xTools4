@@ -1,4 +1,5 @@
 import ezui
+from math import atan, degrees
 from mojo.UI import GetFile
 from mojo.roboFont import OpenWindow, OpenFont
 from mojo.subscriber import Subscriber, registerSubscriberEvent, roboFontSubscriberEventRegistry, registerGlyphEditorSubscriber, unregisterGlyphEditorSubscriber
@@ -39,6 +40,16 @@ def getImplicitSelectedPoints(glyph):
                         bcpOut = nextSegment[0]
                         pts.append(bcpOut)
     return pts
+
+def getAngle(p1, p2):
+    a = p2.x - p1.x
+    b = p2.y - p1.y
+    if a != 0:
+        angleRadians = atan(float(b) / a)
+        angleDegrees = degrees(angleRadians)
+    else:
+        angleDegrees = 0
+    return angleDegrees
 
 
 class VarGlyphViewer(ezui.WindowController):
@@ -219,8 +230,8 @@ class VarGlyphViewerSubscriberGlyphEditor(Subscriber):
             return
 
         selectionOnly = self.controller.w.getItem('selectionOnly').get()
-        showEqual     = True # self.controller.w.getItem('showEqual').get()
-        showDeltas    = True # self.controller.w.getItem('showDeltas').get()
+        showEqual     = True
+        showDeltas    = True
         showValues    = self.controller.w.getItem('showValues').get()
         showDefault   = self.controller.w.getItem('showDefault').get()
         preview       = self.controller.w.getItem("preview").get()
@@ -243,6 +254,16 @@ class VarGlyphViewerSubscriberGlyphEditor(Subscriber):
 
         selectedPoints = getImplicitSelectedPoints(self.controller.glyph)
 
+        italicAngle = self.controller.glyph.font.info.italicAngle
+
+        if italicAngle:
+            g1_ = defaultGlyph.copy()
+            g1_.skewBy((italicAngle, 0))
+            g1_.round()
+            g2_ = self.controller.glyph.copy()
+            g2_.skewBy((italicAngle, 0))
+            g2_.round()
+
         with self.displayLayer.sublayerGroup():
 
             #-------------
@@ -251,11 +272,15 @@ class VarGlyphViewerSubscriberGlyphEditor(Subscriber):
 
             for ci, c in enumerate(self.controller.glyph):
                 for pi, p in enumerate(c.points):
-
                     p2 = defaultGlyph.contours[ci].points[pi]
+                    isEqual = p2.x == p.x and p2.y == p.y
 
-                    isOrthogonal = p.x == p2.x or  p.y == p2.y
-                    isEqual      = p.x == p2.x and p.y == p2.y
+                    if italicAngle:
+                        p1_ = g1_.contours[ci].points[pi]
+                        p2_ = g2_.contours[ci].points[pi]
+                        isOrthogonal = p2_.x == p1_.x or p2_.y == p1_.y
+                    else:
+                        isOrthogonal = p2.x == p.x or p2.y == p.y
 
                     color   = colorCheckTrue   if isOrthogonal else colorCheckFalse
                     colorBG = colorCheckTrueBG if isOrthogonal else colorCheckFalseBG
@@ -296,15 +321,20 @@ class VarGlyphViewerSubscriberGlyphEditor(Subscriber):
 
                                 cx = p.x + (p2.x - p.x) * 0.5
                                 cy = p.y + (p2.y - p.y) * 0.5
+
+                                if italicAngle:
+                                    deltaX = p2_.x - p1_.x
+                                    deltaY = p2_.y - p1_.y
+                                else:
+                                    deltaX = p2.x - p.x
+                                    deltaY = p2.y - p.y
+
                                 caption = ''
-                                if p2.x != p.x:
-                                    # if not isOrthogonal:
-                                    #     caption += 'x:'
-                                    caption += f'{int(p.x - p2.x)} '
-                                if p2.y != p.y:
-                                    # if not isOrthogonal:
-                                    #     caption += 'y:'
-                                    caption += f'{int(p.y - p2.y)}'
+
+                                if deltaX:
+                                    caption += f'{int(deltaX)} '
+                                if deltaY:
+                                    caption += f'{int(deltaY)}'
 
                                 self.displayLayer.appendTextLineSublayer(
                                     position=(cx, cy),
@@ -327,12 +357,19 @@ class VarGlyphViewerSubscriberGlyphEditor(Subscriber):
             for ai, a in enumerate(self.controller.glyph.anchors):
                 if selectionOnly and not a.selected:
                     continue
-                a2 = defaultGlyph.anchors[ai]
 
-                isOrthogonal = a.x == a2.x or  a.y == a2.y
-                isEqual      = a.x == a2.x and a.y == a2.y
+                a2 = defaultGlyph.anchors[ai]
+                isEqual = a.x == a2.x and a.y == a2.y
+
+                if italicAngle:
+                    a1_ = g1_.anchors[ai]
+                    a2_ = g2_.anchors[ai]
+                    isOrthogonal = a2_.x == a1_.x or a2_.y == a1_.y
+                else:
+                    isOrthogonal = a2.x == a.x or a2.y == a.y
+
                 color = colorCheckTrue if isOrthogonal else colorCheckFalse
-                colorBG = color[0], color[1], color[2], 0.35
+                colorBG = colorCheckTrueBG if isOrthogonal else colorCheckFalseBG
 
                 if a.x == a2.x and a.y == a2.y:
                     if showEqual:
@@ -372,15 +409,20 @@ class VarGlyphViewerSubscriberGlyphEditor(Subscriber):
                         if showValues:
                             cx = a.x + (a2.x - a.x) * 0.5
                             cy = a.y + (a2.y - a.y) * 0.5
+
+                            if italicAngle:
+                                deltaX = a2_.x - a1_.x
+                                deltaY = a2_.y - a1_.y
+                            else:
+                                deltaX = a2.x - a.x
+                                deltaY = a2.y - a.y
+
                             caption = ''
-                            if a2.x != a.x:
-                                # if not isOrthogonal:
-                                #     caption += 'x:'
-                                caption += f'{int(a.x - a2.x)} '
-                            if a2.y != a.y:
-                                # if not isOrthogonal:
-                                #     caption += 'y:'
-                                caption += f'{int(a.y - a2.y)}'
+
+                            if deltaX:
+                                caption += f'{int(deltaX)} '
+                            if deltaY:
+                                caption += f'{int(deltaY)}'
 
                             self.displayLayer.appendTextLineSublayer(
                                 position=(cx, cy),

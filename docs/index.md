@@ -60,7 +60,7 @@ tutorials
 
 {% endcomment %}
 
-<div id="carouselMain" class="carousel carousel-dark slide" data-bs-ride="carousel">
+<div id="carouselMain" class="carousel carousel-dark slide" data-bs-ride="carousel" style="height:800px;">
   <div class="carousel-inner">
     <div class="carousel-item active">
       <img src="{{ site.url }}/images/variable/Measurements_glyph.png" class="d-block w-100" />

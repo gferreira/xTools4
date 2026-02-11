@@ -17,7 +17,7 @@ Uppercase
 
 ### Straight glyphs
 
-##### YOUC min
+##### YOPQ min
 
 <div class='row'>
 <div class='col' markdown=1>
@@ -28,7 +28,16 @@ Uppercase
 </div>
 </div>
 
-##### YOUC max
+<div class='row'>
+<div class='col' markdown=1>
+![]({{ site.url }}/images/parametric/AmstelvarA2-Italic_H_YOUCmin_glyph.png){: .img-fluid}
+</div>
+<div class='col' markdown=1>
+![]({{ site.url }}/images/parametric/AmstelvarA2-Italic_H_YOUCmin_measurements.png){: .img-fluid}
+</div>
+</div>
+
+##### YOPQ max
 
 <div class='row'>
 <div class='col' markdown=1>
@@ -39,9 +48,18 @@ Uppercase
 </div>
 </div>
 
+<div class='row'>
+<div class='col' markdown=1>
+![]({{ site.url }}/images/parametric/AmstelvarA2-Italic_H_YOUCmax_glyph.png){: .img-fluid}
+</div>
+<div class='col' markdown=1>
+![]({{ site.url }}/images/parametric/AmstelvarA2-Italic_H_YOUCmax_measurements.png){: .img-fluid}
+</div>
+</div>
+
 ### Round glyphs
 
-##### YOUC min
+##### YOPQ min
 
 <div class='row'>
 <div class='col' markdown=1>
@@ -52,7 +70,16 @@ Uppercase
 </div>
 </div>
 
-##### YOUC max
+<div class='row'>
+<div class='col' markdown=1>
+![]({{ site.url }}/images/parametric/AmstelvarA2-Italic_O_YOUCmin_glyph.png){: .img-fluid}
+</div>
+<div class='col' markdown=1>
+![]({{ site.url }}/images/parametric/AmstelvarA2-Italic_O_YOUCmin_measurements.png){: .img-fluid}
+</div>
+</div>
+
+##### YOPQ max
 
 <div class='row'>
 <div class='col' markdown=1>
@@ -65,7 +92,7 @@ Uppercase
 
 ### Diagonal glyphs
 
-##### YOUC min
+##### YOPQ min
 
 <div class='row'>
 <div class='col' markdown=1>
@@ -85,7 +112,7 @@ Uppercase
 </div>
 </div>
 
-##### YOUC max
+##### YOPQ max
 
 <div class='row'>
 <div class='col' markdown=1>
