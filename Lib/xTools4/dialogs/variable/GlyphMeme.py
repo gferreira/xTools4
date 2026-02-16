@@ -6,6 +6,7 @@ from mojo.smartSet import readSmartSets
 from fontTools.designspaceLib import DesignSpaceDocument
 from fontTools.ufoLib.glifLib import GlyphSet
 from xTools4.modules.linkPoints2 import readMeasurements
+from xTools4.modules.fontutils import getGlyphs2
 from xTools4.modules.measurements import FontMeasurements, GlyphMeasurements
 from xTools4.modules.xproject import measurementsPathKey, smartSetsPathKey
 from xTools4.dialogs.variable.old.TempEdit import setupNewFont, splitall
@@ -293,7 +294,9 @@ class GlyphMemeController(ezui.WindowController):
 
         print('saving selected glyphs...\n')
 
-        for glyphName in f.selectedGlyphNames:
+        glyphNames = getGlyphs2(f, glyphNames=True)
+
+        for glyphName in glyphNames:
 
             glyph = f[glyphName].getLayer('foreground')
 

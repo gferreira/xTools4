@@ -348,3 +348,4 @@ def copyGlyphMeasurements(measurementsPathSrc, measurementsPathDst, glyphNames):
         json.dump(measurementsDst, f, indent=2)
 
     print('...done.\n')
+

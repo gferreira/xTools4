@@ -197,7 +197,7 @@ def checkEqualWidth(g1, g2):
     '''
     return g1.width == g2.width
 
-def checkEqualMarginLeft(g1, g2, roundToInt=True):
+def checkEqualMarginLeft(g1, g2, roundToInt=True, angled=True):
     '''
     Check if the left margin of two glyphs are equal.
 
@@ -208,12 +208,16 @@ def checkEqualMarginLeft(g1, g2, roundToInt=True):
         return True
     elif not g1.bounds or not g2.bounds:
         return False
-    if roundToInt:
-        return round(g1.leftMargin) == round(g2.leftMargin)
-    else:
-        return g1.leftMargin == g2.leftMargin
 
-def checkEqualMarginRight(g1, g2, roundToInt=True):
+    leftMargin1 = g1.angledLeftMargin if angled else g1.leftMargin
+    leftMargin2 = g2.angledLeftMargin if angled else g2.leftMargin
+
+    if roundToInt:
+        return round(leftMargin1) == round(leftMargin2)
+    else:
+        return leftMargin1 == leftMargin2
+
+def checkEqualMarginRight(g1, g2, roundToInt=True, angled=True):
     '''
     Check if the right margin of two glyphs are equal.
 
@@ -224,10 +228,14 @@ def checkEqualMarginRight(g1, g2, roundToInt=True):
         return True
     elif not g1.bounds or not g2.bounds:
         return False
+
+    rightMargin1 = g1.angledRightMargin if angled else g1.rightMargin
+    rightMargin2 = g2.angledRightMargin if angled else g2.rightMargin
+
     if roundToInt:
-        return round(g1.rightMargin) == round(g2.rightMargin)
+        return round(rightMargin1) == round(rightMargin2)
     else:
-        return g1.rightMargin == g2.rightMargin
+        return rightMargin1 == rightMargin2
 
 def checkEqualUnicodes(g1, g2):
     '''

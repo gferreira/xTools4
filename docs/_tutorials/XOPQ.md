@@ -82,6 +82,11 @@ Uppercase
 
 - only x-direction deltas (?)
 
+<div class="alert alert-warning" role="alert" markdown=1>
+In AmstelvarA2 Italic, should we add some rotation with y-deltas? See [XTRA / Round glyphs](../XTRA/#round-glyphs).
+{: .card-text }
+</div>
+
 ##### XOPQ max
 
 <div class='row'>
@@ -147,6 +152,10 @@ Uppercase
 - in AmstelvarA2, slanted measurements are aligned to stroke
 - XTRA may change slightly to accommodate angles
 
+<div class="alert alert-warning" role="alert">
+In RobotoDelta, the angle of slanted strokes is different from the default.
+</div>
+
 ##### XOPQ max
 
 <div class='row'>
@@ -176,10 +185,6 @@ Uppercase
 </div>
 </div>
 
-<div class="alert alert-warning" role="alert">
-In RobotoDelta, the angle of slanted strokes is different from the default.
-</div>
-
 ##### XOPQ min
 
 <div class='row'>
@@ -207,10 +212,6 @@ In RobotoDelta, the angle of slanted strokes is different from the default.
 <div class='col' markdown=1>
 ![]({{ site.url }}/images/parametric/RobotoDelta_V_XOUCmin_measurements.png){: .img-fluid}
 </div>
-</div>
-
-<div class="alert alert-warning" role="alert">
-In RobotoDelta, the angle of slanted strokes is different from the default.
 </div>
 
 ### Single-stem glyphs
