@@ -438,6 +438,7 @@ class VarGlyphViewerSubscriberGlyphEditor(Subscriber):
                                 verticalAlignment='center',
                             )
 
+
 eventName = f"{VarGlyphViewer.key}.changed"
 
 if eventName not in roboFontSubscriberEventRegistry:

@@ -2,15 +2,24 @@ import os
 import drawBot as DB
 from fontParts.world import OpenFont
 from fontTools.designspaceLib import DesignSpaceDocument
+from fontTools.ufoLib.glifLib import glyphNameToFileName
 from xTools4.modules.linkPoints2 import readMeasurements
 from xTools4.modules.xproject import measurementsPathKey
+from xTools4.modules.measurements import Measurement
+from xTools4.modules.validation import *
+from xTools4.dialogs.variable.Measurements import colorCheckTrue, colorCheckFalse, colorCheckEqual
+
+
+colorCheckTrueBG  = 0.7, 1.0, 0.7, 0.85
+colorCheckFalseBG = 1.0, 0.7, 0.7, 0.85
+
 
 class GlyphMemeProofer:
     
     glyphScale = 0.3
     canvasWidth = canvasHeight = 850
 
-    panelWidth = canvasWidth / 4
+    panelWidth = canvasWidth * 0.3
 
     captionDraw = True
     captionSize = 13
@@ -40,8 +49,11 @@ class GlyphMemeProofer:
     measurementsDraw = True
 
     defaultDraw = True
+    defaultThreshold = 0.1
 
     deltasDraw = True
+
+    validationDraw = True
 
     verbose = False
     
@@ -110,6 +122,9 @@ class GlyphMemeProofer:
         boxY = (self.canvasHeight - boxHeight) * 0.5
         boxWidth = glyph.width * self.glyphScale
 
+        defaultFont = OpenFont(self.designspace.default.path, showInterface=False)
+        defaultGlyph = defaultFont[glyph.name]
+
         DB.newPage(self.canvasWidth + self.panelWidth, self.canvasHeight)
         DB.blendMode('multiply')
 
@@ -129,6 +144,7 @@ class GlyphMemeProofer:
                     metricY = y + metricY * self.glyphScale
                     DB.line((0, metricY), (self.canvasWidth, metricY))
 
+        # draw glyph
         with DB.savedState(): 
             DB.strokeWidth(self.glyphWidthStroke)
             if self.glyphColorStroke is None:
@@ -213,29 +229,144 @@ class GlyphMemeProofer:
                     DB.textBox(f'{glyph.leftMargin}', captionBox, align='left')
                     DB.textBox(f'{glyph.rightMargin}', captionBox, align='right')
 
-            if self.measurementsDraw:
+        if self.measurementsDraw:
 
-                panelX = self.canvasWidth + self.captionSize
-                panelY = self.captionSize
-                panelW = self.panelWidth - self.captionSize * 2
-                panelH = self.canvasHeight - self.captionSize * 2
-                panelBox = panelX, panelY, panelW, panelH
+            panelX = self.canvasWidth + self.captionSize
+            panelY = self.captionSize
+            panelW = self.panelWidth - self.captionSize * 2
+            panelH = self.canvasHeight - self.captionSize * 2
+            panelBox = panelX, panelY, panelW, panelH
 
-                txt = ''
-                for k, v in self.glyphMeasurements.items():
-                    pt1, pt2 = k.split()
-                    txt += f"{v['name']}\t{pt1}\t{pt2}\n"
+            char = 7
 
-                print(txt)
+            T = DB.FormattedString()
+            T.tabs((char*7, "left"), (char*12, "left"), (char*17, "left"), (char*24, "left"))
+            T.font(self.captionFont)
+            T.fontSize(self.captionSize)
+            T.stroke(None)
+            T.fill(*self.captionColor)
+            T.append('name\tp1\tp2\tunits\tscale\n')
+            T.append(f'{"-"*27}\n')
 
+            for k, v in self.glyphMeasurements.items():
+                pt1, pt2 = k.split()
+
+                M = Measurement(
+                    v['name'],
+                    v['direction'],
+                    glyph.name, pt1,
+                    glyph.name, pt2,
+                )
+                value = M.measure(glyph.font, italicCorrection=True)
+                valueDefault = M.measure(defaultFont, italicCorrection=True)
+                scaleDefault = value / valueDefault
+
+                if scaleDefault is None:
+                    color = colorCheckNone
+                elif scaleDefault == 1:
+                    color = colorCheckEqual
+                elif (1.0 - self.defaultThreshold) < scaleDefault < (1.0 + self.defaultThreshold):
+                    color = colorCheckTrue
+                else:
+                    color = colorCheckFalse
+
+                T.fill(*self.captionColor)
+                T.append(f"{v['name']}\t{pt1}\t{pt2}\t{value}\t")
+
+                T.fill(*color)
+                T.append(f"{scaleDefault:.2f}\n")
+
+            DB.textBox(T, panelBox, align='left')
+
+        if self.deltasDraw:
+            if self.defaultDraw:
                 with DB.savedState():
-                    # DB.fill(1, 0, 0, 0.1)
-                    # DB.rect(*panelBox)
-                    DB.font(self.captionFont)
-                    DB.fontSize(self.captionSize)
-                    DB.fill(*self.captionColor)
-                    DB.textBox(txt, panelBox, align='left')
+                    DB.strokeWidth(self.glyphWidthStroke)
+                    if self.glyphColorStroke is None:
+                        DB.stroke(self.glyphColorStroke)
+                    else:
+                        DB.stroke(*self.glyphColorStroke)
+                    DB.fill(None)
+                    DB.lineDash(self.glyphWidthStroke, self.glyphWidthStroke)
+                    DB.lineJoin('round')
+                    DB.translate(x, y)
 
+                    with DB.savedState():
+                        DB.scale(self.glyphScale)
+                        DB.drawGlyph(defaultGlyph)
 
+                    dash = 2, 2
+                    r = self.pointsRadius * self.glyphScale
+                    r2 = 6
+                    s =  self.glyphScale
+
+                    DB.lineDash(None)
+                    for ci, c in enumerate(glyph):
+                        for pi, p in enumerate(c.points):
+                            p2 = defaultGlyph.contours[ci].points[pi]
+                            isEqual = p2.x == p.x and p2.y == p.y
+                            isOrthogonal = p2.x == p.x or p2.y == p.y
+
+                            color   = colorCheckTrue   if isOrthogonal else colorCheckFalse
+                            colorBG = colorCheckTrueBG if isOrthogonal else colorCheckFalseBG
+
+                            if isEqual:
+                                DB.stroke(*colorCheckEqual)
+                                DB.strokeWidth(2)
+                                DB.fill(None)
+                                DB.oval(p2.x * s - r2, p2.y * s - r2, r2*2, r2*2)
+
+                            else:
+                                DB.stroke(*color)
+                                DB.strokeWidth(1)
+                                DB.line((p.x * s, p.y * s), (p2.x * s, p2.y * s))
+
+                                DB.stroke(None)
+                                DB.fill(*self.pointsColorFill)
+                                DB.oval(p2.x * s - r, p2.y * s - r, r*2, r*2)
+
+        if self.validationDraw:
+
+            checkResults = {
+                'compatibility' : checkCompatibility(glyph, defaultGlyph),
+                'equality'      : checkEquality(glyph, defaultGlyph),
+            }
+
+            T = DB.FormattedString()
+            T.fontSize(self.captionSize)
+            T.stroke(None)
+            T.fill(*self.captionColor)
+
+            for checkName, isEqual in checkResults['equality'].items():
+                isCompatible = checkResults['compatibility'].get(checkName)
+                if isCompatible and isEqual:
+                    color = colorCheckEqual
+                elif isCompatible or isEqual:
+                    color = colorCheckTrue
+                else:
+                    color = colorCheckFalse
+
+                T.fill(*color)
+                T.append(f'{checkName[0].upper()} ')
+
+            vX = self.canvasWidth + self.captionSize
+            vY = self.captionSize
+
+            DB.text(T, (vX, vY))
+
+    def save(self, folder, fileName):
+
+        glifName = os.path.splitext(glyphNameToFileName(self.glyphName, None))[0]
+        pdfFileName = f'{fileName}_{glifName}.pdf'
+
+        pdfPath = os.path.join(folder, pdfFileName)
+        if os.path.exists(pdfPath):
+            os.remove(pdfPath)
+
+        print(f'saving {pdfFileName}...', end=' ')
+
+        DB.saveImage(pdfPath)
+
+        print(os.path.exists(pdfPath))
 
 
