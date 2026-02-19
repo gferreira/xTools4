@@ -218,14 +218,147 @@ In RobotoDelta, the width and length of traps is different from the default
 Lowercase
 ---------
 
+### Straight glyphs
+
+- only XTRA changes
+- only x-direction deltas
+
+##### XTRA min
+
+<div class='row'>
+<div class='col' markdown=1>
+![]({{ site.url }}/images/parametric/AmstelvarA2_n_XTLCmin_glyph){: .img-fluid}
+</div>
+<div class='col' markdown=1>
+![]({{ site.url }}/images/parametric/AmstelvarA2_n_XTLCmin_measurements{: .img-fluid}
+</div>
+</div>
+
+##### XTRA max
+
+<div class='row'>
+<div class='col' markdown=1>
+![]({{ site.url }}/images/parametric/AmstelvarA2_n_XTLCmax_glyph){: .img-fluid}
+</div>
+<div class='col' markdown=1>
+![]({{ site.url }}/images/parametric/AmstelvarA2_n_XTLCmax_measurements){: .img-fluid}
+</div>
+</div>
+
+### Round glyphs
+
+- in AmstelvarA2, internal curvature is controlled separately by XTEQ YTEQ parametric axes
+- in Italics, xy-direction deltas are allowed for slanted & rotated shapes
+
+##### XTRA min
+
+<div class='row'>
+<div class='col' markdown=1>
+![]({{ site.url }}/images/parametric/AmstelvarA2_o_XTLRmin_glyph){: .img-fluid}
+</div>
+<div class='col' markdown=1>
+![]({{ site.url }}/images/parametric/AmstelvarA2_o_XTLRmin_measurements){: .img-fluid}
+</div>
+</div>
+
+##### XTRA max
+
+<div class='row'>
+<div class='col' markdown=1>
+![]({{ site.url }}/images/parametric/AmstelvarA2_o_XTLRmax_glyph){: .img-fluid}
+</div>
+<div class='col' markdown=1>
+![]({{ site.url }}/images/parametric/AmstelvarA2_o_XTLRmax_measurements{: .img-fluid}
+</div>
+</div>
+
+### Diagonal glyphs
+
+- xy-direction deltas allowed in slanted strokes
+- in AmstelvarA2, slanted measurements are aligned to stroke
+- in AmstelvarA2 Italic, XOPQ may change slightly (?)
+
+##### XTRA min
+
+<div class='row'>
+<div class='col' markdown=1>
+![]({{ site.url }}/images/parametric/AmstelvarA2_v_XTLDmin_glyph){: .img-fluid}
+</div>
+<div class='col' markdown=1>
+![]({{ site.url }}/images/parametric/AmstelvarA2_v_XTLDmin_measurements{: .img-fluid}
+</div>
+</div>
+
+##### XTRA max
+
+<div class='row'>
+<div class='col' markdown=1>
+![]({{ site.url }}/images/parametric/AmstelvarA2_v_XTLDmax_glyph){: .img-fluid}
+</div>
+<div class='col' markdown=1>
+![]({{ site.url }}/images/parametric/AmstelvarA2_v_XTLDmax_measurements){: .img-fluid}
+</div>
+</div>
+
 ...
 
 
 Figures
 -------
 
-...
+### Straight glyphs
 
+- only XTRA changes
+- only x-direction deltas
+
+##### XTRA min
+
+<div class='row'>
+<div class='col' markdown=1>
+![]({{ site.url }}/images/parametric/AmstelvarA2_one_XTFImin_glyph){: .img-fluid}
+</div>
+<div class='col' markdown=1>
+![]({{ site.url }}/images/parametric/AmstelvarA2_one_XTFImin_measurements{: .img-fluid}
+</div>
+</div>
+
+##### XTRA max
+
+<div class='row'>
+<div class='col' markdown=1>
+![]({{ site.url }}/images/parametric/AmstelvarA2_one_XTFImax_glyph){: .img-fluid}
+</div>
+<div class='col' markdown=1>
+![]({{ site.url }}/images/parametric/AmstelvarA2_one_XTFImax_measurements){: .img-fluid}
+</div>
+</div>
+
+### Round glyphs
+
+- in AmstelvarA2, internal curvature is controlled separately by XTEQ YTEQ parametric axes
+- in Italics, xy-direction deltas are allowed for slanted & rotated shapes
+
+##### XTRA min
+
+<div class='row'>
+<div class='col' markdown=1>
+![]({{ site.url }}/images/parametric/AmstelvarA2_zero_XTFImin_glyph){: .img-fluid}
+</div>
+<div class='col' markdown=1>
+![]({{ site.url }}/images/parametric/AmstelvarA2_zero_XTFImin_measurements){: .img-fluid}
+</div>
+</div>
+
+##### XTRA max
+
+<div class='row'>
+<div class='col' markdown=1>
+![]({{ site.url }}/images/parametric/AmstelvarA2_zero_XTFImax_glyph){: .img-fluid}
+</div>
+<div class='col' markdown=1>
+![]({{ site.url }}/images/parametric/AmstelvarA2_zero_XTFImax_measurements{: .img-fluid}
+</div>
+</div>
 
 Etcetera
 --------

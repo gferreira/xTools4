@@ -261,14 +261,192 @@ In RobotoDelta, the angle of slanted strokes is different from the default.
 Lowercase
 ---------
 
-...
+### Straight glyphs
 
+- XOLC changes
+- YOLC changes on XOLC max because of /n's shoulder translation
+- Mostly x-direction deltas and a little bit of y-direction deltas in XOLC max
+- Only x-direction delta in XOLC min
+
+##### XOPQ max
+
+<div class='row'>
+<div class='col' markdown=1>
+![]({{ site.url }}/images/parametric/AmstelvarA2_n_XOLCmax_glyph){: .img-fluid}
+</div>
+<div class='col' markdown=1>
+![]({{ site.url }}/images/parametric/AmstelvarA2_n_XOLCmax_measurements){: .img-fluid}
+</div>
+</div>
+
+<div class='row'>
+<div class='col' markdown=1>
+![]({{ site.url }}/images/parametric/RobotoDelta_n_XOLCmax_glyph){: .img-fluid}
+</div>
+<div class='col' markdown=1>
+![]({{ site.url }}/images/parametric/RobotoDelta_n_XOLCmax_measurements){: .img-fluid}
+</div>
+</div>
+
+##### XOPQ min
+
+<div class='row'>
+<div class='col' markdown=1>
+![]({{ site.url }}/images/parametric/AmstelvarA2_n_XOLCmin_glyph){: .img-fluid}
+</div>
+<div class='col' markdown=1>
+![]({{ site.url }}/images/parametric/AmstelvarA2_n_XOLCmin_measurements){: .img-fluid}
+</div>
+</div>
+
+<div class='row'>
+<div class='col' markdown=1>
+![]({{ site.url }}/images/parametric/RobotoDelta_n_XOLCmin_glyph){: .img-fluid}
+</div>
+<div class='col' markdown=1>
+![]({{ site.url }}/images/parametric/RobotoDelta_n_XOLCmin_measurements){: .img-fluid}
+</div>
+</div>
+
+### Round glyphs
+
+- only x-direction deltas (?)
+
+##### XOPQ max
+
+<div class='row'>
+<div class='col' markdown=1>
+![]({{ site.url }}/images/parametric/AmstelvarA2_o_XOLCmax_glyph){: .img-fluid}
+</div>
+<div class='col' markdown=1>
+![]({{ site.url }}/images/parametric/AmstelvarA2_o_XOLCmax_measurements){: .img-fluid}
+</div>
+</div>
+
+<div class='row'>
+<div class='col' markdown=1>
+![]({{ site.url }}/images/parametric/RobotoDelta_o_XOLCmax_glyph){: .img-fluid}
+</div>
+<div class='col' markdown=1>
+![]({{ site.url }}/images/parametric/RobotoDelta_o_XOLCmax_measurements{: .img-fluid}
+</div>
+</div>
+
+##### XOPQ min
+
+<div class='row'>
+<div class='col' markdown=1>
+![]({{ site.url }}/images/parametric/AmstelvarA2_o_XOLCmin_glyph){: .img-fluid}
+</div>
+<div class='col' markdown=1>
+![]({{ site.url }}/images/parametric/AmstelvarA2_o_XOLCmin_measurements){: .img-fluid}
+</div>
+</div>
+
+<div class='row'>
+<div class='col' markdown=1>
+![]({{ site.url }}/images/parametric/RobotoDelta_o_XOLCmin_glyph){: .img-fluid}
+</div>
+<div class='col' markdown=1>
+![]({{ site.url }}/images/parametric/RobotoDelta_o_XOLCmin_measurements){: .img-fluid}
+</div>
+</div>
+
+### Diagonal glyphs
+
+- angle of slanted strokes does not change
+- xy-direction deltas allowed in slanted strokes
+- in AmstelvarA2, slanted measurements are aligned to stroke
+- XTRA may change slightly to accommodate angles
+
+##### XOPQ max
+
+<div class='row'>
+<div class='col' markdown=1>
+![]({{ site.url }}/images/parametric/AmstelvarA2_v_XOLCmax_glyph){: .img-fluid}
+</div>
+<div class='col' markdown=1>
+![]({{ site.url }}/images/parametric/AmstelvarA2_v_XOLCmax_measurements){: .img-fluid}
+</div>
+</div>
+
+<div class='row'>
+<div class='col' markdown=1>
+![]({{ site.url }}/images/parametric/RobotoDelta_v_XOLCmax_glyph){: .img-fluid}
+</div>
+<div class='col' markdown=1>
+![]({{ site.url }}/images/parametric/RobotoDelta_v_XOLCmax_measurements){: .img-fluid}
+</div>
+</div>
+
+##### XOPQ min
+
+<div class='row'>
+<div class='col' markdown=1>
+![]({{ site.url }}/images/parametric/AmstelvarA2_v_XOLCmin_glyph){: .img-fluid}
+</div>
+<div class='col' markdown=1>
+![]({{ site.url }}/images/parametric/AmstelvarA2_v_XOLCmin_measurements){: .img-fluid}
+</div>
+</div>
 
 Figures
 -------
 
-...
+### Straight glyphs
 
+- XOLC changes
+- YOLC changes on XOLC max because of /n's shoulder translation
+- Mostly x-direction deltas and a little bit of y-direction deltas in XOLC max
+- Only x-direction delta in XOLC min
+
+##### XOPQ max
+
+<div class='row'>
+<div class='col' markdown=1>
+![]({{ site.url }}/images/parametric/AmstelvarA2_one_XOFImax_glyph){: .img-fluid}
+</div>
+<div class='col' markdown=1>
+![]({{ site.url }}/images/parametric/AmstelvarA2_one_XOFImax_measurements){: .img-fluid}
+</div>
+</div>
+
+##### XOPQ min
+
+<div class='row'>
+<div class='col' markdown=1>
+![]({{ site.url }}/images/parametric/AmstelvarA2_one_XOFImin_glyph){: .img-fluid}
+</div>
+<div class='col' markdown=1>
+![]({{ site.url }}/images/parametric/AmstelvarA2_one_XOFImin_measurements){: .img-fluid}
+</div>
+</div>
+
+### Round glyphs
+
+- only x-direction deltas (?)
+
+##### XOPQ max
+
+<div class='row'>
+<div class='col' markdown=1>
+![]({{ site.url }}/images/parametric/AmstelvarA2_zero_XOFImax_glyph){: .img-fluid}
+</div>
+<div class='col' markdown=1>
+![]({{ site.url }}/images/parametric/AmstelvarA2_zero_XOFImax_measurements){: .img-fluid}
+</div>
+</div>
+
+##### XOPQ min
+
+<div class='row'>
+<div class='col' markdown=1>
+![]({{ site.url }}/images/parametric/AmstelvarA2_zero_XOFImin_glyph){: .img-fluid}
+</div>
+<div class='col' markdown=1>
+![]({{ site.url }}/images/parametric/AmstelvarA2_zero_XOFImin_measurements){: .img-fluid}
+</div>
+</div>
 
 Etcetera
 --------
