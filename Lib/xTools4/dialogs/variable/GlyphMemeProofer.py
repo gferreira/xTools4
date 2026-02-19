@@ -171,7 +171,7 @@ class GlyphMemeProoferController:
         DB.newDrawing()
 
         self.proofer = GlyphMemeProofer(glyphName, self.designspacePath)
-        self.proofer.anchorsDraw = False
+        # self.proofer.anchorsDraw = False
         self.proofer.draw()
 
         pdfData = DB.pdfImage()
