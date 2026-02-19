@@ -29,7 +29,7 @@ class GlyphMemeProofer:
     metricsDraw = True
     metricsColor = 0.85,
     
-    anchorsDraw = False
+    anchorsDraw = True
     anchorsRadius = 7
     anchorsColor = 1, 0, 0
     
@@ -125,6 +125,7 @@ class GlyphMemeProofer:
         defaultFont = OpenFont(self.designspace.default.path, showInterface=False)
         defaultGlyph = defaultFont[glyph.name]
 
+        DB.newDrawing()
         DB.newPage(self.canvasWidth + self.panelWidth, self.canvasHeight)
         DB.blendMode('multiply')
 
@@ -188,18 +189,28 @@ class GlyphMemeProofer:
                         n += 1
 
         if self.anchorsDraw:
-            r = self.anchorsRadius
+            r = self.pointsRadius
             with DB.savedState():
-                DB.fill(None)
-                DB.stroke(*self.anchorsColor)
+                DB.font(self.captionFont)
+                DB.fontSize(pointCaptionSize)
+
+                if self.pointsColorStroke is None:
+                    DB.stroke(self.pointsColorStroke)
+                else:
+                    DB.stroke(*self.pointsColorStroke)
+                if self.pointsColorFill is None:
+                    DB.fill(self.pointsColorFill)
+                else: 
+                    DB.fill(*self.pointsColorFill)
+
                 DB.translate(x, y)
-                for anchor in g.anchors:
+                DB.scale(self.glyphScale)
+                for anchor in glyph.anchors:
                     aX, aY = anchor.position
-                    aX *= self.glyphScale
-                    aY *= self.glyphScale
                     DB.oval(aX - r, aY - r, r*2, r*2)
-                    DB.line((aX - r, aY), (aX + r, aY))
-                    DB.line((aX, aY - r), (aX, aY + r))
+                    DB.fill(*self.pointsIndexColor)
+                    DB.text(anchor.name, (aX, aY - r - pointCaptionSize), align='center')
+
 
         if self.captionDraw:
             captionX = self.captionSize
@@ -297,7 +308,7 @@ class GlyphMemeProofer:
 
                     dash = 2, 2
                     r = self.pointsRadius * self.glyphScale
-                    r2 = 6
+                    r2 = 4
                     s =  self.glyphScale
 
                     DB.lineDash(None)
@@ -312,7 +323,7 @@ class GlyphMemeProofer:
 
                             if isEqual:
                                 DB.stroke(*colorCheckEqual)
-                                DB.strokeWidth(2)
+                                DB.strokeWidth(1)
                                 DB.fill(None)
                                 DB.oval(p2.x * s - r2, p2.y * s - r2, r2*2, r2*2)
 
@@ -322,7 +333,7 @@ class GlyphMemeProofer:
                                 DB.line((p.x * s, p.y * s), (p2.x * s, p2.y * s))
 
                                 DB.stroke(None)
-                                DB.fill(*self.pointsColorFill)
+                                DB.fill(*self.glyphColorStroke)
                                 DB.oval(p2.x * s - r, p2.y * s - r, r*2, r*2)
 
         if self.validationDraw:
