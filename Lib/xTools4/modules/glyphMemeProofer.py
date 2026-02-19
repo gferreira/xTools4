@@ -371,12 +371,28 @@ class GlyphMemeProofer:
         r2 = 4
         s =  self.glyphScale
 
+        italicAngle = glyph.font.info.italicAngle
+
+        if italicAngle:
+            g1_ = defaultGlyph.copy()
+            g1_.skewBy((italicAngle, 0))
+            g1_.round()
+            g2_ = glyph.copy()
+            g2_.skewBy((italicAngle, 0))
+            g2_.round()
+
         DB.lineDash(None)
         for ci, c in enumerate(glyph):
             for pi, p in enumerate(c.points):
                 p2 = defaultGlyph.contours[ci].points[pi]
                 isEqual = p2.x == p.x and p2.y == p.y
-                isOrthogonal = p2.x == p.x or p2.y == p.y
+
+                if italicAngle:
+                    p1_ = g1_.contours[ci].points[pi]
+                    p2_ = g2_.contours[ci].points[pi]
+                    isOrthogonal = p2_.x == p1_.x or p2_.y == p1_.y
+                else:
+                    isOrthogonal = p2.x == p.x or p2.y == p.y
 
                 color   = colorCheckTrue   if isOrthogonal else colorCheckFalse
                 colorBG = colorCheckTrueBG if isOrthogonal else colorCheckFalseBG
@@ -400,7 +416,13 @@ class GlyphMemeProofer:
             for ai, a in enumerate(glyph.anchors):
                 a2 = defaultGlyph.anchors[ai]
                 isEqual = a2.x == a.x and a2.y == a.y
-                isOrthogonal = a2.x == a.x or a2.y == a.y
+
+                if italicAngle:
+                    a1_ = g1_.anchors[ai]
+                    a2_ = g2_.anchors[ai]
+                    isOrthogonal = a2_.x == a1_.x or a2_.y == a1_.y
+                else:
+                    isOrthogonal = a2.x == a.x or a2.y == a.y
 
                 color   = colorCheckTrue   if isOrthogonal else colorCheckFalse
                 colorBG = colorCheckTrueBG if isOrthogonal else colorCheckFalseBG
@@ -419,8 +441,6 @@ class GlyphMemeProofer:
                     DB.stroke(None)
                     DB.fill(*self.contoursStroke)
                     DB.oval(a2.x * s - r, a2.y * s - r, r*2, r*2)
-
-
 
         DB.restore()
 
