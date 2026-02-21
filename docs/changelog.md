@@ -9,6 +9,18 @@ All notable changes to xTools4 are documented in this file.
 {: .lead }
 
 
+0.2.7
+-----
+
+- <span class='badge rounded-0'>Added</span> Adding GlyphMemeProofer to visualize all parametric sources of a glyph as a multi-page PDF.
+- <span class='badge rounded-0'>Added</span> Adding mark glyph by type to glyphs > mark colors menu.
+- <span class='badge rounded-0'>Changed</span> Adding support for italic angle in VarGlyphViewer deltas and margins.
+- <span class='badge rounded-0'>Changed</span> Select designspace file when saving measurements from the Measurements tool.
+- <span class='badge rounded-0'>Changed</span> Removing notes about RoboFont version from the documentation.
+- <span class='badge rounded-0'>Fixed</span> Fixing font-level measurements in temporary fonts.
+{: ._changelog .mb-4 }
+
+
 0.2.6
 -----
 

@@ -199,8 +199,8 @@ class BuildConstructionDialog(GlyphsDialogBase):
         if not glyphNames:
             return
 
-        for glyphName in glyphNames:
-            print(glyphName, len(font[glyphName]))
+        # for glyphName in glyphNames:
+        #     print(glyphName, len(font[glyphName]))
 
         if not self.constructions:
             print('no .glyphConstruction file\n')

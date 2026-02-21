@@ -7,8 +7,6 @@ permalink : /reference/tools/variable/measurements/
 A tool to create and visualize font- and glyph-level measurements.
 {: .lead}
 
-<span class="badge text-bg-success rounded-0">RF4</span> Rewritten using the new RoboFont 4 APIs.  
-
 
 ![]({{ site.url }}/images/variable/Measurements_font.png){: .img-fluid}
 

@@ -44,6 +44,8 @@ APIs
 </div>
 
 
+{% comment %}
+
 <div class="card text-dark bg-light my-3 rounded-0">
 <div class="card-header"> note</div>
 <div class="card-body" markdown='1'>
@@ -60,3 +62,5 @@ This documentation will be updated as more tools are updated or rewritten. Keep 
 {: .card-text }
 </div>
 </div>
+
+{% endcomment %}

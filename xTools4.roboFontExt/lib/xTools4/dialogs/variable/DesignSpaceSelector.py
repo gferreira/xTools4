@@ -1,7 +1,6 @@
 import os
 import ezui
 from defcon import Font
-from mojo.UI import GetFile
 from mojo.roboFont import OpenWindow, OpenFont
 from fontTools.designspaceLib import DesignSpaceDocument
 from xTools4.modules.linkPoints2 import readMeasurements # getPointAtIndex, getIndexForPoint, getAnchorPoint
@@ -90,7 +89,7 @@ class DesignSpaceSelector_EZUI(ezui.WindowController):
     )
 
     # subclasses should add all NSTables to this list
-    # used to change table row height when starting up
+    # this is used to change table row height when starting up
     _tables = ['designspaces', 'sources']
 
     def build(self):
@@ -214,17 +213,6 @@ class DesignSpaceSelector_EZUI(ezui.WindowController):
         
         if self.verbose:
             print('done...\n')
-
-    # def loadMeasurementsButtonCallback(self, sender):
-    #     jsonPath = GetFile(message='Select JSON file with measurements:')
-    #     if jsonPath is None:
-    #         return
-
-    #     if self.verbose:
-    #         print(f'loading data from {os.path.split(jsonPath)[-1]}... ')
-
-    #     self._measurementsData = readMeasurements(jsonPath)
-    #     self._loadMeasurements()
 
     def _updateLists(self):
         # implement method when subclassing object

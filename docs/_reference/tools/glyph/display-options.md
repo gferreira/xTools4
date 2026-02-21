@@ -7,8 +7,6 @@ permalink : /reference/tools/glyph/display-options/
 A floating palette to quickly toggle the [display options] in the Glyph Editor.
 {: .lead }
 
-<span class="badge text-bg-danger rounded-0">RF3</span> RoboFont 3 code which does no longer work in RoboFont 4.  
-
 [Display options]: http://www.robofont.com/documentation/reference/workspace/glyph-editor/display-options/#options
 
 

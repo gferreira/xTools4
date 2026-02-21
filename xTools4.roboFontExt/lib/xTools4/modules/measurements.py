@@ -316,8 +316,6 @@ def setSourceNamesFromMeasurements(sourcesFolder, familyName, measurementsPath, 
     print('duplicate style names:')
     print(duplicates)
 
-
-
 def copyFontMeasurements(measurementsPathSrc, measurementsPathDst, measurementNames):
     measurementsSrc = readMeasurements(measurementsPathSrc)
     measurementsDst = readMeasurements(measurementsPathDst)
@@ -350,3 +348,4 @@ def copyGlyphMeasurements(measurementsPathSrc, measurementsPathDst, glyphNames):
         json.dump(measurementsDst, f, indent=2)
 
     print('...done.\n')
+

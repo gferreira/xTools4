@@ -10,39 +10,25 @@ Tools to visualize and edit variable font sources.
 <div class='row'>
 
 <div class='col' markdown='1'>
-- <span class="badge text-bg-warning rounded-0">RF3</span> [BlendsPreview](blends-preview)
-- <span class="badge text-bg-success rounded-0">RF4</span> [GlyphMeme](glyph-meme)
-- <span class="badge text-bg-success rounded-0">RF4</span> [GlyphTuning](glyph-tuning)
-- <span class="badge text-bg-success rounded-0">RF4</span> [GlyphValidator](glyph-validator)
-- <span class="badge text-bg-warning rounded-0">RF3</span> [GlyphSetProofer](glyphset-proofer)
-- <span class="badge text-bg-success rounded-0">RF4</span> [Measurements](measurements)
-- <span class="badge text-bg-warning rounded-0">RF3</span> [TempEdit](temp-edit)
-- <span class="badge text-bg-warning rounded-0">RF3</span> [TempGlyphs](temp-glyphs)
-- <span class="badge text-bg-success rounded-0">RF4</span> [VarFontAssistant](varfont-assistant)
-- <span class="badge text-bg-success rounded-0">RF4</span> [VarGlyphAssistant](varglyph-assistant)
-- <span class="badge text-bg-success rounded-0">RF4</span> [VarGlyphViewer](varglyph-viewer)
+- [BlendsPreview](blends-preview)
+- [GlyphMeme](glyph-meme)
+- [GlyphMemeProofer](glyphmeme-proofer)
+- [GlyphTuning](glyph-tuning)
+- [GlyphValidator](glyph-validator)
+- [GlyphSetProofer](glyphset-proofer)
+- [Measurements](measurements)
+- [TempEdit](temp-edit)
+- [TempGlyphs](temp-glyphs)
+- [VarFontAssistant](varfont-assistant)
+- [VarGlyphAssistant](varglyph-assistant)
+- [VarGlyphViewer](varglyph-viewer)
 </div>
 
 <div class='col' markdown='1'>
-##### Rounding
+##### Rounding tools
 
-- <span class="badge text-bg-success rounded-0">RF4</span> [RoundingTool](rounding-tool)
-- <span class="badge text-bg-success rounded-0">RF4</span> [rounding scripts](rounding-scripts)
+- [RoundingTool](rounding-tool)
+- [rounding scripts](rounding-scripts)
 </div>
 
 </div>
-
-{% comment %}
-## Old versions which will soon be retired
-{: .h5 }
-
-- <span class="badge text-bg-success rounded-0">RF4</span> [GlyphGauge](old/glyph-gauge)
-- <span class="badge text-bg-warning rounded-0">RF3</span> [Measurements](old/measurements)
-- <span class="badge text-bg-warning rounded-0">RF3</span> [VarFontAssistant](old/varfont-assistant)
-- <span class="badge text-bg-warning rounded-0">RF3</span> [VarGlyphAssistant](old/varglyph-assistant)
-{% endcomment %}
-
-- - -
-
-<span class="badge text-bg-warning rounded-0">RF3</span> RoboFont 3 code which still works in RoboFont 4. Not updated to the new RoboFont 4 APIs yet.  
-<span class="badge text-bg-success rounded-0">RF4</span> Rewritten using the new RoboFont 4 APIs.  

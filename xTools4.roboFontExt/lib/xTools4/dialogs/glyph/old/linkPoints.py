@@ -9,6 +9,9 @@ from xTools4.modules.measureHandles import getVector
 from xTools4.dialogs.glyphs.old.base import GlyphsDialogBase
 
 
+KEY = f'{GlyphsDialogBase.key}.old.linkPoints'
+
+
 class LinkPointsTool(GlyphsDialogBase):
 
     '''
@@ -22,7 +25,7 @@ class LinkPointsTool(GlyphsDialogBase):
     '''
 
     title = "links"
-    key = '%s.linkPoints' % GlyphsDialogBase.key
+    key = KEY
     settings = {
         'captionFontSize' : 11,
         'linkStrokeWidth' : 3,

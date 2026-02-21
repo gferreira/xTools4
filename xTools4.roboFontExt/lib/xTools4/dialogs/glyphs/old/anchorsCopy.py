@@ -4,7 +4,7 @@ from xTools4.modules.anchors import copyAnchors
 from xTools4.dialogs.glyphs.old.base import GlyphsCopyDataDialogBase
 
 
-KEY = f'{GlyphsDialogBase.key}.anchorsCopy'
+KEY = f'{GlyphsCopyDataDialogBase.key}.anchorsCopy'
 
 
 class CopyAnchorsDialog(GlyphsCopyDataDialogBase):
