@@ -49,14 +49,15 @@ class GlyphMemeProoferController:
                 (x, y, -p, self.lineHeight),
                 'designspace…',
                 callback=self.getDesignspaceCallback,
-                sizeStyle='small')
+                # sizeStyle='small'
+            )
 
-        y += self.lineHeight + p/2
+        y += self.lineHeight + p
         group1.reloadButton = Button(
                 (x, y, -p, self.lineHeight),
                 'reload ↺',
                 callback=self.reloadCallback,
-                sizeStyle='small'
+                # sizeStyle='small'
             )
 
         y += self.lineHeight + p
@@ -73,18 +74,18 @@ class GlyphMemeProoferController:
 
         y += self.lineHeight + p
         group1.glyphMeme = List(
-                (x, y, -p, -self.lineHeight*2 - p*2.5),
+                (x, y, -p, -self.lineHeight*2 - p*3),
                 [],
                 allowsMultipleSelection=True,
                 allowsEmptySelection=False,
                 enableDelete=False,
             )
 
-        y = -self.lineHeight*2 - p*1.5
+        y = -self.lineHeight*2 - p*2
         group1.makeProof = Button(
                 (x, y, -p, self.lineHeight),
                 'make proof',
-                sizeStyle='small',
+                # sizeStyle='small',
                 callback=self.makeProofCallback
             )
 
@@ -92,7 +93,7 @@ class GlyphMemeProoferController:
         group1.savePDF = Button(
                 (x, y, -p, self.lineHeight),
                 'save PDF…',
-                sizeStyle='small',
+                # sizeStyle='small',
                 callback=self.savePDFCallback
             )
 

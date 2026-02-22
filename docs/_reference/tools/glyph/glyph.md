@@ -9,5 +9,6 @@ Tools to visualize and edit the current glyph.
 
 - [interpolation preview](interpolation-preview)
 - [link points](link-points)
+- [overlay UFOs](overlay-ufos)
 - [show curvature](show-curvature)
 - [show measurements](show-measurements)

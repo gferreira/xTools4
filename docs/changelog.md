@@ -9,6 +9,13 @@ All notable changes to xTools4 are documented in this file.
 {: .lead }
 
 
+0.2.8
+-----
+
+- <span class='badge rounded-0'>Added</span> Adding new tool to overlay UFOs in the background of the current glyph view.
+{: ._changelog .mb-4 }
+
+
 0.2.7
 -----
 
