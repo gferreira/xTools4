@@ -10,7 +10,7 @@ Apply mark colors to glyphs based on type: contour, components, contours & compo
 
 <div class='row'>
 <div class='col-4' markdown='1'>
-![]({{ site.url }}/images/glyphs/MarkGlyphTypes.png){: .img-fluid }
+![]({{ site.url }}/images/glyphs/markGlyphTypes.png){: .img-fluid }
 </div>
 <div class='col-8' markdown='1'>
 contours

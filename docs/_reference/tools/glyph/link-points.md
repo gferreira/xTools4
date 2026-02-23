@@ -67,7 +67,7 @@ Links are defined using the ID attribute of each point, so they remain in place 
 <div class="card text-dark bg-light my-3 rounded-0">
 <div class="card-header">see also</div>
 <div class="card-body" markdown='1'>
-[variable > measurements](../../dialogs/variable/measurements/)
+[variable > measurements](../../variable/measurements/)
 {: .card-text }
 </div>
 </div>
