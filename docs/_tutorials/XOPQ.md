@@ -263,10 +263,10 @@ Lowercase
 
 ### Straight glyphs
 
-- XOLC changes
-- YOLC changes on XOLC max because of /n's shoulder translation
-- Mostly x-direction deltas and a little bit of y-direction deltas in XOLC max
-- Only x-direction delta in XOLC min
+- AmstelvarA2 Roman: XOLC changes in
+- AmstelvarA2 Roman: YOLC changes on XOLC max because of /n's shoulder translation
+- AmstelvarA2 Roman: Mostly x-direction deltas and a little bit of y-direction deltas in XOLC max
+- AmstelvarA2 Roman: Only x-direction delta in XOLC min
 
 ##### XOPQ max
 
@@ -310,7 +310,7 @@ Lowercase
 
 ### Round glyphs
 
-- only x-direction deltas (?)
+- AmstelvarA2 Roman: only x-direction deltas
 
 ##### XOPQ max
 
@@ -354,10 +354,10 @@ Lowercase
 
 ### Diagonal glyphs
 
-- angle of slanted strokes does not change
-- xy-direction deltas allowed in slanted strokes
-- in AmstelvarA2, slanted measurements are aligned to stroke
-- XTRA may change slightly to accommodate angles
+- AmstelvarA2 Roman: angle of slanted strokes does not change
+- AmstelvarA2 Roman: xy-direction deltas allowed in slanted strokes
+- AmstelvarA2 Roman: slanted measurements are aligned to stroke
+- AmstelvarA2 Roman: XTRA may change slightly to accommodate angles
 
 ##### XOPQ max
 
@@ -395,10 +395,8 @@ Figures
 
 ### Straight glyphs
 
-- XOLC changes
-- YOLC changes on XOLC max because of /n's shoulder translation
-- Mostly x-direction deltas and a little bit of y-direction deltas in XOLC max
-- Only x-direction delta in XOLC min
+- AmstelvarA2 Roman: XOFI changes
+- AmstelvarA2 Roman: Since it's a single stem glyph XTRA changes according to the XOPQ
 
 ##### XOPQ max
 
@@ -424,7 +422,7 @@ Figures
 
 ### Round glyphs
 
-- only x-direction deltas (?)
+-  AmstelvarA2 Roman: only x-direction deltas
 
 ##### XOPQ max
 

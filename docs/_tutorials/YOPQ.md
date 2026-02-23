@@ -137,6 +137,9 @@ Lowercase
 
 ### Straight glyphs
 
+- AmstelvarA2 Roman: only YOPQ changes
+- AmstelvarA2 Roman: only y direction deltas 
+
 ##### YOPQ min
 
 <div class='row'>
@@ -161,6 +164,10 @@ Lowercase
 
 ### Round glyphs
 
+- AmstelvarA2 Roman: only YOPQ changes
+- AmstelvarA2 Roman: only y direction deltas 
+- AmstelvarA2 Roman: There might be situations where you need to change XTEQ YTEQ parametric axes
+
 ##### YOPQ min
 
 <div class='row'>
@@ -184,6 +191,11 @@ Lowercase
 </div>
 
 ### Diagonal glyphs
+
+- AmstelvarA2 Roman: angle of slanted strokes does not change
+- AmstelvarA2 Roman: xy-direction deltas allowed in slanted strokes
+- AmstelvarA2 Roman: slanted measurements are aligned to stroke
+- AmstelvarA2 Roman: XTRA may change slightly to accommodate angles
 
 ##### YOPQ min
 
@@ -212,6 +224,8 @@ Figures
 
 ### Straight glyphs
 
+- AmstelvarA2 Roman: only YOFI changes
+
 ##### YOPQ min
 
 <div class='row'>
@@ -235,6 +249,10 @@ Figures
 </div>
 
 ### Round glyphs
+
+- AmstelvarA2 Roman: only YOFI changes
+- AmstelvarA2 Roman: only y direction deltas 
+- AmstelvarA2 Roman: There might be situations where you need to change XTEQ YTEQ parametric axes
 
 ##### YOPQ min
 

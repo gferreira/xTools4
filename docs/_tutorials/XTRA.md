@@ -220,8 +220,8 @@ Lowercase
 
 ### Straight glyphs
 
-- only XTRA changes
-- only x-direction deltas
+- AmstelvarA2 Roman: only XTRA changes
+- AmstelvarA2 Roman: only x-direction deltas
 
 ##### XTRA min
 
@@ -247,8 +247,8 @@ Lowercase
 
 ### Round glyphs
 
-- in AmstelvarA2, internal curvature is controlled separately by XTEQ YTEQ parametric axes
-- in Italics, xy-direction deltas are allowed for slanted & rotated shapes
+- AmstelvarA2 Roman: only XTRA changes
+- AmstelvarA2 Roman: internal curvature is controlled separately by XTEQ YTEQ parametric axes
 
 ##### XTRA min
 
@@ -274,9 +274,9 @@ Lowercase
 
 ### Diagonal glyphs
 
-- xy-direction deltas allowed in slanted strokes
-- in AmstelvarA2, slanted measurements are aligned to stroke
-- in AmstelvarA2 Italic, XOPQ may change slightly (?)
+- AmstelvarA2 Roman: xy-direction deltas allowed in slanted strokes
+- AmstelvarA2 Roman: slanted measurements are aligned to stroke
+- AmstelvarA2 Roman: Only XTRA changes
 
 ##### XTRA min
 
@@ -308,8 +308,8 @@ Figures
 
 ### Straight glyphs
 
-- only XTRA changes
-- only x-direction deltas
+- AmstelvarA2 Roman: only XTRA changes
+- AmstelvarA2 Roman: only x-direction deltas
 
 ##### XTRA min
 
@@ -335,8 +335,8 @@ Figures
 
 ### Round glyphs
 
-- in AmstelvarA2, internal curvature is controlled separately by XTEQ YTEQ parametric axes
-- in Italics, xy-direction deltas are allowed for slanted & rotated shapes
+- AmstelvarA2 Roman: only XTRA changes
+- AmstelvarA2 Roman: internal curvature is controlled separately by XTEQ YTEQ parametric axes
 
 ##### XTRA min
 
