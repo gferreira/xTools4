@@ -12,6 +12,8 @@ from fontTools.varLib.avar.map import map as avar2_map
 from mutatorMath.objects.location import Location
 from ufoProcessor.ufoOperator import UFOOperator
 from glyphNameFormatter.reader import n2u
+from xTools4.modules.glyphSetProofer import decomposeGlyph
+
 
 def getEffectiveLocation(designspacePath, blendedLocation):
     font = TTFont()
@@ -228,6 +230,12 @@ class BlendsPreview:
 
     def draw(self, glyphName):
 
+        defaultGlyph = self.defaultFont[glyphName]
+
+        # if defaultGlyph.components:
+        #     print('glyph contains components, skipping…')
+        #     return
+
         cellWidth  = self.cellSize * self.glyphScale * 1.5
         cellHeight = self.cellSize * self.glyphScale
 
@@ -317,10 +325,20 @@ class BlendsPreview:
                     styleName = f'{axis1Tag} {axisValue1}\n{axis2Tag} {axisValue2}\n{axis3Tag} {axisValue3}'
 
                     parametricLocation = getEffectiveLocation(self.designspacePath, blendedLocation)
+
                     g2 = instantiateGlyph(self.operator, glyphName, parametricLocation)
 
                     # if not g2:
                     #     continue
+
+                    # decompose composite glyphs
+                    if self.defaultFont[glyphName].components:
+                        tempFont = Font()
+                        tempFont.insertGlyph(g2, name=glyphName)
+                        for comp in g2.components:
+                            baseGlyph = instantiateGlyph(self.operator, comp.baseGlyph, parametricLocation)
+                            tempFont.insertGlyph(baseGlyph, name=comp.baseGlyph)
+                        g2 = decomposeGlyph(tempFont[glyphName])
 
                     # get var distance
                     n = getVarDistance(blendedLocation, defaultBlendedLocation)
@@ -397,9 +415,9 @@ class BlendsPreview:
                     #----------------------
 
                     if self.compare and self.compareFont:
-                        if not self.defaultFont[glyphName].unicodes:
+                        if not defaultGlyph.unicodes:
                             return
-                        char = chr(self.defaultFont[glyphName].unicodes[0])
+                        char = chr(defaultGlyph.unicodes[0])
                         g1 = getTTFGlyphForChar(self.compareFontPath, char, blendedLocation)
                         if g1 is None:
                             return

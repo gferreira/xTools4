@@ -16,8 +16,10 @@ Overlay glyphs from other UFOs in the background of the current glyph.
 
 <div class='col' markdown='1'>
 UFOs
-: A list of UFO fonts to overlay in the background.  
-  Add fonts to the list by dragging them from the Finder.
+: A list of UFO fonts which can be displayed in the background.  
+  Fonts which are already open are included automatically.  
+  Other UFOs can be added by dragging files from Finder into the list.  
+  Select one or more fonts to display in the background.
 
 color
 : Choose a color for the overlaid UFOs.
@@ -36,5 +38,3 @@ Preview
 -------
 
 ![]({{ site.url }}/images/glyph/overlay-ufos_preview.png){: .img-fluid}
-
-
