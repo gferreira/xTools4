@@ -1,6 +1,6 @@
 import ezui
 from mojo.subscriber import Subscriber, registerGlyphEditorSubscriber, unregisterGlyphEditorSubscriber, registerRoboFontSubscriber, unregisterRoboFontSubscriber, registerSubscriberEvent, roboFontSubscriberEventRegistry
-from mojo.roboFont import OpenWindow, OpenFont, CurrentFont, CurrentGlyph
+from mojo.roboFont import AllFonts, OpenWindow, OpenFont, CurrentFont, CurrentGlyph
 from mojo.events import postEvent
 from xTools4.dialogs.old import hDialog
 
@@ -77,11 +77,15 @@ class OverlayUFOsController(ezui.WindowController):
     def started(self):
         OverlayUFOsGlyphEditor.controller = self
         registerGlyphEditorSubscriber(OverlayUFOsGlyphEditor)
+        OverlayUFOsRoboFont.controller = self
+        registerRoboFontSubscriber(OverlayUFOsRoboFont)
         self.settingsChangedCallback(None)
 
     def destroy(self):
         unregisterGlyphEditorSubscriber(OverlayUFOsGlyphEditor)
         OverlayUFOsGlyphEditor.controller = None
+        unregisterRoboFontSubscriber(OverlayUFOsRoboFont)
+        OverlayUFOsRoboFont.controller = None
 
     # callbacks
 
@@ -145,6 +149,9 @@ class OverlayUFOsGlyphEditor(Subscriber):
 
     def glyphEditorDidSetGlyph(self, info):
         self.glyph = info["glyph"]
+        self._drawUFOs()
+
+    def glyphEditorGlyphDidChange(self, info):
         self._drawUFOs()
 
     def _drawUFOs(self):
@@ -229,6 +236,23 @@ class OverlayUFOsGlyphEditor(Subscriber):
                                 fillColor=colorPoints,
                             )
                         )
+
+
+class OverlayUFOsRoboFont(Subscriber):
+
+    controller = None
+
+    def build(self):
+        self._updateFontsList()
+
+    def fontDocumentDidOpen(self, info):
+        self._updateFontsList()
+
+    def _updateFontsList(self):
+        ufos  = self.controller.w.getItem('ufos')
+        selection = ufos.getSelectedIndexes()
+        ufos.appendItems([f for f in AllFonts() if f not in ufos.get()])
+        ufos.setSelectedIndexes(selection)
 
 
 eventName = f"{KEY}.changed"
