@@ -8,8 +8,6 @@ permalink : /reference/tools/glyph/interpolation-preview/
 Preview interpolation steps with another font, layer and / or glyph.
 {: .lead }
 
-<span class="badge text-bg-success rounded-0">RF4</span> Rewritten using the new RoboFont 4 APIs.
-
 
 <div class='row'>
 

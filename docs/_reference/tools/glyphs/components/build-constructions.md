@@ -7,9 +7,6 @@ permalink : /reference/tools/glyphs/components/build-constructions/
 Build selected glyphs from components using [Glyph Construction] language.
 {: .lead }
 
-<span class="badge text-bg-warning rounded-0">RF3</span> RoboFont 3 code which still works in RoboFont 4. Not updated to the new RoboFont 4 APIs yet.  
-
-
 [Glyph Construction]: http://github.com/typemytype/GlyphConstruction
 
 

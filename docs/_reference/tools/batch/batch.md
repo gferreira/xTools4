@@ -7,14 +7,10 @@ permalink : /reference/tools/batch/
 Tools to apply actions to multiple fonts at once (closed or open).
 {: .lead }
 
-- <span class="badge text-bg-warning rounded-0">RF3</span> [build glyphs](build-glyphs)
-- <span class="badge text-bg-warning rounded-0">RF3</span> [clear data](clear-data)
-- <span class="badge text-bg-warning rounded-0">RF3</span> [copy data](copy-data)
-- <span class="badge text-bg-warning rounded-0">RF3</span> [find replace](find-replace)
-- <span class="badge text-bg-warning rounded-0">RF3</span> [glyph actions](glyph-actions)
-- <span class="badge text-bg-warning rounded-0">RF3</span> [set data](set-data)
-- <span class="badge text-bg-warning rounded-0">RF3</span> [set style data](set-style-data)
-
-- - -
-
-<span class="badge text-bg-warning rounded-0">RF3</span> RoboFont 3 code which still works in RoboFont 4. Not updated to the new RoboFont 4 APIs yet.
+- [build glyphs](build-glyphs)
+- [clear data](clear-data)
+- [copy data](copy-data)
+- [find replace](find-replace)
+- [glyph actions](glyph-actions)
+- [set data](set-data)
+- [set style data](set-style-data)

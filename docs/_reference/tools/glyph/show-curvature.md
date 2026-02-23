@@ -8,8 +8,6 @@ permalink : /reference/tools/glyph/show-curvature/
 Visualize the curvature along curve segments.
 {: .lead }
 
-<span class="badge text-bg-success rounded-0">RF4</span> Rewritten using the new RoboFont 4 APIs.
-
 
 <div class='row'>
 

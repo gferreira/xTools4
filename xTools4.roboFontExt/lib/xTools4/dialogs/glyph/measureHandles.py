@@ -4,9 +4,10 @@ from mojo.subscriber import Subscriber, registerGlyphEditorSubscriber, registerS
 from mojo.roboFont import OpenWindow, CurrentGlyph
 from mojo.events import postEvent
 from xTools4.modules.measureHandles import MeasureHandlesMaker, MeasureSegmentsMaker
+from xTools4.dialogs.old import hDialog
 
 
-KEY = '{hDialog.key}.glyph.measureHandles'
+KEY = f'{hDialog.key}.glyph.measureHandles'
 
 
 def measureHandlesFactory(glyph):

@@ -4,9 +4,10 @@ from mojo.roboFont import OpenWindow, CurrentGlyph
 from mojo.events import postEvent
 from xTools4.modules.linkPoints import *
 from xTools4.modules.measureHandles import getVector
+from xTools4.dialogs.old import hDialog
 
 
-KEY = '{hDialog.key}.glyph.linkPoints'
+KEY = f'{hDialog.key}.glyph.linkPoints'
 
 
 class LinkPointsController(ezui.WindowController):
@@ -154,6 +155,9 @@ class LinkPoints(Subscriber):
 
         showPreview = self.controller.w.getItem("preview").get()
         if not showPreview:
+            return
+
+        if not self.glyph:
             return
 
         links = getLinks(self.glyph, key=KEY)

@@ -1,8 +1,14 @@
 xTools4
 =======
 
-A modular toolkit for typeface design and font production in RoboFont 4.
+A collection of expert tools for variable font production in RoboFont 4.
 
 [xTools4 documentation](http://gferreira.github.io/xTools4/)
 
-see also: [Variable font production with xTools4 (presentation notes)](http://gist.github.com/gferreira2/7219f99019d83b44512d315ef7bbc951)
+<!--
+
+see also:
+
+- [Expert variable font production tools (13/01/2026)](http://gferreira.github.io/vartools-presentations/20260113_xtools.html)
+
+-->

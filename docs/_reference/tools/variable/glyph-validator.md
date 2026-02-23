@@ -7,8 +7,6 @@ permalink : /reference/tools/variable/glyph-validator/
 A tool to validate glyphs in the current font against glyphs from another source.
 {: .lead}
 
-<span class="badge text-bg-success rounded-0">RF4</span> Rewritten using the new RoboFont 4 APIs.  
-
 
 <div class='row'>
 <div class='col-4' markdown='1'>

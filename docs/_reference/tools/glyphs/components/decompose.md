@@ -7,8 +7,6 @@ permalink : /reference/tools/glyphs/components/decompose/
 Decompose all components in the selected glyphs.
 {: .lead }
 
-<span class="badge text-bg-primary rounded-0">RF4</span> RoboFont 3 code which does not need to change for RoboFont 4.  
-
 
 <div class="card bg-light my-3 rounded-0">
 <div class="card-header">note</div>
@@ -19,7 +17,6 @@ Supports decomposing in multiple layers using the [layers] selector.
 </div>
 
 [layers]: ../../modifiers/layers/
-
 
 <div class="card bg-light my-3 rounded-0">
 <div class="card-header">see also</div>

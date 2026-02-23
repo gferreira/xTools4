@@ -4,9 +4,10 @@ from mojo.subscriber import Subscriber, registerGlyphEditorSubscriber, unregiste
 from mojo.roboFont import OpenWindow, CurrentGlyph, CurrentFont, AllFonts, RGlyph
 from mojo.events import postEvent
 from mojo.UI import UpdateCurrentGlyphView
+from xTools4.dialogs.old import hDialog
 
 
-KEY = '{hDialog.key}.glyph.interpolationPreview'
+KEY = f'{hDialog.key}.glyph.interpolationPreview'
 
 
 class InterpolationPreviewController(ezui.WindowController):

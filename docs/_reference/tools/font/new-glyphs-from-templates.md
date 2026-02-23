@@ -7,8 +7,6 @@ permalink : /reference/tools/font/new-glyphs-from-templates/
 Create new glyphs from selected template glyphs in the current font.
 {: .lead }
 
-<span class="badge text-bg-success rounded-0">RF4</span> RoboFont 3 code which does not need to change for RoboFont 4.  
-
 
 1. Select template glyphs in the *Font Overview*.
 2. Run the script to convert the selected slots into new empty glyphs.

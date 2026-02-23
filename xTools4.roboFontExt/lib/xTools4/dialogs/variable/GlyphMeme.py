@@ -1,4 +1,4 @@
-import os
+import os, glob
 import ezui
 from mojo.UI import GetFile
 from mojo.roboFont import OpenWindow, NewFont, OpenFont, CurrentFont
@@ -6,6 +6,7 @@ from mojo.smartSet import readSmartSets
 from fontTools.designspaceLib import DesignSpaceDocument
 from fontTools.ufoLib.glifLib import GlyphSet
 from xTools4.modules.linkPoints2 import readMeasurements
+from xTools4.modules.fontutils import getGlyphs2
 from xTools4.modules.measurements import FontMeasurements, GlyphMeasurements
 from xTools4.modules.xproject import measurementsPathKey, smartSetsPathKey
 from xTools4.dialogs.variable.old.TempEdit import setupNewFont, splitall
@@ -170,15 +171,15 @@ class GlyphMemeController(ezui.WindowController):
             print('done.\n')
 
     def getDesignspaceButtonCallback(self, sender):
-        self.designspacePath = GetFile(
+        designspacePath = GetFile(
             message='Select designspace file:',
             title=self.title, 
             allowsMultipleSelection=False,
             fileTypes=["designspace"]
         )
-        if self.designspacePath is None:
+        if designspacePath is None:
             return
-
+        self.designspacePath = designspacePath
         self._loadDesignspace()
 
     def groupSelectorCallback(self, sender):
@@ -230,8 +231,12 @@ class GlyphMemeController(ezui.WindowController):
 
         print('opening glyphs...\n')
 
+        parametricSources = glob.glob(f'{self.sourcesFolder}/*.ufo')
+
         for i, sourceFile in enumerate(sources.keys()):
             ufoPath = sources[sourceFile]
+            if ufoPath not in parametricSources:
+                continue
             srcFont = OpenFont(ufoPath, showInterface=False)
 
             # copy vertical metrics etc. from 1st source
@@ -273,8 +278,10 @@ class GlyphMemeController(ezui.WindowController):
             tmpFont[tmpGlyphName].getLayer('background').lib[glyphSetPathKey] = glyphsFolder
 
             # store current font measurements in the glyph lib
-            FM.measure(srcFont)
-            tmpFont[tmpGlyphName].lib[fontMeasurementsKey] = FM.values
+            currentFM = FontMeasurements()
+            currentFM.read(self.measurementsPath)
+            currentFM.measure(srcFont)
+            tmpFont[tmpGlyphName].lib[fontMeasurementsKey] = currentFM.values
 
         print('\n...done!\n')
 
@@ -287,7 +294,9 @@ class GlyphMemeController(ezui.WindowController):
 
         print('saving selected glyphs...\n')
 
-        for glyphName in f.selectedGlyphNames:
+        glyphNames = getGlyphs2(f, glyphNames=True)
+
+        for glyphName in glyphNames:
 
             glyph = f[glyphName].getLayer('foreground')
 

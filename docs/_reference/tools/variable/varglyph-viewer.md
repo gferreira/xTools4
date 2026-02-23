@@ -7,8 +7,6 @@ permalink : /reference/tools/variable/varglyph-viewer/
 A tool to visualize and highlight the differences between the current glyph and the same glyph in the default font.
 {: .lead}
 
-<span class="badge text-bg-success rounded-0">RF4</span> Rewritten using the new RoboFont 4 APIs.  
-
 
 <div class='row'>
 <div class='col-4' markdown='1'>

@@ -53,7 +53,8 @@ class xProject:
     def defaultLocation(self):
         # L = { name: permille(self.measurementsDefault.values[name], self.unitsPerEm) for name in self.parametricAxes }
         # L['GRAD'] = 0
-        return L
+        # return L
+        pass
 
     # parametric sources
 
@@ -195,8 +196,7 @@ class xProject:
     def printAxes(self):
         pass
 
-
-    def build(self, patchBlends=True, tuneDuovars=True, tuneTrivars=True, tuneQuadvars=True):
+    def build(self, patchBlends=False, tuneDuovars=False, tuneTrivars=False, tuneQuadvars=False):
 
         self.buildBlendsFile()
         if patchBlends:
@@ -214,8 +214,4 @@ class xProject:
         # self.addInstances()
 
         self.save()
-
-
-
-
 

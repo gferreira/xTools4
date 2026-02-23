@@ -7,8 +7,6 @@ permalink : /reference/tools/glyph/link-points/
 Create permanent links between pairs of points and show the distance or angle between them.
 {: .lead }
 
-<span class="badge text-bg-success rounded-0">RF4</span> Rewritten using the new RoboFont 4 APIs.
-
 
 <div class='row'>
 

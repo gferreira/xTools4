@@ -7,7 +7,6 @@ permalink : /reference/tools/variable/glyph-meme/
 A tool to open all parametric sources of a single glyph in a temporary font for editing.
 {: .lead}
 
-<span class="badge text-bg-success rounded-0">RF4</span> Rewritten using the new RoboFont 4 APIs.
 
 <div class='row'>
 <div class='col-4' markdown='1'>

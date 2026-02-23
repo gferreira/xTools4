@@ -8,8 +8,6 @@ permalink : /reference/tools/glyph/show-measurements/
 Visualize angle and length of bezier handles and line segments.
 {: .lead }
 
-<span class="badge text-bg-success rounded-0">RF4</span> Rewritten using the new RoboFont 4 APIs.
-
 
 <div class='row'>
 

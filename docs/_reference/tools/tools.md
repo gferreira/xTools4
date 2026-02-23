@@ -4,7 +4,7 @@ layout    : default
 permalink : /reference/tools/
 ---
 
-The xTools4 toolkit is organized around 5 main contexts or scopes for performing tasks while working on fonts.
+The xTools4 toolkit is organized around 5 main contexts for performing tasks while working on fonts.
 {: .lead }
 
 - [glyph](glyph)
