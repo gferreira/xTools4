@@ -9,6 +9,15 @@ All notable changes to xTools4 are documented in this file.
 {: .lead }
 
 
+0.2.9
+-----
+
+- <span class='badge rounded-0'>Changed</span> Include open fonts in the list of UFOs in the new overlay tool.
+- <span class='badge rounded-0'>Changed</span> Adding support for composite glyphs in BlendsPreview.
+- <span class='badge rounded-0'>Changed</span> Rewriting glyph construction builder with validation and composite filtering.
+{: ._changelog .mb-4 }
+
+
 0.2.8
 -----
 

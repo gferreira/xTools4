@@ -356,7 +356,7 @@ class GlyphValidatorController(ezui.WindowController):
 
         w = CurrentFontWindow()
         cellSize = w.fontOverview.views.sizeSlider.get()
-        rectSize = cellSize / 4
+        rectSize = cellSize / 6
 
         ctx.save()
         ctx.stroke(None)

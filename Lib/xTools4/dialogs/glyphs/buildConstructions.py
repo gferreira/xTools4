@@ -30,7 +30,6 @@ class BuildConstructionController(ezui.WindowController):
     verbose = True
 
     glyph = None
-
     constructionsTxt = None
 
     def build(self):
@@ -38,8 +37,8 @@ class BuildConstructionController(ezui.WindowController):
         (constructions…)  @loadButton
         (reload ↺)        @reloadButton
         * ColorWell       @colorButton
+        [X] validation    @validate
         [X] preview       @preview
-        [X] validate      @validate
         (build)           @buildButton
         (composites)      @filterButton
         """

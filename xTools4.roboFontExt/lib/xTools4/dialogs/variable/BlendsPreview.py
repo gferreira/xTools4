@@ -1,3 +1,7 @@
+from importlib import reload 
+import xTools4.modules.blendsPreview
+reload(xTools4.modules.blendsPreview)
+
 import os, time
 import drawBot as DB
 from drawBot.ui.drawView import DrawView

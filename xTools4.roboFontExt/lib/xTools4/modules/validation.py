@@ -155,18 +155,17 @@ def checkEqualComponents(g1, g2):
     if not len(g1.components) or not len(g2.components):
         return False
 
-    # decompose glyphs
     _g1 = RGlyph()
     pointPen = _g1.getPointPen()
     decomposePen = DecomposePointPen(g1.font, pointPen)
     g1.drawPoints(decomposePen)
-    _g1.width   = g1.width
+    _g1.width = g1.width
 
     _g2 = RGlyph()
     pointPen = _g2.getPointPen()
     decomposePen = DecomposePointPen(g2.font, pointPen)
     g2.drawPoints(decomposePen)
-    _g2.width   = g2.width
+    _g2.width = g2.width
 
     return checkEqualContours(_g1, _g2)
 
