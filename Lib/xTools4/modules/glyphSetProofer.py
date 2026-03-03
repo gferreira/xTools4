@@ -1,7 +1,9 @@
 import os, glob, datetime
 import drawBot as DB
 from fontParts.world import OpenFont
+from glyphConstruction import ParseGlyphConstructionListFromString, GlyphConstructionBuilder
 from xTools4.modules.validation import *
+from xTools4.dialogs.variable.Measurements import colorCheckTrue, colorCheckFalse, colorCheckEqual
 
 
 def drawGlyph(glyph):
@@ -28,30 +30,21 @@ class GlyphSetProofer:
     Visualize glyphset of UFO sources with validation checks against a default font.
 
     '''
-    margins               = 25, 10, 10, 10
-    stepsX                = 41
-    stepsY                = 26
-    colorContours         = 0,
-    colorContoursEqual    = 0, 0.65, 1
-    colorComponents       = 1, 0.35, 0
-    colorComponentsEqual  = 1, 0.75, 0
-    colorWarning          = 1, 0, 0
-    colorAlpha            = 0.2
-    colorCheckTrue        = 0.00, 0.85, 0.00
-    colorCheckFalse       = 1.00, 0.00, 0.00
-    colorCheckEqual       = 0.00, 0.33, 1.00
-    headerFont            = 'Menlo'
-    headerFontSize        = 8
-    glyphScale            = 0.0047
-    glyphBaseline         = 0.36
+    margins = 25, 10, 10, 10
+    stepsX  = 41
+    stepsY  = 26
+
+    headerFont     = 'Menlo'
+    headerFontSize = 8
+    glyphScale     = 0.0047
+    glyphBaseline  = 0.36
+
     cellStrokeColor       = 1,
     cellStrokeWidth       = 0.5
     cellLabelFont         = 'Menlo-Bold'
     cellLabelSize         = 3.5
-    cellLabelEqual        = 0, 0, 1
-    cellLabelCompatible   = 0, 1, 0
-    cellLabelIncompatible = 1, 0, 0
     cellMarginsColor      = 0.93,
+    cellColorAlpha        = 0.2
 
     checks = {
         'width'      : True,
@@ -62,11 +55,24 @@ class GlyphSetProofer:
         'anchors'    : True,
         'unicodes'   : True,
     }
+    checksShowCompatible = False
+    validateComposites = True
 
-    def __init__(self, familyName, defaultFontPath, sourcePaths):
+    def __init__(self, familyName, defaultFontPath, sourcePaths, glyphConstructionPath):
         self.familyName = familyName
         self.defaultFontPath = defaultFontPath
         self.sourcePaths = sourcePaths
+        self.glyphConstructionPath = glyphConstructionPath
+        self._loadGlyphConstructions()
+
+    def _loadGlyphConstructions(self):
+        if os.path.exists(self.glyphConstructionPath):
+            with open(self.glyphConstructionPath, 'r', encoding='utf-8') as f:
+                constructionsTxt = f.read()
+            constructionsRaw  = ParseGlyphConstructionListFromString(constructionsTxt)
+            self.constructions = { c.split('=')[0].strip() : c for c in constructionsRaw }
+        else:
+            self.constructions = {}
 
     def _drawHeader(self, fontName, now, isDefault=False):
         m = self.margins
@@ -111,38 +117,51 @@ class GlyphSetProofer:
         # define colors
         # -------------
 
-        glyphColor = bgColor = None
+        glyphColor = bgColor = compColor = None
 
         # glyphs with components
         if currentGlyph.components:
+
             levels = getNestingLevels(currentGlyph)
             # warning: nested components of mixed contour/components
             if levels > 1 or len(currentGlyph.contours):
-                bgColor    = self.colorWarning + (self.colorAlpha * 2,)
-                glyphColor = self.colorWarning
+                bgColor    = colorWarning[:-1] + (self.cellColorAlpha * 2,)
+                glyphColor = colorWarning
             else:
                 # components equal to default
                 if all(results['compatibility']) and results['equality']['components']:
-                    bgColor    = self.colorComponentsEqual + (self.colorAlpha,)
-                    glyphColor = self.colorComponentsEqual
+                    bgColor    = colorComponentsEqual[:-1] + (self.cellColorAlpha,)
+                    glyphColor = colorComponentsEqual
                 # components different from default
                 else:
-                    bgColor    = self.colorComponents + (self.colorAlpha,)
-                    glyphColor = self.colorComponents
+                    bgColor    = colorComponentsDifferent[:-1] + (self.cellColorAlpha,)
+                    glyphColor = colorComponentsDifferent
+
+            # validate composite glyphs
+
+            construction = self.constructions.get(currentGlyph.name)
+
+            constructionGlyph = GlyphConstructionBuilder(construction, currentGlyph.font)
+            components = [(c.baseGlyph, c.transformation) for c in currentGlyph.components]
+
+            if constructionGlyph.components == components and currentGlyph.width == constructionGlyph.width:
+                isConstruction = True
+            else:
+                isConstruction = False
 
         else:
             # contours equal to default
             if results['compatibility']['points'] and results['equality']['points']:
                 if currentGlyph.width == defaultGlyph.width:
-                    bgColor    = self.colorContoursEqual + (self.colorAlpha,)
-                    glyphColor = self.colorContoursEqual
+                    bgColor    = colorContoursEqual[:-1] + (self.cellColorAlpha,)
+                    glyphColor = colorContoursEqual
             else:
                 # empty glyphs
                 if not len(defaultGlyph) and not len(currentGlyph):
                     # width equal to default
                     if currentGlyph.width == defaultGlyph.width:
-                        bgColor    = self.colorContoursEqual + (self.colorAlpha,)
-                        glyphColor = self.colorContoursEqual
+                        bgColor    = colorContoursEqual[:-1] + (self.cellColorAlpha,)
+                        glyphColor = colorContoursEqual
 
         # ---------
         # draw cell
@@ -169,14 +188,15 @@ class GlyphSetProofer:
 
         # draw check results
         if font is not defaultFont and \
-                glyphColor != self.colorContoursEqual and \
-                glyphColor != self.colorComponentsEqual:
+                glyphColor != colorContoursEqual and \
+                glyphColor != colorComponentsEqual:
 
             with DB.savedState():
                 DB.stroke(None)
                 DB.translate(x, y)
                 DB.font(self.cellLabelFont)
                 DB.fontSize(self.cellLabelSize)
+                DB.save()
 
                 for checkName in self.checks.keys():
                     # check is hidden
@@ -187,13 +207,13 @@ class GlyphSetProofer:
                     isEqual      = results['equality'].get(checkName)
 
                     if isCompatible and isEqual:
-                        DB.fill(*self.colorCheckEqual)
+                        DB.fill(*colorCheckEqual)
                         drawCheck = True
                     elif isCompatible or isEqual:
-                        DB.fill(*self.colorCheckTrue)
-                        drawCheck = False
+                        DB.fill(*colorCheckTrue)
+                        drawCheck = self.checksShowCompatible
                     else:
-                        DB.fill(*self.colorCheckFalse)
+                        DB.fill(*colorCheckFalse)
                         drawCheck = True
 
                     if drawCheck:
@@ -201,6 +221,19 @@ class GlyphSetProofer:
                         DB.text(label, (1, 1))
                         w, h = DB.textSize(label)
                         DB.translate(w + 0.5, 0)
+
+                DB.restore()
+
+                # draw composite validation
+                if self.validateComposites and currentGlyph.components:
+                    compPos = stepX-1, stepY*0.5 - self.cellLabelSize*0.3
+                    if isConstruction:
+                        if self.checksShowCompatible:
+                            DB.fill(*colorCheckTrue)
+                            DB.text('C', compPos, align='right')
+                    else:
+                        DB.fill(*colorCheckFalse)
+                        DB.text('C', compPos, align='right')
 
         # draw contours / components
         if currentGlyph.bounds:
@@ -284,5 +317,4 @@ class GlyphSetProoferDesignspace:
 
     '''
     pass
-
 
