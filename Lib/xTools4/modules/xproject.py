@@ -3,6 +3,7 @@ from fontTools.designspaceLib import DesignSpaceDocument, AxisDescriptor, Source
 from fontParts.world import OpenFont
 from xTools4.modules.linkPoints2 import readMeasurements
 from xTools4.modules.measurements import FontMeasurements, permille
+from xTools4.modules.normalization import cleanupSources, normalizeSources
 
 
 measurementsPathKey       = 'com.xTools4.xProject.measurementsPath'
@@ -378,9 +379,30 @@ class xProject:
 
     # saving
 
-    def cleanupNormalizeSources(self):
+    def cleanupNormalizeSources(self, parametric=True, tuning=True, cleanup=True, normalize=True):
         '''Remove all unnecessary data from UFO sources and normalize when saving.'''
-        pass
+
+        ignoreFontLibs = [
+            'com.typemytype.robofont.italicSlantOffset',
+            'com.typemytype.robofont.segmentType',
+        ]
+
+        ignoreLayers = [
+            'foreground',
+            'background',
+        ]
+
+        if parametric:
+            if cleanup:
+                cleanupSources(self.sourcesFolder, preflight=False, ignoreFontLibs=ignoreFontLibs, ignoreLayers=ignoreLayers)
+            if normalize:
+                normalizeSources(self.sourcesFolder)
+
+        if tuning:
+            if cleanup:
+                cleanupSources(self.tuningSourcesFolder, preflight=False, ignoreFontLibs=ignoreFontLibs, ignoreLayers=ignoreLayers)
+            if normalize:
+                normalizeSources(self.tuningSourcesFolder)
 
     def addCustomKeysToLib(self):
 
