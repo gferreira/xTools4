@@ -91,7 +91,9 @@ class xProject:
     @property
     def defaultLocation(self):
         '''Returns the (parametric) location of the default source.'''
-        return {}
+        if not self.measurementsDefault:
+            return
+        return { name: permille(self.measurementsDefault.values[name], self.defaultFont.info.unitsPerEm) for name in self.parametricAxes }
 
     @property
     def defaultFont(self):
@@ -318,7 +320,21 @@ class xProject:
 
     def addParametricSources(self):
         '''Add parametric sources to the designspace.'''
-        pass
+        if self.verbose:
+            print('\tadding parametric sources...')
+
+        for name in self.parametricAxes:
+            for ufoPath in self.sourcesPaths:
+                if name in ufoPath:
+                    src = SourceDescriptor()
+                    src.path = ufoPath
+                    src.familyName = self.familyName
+                    L = self.defaultLocation.copy()
+                    value = int(os.path.splitext(os.path.split(ufoPath)[-1])[0].split('_')[-1][4:])
+                    src.styleName  = f'{name}{value}'
+                    L[name] = value
+                    src.location = L
+                    self.designspace.addSource(src)
 
     def addDefaultSource(self):
         '''Add the default source to the designspace.'''
@@ -357,6 +373,9 @@ class xProject:
     # building
 
     def buildDesignspace(self, tuning=False, instances=False):
+
+        if self.verbose:
+            print(f'building {os.path.split(self.designspacePath)[-1]}...')
 
         self.designspace = DesignSpaceDocument()
 
