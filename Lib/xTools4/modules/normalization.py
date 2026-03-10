@@ -75,7 +75,7 @@ def cleanupSources(sourcesFolder, clearFontLibs=True, clearGlyphLibs=True, clear
                 print(f'\t\tsaving UFO source...')
             f.save()
 
-        f.close()
+        # f.close()
 
     print()
     if clearFontLibs:

@@ -379,30 +379,55 @@ class xProject:
 
     # saving
 
-    def cleanupNormalizeSources(self, parametric=True, tuning=True, cleanup=True, normalize=True):
-        '''Remove all unnecessary data from UFO sources and normalize when saving.'''
+    def cleanupSources(self, parametric=True, tuning=True, clearFontLibs=True, clearGlyphLibs=True, clearFontGuides=True, clearGlyphGuides=True, clearMarks=True, clearLayers=True, preflight=False):
+        '''Remove unnecessary data from UFO sources.'''
 
+        # delete all font libs except these:
         ignoreFontLibs = [
             'com.typemytype.robofont.italicSlantOffset',
             'com.typemytype.robofont.segmentType',
         ]
 
+        # delete all layers except these:
         ignoreLayers = [
             'foreground',
             'background',
         ]
 
         if parametric:
-            if cleanup:
-                cleanupSources(self.sourcesFolder, preflight=False, ignoreFontLibs=ignoreFontLibs, ignoreLayers=ignoreLayers)
-            if normalize:
-                normalizeSources(self.sourcesFolder)
+            cleanupSources(self.sourcesFolder,
+                    clearFontLibs=clearFontLibs,
+                    clearGlyphLibs=clearGlyphLibs,
+                    clearFontGuides=clearFontGuides,
+                    clearGlyphGuides=clearGlyphGuides,
+                    clearMarks=clearMarks,
+                    clearLayers=clearLayers,
+                    preflight=preflight,
+                    ignoreFontLibs=ignoreFontLibs,
+                    ignoreLayers=ignoreLayers
+                )
 
         if tuning:
-            if cleanup:
-                cleanupSources(self.tuningSourcesFolder, preflight=False, ignoreFontLibs=ignoreFontLibs, ignoreLayers=ignoreLayers)
-            if normalize:
-                normalizeSources(self.tuningSourcesFolder)
+            cleanupSources(self.tuningSourcesFolder,
+                    clearFontLibs=clearFontLibs,
+                    clearGlyphLibs=clearGlyphLibs,
+                    clearFontGuides=clearFontGuides,
+                    clearGlyphGuides=clearGlyphGuides,
+                    clearMarks=clearMarks,
+                    clearLayers=clearLayers,
+                    preflight=preflight,
+                    ignoreFontLibs=ignoreFontLibs,
+                    ignoreLayers=ignoreLayers
+                )
+
+    def normalizeSources(self, parametric=True, tuning=True):
+        '''Normalize UFO sources.'''
+
+        if parametric:
+            normalizeSources(self.sourcesFolder, verbose=self.verbose)
+
+        if tuning:
+            normalizeSources(self.tuningSourcesFolder, verbose=self.verbose)
 
     def addCustomKeysToLib(self):
 
