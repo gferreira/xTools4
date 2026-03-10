@@ -1,217 +1,456 @@
-import os, glob
+import os, glob, json, shutil
+from fontTools.designspaceLib import DesignSpaceDocument, AxisDescriptor, SourceDescriptor, InstanceDescriptor, AxisMappingDescriptor
+from fontParts.world import OpenFont
+from xTools4.modules.linkPoints2 import readMeasurements
+from xTools4.modules.measurements import FontMeasurements, permille
 
-# WARNING: THIS IS A WORK-IN-PROGRESS DRAFT, NOT USABLE YET!
 
 measurementsPathKey       = 'com.xTools4.xProject.measurementsPath'
 smartSetsPathKey          = 'com.xTools4.xProject.smartSetsPath'
 glyphConstructionsPathKey = 'com.xTools4.xProject.glyphConstructionsPath'
 
+
 class xProject:
     '''
-    This object represents the source files of a parametric avar2 variable font.
-
-    - smart sets
-    - glyph constructions
-    - features
-    - measurements
-    - blends
-    - fences?
-
-    Example:
-
-    p = xProject(folder, 'AmstelvarA2')
-    p.buildBlends()
-    p.buildDesignspace()
-    p.buildVariableFont()
-    p.buildInstancesUFO()
-    p.buildInstancesTTF()
+    A base object to control the source files of a parametric avar2 variable font.
 
     '''
 
-    defaultName    = 'wght400'
+    verbose = True
+
+    #: A list of parametric axes (4-letter names).
     parametricAxes = []
 
-    def __init__(self, folder, familyName, subFamilyName=None):
+    def __init__(self, folder, familyName):
         self.baseFolder = folder
         self.familyName = familyName
-        self.subFamilyName = subFamilyName
 
-    # designspace
+    #==========
+    # SETTINGS
+    #==========
+
+    #: The name of the project settings file.
+    settingsFile = 'xproject.json'
 
     @property
-    def designspaceFileName(self):
-        fileName = self.familyName.replace(' ', '') 
-        if self.subFamilyName:
-            fileName += f'-{self.subFamilyName.replace(' ', '') }'
-        return f'{fileName}.designspace'
+    def settingsPath(self):
+        '''Returns the full path of the settings file.'''
+        return os.path.join(self.baseFolder, self.settingsFile)
+
+    # -----------
+    # designspace
+    # -----------
+
+    @property
+    def designspaceFile(self):
+        '''Returns the name of the designspace file.'''
+        return f'{self.familyName.replace(' ', '') }.designspace'
 
     @property
     def designspacePath(self):
-        return os.path.join(self.sourcesFolder, self.designspaceFileName)
+        '''Returns the full path of the designspace file.'''
+        return os.path.join(self.sourcesFolder, self.designspaceFile)
 
-    @property
-    def defaultLocation(self):
-        # L = { name: permille(self.measurementsDefault.values[name], self.unitsPerEm) for name in self.parametricAxes }
-        # L['GRAD'] = 0
-        # return L
-        pass
-
+    # ------------------
     # parametric sources
+    # ------------------
+
+    #: The name of the sources folder.
+    sourcesFolderName = 'Sources'
 
     @property
     def sourcesFolder(self):
-        folder = os.path.join(self.baseFolder, 'Sources')
-        if self.subFamilyName:
-            folder = os.path.join(folder, self.subFamilyName.replace(' ', ''))
+        '''Returns the full path of the sources folder.'''
+        folder = os.path.join(self.baseFolder, self.sourcesFolderName)
         return folder
 
     @property
-    def sources(self):
+    def sourcesPaths(self):
+        '''Returns a list with the full paths of all (parametric) UFO sources.'''
         return glob.glob(f'{self.sourcesFolder}/*.ufo')
 
-    @property
-    def defaultSource(self):
-        return os.path.join(self.sourcesFolder, f'{self.familyName}_{self.defaultName}.ufo')
+    # -------
+    # default
+    # -------
 
+    #: The name of the default source.
+    defaultName = 'wght400'
+
+    @property
+    def defaultSourcePath(self):
+        '''Returns the full path of the default source.'''
+        return os.path.join(self.sourcesFolder, f"{self.familyName.replace(' ', '')}_{self.defaultName}.ufo")
+
+    @property
+    def defaultLocation(self):
+        '''Returns the (parametric) location of the default source.'''
+        return {}
+
+    @property
+    def defaultFont(self):
+        return OpenFont(self.defaultSourcePath, showInterface=False)
+
+    # ------------
     # measurements
+    # ------------
 
-    @property
-    def measurementsFileName(self):
-        return 'measurements.json'
+    #: The name of the measurements file.
+    measurementsFile = 'measurements.json'
 
     @property
     def measurementsPath(self):
-        return os.path.join(self.sourcesFolder, self.measurementsFileName)
+        '''Returns the full path of the measurements file.'''
+        return os.path.join(self.sourcesFolder, self.measurementsFile)
 
-    # data files
+    @property
+    def measurements(self):
+        '''Returns the imported measurements as a dictionary.'''
+        if self.measurementsPath is None or not os.path.exists(self.measurementsPath):
+            return {}
+        else:
+            return readMeasurements(self.measurementsPath)
+
+    @property
+    def measurementsDefault(self):
+        measurements = FontMeasurements()
+        measurements.read(self.measurementsPath)
+        measurements.measure(self.defaultFont)
+        return measurements
+
+    # ----------
+    # smart sets
+    # ----------
+
+    @property
+    def smartSetsFile(self):
+        '''Returns the name of the smart sets file.'''
+        return self.designspaceFile.replace('.designspace', '.roboFontSets')
 
     @property
     def smartSetsPath(self):
-        pass
+        '''Returns the full path of the smart sets file.'''
+        return os.path.join(self.sourcesFolder, self.smartSetsFile)
+
+    @property
+    def smartSets(self):
+        '''Returns the imported smart sets as a dictionary.'''
+        return {}
+
+    # ------------------
+    # glyph construction
+    # ------------------
+
+    @property
+    def glyphConstructionsFile(self):
+        '''Returns the name of the glyph construction file.'''
+        return self.designspaceFile.replace('.designspace', '.glyphConstruction')
 
     @property
     def glyphConstructionsPath(self):
-        pass
-
-    # blending
+        '''Returns the full path of the glyph construction file.'''
+        return os.path.join(self.sourcesFolder, self.glyphConstructionsFile)
 
     @property
-    def blendsFileName(self):
-        return 'blends.json'
+    def glyphConstructions(self):
+        '''Returns the imported glyph constructions as a dictionary.'''
+        pass
+
+    # --------
+    # blending
+    # --------
+
+    #: The name of the blends file.
+    blendsFile = 'blends.json'
 
     @property
     def blendsPath(self):
-        return os.path.join(self.sourcesFolder, self.blendsFileName)
+        '''Returns the full path of the blends file.'''
+        return os.path.join(self.sourcesFolder, self.blendsFile)
 
     @property
     def blendedAxes(self):
+        '''Returns the imported blended axes as a dictionary.'''
+        if not os.path.exists(self.blendsPath):
+            return {}
         with open(self.blendsPath, 'r', encoding='utf-8') as f:
             blendsData = json.load(f)
         return blendsData['axes']
 
     @property
     def blendedSources(self):
+        '''Returns the imported blended sources as a dictionary.'''
+        if not os.path.exists(self.blendsPath):
+            return {}
         with open(self.blendsPath, 'r', encoding='utf-8') as f:
             blendsData = json.load(f)
         return blendsData['sources']
 
+    # ------
     # tuning
+    # ------
+
+    #: The name of the tuning folder.
+    tuningSourcerFolderName = 'corners'
 
     @property
     def tuningSourcesFolder(self):
-        pass
+        '''Returns the full path of the tuning sources (sub)folder.'''
+        return os.path.join(self.sourcesFolder, self.tuningSourcerFolderName)
 
     @property
-    def tuningSources(self):
-        pass
+    def tuningSourcesPaths(self):
+        '''Returns a list with the full paths of all tuning UFO sources.'''
+        return glob.glob(f'{self.tuningSourcesFolder}/*.ufo')
 
+    # ---------
     # instances
+    # ---------
+
+    #: The name of the instances folder.
+    instancesFolderName = 'instances'
 
     @property
     def instancesFolder(self):
-        return os.path.join(self.sourcesFolder, 'instances')
+        '''Returns the full path of the UFO instances folder.'''
+        return os.path.join(self.sourcesFolder, self.instancesFolderName)
 
-    # variable font
+    # --------------
+    # variable fonts
+    # --------------
+
+    #: The name of the fonts folder.
+    fontsFolderName = 'Fonts'
 
     @property
     def fontsFolder(self):
-        return os.path.join(self.baseFolder, 'Fonts')
+        '''Returns the full path of the (binary) fonts folder.'''
+        return os.path.join(self.baseFolder, self.fontsFolderName)
+
+    @property
+    def varFontFile(self):
+        '''Returns the name of the variable font file.'''
+        return self.designspaceFile.replace('.designspace', '.ttf')
 
     @property
     def varFontPath(self):
-        return os.path.join(self.fontsFolder, f'{self.familyName}.ttf')
+        '''Returns the full path of the variable font file.'''
+        return os.path.join(self.fontsFolder, self.varFontFile)
 
-    # -------
-    # methods
-    # -------
+    #=========
+    # METHODS
+    #=========
 
-    def addParametricAxes(self):
+    def setSourceNamesFromMeasurements(self):
+        '''Set source names from the actual measurement value in each source.'''
         pass
 
+    def createParametricSources(self, parameters, minSource=True, maxSource=True):
+        '''Create fresh min/max sources for parametric axes from default.'''
+        for parameter in parameters:
+            if minSource:
+                minSourcePath = self.defaultSourcePath.replace(self.defaultName, f'{parameter}min')
+                if os.path.exists(minSourcePath):
+                    if self.verbose:
+                        print(f'{os.path.split(minSourcePath)[-1]} already exists, skipping…')
+                else:
+                    shutil.copytree(self.defaultSourcePath, minSourcePath)
+            if maxSource:
+                maxSourcePath = self.defaultSourcePath.replace(self.defaultName, f'{parameter}max')
+                if os.path.exists(maxSourcePath):
+                    if self.verbose:
+                        print(f'{os.path.split(minSourcePath)[-1]} already exists, skipping…')
+                else:
+                    shutil.copytree(self.defaultSourcePath, maxSourcePath)
+
+    # designspace
+
+    def addParametricAxes(self):
+        '''Add parametric axes to the designspace.'''
+
+        if self.verbose:
+            print('\tadding parametric axes...')
+
+        for name in self.parametricAxes:
+
+            # get default value
+            defaultValue = permille(self.measurementsDefault.values[name], self.defaultFont.info.unitsPerEm)
+
+            # get min/max values from file names
+            values = []
+            for ufo in self.sourcesPaths:
+                if name in ufo:
+                    value = int(os.path.splitext(os.path.split(ufo)[-1])[0].split('_')[-1][4:])
+                    values.append(value)
+            if len(values) == 2:
+                values.sort()
+                minValue, maxValue = values
+            elif len(values) == 1:
+                values.append(defaultValue)
+                values.sort()
+                minValue, maxValue = values
+            else:
+                print(f'ERROR: {name}: {values}')
+                continue
+
+            # create axis
+            a = AxisDescriptor()
+            a.name    = name
+            a.tag     = name
+            a.minimum = minValue
+            a.maximum = maxValue
+            a.default = defaultValue
+            a.hidden  = True
+
+            self.designspace.addAxis(a)
+
     def addParametricSources(self):
+        '''Add parametric sources to the designspace.'''
         pass
 
     def addDefaultSource(self):
-        pass
+        '''Add the default source to the designspace.'''
 
-    def addTuningAxes(self, duovars=True, trivars=True, quadvars=True):
+        if not self.designspace:
+            return
+
+        src = SourceDescriptor()
+        src.path       = self.defaultSourcePath
+        src.familyName = self.familyName
+        src.styleName  = self.defaultName
+        src.location   = self.defaultLocation
+
+        self.designspace.addSource(src)
+
+    def addTuningAxes(self):
+        '''Add tuning axes to the designspace.'''
         pass
 
     def addTuningSources(self):
+        '''Add tuning sources to the designspace.'''
         pass
 
     def addInstances(self):
+        '''Add instances to the designspace.'''
         pass
 
     def addBlendedAxes(self):
+        '''Add blended axes to the designspace.'''
         pass
 
-    def buildBlendsFile(self):
+    def addBlendMappings(self):
+        '''Add blend mappings to the designspace.'''
         pass
 
-    def patchBlendsFile(self):
-        pass
+    # building
 
-    def addMappings(self):
-        pass
-
-    def save(self):
-        pass
-
-    def setSourceNamesFromMeasurements(self):
-        pass
-
-    def cleanupNormalizeSources(self):
-        pass
-
-    def buildInstances(self, clear=True):
-        pass
-
-    def buildVariableFont(self, subset=None, setVersionInfo=True, debug=False, fixGDEF=False, removeMarkFeature=False):
-        pass
-
-    def buildInstancesVariableFont(self, clear=True, ufo=False):
-        pass
-
-    def printAxes(self):
-        pass
-
-    def build(self, patchBlends=False, tuneDuovars=False, tuneTrivars=False, tuneQuadvars=False):
-
-        self.buildBlendsFile()
-        if patchBlends:
-            self.patchBlendsFile()
+    def buildDesignspace(self, tuning=False, instances=False):
 
         self.designspace = DesignSpaceDocument()
 
         self.addBlendedAxes()
         self.addParametricAxes()
-        self.addCornerTuningAxes(duovars=tuneDuovars, trivars=tuneTrivars, quadvars=tuneQuadvars)
-        self.addMappings()
+
+        if tuning:
+            self.addTuningAxes()
+
+        self.addBlendMappings()
         self.addDefaultSource()
         self.addParametricSources()
-        self.addCornerTuningSources()
-        # self.addInstances()
+
+        if tuning:
+            self.addTuningSources()
+
+        if instances:
+            self.addInstances()
+
+        self.addCustomKeysToLib()
 
         self.save()
+
+    def buildInstances(self, clear=True):
+        pass
+
+    def buildVariableFont(self, subset=None, setVersionInfo=True, debug=False):
+        pass
+
+    def buildInstancesVariableFont(self, clear=True, ufo=False):
+        pass
+
+    # saving
+
+    def cleanupNormalizeSources(self):
+        '''Remove all unnecessary data from UFO sources and normalize when saving.'''
+        pass
+
+    def addCustomKeysToLib(self):
+
+        if os.path.exists(self.smartSetsPath):
+            self.designspace.lib[smartSetsPathKey] = os.path.split(self.smartSetsPath)[-1]
+
+        if os.path.exists(self.measurementsPath):
+            self.designspace.lib[measurementsPathKey] = os.path.split(self.measurementsPath)[-1]
+
+        if os.path.exists(self.glyphConstructionsPath):
+            self.designspace.lib[glyphConstructionsPathKey] = os.path.split(self.glyphConstructionsPath)[-1]
+
+    def save(self):
+        if not self.designspace:
+            return
+
+        if self.verbose:
+            print(f'saving designspace...', end=' ')
+
+        self.designspace.write(self.designspacePath)
+        if self.verbose:
+            print(os.path.exists(self.designspacePath))
+            print()
+
+    # project info
+
+    def printAxes(self):
+        pass
+
+    def printSettings(self):
+        txt  = f'base folder: {self.baseFolder}\n'
+        txt += f'family name: {self.familyName}\n'
+        txt += f'settings file: {self.settingsFile}\n'
+        txt += f'settings path: {self.settingsPath} ({os.path.exists(self.settingsPath)})\n\n'
+
+        txt += f'designspace file: {self.designspaceFile}\n'
+        txt += f'designspace path: {self.designspacePath} ({os.path.exists(self.designspacePath)})\n\n'
+
+        txt += f'sources folder name: {self.sourcesFolderName}\n'
+        txt += f'sources folder path: {self.sourcesFolder} ({os.path.exists(self.sourcesFolder)})\n'
+        # txt += f'sources paths: {self.sourcesPaths}\n\n'
+
+        txt += f'default name: {self.defaultName}\n'
+        txt += f'default path: {self.defaultSourcePath} ({os.path.exists(self.defaultSourcePath)})\n'
+        txt += f'default location: {self.defaultLocation}\n\n'
+
+        txt += f'measurements file: {self.measurementsFile}\n'
+        txt += f'measurements path: {self.measurementsPath} ({os.path.exists(self.measurementsPath)})\n'
+        # txt += f'measurements data: {self.measurements}\n\n'
+
+        txt += f'smart sets file: {self.smartSetsFile}\n'
+        txt += f'smart sets path: {self.smartSetsPath} ({os.path.exists(self.smartSetsPath)})\n'
+        # txt += f'smart sets data: {self.smartSets}\n\n'
+
+        txt += f'blends file: {self.blendsFile}\n'
+        txt += f'blends path: {self.blendsPath} ({os.path.exists(self.blendsPath)})\n'
+        txt += f'blend axes: {self.blendedAxes.keys()}\n'
+        txt += f'blend mappings: {self.blendedSources.keys()}\n\n'
+
+        txt += f'tuning folder name: {self.tuningSourcerFolderName}\n'
+        txt += f'tuning folder path: {self.tuningSourcesFolder} ({os.path.exists(self.tuningSourcesFolder)})\n'
+        # txt += f'tuning sources paths: {self.tuningSourcesPaths}\n\n'
+
+        txt += f'instances folder name: {self.instancesFolderName}\n'
+        txt += f'instances folder path: {self.instancesFolder} ({os.path.exists(self.instancesFolder)})\n\n'
+
+        txt += f'fonts folder name: {self.fontsFolderName}\n'
+        txt += f'fonts folder: {self.fontsFolder} ({os.path.exists(self.fontsFolder)})\n'
+        txt += f'variable font file: {self.varFontFile}\n'
+        txt += f'variable font path:{self.varFontPath} ({os.path.exists(self.varFontPath)})\n\n'
+
+        print(txt)
 
