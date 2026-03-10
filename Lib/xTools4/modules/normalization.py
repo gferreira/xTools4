@@ -98,12 +98,11 @@ def cleanupSources(sourcesFolder, clearFontLibs=True, clearGlyphLibs=True, clear
 
     print('...done!\n')
 
-
-def normalizeSources(sourcesFolder, verbose=True):
+def normalizeSources(sourcesFolder, verbose=True, onlyModified=False, writeModTimes=False):
     ufoPaths  = glob.glob(f'{sourcesFolder}/*.ufo')
     print(f'normalizing UFO sources...\n')
     for ufoPath in ufoPaths:
         print(f'\tnormalizing {os.path.split(ufoPath)[-1]}...')
-        normalizeUFO(ufoPath, onlyModified=False, writeModTimes=False)
+        normalizeUFO(ufoPath, onlyModified=onlyModified, writeModTimes=writeModTimes)
     print('\n...done!\n')
 

@@ -262,11 +262,14 @@ def renameGlyphMeasurements(measurementsPath, glyphNames, renameDict):
 
     print('...done.')
 
-def setSourceNamesFromMeasurements(sourcesFolder, familyName, measurementsPath, preflight=True, ignoreTags=[]):
+def setSourceNamesFromMeasurements(sourcesFolder, familyName, measurementsPath, preflight=True, ignoreTags=[], infoFamilyName=None):
 
     ### expects semi-correct source names -- ex: FamilyName_AXISmin.ufo
 
     allSources = glob.glob(f'{sourcesFolder}/*.ufo')
+
+    if not infoFamilyName:
+        infoFamilyName = familyName
 
     allSourceNames = []
     for sourcePath in sorted(allSources):
@@ -274,10 +277,10 @@ def setSourceNamesFromMeasurements(sourcesFolder, familyName, measurementsPath, 
 
         # set family name
         f = OpenFont(sourcePath, showInterface=False)
-        if f.info.familyName != familyName:
-            print(f'family name: {f.info.familyName} --> {familyName}' )
+        if f.info.familyName != infoFamilyName:
+            print(f'family name: {f.info.familyName} --> {infoFamilyName}' )
             if not preflight:
-                f.info.familyName = familyName
+                f.info.familyName = infoFamilyName
 
         # measure source
         if tag not in ignoreTags:

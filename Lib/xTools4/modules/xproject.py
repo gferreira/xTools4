@@ -1,8 +1,14 @@
+from importlib import reload
+import xTools4.modules.measurements
+reload(xTools4.modules.measurements)
+import xTools4.modules.normalization
+reload(xTools4.modules.normalization)
+
 import os, glob, json, shutil
 from fontTools.designspaceLib import DesignSpaceDocument, AxisDescriptor, SourceDescriptor, InstanceDescriptor, AxisMappingDescriptor
 from fontParts.world import OpenFont
 from xTools4.modules.linkPoints2 import readMeasurements
-from xTools4.modules.measurements import FontMeasurements, permille
+from xTools4.modules.measurements import FontMeasurements, permille, setSourceNamesFromMeasurements
 from xTools4.modules.normalization import cleanupSources, normalizeSources
 
 
@@ -241,9 +247,15 @@ class xProject:
     # METHODS
     #=========
 
-    def setSourceNamesFromMeasurements(self):
+    def setSourceNamesFromMeasurements(self, preflight=True, ignoreTags=['wght']):
         '''Set source names from the actual measurement value in each source.'''
-        pass
+        setSourceNamesFromMeasurements(
+                self.sourcesFolder,
+                self.familyName,
+                self.measurementsPath,
+                preflight=preflight,
+                ignoreTags=ignoreTags,
+        )
 
     def createParametricSources(self, parameters, minSource=True, maxSource=True):
         '''Create fresh min/max sources for parametric axes from default.'''
@@ -404,7 +416,8 @@ class xProject:
                     clearLayers=clearLayers,
                     preflight=preflight,
                     ignoreFontLibs=ignoreFontLibs,
-                    ignoreLayers=ignoreLayers
+                    ignoreLayers=ignoreLayers,
+                    # verbose=self.verbose
                 )
 
         if tuning:
@@ -417,17 +430,18 @@ class xProject:
                     clearLayers=clearLayers,
                     preflight=preflight,
                     ignoreFontLibs=ignoreFontLibs,
-                    ignoreLayers=ignoreLayers
+                    ignoreLayers=ignoreLayers,
+                    # verbose=self.verbose
                 )
 
     def normalizeSources(self, parametric=True, tuning=True):
         '''Normalize UFO sources.'''
 
         if parametric:
-            normalizeSources(self.sourcesFolder, verbose=self.verbose)
+            normalizeSources(self.sourcesFolder, onlyModified=False, writeModTimes=False, verbose=self.verbose)
 
         if tuning:
-            normalizeSources(self.tuningSourcesFolder, verbose=self.verbose)
+            normalizeSources(self.tuningSourcesFolder, onlyModified=False, writeModTimes=False, verbose=self.verbose)
 
     def addCustomKeysToLib(self):
 
@@ -500,4 +514,6 @@ class xProject:
         txt += f'variable font path:{self.varFontPath} ({os.path.exists(self.varFontPath)})\n\n'
 
         print(txt)
+
+
 
