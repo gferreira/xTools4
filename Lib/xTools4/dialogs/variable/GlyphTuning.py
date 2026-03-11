@@ -5,7 +5,7 @@ from mojo.roboFont import OpenWindow, NewFont, OpenFont, CurrentFont
 from mojo.smartSet import readSmartSets
 from fontTools.designspaceLib import DesignSpaceDocument
 from fontTools.ufoLib.glifLib import GlyphSet
-from xTools4.modules.xproject import measurementsPathKey, smartSetsPathKey
+from xTools4.modules.xproject import smartSetsPathKey
 from xTools4.modules.validation import assignValidationGroup
 from xTools4.dialogs.variable.old.TempEdit import setupNewFont, splitall
 
@@ -121,9 +121,9 @@ class GlyphTuningController(ezui.WindowController):
 
     @property
     def smartSetsPath(self):
-        fileName = self.designspace.lib.get(smartSetsPathKey)
-        if fileName:
-            return os.path.join(self.sourcesFolder, fileName)
+        relativePath = self.designspace.lib.get(smartSetsPathKey)
+        if relativePath:
+            return os.path.normpath(os.path.join(self.sourcesFolder, relativePath))
 
     def _loadDesignspace(self):
 

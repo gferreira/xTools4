@@ -104,15 +104,15 @@ class GlyphMemeController(ezui.WindowController):
 
     @property
     def measurementsPath(self):
-        fileName = self.designspace.lib.get(measurementsPathKey)
-        if fileName:
-            return os.path.join(self.sourcesFolder, fileName)
+        relativePath = self.designspace.lib.get(measurementsPathKey)
+        if relativePath:
+            return os.path.normpath(os.path.join(self.sourcesFolder, relativePath))
 
     @property
     def smartSetsPath(self):
-        fileName = self.designspace.lib.get(smartSetsPathKey)
-        if fileName:
-            return os.path.join(self.sourcesFolder, fileName)
+        relativePath = self.designspace.lib.get(smartSetsPathKey)
+        if relativePath:
+            return os.path.normpath(os.path.join(self.sourcesFolder, relativePath))
 
     def _loadDesignspace(self):
 

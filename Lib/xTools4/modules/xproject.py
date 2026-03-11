@@ -15,6 +15,7 @@ from xTools4.modules.normalization import cleanupSources, normalizeSources
 measurementsPathKey       = 'com.xTools4.xProject.measurementsPath'
 smartSetsPathKey          = 'com.xTools4.xProject.smartSetsPath'
 glyphConstructionsPathKey = 'com.xTools4.xProject.glyphConstructionsPath'
+referenceFontPathKey      = 'com.xTools4.xProject.referenceFontPath'
 
 
 class xProject:

@@ -13,6 +13,7 @@ from xTools4.modules.linkPoints2 import readMeasurements, getPointAtIndex, getIn
 from xTools4.modules.measurements import Measurement
 from xTools4.modules.messages import showMessage
 from xTools4.modules.measureHandles import vector, getVector
+from xTools4.modules.xproject import measurementsPathKey
 
 
 KEY = 'com.xTools4.dialogs.variable.measurements'
@@ -31,9 +32,6 @@ thresholdGlyphDefault = 0.1
 tempEditModeKey        = 'com.xTools4.tempEdit.mode'
 fontMeasurementsKey    = 'com.xTools4.measurements.font'
 defaultMeasurementsKey = 'com.xTools4.measurements.default'
-
-measurementsPathKey    = 'com.xTools4.xProject.measurementsPath'
-smartSetsPathKey       = 'com.xTools4.xProject.smartSetsPath'
 
 
 def scaleColorFormatter(attributes, threshold):
@@ -495,9 +493,9 @@ class MeasurementsController(ezui.WindowController):
     def measurementsPath(self):
         if not self.designspace:
             return
-        fileName = self.designspace.lib.get(measurementsPathKey)
-        if fileName:
-            return os.path.join(self.sourcesFolder, fileName)
+        relativePath = self.designspace.lib.get(measurementsPathKey)
+        if relativePath:
+            return os.path.normpath(os.path.join(self.sourcesFolder, relativePath))
 
     @property
     def defaultPath(self):

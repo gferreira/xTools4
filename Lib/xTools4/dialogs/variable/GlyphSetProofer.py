@@ -152,6 +152,10 @@ class GlyphSetProoferUI:
         return designspacePlus.document.sources
 
     @property
+    def sourcesFolder(self):
+        return os.path.dirname(self.selectedDesignspacePlus.document.path)
+
+    @property
     def selectedSources(self):
         group = self._groups[0]['view']
         selection = group.sources.getSelection()
@@ -208,7 +212,8 @@ class GlyphSetProoferUI:
         if default is None:
             return
 
-        glyphConstructionPath = self.selectedDesignspacePlus.document.lib.get(glyphConstructionsPathKey)
+        relativePath = self.selectedDesignspacePlus.document.lib.get(glyphConstructionsPathKey)
+        glyphConstructionPath = os.path.normpath(os.path.join(self.sourcesFolder, relativePath))
 
         group1 = self._groups[0]['view']
         group2 = self._groups[1]['view']
