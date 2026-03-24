@@ -29,6 +29,9 @@ class xProject:
     #: A list of parametric axes (4-letter names).
     parametricAxes = []
 
+    #: A switch to make parametric axes hidden (or not).
+    parametricAxesHidden = True
+
     def __init__(self, folder, familyName):
         self.baseFolder = folder
         self.familyName = familyName
@@ -278,6 +281,40 @@ class xProject:
                 else:
                     shutil.copytree(self.defaultSourcePath, maxSourcePath)
 
+    def createMeasurementsFile(self):
+        '''Create a fresh measurements file.'''
+        if self.verbose:
+            print('creating measurements file...')
+        measurements = {
+            'font'   : {},
+            'glyphs' : {},
+        }
+        if os.path.exists(self.measurementsPath):
+            print(f'{self.measurementsPath} already exists.\n')
+            return
+        with open(self.measurementsPath, 'w', encoding='utf-8') as f:
+            json.dump(measurements, f, indent=2)
+
+    def createSmartSetsFile(self):
+        '''Create a fresh smart sets file.'''
+        if self.verbose:
+            print('creating smart sets file...')
+        if os.path.exists(self.smartSetsPath):
+            print(f'{self.smartSetsPath} already exists.\n')
+            return
+        with open(self.smartSetsPath, 'w') as f:
+            pass
+
+    def createGlyphConstructionFile(self):
+        '''Create a fresh glyph construction file.'''
+        if self.verbose:
+            print('creating glyph construction file...')
+        if os.path.exists(self.glyphConstructionsPath):
+            print(f'{self.glyphConstructionsPath} already exists.\n')
+            return
+        with open(self.glyphConstructionsPath, 'w') as f:
+            pass
+
     # designspace
 
     def addParametricAxes(self):
@@ -315,7 +352,7 @@ class xProject:
             a.minimum = minValue
             a.maximum = maxValue
             a.default = defaultValue
-            a.hidden  = True
+            a.hidden  = self.parametricAxesHidden
 
             self.designspace.addAxis(a)
 
@@ -365,13 +402,60 @@ class xProject:
 
     def addBlendedAxes(self):
         '''Add blended axes to the designspace.'''
-        pass
+        if self.verbose:
+            print('\tadding blended axes...')
+
+        for tag in self.blendedAxes.keys():
+            a = AxisDescriptor()
+            a.name    = self.blendedAxes[tag]['name']
+            a.tag     = tag
+            a.minimum = self.blendedAxes[tag]['minimum']
+            a.maximum = self.blendedAxes[tag]['maximum']
+            a.default = self.blendedAxes[tag]['default']
+            # if tag == 'opsz':
+            #     a.map = self.opszMapping
+            self.designspace.addAxis(a)
 
     def addBlendMappings(self):
         '''Add blend mappings to the designspace.'''
-        pass
+
+        blendedAxes    = self.blendedAxes
+        blendedSources = self.blendedSources
+
+        if self.verbose:
+            print('\tadding blend mappings...')
+
+        for styleName in blendedSources.keys():
+            m = AxisMappingDescriptor()
+
+            # get input value from style name
+            inputLocation = {}
+            for param in styleName.split('_'):
+                tag   = param[:4]
+                value = int(param[4:])
+                axisName  = blendedAxes[tag]['name']
+                inputLocation[axisName] = value
+
+            # get output value from blends.json file
+            outputLocation = {}
+            for axisName in blendedSources[styleName]:
+                outputLocation[axisName] = int(blendedSources[styleName][axisName])
+
+            # # set value for corner tuning axes
+            # if styleName in self.cornerTuningAxes:
+            #     axisTag = self.cornerTuningAxes[styleName]
+            #     outputLocation[axisTag] = 100
+
+            m.inputLocation  = inputLocation
+            m.outputLocation = outputLocation
+            m.description    = styleName
+
+            self.designspace.addAxisMapping(m)
 
     # building
+
+    def buildBlendsFile(self):
+        pass
 
     def buildDesignspace(self, tuning=False, instances=False):
 
@@ -534,6 +618,10 @@ class xProject:
         txt += f'variable font path:{self.varFontPath} ({os.path.exists(self.varFontPath)})\n\n'
 
         print(txt)
+
+
+
+
 
 
 

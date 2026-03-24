@@ -325,37 +325,44 @@ class BlendsPreviewController:
     def _loadDesignspace(self):
 
         if self.verbose:
-            print(f'loading designspace from {os.path.split(self.designspacePath)[-1]}... ', end='')
+            print(f'loading designspace from {os.path.split(self.designspacePath)[-1]}... ')
 
         # initiate operator
         self.operator = UFOOperator()
         self.operator.read(self.designspacePath)
         self.operator.loadFonts()
 
-        if self.verbose:
-            print('done.\n')
-
         # load reference font
         relativePath = self.operator.doc.lib.get(referenceFontPathKey)
         if relativePath:
+            print('loading reference font...')
             sourcesFolder = os.path.dirname(self.designspacePath)
             self.referenceFontPath = os.path.normpath(os.path.join(sourcesFolder, relativePath))
+            self._group1.compare.set(True)
 
         self._updateAxesList()
 
+        if self.verbose:
+            print('done.\n')
+
     def _updateAxesList(self):
+        print('updating axes list...')
         axesItems = []
+
         for axis in self.operator.doc.axes:
             for axisName in self.blendedAxes:
+                print('\t', axisName)
                 if axisName in self.ignoreAxes or axisName.startswith('TN'):
                     continue
                 if axisName == axis.name:
+                    print(axisName)
                     axesItems.append({
                         'axis' : axis.tag,
                         'values': f'{int(axis.minimum)} {int(axis.default)} {int(axis.maximum)}',
                     })
 
-        self._group1.axesList.set(axesItems)
+        # the first 3 axes must be: opsz wght wdth
+        self._group1.axesList.set(axesItems[:3])
 
     def _updatePreview(self):
 
