@@ -668,6 +668,8 @@ class MeasurementsController(ezui.WindowController):
 
         # editing measurements not supported in temp fonts!
         if self.font.lib.get(tempEditModeKey) == 'glyphs':
+            if self.verbose:
+                showMessage('creating measurements in temp fonts is not supported', self.messageMode)
             return
 
         table = self.w.getItem("glyphMeasurements")
@@ -878,11 +880,9 @@ class MeasurementsController(ezui.WindowController):
             if not self.glyph or not isTempFont:
                 distanceUnits = M.measure(self.font, italicCorrection=italicCorrection)
             else:
-                # print(item['name'], self.glyph.lib[fontMeasurementsKey][item['name']])
-
                 # if the font is temporary, get stored measurement values from the glyph lib
                 if isTempFont and fontMeasurementsKey in self.glyph.lib:
-                    distanceUnits = self.glyph.lib[fontMeasurementsKey][item['name']]
+                    distanceUnits = self.glyph.lib[fontMeasurementsKey].get(item['name'])
                 else:
                     distanceUnits = None
 

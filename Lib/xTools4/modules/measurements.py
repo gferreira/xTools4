@@ -54,6 +54,15 @@ class FontMeasurements:
         for k, v in self.values.items():
             print(k, v)
 
+    @property
+    def valuesClean(self):
+        # clear all 'None' values (not valid in font libs)
+        values = self.values.copy()
+        for k, v in self.values.items():
+            if v is None:
+                del values[k]
+        return values
+
 
 class GlyphMeasurements:
     '''
@@ -351,4 +360,158 @@ def copyGlyphMeasurements(measurementsPathSrc, measurementsPathDst, glyphNames):
         json.dump(measurementsDst, f, indent=2)
 
     print('...done.\n')
+
+def convertMeasurementIndexesToIDs(font, measurements):
+
+    _measurements = measurements.copy()
+
+    # convert font-level measurements
+
+    for measurementName, fontMeasurement in _measurements['font'].items():
+        glyph1, point1 = fontMeasurement['glyph 1'], fontMeasurement['point 1']
+        glyph2, point2 = fontMeasurement['glyph 2'], fontMeasurement['point 2']
+
+        try:
+            point1 = int(point1)
+            g1 = font[glyph1]
+            pointCount1 = sum(len(c.points) for c in g1)
+            if point1 == -1 or point1 > pointCount1:
+                pass
+            else:
+                pt1 = getPointAtIndex(g1, point1)
+                id1 = pt1.identifier if pt1.identifier else pt1.getIdentifier()
+                fontMeasurement['point 1'] = id1
+        except:
+            pass
+
+        try:
+            point2 = int(point2)
+            g2 = font[glyph2]
+            pointCount2 = sum(len(c.points) for c in g2)
+            if point2 == -1 or point2 > pointCount2:
+                pass
+            else:
+                pt2 = getPointAtIndex(g2, point2)
+                id2 = pt2.identifier if pt2.identifier else pt2.getIdentifier()
+                fontMeasurement['point 2'] = id2
+        except:
+            pass
+
+    # convert glyph-level measurements
+
+    for glyphName, glyphMeasurements in _measurements['glyphs'].items():
+
+        glyph = font[glyphName]
+        pointCount = sum(len(c) for c in glyph)
+        _glyphMeasurements = {}
+
+        for glyphMeasurementKey, glyphMeasurement in glyphMeasurements.items():
+            point1, point2 = glyphMeasurementKey.split()
+
+            try:
+                point1 = int(point1)
+                if point1 == -1 or point1 > pointCount:
+                    pass
+                else:
+                    pt1 = getPointAtIndex(glyph, point1)
+                    id1 = pt1.identifier if pt1.identifier else pt1.getIdentifier()
+                    point1 = id1
+            except:
+                pass
+
+            try:
+                point2 = int(point2)
+                if point2 == -1 or point2 > pointCount:
+                    pass
+                else:
+                    pt2 = getPointAtIndex(glyph, point2)
+                    id2 = pt2.identifier if pt2.identifier else pt2.getIdentifier()
+                    point2 = id2
+            except:
+                pass
+
+            _glyphMeasurementKey = f'{point1} {point2}'
+            _glyphMeasurements[_glyphMeasurementKey] = glyphMeasurement
+
+        _measurements['glyphs'][glyphName] = _glyphMeasurements
+
+    # done!
+
+    return _measurements
+
+def convertMeasurementIDsToIndexes(font, measurements):
+
+    _measurements = measurements.copy()
+
+    # convert font-level measurements
+
+    for measurementName, fontMeasurement in _measurements['font'].items():
+        glyph1, point1 = fontMeasurement['glyph 1'], fontMeasurement['point 1']
+        glyph2, point2 = fontMeasurement['glyph 2'], fontMeasurement['point 2']
+
+        g1 = font[glyph1]
+        pointCount1 = sum(len(c) for c in g1)
+
+        try:
+            if int(point1) == -1 or int(point1) > pointCount1:
+                pass
+        except:
+            if len(point1) > 1:
+                pt1 = getPointFromID(g1, point1)
+                pt1_index = getIndexForPoint(g1, pt1)
+                fontMeasurement['point 1'] = pt1_index
+
+        g2  = font[glyph2]
+        pointCount2 = sum(len(c) for c in g2)
+
+        try:
+            if int(point2) == -1 or int(point2) > pointCount2:
+                pass
+        except:
+            if len(point2) > 1:
+                pt2 = getPointFromID(g2, point2)
+                pt2_index = getIndexForPoint(g2, pt2)
+                fontMeasurement['point 2'] = pt2_index
+
+    # convert glyph-level measurements
+
+    for glyphName, glyphMeasurements in _measurements['glyphs'].items():
+
+        glyph = font[glyphName]
+        _glyphMeasurements = {}
+
+        for glyphMeasurementKey, glyphMeasurement in glyphMeasurements.items():
+            point1, point2 = glyphMeasurementKey.split()
+
+            try:
+                if int(point1) == -1 or int(point1) > pointCount1:
+                    pass
+            except:
+                if len(point1) > 1:
+                    pt1 = getPointFromID(glyph, point1)
+                    pt1_index = getIndexForPoint(glyph, pt1)
+                    point1 = pt1_index
+
+            try:
+                if int(point2) == -1 or int(point2) > pointCount2:
+                    pass
+            except:
+                if len(point2) > 1:
+                    pt2 = getPointFromID(glyph, point2)
+                    pt2_index = getIndexForPoint(glyph, pt2)
+                    point2 = pt2_index
+
+            if point1 is None or point2 is None:
+                print(glyphMeasurementKey, '->', point1, point2)
+
+            _glyphMeasurementKey = f'{point1} {point2}'
+            _glyphMeasurements[_glyphMeasurementKey] = glyphMeasurement
+
+        _measurements['glyphs'][glyphName] = _glyphMeasurements
+
+    # done!
+
+    return _measurements
+
+
 
