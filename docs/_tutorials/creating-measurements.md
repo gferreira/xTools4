@@ -1,5 +1,5 @@
 ---
-title     : Creating measurements for an existing font or designspace
+title     : Creating a measurements file
 layout    : default
 permalink : /tutorials/creating-measurements/
 ---

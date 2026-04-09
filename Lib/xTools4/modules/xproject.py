@@ -125,6 +125,8 @@ class xProject:
 
     @property
     def measurementsDefault(self):
+        if not os.path.exists(self.measurementsPath):
+            return
         measurements = FontMeasurements()
         measurements.read(self.measurementsPath)
         measurements.measure(self.defaultFont)
@@ -416,8 +418,8 @@ class xProject:
             #     a.map = self.opszMapping
             self.designspace.addAxis(a)
 
-    def addBlendMappings(self):
-        '''Add blend mappings to the designspace.'''
+    def addBlendedSources(self):
+        '''Add blended sources (mappings) to the designspace.'''
 
         blendedAxes    = self.blendedAxes
         blendedSources = self.blendedSources
@@ -470,7 +472,7 @@ class xProject:
         if tuning:
             self.addTuningAxes()
 
-        self.addBlendMappings()
+        self.addBlendedSources()
         self.addDefaultSource()
         self.addParametricSources()
 
@@ -577,15 +579,15 @@ class xProject:
 
     def printSettings(self):
         txt  = f'base folder: {self.baseFolder}\n'
-        txt += f'family name: {self.familyName}\n'
-        txt += f'settings file: {self.settingsFile}\n'
-        txt += f'settings path: {self.settingsPath} ({os.path.exists(self.settingsPath)})\n\n'
+        txt += f'family name: {self.familyName}\n\n'
+        # txt += f'settings file: {self.settingsFile}\n'
+        # txt += f'settings path: {self.settingsPath} ({os.path.exists(self.settingsPath)})\n\n'
 
         txt += f'designspace file: {self.designspaceFile}\n'
         txt += f'designspace path: {self.designspacePath} ({os.path.exists(self.designspacePath)})\n\n'
 
         txt += f'sources folder name: {self.sourcesFolderName}\n'
-        txt += f'sources folder path: {self.sourcesFolder} ({os.path.exists(self.sourcesFolder)})\n'
+        txt += f'sources folder path: {self.sourcesFolder} ({os.path.exists(self.sourcesFolder)})\n\n'
         # txt += f'sources paths: {self.sourcesPaths}\n\n'
 
         txt += f'default name: {self.defaultName}\n'
@@ -593,31 +595,32 @@ class xProject:
         txt += f'default location: {self.defaultLocation}\n\n'
 
         txt += f'measurements file: {self.measurementsFile}\n'
-        txt += f'measurements path: {self.measurementsPath} ({os.path.exists(self.measurementsPath)})\n'
+        txt += f'measurements path: {self.measurementsPath} ({os.path.exists(self.measurementsPath)})\n\n'
         # txt += f'measurements data: {self.measurements}\n\n'
 
         txt += f'smart sets file: {self.smartSetsFile}\n'
-        txt += f'smart sets path: {self.smartSetsPath} ({os.path.exists(self.smartSetsPath)})\n'
+        txt += f'smart sets path: {self.smartSetsPath} ({os.path.exists(self.smartSetsPath)})\n\n'
         # txt += f'smart sets data: {self.smartSets}\n\n'
 
         txt += f'blends file: {self.blendsFile}\n'
         txt += f'blends path: {self.blendsPath} ({os.path.exists(self.blendsPath)})\n'
-        txt += f'blend axes: {self.blendedAxes.keys()}\n'
-        txt += f'blend mappings: {self.blendedSources.keys()}\n\n'
+        txt += f'blended axes: {self.blendedAxes.keys()}\n'
+        txt += f'blended sources: {self.blendedSources.keys()}\n\n'
 
         txt += f'tuning folder name: {self.tuningSourcerFolderName}\n'
-        txt += f'tuning folder path: {self.tuningSourcesFolder} ({os.path.exists(self.tuningSourcesFolder)})\n'
+        txt += f'tuning folder path: {self.tuningSourcesFolder} ({os.path.exists(self.tuningSourcesFolder)})\n\n'
         # txt += f'tuning sources paths: {self.tuningSourcesPaths}\n\n'
 
         txt += f'instances folder name: {self.instancesFolderName}\n'
         txt += f'instances folder path: {self.instancesFolder} ({os.path.exists(self.instancesFolder)})\n\n'
 
         txt += f'fonts folder name: {self.fontsFolderName}\n'
-        txt += f'fonts folder: {self.fontsFolder} ({os.path.exists(self.fontsFolder)})\n'
+        txt += f'fonts folder: {self.fontsFolder} ({os.path.exists(self.fontsFolder)})\n\n'
         txt += f'variable font file: {self.varFontFile}\n'
-        txt += f'variable font path:{self.varFontPath} ({os.path.exists(self.varFontPath)})\n\n'
+        txt += f'variable font path: {self.varFontPath} ({os.path.exists(self.varFontPath)})\n\n'
 
         print(txt)
+
 
 
 
