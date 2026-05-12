@@ -16,7 +16,7 @@ The controller object is responsible for building and managing the designspace.
 Introduction
 ------------
 
-In parametric fonts, the designspace is tighly coupled to various measurements (parameters) in the fonts.
+In parametric fonts, the designspace is tightly coupled to various measurements (parameters) in the fonts.
 
 During the design stage, the glyph shapes are still changing all the time, and if a measurement changes the parametric designspace must change accordingly.
 
