@@ -78,7 +78,7 @@ When converting from cubic to quadratic contours, it is also required to revert 
 </div>
 </div>
 
-*Cubic (left) and quadratic (right). Notice the overlapped points at the serifs and crotch of the quadratic.*
+*Cubic (left) and quadratic (right). Notice the overlapped points at the serifs and crotch of the quadratic, which are needed for bolder and smaller styles.*
 {: .small }
 
 

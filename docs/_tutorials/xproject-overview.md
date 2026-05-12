@@ -13,9 +13,17 @@ permalink : /tutorials/xproject-overview/
 Introduction
 ------------
 
-The “xProject model” is an attempt to systematize and automate the production of parametric variable fonts. It defines a set of data files which are used for various tasks during font development: measuring and automatically naming the sources, navigating the glyph set, building composite glyphs, automatically building the designspace, and much more.
+The “xProject model” is an attempt to systematize and automate the production of parametric variable fonts. It defines a set of data files which are used for various tasks during font development:
 
-This system is being developed for the production of [AmstelvarA2](#), and is now beginning to be used to produce other variable fonts too.
+- measuring and automatically naming the sources
+- navigating and filtering the glyph set
+- automatically building the designspace
+- blending typographic axes from parametric ones
+- building composite glyphs
+
+…and much more.
+
+This system was originally developed for the production of [AmstelvarA2](#), and is now being used to create other variable fonts too.
 
 **This is all still highly experimental and unstable! Your feedback is welcome.**
 
@@ -23,9 +31,20 @@ This system is being developed for the production of [AmstelvarA2](#), and is no
 {: .h5 }
 
 - greater precision and consistency
-- reduce repetitive tasks, focus on the design of the typeface
+- reduce repetitive tasks, focus on typeface design
 - more flexibility for changes during the development process
 - handle a very large number (50+) of axes and sources
+
+### How xProject works
+{: .h5 }
+
+Think of xProject is a set of files with a Python controller on top.
+
+`xProject` is a Python object which loads a standard set of files, and provides basic functionality for the production of parametric variable fonts. New projects are created by subclassing this object, and adding custom functions as needed.
+
+The designspace is built automatically, new axes and sources are added through the controller. The controller keeps the source names and the designspace updated based on actual measurements in the sources; it makes sure the parametric system is consistent.
+
+...
 
 
 Example source folders
@@ -102,7 +121,9 @@ File formats
 ### Designspace file
 {: .h5 }
 
-...
+The designspace file describes the complete font variation space, with all parametric axes and sources, blended axes, mappings, and everything needed to build a parametric variable font.
+
+The designspace file is not edited directly – it is built by the controller from data in the other files. This automated approach ensures that font names and parametric locations stay in synch with the actual measurements in the font.
 
 ### Default source
 {: .h5 }

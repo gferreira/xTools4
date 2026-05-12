@@ -3,13 +3,20 @@ import xTools4.modules.measurements
 reload(xTools4.modules.measurements)
 import xTools4.modules.normalization
 reload(xTools4.modules.normalization)
+import xTools4.modules.validation
+reload(xTools4.modules.validation)
 
-import os, glob, json, shutil
+import os, glob, json, shutil, time, datetime
+import subprocess
+from xml.etree.ElementTree import parse
 from fontTools.designspaceLib import DesignSpaceDocument, AxisDescriptor, SourceDescriptor, InstanceDescriptor, AxisMappingDescriptor
 from fontParts.world import OpenFont
+from defcon import Font
 from xTools4.modules.linkPoints2 import readMeasurements
 from xTools4.modules.measurements import FontMeasurements, permille, setSourceNamesFromMeasurements
 from xTools4.modules.normalization import cleanupSources, normalizeSources
+from xTools4.modules.validation import validateDesignspace
+from xTools4.modules.ttx import ttf2ttx, ttx2ttf
 
 
 measurementsPathKey       = 'com.xTools4.xProject.measurementsPath'
@@ -489,8 +496,45 @@ class xProject:
     def buildInstances(self, clear=True):
         pass
 
-    def buildVariableFont(self, subset=None, setVersionInfo=True, debug=False):
-        pass
+    def buildVariableFont(self, debug=False, featureWriter=True, noGDEF=False):
+
+        print(f'generating variable font for {self.designspaceFile}...')
+
+        D = DesignSpaceDocument()
+        D.read(self.designspacePath)
+        print(f'\tloading sources...')
+        for src in D.sources:
+            if debug:
+                print(f'\t\tloading {src.familyName} {src.styleName}...')
+            src.font = Font(src.path)
+
+        # generate variable font with fontmake
+
+        if 'PYTHONHOME' in os.environ:
+           del os.environ['PYTHONHOME']
+
+        print(f"\tbuilding avar2 font... ", end='')
+
+        cmd  = ['/Library/Frameworks/Python.framework/Versions/3.11/bin/fontmake']
+        cmd += ['-m', self.designspacePath]
+        cmd += ['-o', 'variable']
+        cmd += ['--output-path', self.varFontPath]
+        if not featureWriter:
+            cmd += ['--feature-writer', 'None']
+        if noGDEF:
+            cmd += ['--no-generate-GDEF']
+        cmd += ['--keep-direction']
+        cmd += ['--verbose WARNING']
+        cmd  = ' '.join(cmd)
+
+        with subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT) as p:
+            for line in p.stdout.readlines():
+                print(line,)
+            retval = p.wait()
+
+        print(f'{os.path.exists(self.varFontPath)}')
+
+        print('...done.\n')
 
     def buildInstancesVariableFont(self, clear=True, ufo=False):
         pass
@@ -552,13 +596,13 @@ class xProject:
     def addCustomKeysToLib(self):
 
         if os.path.exists(self.smartSetsPath):
-            self.designspace.lib[smartSetsPathKey] = os.path.split(self.smartSetsPath)[-1]
+            self.designspace.lib[smartSetsPathKey] = os.path.relpath(self.smartSetsPath, self.sourcesFolder)
 
         if os.path.exists(self.measurementsPath):
-            self.designspace.lib[measurementsPathKey] = os.path.split(self.measurementsPath)[-1]
+            self.designspace.lib[measurementsPathKey] = os.path.relpath(self.measurementsPath, self.sourcesFolder)
 
         if os.path.exists(self.glyphConstructionsPath):
-            self.designspace.lib[glyphConstructionsPathKey] = os.path.split(self.glyphConstructionsPath)[-1]
+            self.designspace.lib[glyphConstructionsPathKey] = os.path.relpath(self.glyphConstructionsPath, self.sourcesFolder)
 
     def save(self):
         if not self.designspace:
@@ -629,4 +673,11 @@ class xProject:
 
 
 
+
+
+
+    # validation
+
+    def validateDesignspace(self, locations=True, mappings=True, instances=True):
+        validateDesignspace(self.designspacePath, locations=locations, mappings=mappings, instances=instances)
 

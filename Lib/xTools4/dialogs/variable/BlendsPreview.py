@@ -351,14 +351,15 @@ class BlendsPreviewController:
 
         for axis in self.operator.doc.axes:
             for axisName in self.blendedAxes:
-                print('\t', axisName)
+                # print('\t', axisName)
                 if axisName in self.ignoreAxes or axisName.startswith('TN'):
                     continue
                 if axisName == axis.name:
-                    print(axisName)
+                    # print(axisName)
+                    values = set([axis.minimum, axis.default, axis.maximum])
                     axesItems.append({
                         'axis' : axis.tag,
-                        'values': f'{int(axis.minimum)} {int(axis.default)} {int(axis.maximum)}',
+                        'values': f"{' '.join([str(int(v)) for v in values])}",
                     })
 
         # the first 3 axes must be: opsz wght wdth
