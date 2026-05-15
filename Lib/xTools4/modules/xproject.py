@@ -8,6 +8,7 @@ reload(xTools4.modules.validation)
 
 import os, glob, json, shutil, time, datetime
 import subprocess
+from functools import cached_property
 from xml.etree.ElementTree import parse
 from fontTools.designspaceLib import DesignSpaceDocument, AxisDescriptor, SourceDescriptor, InstanceDescriptor, AxisMappingDescriptor
 from fontParts.world import OpenFont
@@ -43,9 +44,9 @@ class xProject:
         self.baseFolder = folder
         self.familyName = familyName
 
-    #==========
+    #----------
     # SETTINGS
-    #==========
+    #----------
 
     #: The name of the project settings file.
     settingsFile = 'xproject.json'
@@ -55,9 +56,7 @@ class xProject:
         '''Returns the full path of the settings file.'''
         return os.path.join(self.baseFolder, self.settingsFile)
 
-    # -----------
     # designspace
-    # -----------
 
     @property
     def designspaceFile(self):
@@ -69,9 +68,7 @@ class xProject:
         '''Returns the full path of the designspace file.'''
         return os.path.join(self.sourcesFolder, self.designspaceFile)
 
-    # ------------------
     # parametric sources
-    # ------------------
 
     #: The name of the sources folder.
     sourcesFolderName = 'Sources'
@@ -82,14 +79,12 @@ class xProject:
         folder = os.path.join(self.baseFolder, self.sourcesFolderName)
         return folder
 
-    @property
+    @cached_property
     def sourcesPaths(self):
         '''Returns a list with the full paths of all (parametric) UFO sources.'''
         return glob.glob(f'{self.sourcesFolder}/*.ufo')
 
-    # -------
     # default
-    # -------
 
     #: The name of the default source.
     defaultName = 'wght400'
@@ -104,15 +99,17 @@ class xProject:
         '''Returns the (parametric) location of the default source.'''
         if not self.measurementsDefault:
             return
-        return { name: permille(self.measurementsDefault.values[name], self.defaultFont.info.unitsPerEm) for name in self.parametricAxes }
+        L = {}
+        for name in self.parametricAxes:
+            if name in self.measurementsDefault.values:
+                L[name] = permille(self.measurementsDefault.values[name], self.defaultFont.info.unitsPerEm)
+        return L
 
-    @property
+    @cached_property
     def defaultFont(self):
         return OpenFont(self.defaultSourcePath, showInterface=False)
 
-    # ------------
     # measurements
-    # ------------
 
     #: The name of the measurements file.
     measurementsFile = 'measurements.json'
@@ -122,7 +119,7 @@ class xProject:
         '''Returns the full path of the measurements file.'''
         return os.path.join(self.sourcesFolder, self.measurementsFile)
 
-    @property
+    @cached_property
     def measurements(self):
         '''Returns the imported measurements as a dictionary.'''
         if self.measurementsPath is None or not os.path.exists(self.measurementsPath):
@@ -130,7 +127,7 @@ class xProject:
         else:
             return readMeasurements(self.measurementsPath)
 
-    @property
+    @cached_property
     def measurementsDefault(self):
         if not os.path.exists(self.measurementsPath):
             return
@@ -139,9 +136,7 @@ class xProject:
         measurements.measure(self.defaultFont)
         return measurements
 
-    # ----------
     # smart sets
-    # ----------
 
     @property
     def smartSetsFile(self):
@@ -158,9 +153,7 @@ class xProject:
         '''Returns the imported smart sets as a dictionary.'''
         return {}
 
-    # ------------------
     # glyph construction
-    # ------------------
 
     @property
     def glyphConstructionsFile(self):
@@ -177,9 +170,7 @@ class xProject:
         '''Returns the imported glyph constructions as a dictionary.'''
         pass
 
-    # --------
     # blending
-    # --------
 
     #: The name of the blends file.
     blendsFile = 'blends.json'
@@ -207,9 +198,7 @@ class xProject:
             blendsData = json.load(f)
         return blendsData['sources']
 
-    # ------
     # tuning
-    # ------
 
     #: The name of the tuning folder.
     tuningSourcerFolderName = 'corners'
@@ -224,9 +213,7 @@ class xProject:
         '''Returns a list with the full paths of all tuning UFO sources.'''
         return glob.glob(f'{self.tuningSourcesFolder}/*.ufo')
 
-    # ---------
     # instances
-    # ---------
 
     #: The name of the instances folder.
     instancesFolderName = 'instances'
@@ -236,9 +223,7 @@ class xProject:
         '''Returns the full path of the UFO instances folder.'''
         return os.path.join(self.sourcesFolder, self.instancesFolderName)
 
-    # --------------
     # variable fonts
-    # --------------
 
     #: The name of the fonts folder.
     fontsFolderName = 'Fonts'
@@ -258,9 +243,9 @@ class xProject:
         '''Returns the full path of the variable font file.'''
         return os.path.join(self.fontsFolder, self.varFontFile)
 
-    #=========
+    #---------
     # METHODS
-    #=========
+    #---------
 
     def setSourceNamesFromMeasurements(self, preflight=True, ignoreTags=['wght']):
         '''Set source names from the actual measurement value in each source.'''
@@ -326,16 +311,18 @@ class xProject:
 
     # designspace
 
-    def addParametricAxes(self):
+    def addParametricAxes(self, customAxes={}):
         '''Add parametric axes to the designspace.'''
 
         if self.verbose:
             print('\tadding parametric axes...')
 
         for name in self.parametricAxes:
-
             # get default value
-            defaultValue = permille(self.measurementsDefault.values[name], self.defaultFont.info.unitsPerEm)
+            if name in self.measurementsDefault.values:
+                defaultValue = permille(self.measurementsDefault.values[name], self.defaultFont.info.unitsPerEm)
+            elif name in customAxes:
+                defaultValue = customAxes[name]
 
             # get min/max values from file names
             values = []
@@ -365,7 +352,7 @@ class xProject:
 
             self.designspace.addAxis(a)
 
-    def addParametricSources(self):
+    def addParametricSources(self, familyName=None):
         '''Add parametric sources to the designspace.'''
         if self.verbose:
             print('\tadding parametric sources...')
@@ -373,17 +360,19 @@ class xProject:
         for name in self.parametricAxes:
             for ufoPath in self.sourcesPaths:
                 if name in ufoPath:
+                    # if self.verbose:
+                    #     print(f'\t\tadding {ufoPath}...')
                     src = SourceDescriptor()
                     src.path = ufoPath
-                    src.familyName = self.familyName
+                    src.familyName = self.familyName if not familyName else familyName
                     L = self.defaultLocation.copy()
                     value = int(os.path.splitext(os.path.split(ufoPath)[-1])[0].split('_')[-1][4:])
-                    src.styleName  = f'{name}{value}'
+                    src.styleName = src.name = f'{name}{value}'
                     L[name] = value
                     src.location = L
                     self.designspace.addSource(src)
 
-    def addDefaultSource(self):
+    def addDefaultSource(self, familyName=None):
         '''Add the default source to the designspace.'''
 
         if not self.designspace:
@@ -391,8 +380,8 @@ class xProject:
 
         src = SourceDescriptor()
         src.path       = self.defaultSourcePath
-        src.familyName = self.familyName
-        src.styleName  = self.defaultName
+        src.familyName = self.familyName if not familyName else familyName
+        src.styleName  = src.name = self.defaultName
         src.location   = self.defaultLocation
 
         self.designspace.addSource(src)
@@ -463,8 +452,8 @@ class xProject:
 
     # building
 
-    def buildBlendsFile(self):
-        pass
+    # def buildBlendsFile(self):
+    #     pass
 
     def buildDesignspace(self, tuning=False, instances=False):
 
@@ -604,12 +593,15 @@ class xProject:
         if os.path.exists(self.glyphConstructionsPath):
             self.designspace.lib[glyphConstructionsPathKey] = os.path.relpath(self.glyphConstructionsPath, self.sourcesFolder)
 
+        if os.path.exists(self.referenceFontPath):
+            self.designspace.lib[referenceFontPathKey] = os.path.relpath(self.referenceFontPath, self.sourcesFolder)
+
     def save(self):
         if not self.designspace:
             return
 
         if self.verbose:
-            print(f'saving designspace...', end=' ')
+            print(f'\tsaving designspace...', end=' ')
 
         self.designspace.write(self.designspacePath)
         if self.verbose:
@@ -665,19 +657,115 @@ class xProject:
 
         print(txt)
 
-
-
-
-
-
-
-
-
-
-
-
     # validation
 
     def validateDesignspace(self, locations=True, mappings=True, instances=True):
         validateDesignspace(self.designspacePath, locations=locations, mappings=mappings, instances=instances)
+
+
+
+
+
+
+def makeParentAxis(parentName, parametricAxes, defaultName):
+    r'''
+    Calculate a parent axis to control several parametric axes,
+    with mappings to limit the range of each child axis.
+
+    ::
+        parentName  = 'XTRA'
+        parametricAxes = {
+            'XTUC' : dict(minimum=72, maximum=668, default=400),
+            'XTUR' : dict(minimum=60, maximum=902, default=561),
+            'XTUD' : dict(minimum=76, maximum=686, default=410),
+            'XTLC' : dict(minimum=42, maximum=500, default=243),
+            'XTLR' : dict(minimum=46, maximum=625, default=337),
+            'XTLD' : dict(minimum=84, maximum=501, default=248),
+            'XTFI' : dict(minimum=40, maximum=604, default=329),
+        }
+        defaultName = 'XTUC'
+
+        parentAxis, mappings = makeParentAxis(parentName, parametricAxes, defaultName)
+
+        print('parent parametric axis:')
+        print(parentAxis)
+        print()
+        print('parent mappings to child parameters:')
+        for parentValue, mapping in sorted(mappings.items()):
+            print(f'\t{ parentValue } { mapping }')
+
+    '''
+    # THIS IS THE WRONG PLACE FOR THIS KIND OF DATA!
+    # MOVE TO DESIGNSPACE BUILDER? MEASUREMENTS FORMAT?
+    matchRangeAxes = {
+        'XQUC' : 'XTUR',
+        'XQLC' : 'XTLR',
+        'XQFI' : 'XTFI',
+    }
+
+    defaultValue = parametricAxes[defaultName]['default']
+    minValues = []
+    maxValues = []
+    for axisName, axis in parametricAxes.items():
+        # SKIP MATCHED RANGE AXES
+        if axisName in matchRangeAxes:
+            continue
+        axisShift = defaultValue - axis['default']
+        minValue  = axis['minimum'] + axisShift
+        maxValue  = axis['maximum'] + axisShift
+        minValues.append(minValue)
+        maxValues.append(maxValue)
+
+    parentAxis = {
+        'name'    : parentName,
+        'default' : defaultValue,
+        'minimum' : min(minValues),
+        'maximum' : max(maxValues),
+    }
+
+    mappingValues = set(minValues + maxValues)
+    mappings = {}
+    for mappingValue in sorted(mappingValues):
+        mappings[mappingValue] = {}
+        for axisName, axis in parametricAxes.items():
+            # SKIP MATCHED RANGE AXES
+            if axisName in matchRangeAxes:
+                continue
+            axisShift = defaultValue - axis['default']
+            value = mappingValue - axisShift
+            mappings[mappingValue][axisName] = value
+
+    # ADD AXES WITH MATCHED RANGES
+
+    for mappingValue, maps in mappings.items():
+        for axisName, mapAxisName in matchRangeAxes.items():
+            if mapAxisName in maps:
+
+                axisDefault = parametricAxes[axisName]['default']
+                axisMinimum = parametricAxes[axisName]['minimum']
+                axisMaximum = parametricAxes[axisName]['maximum']
+
+                mapAxisDefault = parametricAxes[mapAxisName]['default']
+                mapAxisMinimum = parametricAxes[mapAxisName]['minimum']
+                mapAxisMaximum = parametricAxes[mapAxisName]['maximum']
+
+                mapAxisValue = maps[mapAxisName]
+
+                if mappingValue < defaultValue:
+                    axisRange = axisDefault    - axisMinimum
+                    mapRange  = mapAxisDefault - mapAxisMinimum
+                    mapScale  = axisRange / mapRange
+                    mapValue  = (mapAxisValue - mapAxisMinimum) * mapScale
+                    axisValue = axisMinimum + mapValue
+
+                elif mappingValue > defaultValue:
+                    axisRange = axisMaximum    - axisDefault
+                    mapRange  = mapAxisMaximum - mapAxisDefault
+                    mapScale  = axisRange / mapRange
+                    mapValue  = (mapAxisValue - mapAxisDefault) * mapScale
+                    axisValue = axisDefault + mapValue
+
+                maps[axisName] = int(axisValue)
+
+    return parentAxis, mappings
 
