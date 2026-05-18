@@ -57,11 +57,11 @@ p.printSettings()
 {: .h5 }
 
 | base folder | MyFolder/ |
-| family name | My New |
+| family name | My Family |
 | designspace file | MyFamily.designspace |
 | designspace path | MyFolder/Sources/MyFamily.designspace |
 | sources folder name | Sources |
-| sources folder path | MyFolder/Sources |
+| sources folder path | MyFolder/Sources/ |
 | default name | wght400 |
 | default path | MyFolder/Sources/MyFamily_wght400.ufo |
 | measurements file | measurements.json |
@@ -71,11 +71,11 @@ p.printSettings()
 | blends file | blends.json |
 | blends path | MyFolder/Sources/blends.json |
 | tuning folder name | corners |
-| tuning folder path | MyFolder/Sources/corners |
+| tuning folder path | MyFolder/Sources/corners/ |
 | instances folder name | instances |
-| instances folder path | MyFolder/Sources/instances |
+| instances folder path | MyFolder/Sources/instances/ |
 | fonts folder name | Fonts |
-| fonts folder | MyFolder/Fonts |
+| fonts folder | MyFolder/Fonts/ |
 | variable font file | MyFamily.ttf |
 | variable font path | MyFolder/Fonts/MyFamily.ttf |
 {: .table .table-hover }

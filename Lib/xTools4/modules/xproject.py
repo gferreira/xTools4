@@ -667,7 +667,7 @@ class xProject:
 
 
 
-def makeParentAxis(parentName, parametricAxes, defaultName):
+def makeParentAxis(parentName, parametricAxes, defaultName, matchRangeAxes):
     r'''
     Calculate a parent axis to control several parametric axes,
     with mappings to limit the range of each child axis.
@@ -684,8 +684,13 @@ def makeParentAxis(parentName, parametricAxes, defaultName):
             'XTFI' : dict(minimum=40, maximum=604, default=329),
         }
         defaultName = 'XTUC'
+        matchRangeAxes = {
+            'XQUC' : 'XTUR',
+            'XQLC' : 'XTLR',
+            'XQFI' : 'XTFI',
+        }
 
-        parentAxis, mappings = makeParentAxis(parentName, parametricAxes, defaultName)
+        parentAxis, mappings = makeParentAxis(parentName, parametricAxes, defaultName, matchRangeAxes)
 
         print('parent parametric axis:')
         print(parentAxis)
@@ -695,13 +700,7 @@ def makeParentAxis(parentName, parametricAxes, defaultName):
             print(f'\t{ parentValue } { mapping }')
 
     '''
-    # THIS IS THE WRONG PLACE FOR THIS KIND OF DATA!
-    # MOVE TO DESIGNSPACE BUILDER? MEASUREMENTS FORMAT?
-    matchRangeAxes = {
-        'XQUC' : 'XTUR',
-        'XQLC' : 'XTLR',
-        'XQFI' : 'XTFI',
-    }
+
 
     defaultValue = parametricAxes[defaultName]['default']
     minValues = []
