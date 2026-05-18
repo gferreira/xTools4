@@ -18,12 +18,165 @@ from xTools4.modules.measurements import FontMeasurements, permille, setSourceNa
 from xTools4.modules.normalization import cleanupSources, normalizeSources
 from xTools4.modules.validation import validateDesignspace
 from xTools4.modules.ttx import ttf2ttx, ttx2ttf
+from xTools4.modules.glyphMemeProofer import GlyphMemeProofer
+from xTools4.modules.glyphSetProofer import GlyphSetProofer
+from xTools4.modules.blendsPreview import BlendsPreview
 
 
 measurementsPathKey       = 'com.xTools4.xProject.measurementsPath'
 smartSetsPathKey          = 'com.xTools4.xProject.smartSetsPath'
 glyphConstructionsPathKey = 'com.xTools4.xProject.glyphConstructionsPath'
 referenceFontPathKey      = 'com.xTools4.xProject.referenceFontPath'
+
+
+def makeParentAxis(parentName, parametricAxes, defaultName, matchRangeAxes):
+    r'''
+    Calculate a parent axis to control several parametric axes,
+    with mappings to limit the range of each child axis.
+
+    ::
+        parentName  = 'XTRA'
+        parametricAxes = {
+            'XTUC' : dict(minimum=72, maximum=668, default=400),
+            'XTUR' : dict(minimum=60, maximum=902, default=561),
+            'XTUD' : dict(minimum=76, maximum=686, default=410),
+            'XTLC' : dict(minimum=42, maximum=500, default=243),
+            'XTLR' : dict(minimum=46, maximum=625, default=337),
+            'XTLD' : dict(minimum=84, maximum=501, default=248),
+            'XTFI' : dict(minimum=40, maximum=604, default=329),
+        }
+        defaultName = 'XTUC'
+        matchRangeAxes = {
+            'XQUC' : 'XTUR',
+            'XQLC' : 'XTLR',
+            'XQFI' : 'XTFI',
+        }
+
+        parentAxis, mappings = makeParentAxis(parentName, parametricAxes, defaultName, matchRangeAxes)
+
+        print('parent parametric axis:')
+        print(parentAxis)
+        print()
+        print('parent mappings to child parameters:')
+        for parentValue, mapping in sorted(mappings.items()):
+            print(f'\t{ parentValue } { mapping }')
+
+    '''
+
+
+    defaultValue = parametricAxes[defaultName]['default']
+    minValues = []
+    maxValues = []
+    for axisName, axis in parametricAxes.items():
+        # SKIP MATCHED RANGE AXES
+        if axisName in matchRangeAxes:
+            continue
+        axisShift = defaultValue - axis['default']
+        minValue  = axis['minimum'] + axisShift
+        maxValue  = axis['maximum'] + axisShift
+        minValues.append(minValue)
+        maxValues.append(maxValue)
+
+    parentAxis = {
+        'name'    : parentName,
+        'default' : defaultValue,
+        'minimum' : min(minValues),
+        'maximum' : max(maxValues),
+    }
+
+    mappingValues = set(minValues + maxValues)
+    mappings = {}
+    for mappingValue in sorted(mappingValues):
+        mappings[mappingValue] = {}
+        for axisName, axis in parametricAxes.items():
+            # SKIP MATCHED RANGE AXES
+            if axisName in matchRangeAxes:
+                continue
+            axisShift = defaultValue - axis['default']
+            value = mappingValue - axisShift
+            mappings[mappingValue][axisName] = value
+
+    # ADD AXES WITH MATCHED RANGES
+
+    for mappingValue, maps in mappings.items():
+        for axisName, mapAxisName in matchRangeAxes.items():
+            if mapAxisName in maps:
+
+                axisDefault = parametricAxes[axisName]['default']
+                axisMinimum = parametricAxes[axisName]['minimum']
+                axisMaximum = parametricAxes[axisName]['maximum']
+
+                mapAxisDefault = parametricAxes[mapAxisName]['default']
+                mapAxisMinimum = parametricAxes[mapAxisName]['minimum']
+                mapAxisMaximum = parametricAxes[mapAxisName]['maximum']
+
+                mapAxisValue = maps[mapAxisName]
+
+                if mappingValue < defaultValue:
+                    axisRange = axisDefault    - axisMinimum
+                    mapRange  = mapAxisDefault - mapAxisMinimum
+                    mapScale  = axisRange / mapRange
+                    mapValue  = (mapAxisValue - mapAxisMinimum) * mapScale
+                    axisValue = axisMinimum + mapValue
+
+                elif mappingValue > defaultValue:
+                    axisRange = axisMaximum    - axisDefault
+                    mapRange  = mapAxisMaximum - mapAxisDefault
+                    mapScale  = axisRange / mapRange
+                    mapValue  = (mapAxisValue - mapAxisDefault) * mapScale
+                    axisValue = axisDefault + mapValue
+
+                maps[axisName] = int(axisValue)
+
+    return parentAxis, mappings
+
+def updateGlyphsFromDefault(currentFont, oldDefaultFont, newDefaultFont, glyphNames, preflight=False):
+    name = os.path.splitext(os.path.split(currentFont.path)[-1])[0].split('_')[-1]
+    fontChanged = False
+    for glyphName in glyphNames:
+        if glyphName not in oldDefaultFont or glyphName not in currentFont or glyphName not in newDefaultFont:
+            continue
+
+        print(familyName, subFamilyName, name)
+
+        oldDefaultGlyph = oldDefaultFont[glyphName]
+        currentGlyph    = currentFont[glyphName]
+        newDefaultGlyph = newDefaultFont[glyphName]
+
+        validationGroupOldNew = assignValidationGroup(oldDefaultGlyph, newDefaultGlyph)
+        if validationGroupOldNew == 'contoursEqual':
+            print(familyName, subFamilyName, name)
+            print(f'old default /{glyphName} is equal to new default, skipping...')
+            continue
+
+        validationGroupOldCurrent = assignValidationGroup(oldDefaultGlyph, currentGlyph)
+        if validationGroupOldCurrent == 'contoursEqual':
+            # current glyph is equal to old default!
+            print(f'\tupdating /{glyphName} from default...')
+            currentFont.insertGlyph(newDefaultGlyph, name=glyphName)
+            if not fontChanged:
+                fontChanged = True
+
+    if fontChanged and not preflight:
+        print('\tsaving font...')
+        font.save()
+        font.close()
+
+    print()
+
+def batchUpdateGlyphsFromDefault(ufoPaths, newDefaultPath, oldDefaultPath, preflight=False):
+
+    newDefault = OpenFont(newDefaultPath, showInterface=False)
+    oldDefault = OpenFont(oldDefaultPath, showInterface=False)
+
+    ufoPaths.remove(newDefaultPath)
+    ufoPaths.remove(oldDefaultPath)
+
+    for ufoPath in sorted(ufoPaths):
+        font = OpenFont(ufoPath, showInterface=False)
+        updateGlyphsFromDefault(font, oldDefault, newDefault, glyphNames)
+
+    updateGlyphsFromDefault(oldDefault, oldDefault, newDefault, glyphNames, preflight=preflight)
 
 
 class xProject:
@@ -33,12 +186,6 @@ class xProject:
     '''
 
     verbose = True
-
-    #: A list of parametric axes (4-letter names).
-    parametricAxes = []
-
-    #: A switch to make parametric axes hidden (or not).
-    parametricAxesHidden = True
 
     def __init__(self, folder, familyName):
         self.baseFolder = folder
@@ -68,7 +215,16 @@ class xProject:
         '''Returns the full path of the designspace file.'''
         return os.path.join(self.sourcesFolder, self.designspaceFile)
 
+    #: A fontTools designspace object.
+    designspace = None
+
     # parametric sources
+
+    #: A list of parametric axes (4-letter names).
+    parametricAxes = []
+
+    #: A switch to make parametric axes hidden (or not).
+    parametricAxesHidden = True
 
     #: The name of the sources folder.
     sourcesFolderName = 'Sources'
@@ -243,6 +399,15 @@ class xProject:
         '''Returns the full path of the variable font file.'''
         return os.path.join(self.fontsFolder, self.varFontFile)
 
+    # proofs
+
+    proofsFolderName = 'Proofs'
+
+    @property
+    def proofsFolder(self):
+        '''Returns the full path of the proofs folder.'''
+        return os.path.join(self.baseFolder, self.proofsFolderName)
+
     #---------
     # METHODS
     #---------
@@ -308,6 +473,9 @@ class xProject:
             return
         with open(self.glyphConstructionsPath, 'w') as f:
             pass
+
+    def updateGlyphsFromDefault(self, glyphNames, oldDefaultPath, preflight=True):
+        batchUpdateGlyphsFromDefault(glyphNames, self.sourcesPaths, self.defaultSourcePath, oldDefaultPath, preflight=preflight)
 
     # designspace
 
@@ -452,9 +620,6 @@ class xProject:
 
     # building
 
-    # def buildBlendsFile(self):
-    #     pass
-
     def buildDesignspace(self, tuning=False, instances=False):
 
         if self.verbose:
@@ -584,6 +749,9 @@ class xProject:
 
     def addCustomKeysToLib(self):
 
+        if self.verbose:
+            print('\tadding custom keys to lib...')
+
         if os.path.exists(self.smartSetsPath):
             self.designspace.lib[smartSetsPathKey] = os.path.relpath(self.smartSetsPath, self.sourcesFolder)
 
@@ -662,109 +830,74 @@ class xProject:
     def validateDesignspace(self, locations=True, mappings=True, instances=True):
         validateDesignspace(self.designspacePath, locations=locations, mappings=mappings, instances=instances)
 
+    # proofing
 
+    def proofGlyphMemes(self, glyphNames, anchors=True):
 
+        for glyphName in glyphNames:
 
+            P = GlyphMemeProofer(glyphName, self.designspacePath)
+            P.anchorsDraw = anchors
+            P.draw()
 
+            pdfFileName = os.path.splitext(os.path.split(self.designspacePath)[-1])[0]
+            glyphMemesFolder = os.path.join(self.proofsFolder, 'PDF', 'glyph-memes')
+            P.save(glyphMemesFolder, pdfFileName)
 
-def makeParentAxis(parentName, parametricAxes, defaultName, matchRangeAxes):
-    r'''
-    Calculate a parent axis to control several parametric axes,
-    with mappings to limit the range of each child axis.
+    def proofSourcesGlyphSet(self, familyName=None, showCompatible=True, validateComposites=True):
 
-    ::
-        parentName  = 'XTRA'
-        parametricAxes = {
-            'XTUC' : dict(minimum=72, maximum=668, default=400),
-            'XTUR' : dict(minimum=60, maximum=902, default=561),
-            'XTUD' : dict(minimum=76, maximum=686, default=410),
-            'XTLC' : dict(minimum=42, maximum=500, default=243),
-            'XTLR' : dict(minimum=46, maximum=625, default=337),
-            'XTLD' : dict(minimum=84, maximum=501, default=248),
-            'XTFI' : dict(minimum=40, maximum=604, default=329),
-        }
-        defaultName = 'XTUC'
-        matchRangeAxes = {
-            'XQUC' : 'XTUR',
-            'XQLC' : 'XTLR',
-            'XQFI' : 'XTFI',
-        }
+        if not familyName:
+            familyName = self.familyName
 
-        parentAxis, mappings = makeParentAxis(parentName, parametricAxes, defaultName, matchRangeAxes)
+        sourcePaths = sorted(glob.glob(f'{self.sourcesFolder}/*.ufo'))
+        glyphsetProofsFolder = os.path.join(self.proofsFolder, 'PDF', 'glyphset')
 
-        print('parent parametric axis:')
-        print(parentAxis)
-        print()
-        print('parent mappings to child parameters:')
-        for parentValue, mapping in sorted(mappings.items()):
-            print(f'\t{ parentValue } { mapping }')
+        P = GlyphSetProofer(f'{familyName}', self.defaultSourcePath, sourcePaths, self.glyphConstructionsPath)
+        P.checksShowCompatible = showCompatible
+        P.validateComposites = validateComposites
+        P.build(savePDF=True, folder=glyphsetProofsFolder)
 
-    '''
+    def proofBlends(self, glyphNames, familyName=None, margins=True, labels=True, levels=False, levelsShow=[1, 2, 3, 4], header=True, footer=True, points=False):
 
+        B = BlendsPreview(self.designspacePath)
 
-    defaultValue = parametricAxes[defaultName]['default']
-    minValues = []
-    maxValues = []
-    for axisName, axis in parametricAxes.items():
-        # SKIP MATCHED RANGE AXES
-        if axisName in matchRangeAxes:
-            continue
-        axisShift = defaultValue - axis['default']
-        minValue  = axis['minimum'] + axisShift
-        maxValue  = axis['maximum'] + axisShift
-        minValues.append(minValue)
-        maxValues.append(maxValue)
+        if self.referenceFontPath:
+            B.compareFontPath = self.referenceFontPath
+            B.compare = True
+        else:
+            B.compare = False
 
-    parentAxis = {
-        'name'    : parentName,
-        'default' : defaultValue,
-        'minimum' : min(minValues),
-        'maximum' : max(maxValues),
-    }
+        designspace = DesignSpaceDocument()
+        designspace.read(self.designspacePath)
 
-    mappingValues = set(minValues + maxValues)
-    mappings = {}
-    for mappingValue in sorted(mappingValues):
-        mappings[mappingValue] = {}
-        for axisName, axis in parametricAxes.items():
-            # SKIP MATCHED RANGE AXES
-            if axisName in matchRangeAxes:
+        blendedAxes = ['opsz', 'wght', 'wdth']
+
+        axesList = []
+        for axis in designspace.axes:
+            if axis.tag in blendedAxes:
+                axesList.append((axis.tag, [int(axis.minimum), int(axis.default), int(axis.maximum)]))
+
+        B.axesList   = axesList
+        B.margins    = margins
+        B.labels     = labels
+        B.levels     = levels
+        B.levelsShow = levelsShow
+        B.header     = header
+        B.footer     = footer
+        B.points     = points
+
+        for glyphName in glyphNames:
+            if not glyphName:
                 continue
-            axisShift = defaultValue - axis['default']
-            value = mappingValue - axisShift
-            mappings[mappingValue][axisName] = value
+            B.draw(glyphName)
 
-    # ADD AXES WITH MATCHED RANGES
+        if not familyName:
+            familyName = self.familyName
 
-    for mappingValue, maps in mappings.items():
-        for axisName, mapAxisName in matchRangeAxes.items():
-            if mapAxisName in maps:
+        pdfPath = os.path.join(self.proofsFolder, 'PDF', 'blending', f'blending-preview_{familyName}.pdf')
+        print(f'saving {pdfPath}...', end=' ')
+        B.save(pdfPath)
+        print(f'done!\n')
 
-                axisDefault = parametricAxes[axisName]['default']
-                axisMinimum = parametricAxes[axisName]['minimum']
-                axisMaximum = parametricAxes[axisName]['maximum']
 
-                mapAxisDefault = parametricAxes[mapAxisName]['default']
-                mapAxisMinimum = parametricAxes[mapAxisName]['minimum']
-                mapAxisMaximum = parametricAxes[mapAxisName]['maximum']
-
-                mapAxisValue = maps[mapAxisName]
-
-                if mappingValue < defaultValue:
-                    axisRange = axisDefault    - axisMinimum
-                    mapRange  = mapAxisDefault - mapAxisMinimum
-                    mapScale  = axisRange / mapRange
-                    mapValue  = (mapAxisValue - mapAxisMinimum) * mapScale
-                    axisValue = axisMinimum + mapValue
-
-                elif mappingValue > defaultValue:
-                    axisRange = axisMaximum    - axisDefault
-                    mapRange  = mapAxisMaximum - mapAxisDefault
-                    mapScale  = axisRange / mapRange
-                    mapValue  = (mapAxisValue - mapAxisDefault) * mapScale
-                    axisValue = axisDefault + mapValue
-
-                maps[axisName] = int(axisValue)
-
-    return parentAxis, mappings
 
