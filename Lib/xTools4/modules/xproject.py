@@ -5,6 +5,8 @@ import xTools4.modules.normalization
 reload(xTools4.modules.normalization)
 import xTools4.modules.validation
 reload(xTools4.modules.validation)
+import xTools4.modules.glyphMemeProofer
+reload(xTools4.modules.glyphMemeProofer)
 
 import os, glob, json, shutil, time, datetime
 import subprocess
@@ -477,6 +479,59 @@ class xProject:
     def updateGlyphsFromDefault(self, glyphNames, oldDefaultPath, preflight=True):
         batchUpdateGlyphsFromDefault(glyphNames, self.sourcesPaths, self.defaultSourcePath, oldDefaultPath, preflight=preflight)
 
+    def copyGlyphsFromDefault(self, glyphNames):
+        pass
+
+    def copyGroupsFromDefault(self, glyphNames):
+        pass
+
+    def copyUnicodesFromDefault(self, preflight=False):
+        '''Copy all unicodes from the default source to all other sources.'''
+
+        srcFont = OpenFont(self.defaultSourcePath, showInterface=False)
+
+        print(f'copying all unicodes from the default to all other sources...')
+        for dstPath in self.sourcesPaths:
+            if dstPath == self.defaultSourcePath:
+                continue
+
+            dstFont = OpenFont(dstPath, showInterface=False)
+
+            print(f'\tcopying unicodes to {os.path.split(dstPath)[-1]}...')
+            for glyphName in srcFont.glyphOrder:
+                if glyphName not in srcFont or glyphName not in dstFont:
+                    continue
+                if dstFont[glyphName].unicodes != srcFont[glyphName].unicodes:
+                    print(f'\t\tcopying unicodes in {glyphName}...')
+                    if not preflight:
+                        dstFont[glyphName].unicodes = srcFont[glyphName].unicodes
+
+            if not preflight:
+                print(f'\tsaving font...')
+                dstFont.save()
+
+        print('...done!\n')
+
+    def copyGlyphOrderFromDefault(self):
+        '''Copy glyph order from the default source to all other sources.'''
+
+        srcFont = OpenFont(self.defaultSourcePath, showInterface=False)
+        glyphOrder = srcFont.templateGlyphOrder # srcFont.glyphOrder
+
+        print(f'copying glyph order from the default to all other sources...')
+        for dstPath in self.sourcesPaths:
+            if dstPath == self.defaultSourcePath:
+                continue
+            dstFont = OpenFont(dstPath, showInterface=False)
+            print(f'\tcopying default glyph order to {os.path.split(dstPath)[-1]}...')
+            dstFont.templateGlyphOrder = glyphOrder
+            dstFont.save()
+
+        print('...done!\n')
+
+    def buildCompositeGlyphs(self, glyphNames):
+        pass
+
     # designspace
 
     def addParametricAxes(self, customAxes={}):
@@ -898,6 +953,8 @@ class xProject:
         print(f'saving {pdfPath}...', end=' ')
         B.save(pdfPath)
         print(f'done!\n')
+
+
 
 
 

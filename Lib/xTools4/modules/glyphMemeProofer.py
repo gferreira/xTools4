@@ -311,6 +311,8 @@ class GlyphMemeProofer:
         T.append('name\tp1\tp2\tunits\tscale\n')
         T.append(f'{"-"*27}\n')
 
+        colorCheckNone = self.captionColor
+
         for k, v in self.glyphMeasurements.items():
             pt1, pt2 = k.split()
 
@@ -322,7 +324,10 @@ class GlyphMemeProofer:
             )
             value = M.measure(glyph.font, italicCorrection=True)
             valueDefault = M.measure(defaultFont, italicCorrection=True)
-            scaleDefault = value / valueDefault
+            if valueDefault != 0:
+                scaleDefault = value / valueDefault
+            else:
+                scaleDefault = None
 
             if scaleDefault is None:
                 color = colorCheckNone
@@ -333,11 +338,17 @@ class GlyphMemeProofer:
             else:
                 color = colorCheckFalse
 
+            T.fill(*color)
+            T.append(f"{v['name']}\t")
+
             T.fill(*self.captionColor)
-            T.append(f"{v['name']}\t{pt1}\t{pt2}\t{value}\t")
+            T.append(f"{pt1}\t{pt2}\t{value}\t")
 
             T.fill(*color)
-            T.append(f"{scaleDefault:.2f}\n")
+            if scaleDefault is not None:
+                T.append(f"{scaleDefault:.2f}\n")
+            else:
+                T.append("–\n")
 
         DB.textBox(T, panelBox, align='left')
 
