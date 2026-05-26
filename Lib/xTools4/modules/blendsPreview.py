@@ -461,5 +461,7 @@ class BlendsPreview:
             DB.translate(0, cellHeight * len(axis2Values))
 
     def save(self, pdfPath):
+        folder = os.path.dirname(pdfPath)
+        if not os.path.exists(folder):
+            os.makedirs(folder)
         DB.saveImage(pdfPath)
-

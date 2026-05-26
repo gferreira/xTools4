@@ -13,7 +13,7 @@ from mojo.smartSet import readSmartSets
 from fontTools.designspaceLib import DesignSpaceDocument
 from fontParts.world import OpenFont
 from xTools4.modules.linkPoints2 import readMeasurements
-from xTools4.modules.xproject import measurementsPathKey, smartSetsPathKey
+from xTools4.modules.xprojectLib import measurementsPathKey, smartSetsPathKey
 from xTools4.modules.glyphMemeProofer import GlyphMemeProofer
 
 

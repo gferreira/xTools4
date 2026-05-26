@@ -4,7 +4,7 @@ from defcon import Font
 from mojo.roboFont import OpenWindow, OpenFont
 from fontTools.designspaceLib import DesignSpaceDocument
 from xTools4.modules.linkPoints2 import readMeasurements
-from xTools4.modules.xproject import measurementsPathKey
+from xTools4.modules.xprojectLib import measurementsPathKey
 
 
 KEY = 'com.xTools4.dialogs.variable.designSpaceSelector'

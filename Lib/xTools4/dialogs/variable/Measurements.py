@@ -13,7 +13,7 @@ from xTools4.modules.linkPoints2 import readMeasurements, getPointAtIndex, getIn
 from xTools4.modules.measurements import Measurement
 from xTools4.modules.messages import showMessage
 from xTools4.modules.measureHandles import vector, getVector
-from xTools4.modules.xproject import measurementsPathKey
+from xTools4.modules.xprojectLib import measurementsPathKey
 
 
 KEY = 'com.xTools4.dialogs.variable.measurements'
@@ -799,6 +799,9 @@ class MeasurementsController(ezui.WindowController):
 
     def _loadDesignspace(self):
 
+        if self.verbose:
+            print(f'loading designspace...')
+
         self.designspace = DesignSpaceDocument()
         self.designspace.read(self.designspacePath)
 
@@ -806,7 +809,7 @@ class MeasurementsController(ezui.WindowController):
             return
 
         if self.verbose:
-            print(f'loading data from {os.path.split(self.measurementsPath)[-1]}... ', end='')
+            print(f'\tloading data from {os.path.split(self.measurementsPath)[-1]}...')
 
         self.measurements = readMeasurements(self.measurementsPath)
 
@@ -814,12 +817,12 @@ class MeasurementsController(ezui.WindowController):
         self._loadGlyphMeasurements()
 
         if self.verbose:
-            print(f'loading default source from {os.path.split(self.defaultPath)[-1]}... ', end='')
+            print(f'\tloading default source ({os.path.split(self.defaultPath)[-1]})...')
 
         self.defaultFont = OpenFont(self.defaultPath, showInterface=False)
 
         if self.verbose:
-            print('done.\n')
+            print('...done!\n')
 
         postEvent(f"{self.key}.changed")
 

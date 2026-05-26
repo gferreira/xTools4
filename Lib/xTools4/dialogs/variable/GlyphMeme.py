@@ -8,7 +8,7 @@ from fontTools.ufoLib.glifLib import GlyphSet
 from xTools4.modules.linkPoints2 import readMeasurements
 from xTools4.modules.fontutils import getGlyphs2
 from xTools4.modules.measurements import FontMeasurements, GlyphMeasurements
-from xTools4.modules.xproject import measurementsPathKey, smartSetsPathKey
+from xTools4.modules.xprojectLib import measurementsPathKey, smartSetsPathKey
 from xTools4.dialogs.variable.old.TempEdit import setupNewFont, splitall
 
 

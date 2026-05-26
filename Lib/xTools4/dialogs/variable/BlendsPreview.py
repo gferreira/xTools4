@@ -16,7 +16,7 @@ from xTools4.modules.sys import timer
 from xTools4.modules.blendsPreview import BlendsPreview
 from xTools4.modules.color import rgb2nscolor, nscolor2rgb
 from xTools4.dialogs.variable.GlyphMeme import tempEditModeKey
-from xTools4.modules.xproject import referenceFontPathKey
+from xTools4.modules.xprojectLib import referenceFontPathKey
 
 
 KEY = 'com.xTools4.dialogs.variable.blendsPreview'

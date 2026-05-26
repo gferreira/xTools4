@@ -12,7 +12,7 @@ from mojo.roboFont import OpenWindow
 from fontParts.world import OpenFont
 from xTools4.modules.designspacePlus import DesignSpacePlus
 from xTools4.modules.glyphSetProofer import GlyphSetProofer
-from xTools4.modules.xproject import glyphConstructionsPathKey
+from xTools4.modules.xprojectLib import glyphConstructionsPathKey
 
 
 KEY = 'com.xTools4.dialogs.variable.glyphSetProofer'

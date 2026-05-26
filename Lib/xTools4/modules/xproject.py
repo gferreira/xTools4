@@ -1,12 +1,6 @@
 from importlib import reload
-import xTools4.modules.measurements
-reload(xTools4.modules.measurements)
-import xTools4.modules.normalization
-reload(xTools4.modules.normalization)
-import xTools4.modules.validation
-reload(xTools4.modules.validation)
-import xTools4.modules.glyphMemeProofer
-reload(xTools4.modules.glyphMemeProofer)
+import xTools4.modules.blendsPreview
+reload(xTools4.modules.blendsPreview)
 
 import os, glob, json, shutil, time, datetime
 import subprocess
@@ -23,162 +17,7 @@ from xTools4.modules.ttx import ttf2ttx, ttx2ttf
 from xTools4.modules.glyphMemeProofer import GlyphMemeProofer
 from xTools4.modules.glyphSetProofer import GlyphSetProofer
 from xTools4.modules.blendsPreview import BlendsPreview
-
-
-measurementsPathKey       = 'com.xTools4.xProject.measurementsPath'
-smartSetsPathKey          = 'com.xTools4.xProject.smartSetsPath'
-glyphConstructionsPathKey = 'com.xTools4.xProject.glyphConstructionsPath'
-referenceFontPathKey      = 'com.xTools4.xProject.referenceFontPath'
-
-
-def makeParentAxis(parentName, parametricAxes, defaultName, matchRangeAxes):
-    r'''
-    Calculate a parent axis to control several parametric axes,
-    with mappings to limit the range of each child axis.
-
-    ::
-        parentName  = 'XTRA'
-        parametricAxes = {
-            'XTUC' : dict(minimum=72, maximum=668, default=400),
-            'XTUR' : dict(minimum=60, maximum=902, default=561),
-            'XTUD' : dict(minimum=76, maximum=686, default=410),
-            'XTLC' : dict(minimum=42, maximum=500, default=243),
-            'XTLR' : dict(minimum=46, maximum=625, default=337),
-            'XTLD' : dict(minimum=84, maximum=501, default=248),
-            'XTFI' : dict(minimum=40, maximum=604, default=329),
-        }
-        defaultName = 'XTUC'
-        matchRangeAxes = {
-            'XQUC' : 'XTUR',
-            'XQLC' : 'XTLR',
-            'XQFI' : 'XTFI',
-        }
-
-        parentAxis, mappings = makeParentAxis(parentName, parametricAxes, defaultName, matchRangeAxes)
-
-        print('parent parametric axis:')
-        print(parentAxis)
-        print()
-        print('parent mappings to child parameters:')
-        for parentValue, mapping in sorted(mappings.items()):
-            print(f'\t{ parentValue } { mapping }')
-
-    '''
-
-
-    defaultValue = parametricAxes[defaultName]['default']
-    minValues = []
-    maxValues = []
-    for axisName, axis in parametricAxes.items():
-        # SKIP MATCHED RANGE AXES
-        if axisName in matchRangeAxes:
-            continue
-        axisShift = defaultValue - axis['default']
-        minValue  = axis['minimum'] + axisShift
-        maxValue  = axis['maximum'] + axisShift
-        minValues.append(minValue)
-        maxValues.append(maxValue)
-
-    parentAxis = {
-        'name'    : parentName,
-        'default' : defaultValue,
-        'minimum' : min(minValues),
-        'maximum' : max(maxValues),
-    }
-
-    mappingValues = set(minValues + maxValues)
-    mappings = {}
-    for mappingValue in sorted(mappingValues):
-        mappings[mappingValue] = {}
-        for axisName, axis in parametricAxes.items():
-            # SKIP MATCHED RANGE AXES
-            if axisName in matchRangeAxes:
-                continue
-            axisShift = defaultValue - axis['default']
-            value = mappingValue - axisShift
-            mappings[mappingValue][axisName] = value
-
-    # ADD AXES WITH MATCHED RANGES
-
-    for mappingValue, maps in mappings.items():
-        for axisName, mapAxisName in matchRangeAxes.items():
-            if mapAxisName in maps:
-
-                axisDefault = parametricAxes[axisName]['default']
-                axisMinimum = parametricAxes[axisName]['minimum']
-                axisMaximum = parametricAxes[axisName]['maximum']
-
-                mapAxisDefault = parametricAxes[mapAxisName]['default']
-                mapAxisMinimum = parametricAxes[mapAxisName]['minimum']
-                mapAxisMaximum = parametricAxes[mapAxisName]['maximum']
-
-                mapAxisValue = maps[mapAxisName]
-
-                if mappingValue < defaultValue:
-                    axisRange = axisDefault    - axisMinimum
-                    mapRange  = mapAxisDefault - mapAxisMinimum
-                    mapScale  = axisRange / mapRange
-                    mapValue  = (mapAxisValue - mapAxisMinimum) * mapScale
-                    axisValue = axisMinimum + mapValue
-
-                elif mappingValue > defaultValue:
-                    axisRange = axisMaximum    - axisDefault
-                    mapRange  = mapAxisMaximum - mapAxisDefault
-                    mapScale  = axisRange / mapRange
-                    mapValue  = (mapAxisValue - mapAxisDefault) * mapScale
-                    axisValue = axisDefault + mapValue
-
-                maps[axisName] = int(axisValue)
-
-    return parentAxis, mappings
-
-def updateGlyphsFromDefault(currentFont, oldDefaultFont, newDefaultFont, glyphNames, preflight=False):
-    name = os.path.splitext(os.path.split(currentFont.path)[-1])[0].split('_')[-1]
-    fontChanged = False
-    for glyphName in glyphNames:
-        if glyphName not in oldDefaultFont or glyphName not in currentFont or glyphName not in newDefaultFont:
-            continue
-
-        print(familyName, subFamilyName, name)
-
-        oldDefaultGlyph = oldDefaultFont[glyphName]
-        currentGlyph    = currentFont[glyphName]
-        newDefaultGlyph = newDefaultFont[glyphName]
-
-        validationGroupOldNew = assignValidationGroup(oldDefaultGlyph, newDefaultGlyph)
-        if validationGroupOldNew == 'contoursEqual':
-            print(familyName, subFamilyName, name)
-            print(f'old default /{glyphName} is equal to new default, skipping...')
-            continue
-
-        validationGroupOldCurrent = assignValidationGroup(oldDefaultGlyph, currentGlyph)
-        if validationGroupOldCurrent == 'contoursEqual':
-            # current glyph is equal to old default!
-            print(f'\tupdating /{glyphName} from default...')
-            currentFont.insertGlyph(newDefaultGlyph, name=glyphName)
-            if not fontChanged:
-                fontChanged = True
-
-    if fontChanged and not preflight:
-        print('\tsaving font...')
-        font.save()
-        font.close()
-
-    print()
-
-def batchUpdateGlyphsFromDefault(ufoPaths, newDefaultPath, oldDefaultPath, preflight=False):
-
-    newDefault = OpenFont(newDefaultPath, showInterface=False)
-    oldDefault = OpenFont(oldDefaultPath, showInterface=False)
-
-    ufoPaths.remove(newDefaultPath)
-    ufoPaths.remove(oldDefaultPath)
-
-    for ufoPath in sorted(ufoPaths):
-        font = OpenFont(ufoPath, showInterface=False)
-        updateGlyphsFromDefault(font, oldDefault, newDefault, glyphNames)
-
-    updateGlyphsFromDefault(oldDefault, oldDefault, newDefault, glyphNames, preflight=preflight)
+from xTools4.modules.xprojectLib import *
 
 
 class xProject:
@@ -257,10 +96,19 @@ class xProject:
         '''Returns the (parametric) location of the default source.'''
         if not self.measurementsDefault:
             return
+
+        # get parametric measurements
         L = {}
         for name in self.parametricAxes:
             if name in self.measurementsDefault.values:
                 L[name] = permille(self.measurementsDefault.values[name], self.defaultFont.info.unitsPerEm)
+
+        # add tuning axes
+        if self.tuning:
+            for i, styleName in enumerate(self.tuningSources):
+                axisTag = f'TN{i:02}'
+                L[axisTag] = 0
+
         return L
 
     @cached_property
@@ -358,6 +206,9 @@ class xProject:
 
     # tuning
 
+    #: Enable/disable tuning (optional, disabled by default).
+    tuning = False
+
     #: The name of the tuning folder.
     tuningSourcerFolderName = 'corners'
 
@@ -370,6 +221,10 @@ class xProject:
     def tuningSourcesPaths(self):
         '''Returns a list with the full paths of all tuning UFO sources.'''
         return glob.glob(f'{self.tuningSourcesFolder}/*.ufo')
+
+    @property
+    def tuningSources(self):
+        return { os.path.splitext(os.path.split(ufo)[-1])[0] : ufo for ufo in self.tuningSourcesPaths }
 
     # instances
 
@@ -609,13 +464,61 @@ class xProject:
 
         self.designspace.addSource(src)
 
-    def addTuningAxes(self):
+    def addTuningAxes(self, duovars=True, trivars=True, quadvars=True):
         '''Add tuning axes to the designspace.'''
-        pass
 
-    def addTuningSources(self):
+        if self.verbose:
+            print('\tadding tuning axes...')
+
+        #: A dict of blended location names (keys) and tuning axes (values).
+        self._tuningAxes = {}
+
+        for i, styleName in enumerate(self.tuningSources):
+            ufo = self.tuningSources[styleName]
+            styleNameParts = styleName.split('_')
+
+            if duovars is False and len(styleNameParts) == 1:
+                continue
+            if trivars is False and len(styleNameParts) == 2:
+                continue
+            if quadvars is False and len(styleNameParts) == 3:
+                continue
+
+            axisTag = f'TN{i:02}'
+
+            a = AxisDescriptor()
+            a.name    = axisTag # styleName
+            a.tag     = axisTag
+            a.minimum = 0
+            a.maximum = 100
+            a.default = 0
+            a.hidden  = True
+            self.designspace.addAxis(a)
+
+            self._tuningAxes[styleName] = axisTag
+
+    def addTuningSources(self, familyName=None):
         '''Add tuning sources to the designspace.'''
-        pass
+
+        if self.verbose:
+            print('\tadding tuning sources...')
+
+        for i, styleName in enumerate(self.tuningSources):
+            ufo = self.tuningSources[styleName]
+
+            if styleName not in self._tuningAxes:
+                continue
+
+            axisTag = f'TN{i:02}'
+
+            src = SourceDescriptor()
+            src.path = ufo
+            src.familyName = self.familyName if not familyName else familyName
+            src.styleName = src.name = axisTag
+            L = self.defaultLocation.copy()
+            L[axisTag] = 100
+            src.location = L
+            self.designspace.addSource(src)
 
     def addInstances(self):
         '''Add instances to the designspace.'''
@@ -675,7 +578,7 @@ class xProject:
 
     # building
 
-    def buildDesignspace(self, tuning=False, instances=False):
+    def buildDesignspace(self, instances=False):
 
         if self.verbose:
             print(f'building {os.path.split(self.designspacePath)[-1]}...')
@@ -685,14 +588,14 @@ class xProject:
         self.addBlendedAxes()
         self.addParametricAxes()
 
-        if tuning:
+        if self.tuning:
             self.addTuningAxes()
 
         self.addBlendedSources()
         self.addDefaultSource()
         self.addParametricSources()
 
-        if tuning:
+        if self.tuning:
             self.addTuningSources()
 
         if instances:
@@ -846,8 +749,8 @@ class xProject:
         txt += f'designspace path: {self.designspacePath} ({os.path.exists(self.designspacePath)})\n\n'
 
         txt += f'sources folder name: {self.sourcesFolderName}\n'
-        txt += f'sources folder path: {self.sourcesFolder} ({os.path.exists(self.sourcesFolder)})\n\n'
-        # txt += f'sources paths: {self.sourcesPaths}\n\n'
+        txt += f'sources folder path: {self.sourcesFolder} ({os.path.exists(self.sourcesFolder)})\n'
+        txt += f'sources paths: {self.sourcesPaths}\n\n'
 
         txt += f'default name: {self.defaultName}\n'
         txt += f'default path: {self.defaultSourcePath} ({os.path.exists(self.defaultSourcePath)})\n'
@@ -863,12 +766,12 @@ class xProject:
 
         txt += f'blends file: {self.blendsFile}\n'
         txt += f'blends path: {self.blendsPath} ({os.path.exists(self.blendsPath)})\n'
-        txt += f'blended axes: {self.blendedAxes.keys()}\n'
-        txt += f'blended sources: {self.blendedSources.keys()}\n\n'
+        txt += f'blended axes: {list(self.blendedAxes.keys())}\n'
+        txt += f'blended sources: {list(self.blendedSources.keys())}\n\n'
 
         txt += f'tuning folder name: {self.tuningSourcerFolderName}\n'
-        txt += f'tuning folder path: {self.tuningSourcesFolder} ({os.path.exists(self.tuningSourcesFolder)})\n\n'
-        # txt += f'tuning sources paths: {self.tuningSourcesPaths}\n\n'
+        txt += f'tuning folder path: {self.tuningSourcesFolder} ({os.path.exists(self.tuningSourcesFolder)})\n'
+        txt += f'tuning sources paths: {self.tuningSourcesPaths}\n\n'
 
         txt += f'instances folder name: {self.instancesFolderName}\n'
         txt += f'instances folder path: {self.instancesFolder} ({os.path.exists(self.instancesFolder)})\n\n'
@@ -953,6 +856,12 @@ class xProject:
         print(f'saving {pdfPath}...', end=' ')
         B.save(pdfPath)
         print(f'done!\n')
+
+
+
+
+
+
 
 
 
