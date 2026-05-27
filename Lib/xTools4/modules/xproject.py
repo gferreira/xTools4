@@ -281,21 +281,31 @@ class xProject:
 
     def createParametricSources(self, parameters, minSource=True, maxSource=True):
         '''Create fresh min/max sources for parametric axes from default.'''
+        if self.verbose:
+            print(f'creating parametric sources...')
+
         for parameter in parameters:
             if minSource:
                 minSourcePath = self.defaultSourcePath.replace(self.defaultName, f'{parameter}min')
+                if self.verbose:
+                    print(f'\tcreating {os.path.split(minSourcePath)[-1]}...')
                 if os.path.exists(minSourcePath):
                     if self.verbose:
-                        print(f'{os.path.split(minSourcePath)[-1]} already exists, skipping…')
+                        print(f'\t{os.path.split(minSourcePath)[-1]} already exists, skipping...')
                 else:
                     shutil.copytree(self.defaultSourcePath, minSourcePath)
             if maxSource:
                 maxSourcePath = self.defaultSourcePath.replace(self.defaultName, f'{parameter}max')
+                if self.verbose:
+                    print(f'\tcreating {os.path.split(maxSourcePath)[-1]}...')
                 if os.path.exists(maxSourcePath):
                     if self.verbose:
-                        print(f'{os.path.split(minSourcePath)[-1]} already exists, skipping…')
+                        print(f'\t{os.path.split(minSourcePath)[-1]} already exists, skipping...')
                 else:
                     shutil.copytree(self.defaultSourcePath, maxSourcePath)
+
+        if self.verbose:
+            print(f'...done.\n')
 
     def createMeasurementsFile(self):
         '''Create a fresh measurements file.'''
