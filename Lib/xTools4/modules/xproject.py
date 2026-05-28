@@ -1,6 +1,8 @@
 from importlib import reload
 import xTools4.modules.blendsPreview
 reload(xTools4.modules.blendsPreview)
+import xTools4.modules.glyphMemeProofer
+reload(xTools4.modules.glyphMemeProofer)
 
 import os, glob, json, shutil, time, datetime
 import subprocess

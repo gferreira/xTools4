@@ -126,7 +126,6 @@ class GlyphMemeProofer:
         boxY = (self.canvasHeight - boxHeight) * 0.5
         boxWidth = glyph.width * self.glyphScale
 
-
         DB.newPage(self.canvasWidth + self.panelWidth, self.canvasHeight)
         DB.blendMode('multiply')
 
