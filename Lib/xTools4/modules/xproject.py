@@ -3,6 +3,8 @@ import xTools4.modules.blendsPreview
 reload(xTools4.modules.blendsPreview)
 import xTools4.modules.glyphMemeProofer
 reload(xTools4.modules.glyphMemeProofer)
+import xTools4.modules.normalization
+reload(xTools4.modules.normalization)
 
 import os, glob, json, shutil, time, datetime
 import subprocess
@@ -665,7 +667,7 @@ class xProject:
 
     # saving
 
-    def cleanupSources(self, parametric=True, tuning=True, clearFontLibs=True, clearGlyphLibs=True, clearFontGuides=True, clearGlyphGuides=True, clearMarks=True, clearLayers=True, preflight=False):
+    def cleanupSources(self, parametric=True, tuning=True, clearFontLibs=True, clearGlyphLibs=True, clearFontGuides=True, clearGlyphGuides=True, clearMarks=True, clearLayers=True, preflight=False, ignoreLayers=[]):
         '''Remove unnecessary data from UFO sources.'''
 
         # delete all font libs except these:
@@ -675,10 +677,7 @@ class xProject:
         ]
 
         # delete all layers except these:
-        ignoreLayers = [
-            'foreground',
-            'background',
-        ]
+        ignoreLayers += ['foreground']
 
         if parametric:
             cleanupSources(self.sourcesFolder,

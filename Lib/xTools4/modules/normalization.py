@@ -3,7 +3,7 @@ from ufonormalizer import normalizeUFO
 from fontParts.world import OpenFont
 
 
-def cleanupSources(sourcesFolder, clearFontLibs=True, clearGlyphLibs=True, clearFontGuides=True, clearGlyphGuides=True, clearMarks=True, clearLayers=True, preflight=True, verbose=False, ignoreFontLibs=[], ignoreLayers=[]):
+def cleanupSources(sourcesFolder, clearFontLibs=True, clearGlyphLibs=True, clearFontGuides=True, clearGlyphGuides=True, clearMarks=True, clearLayers=True, preflight=False, verbose=False, ignoreFontLibs=[], ignoreLayers=[]):
 
     ufoPaths  = glob.glob(f'{sourcesFolder}/*.ufo')
 
