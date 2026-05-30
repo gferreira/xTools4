@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>xProject · xTools4</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://gferreira.github.io/xTools4/css/style.css" type="text/css" />
+    <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js" integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
+  </head>
+  <body >
+    <nav id='navbar-main' class="navbar fixed-top navbar-expand-sm"> <!-- navbar-dark bg-secondary -->
+      <div class="container mx-auto px-md-4">
+        <a class="navbar-brand" id='logo' href="https://gferreira.github.io/xTools4/">
+          <i class="bi bi-tools fs-2"></i>
+        </a>
+        <button class="navbar-toggler navbar-light" type="button" data-bs-toggle="collapse" data-bs-target="#navbarItems" aria-controls="navbarItems" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse user-select-none" id="navbarItems">
+          <ul class="navbar-nav me-auto">
+            <li class="nav-item"><a class="nav-link" href="https://gferreira.github.io/xTools4/explanations/">explanations</a></li>
+            <li class="nav-item"><a class="nav-link" href="https://gferreira.github.io/xTools4/tutorials/">tutorials</a></li>
+            <li class="nav-item"><a class="nav-link" href="https://gferreira.github.io/xTools4/how-tos/">how-tos</a></li>
+            <li class="nav-item"><a class="nav-link" href="https://gferreira.github.io/xTools4/reference/">reference</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <main class='home mt-5'>
+      <div class="container mx-auto px-md-4 pt-4 pb-3 bg-white">
+        <div class='row mt-2'>
+          <h1 class='col-sm-9 mt-sm-1'>xProject</h1>
+          <nav class='col-sm-3 mt-sm-2'>
+            <ul class="pagination pagination-sm float-end">
+              <li class="page-item">
+                <a class="page-link px-3 rounded-0 prev" href="https://gferreira.github.io/xTools4//reference/tools/variable/varglyph-viewer/" title='VarGlyphViewer'>&laquo;</a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+        <nav aria-label="breadcrumb">
+          <ol class='breadcrumb'>
+            <li class='breadcrumb-item small'>
+              <a href="https://gferreira.github.io/xTools4">Index</a>
+            </li>
+            <li class='breadcrumb-item small'>
+              <a href="https://gferreira.github.io/xTools4/reference/">
+                Reference
+              </a>
+            </li>
+            <li class='breadcrumb-item small'>xproject</li>
+          </ol>
+        </nav>
+        <p class="lead">A Pythonic API for scripting font source data for parametric variable fonts.</p>
+        <p><span class="badge bg-warning rounded-0">draft</span></p>
+        <table class="table table-hover">
+          <tr>
+            <td><code>xProject.verbose</code></td>
+            <td>Enable/disable console output.</td>
+          </tr>
+          <tr>
+            <td><code>xProject.settingsFile</code></td>
+            <td>The name of the project settings file.</td>
+          </tr>
+          <tr>
+            <td><code>xProject.settingsPath</code></td>
+            <td>Returns the full path of the settings file.</td>
+          </tr>
+          <tr>
+            <td><code>xProject.designspaceFile</code></td>
+            <td>Returns the name of the designspace file.</td>
+          </tr>
+          <tr>
+            <td><code>xProject.designspacePath</code></td>
+            <td>Returns the full path of the designspace file.</td>
+          </tr>
+          <tr>
+            <td><code>xProject.designspace</code></td>
+            <td>Returns a fontTools designspace object (after building).</td>
+          </tr>
+          <tr>
+            <td><code>xProject.parametricAxes</code></td>
+            <td>A list of parametric axes as 4-letter tags.</td>
+          </tr>
+          <tr>
+            <td><code>xProject.parametricAxesHidden</code></td>
+            <td>A switch to make parametric axes hidden (or not).</td>
+          </tr>
+          <tr>
+            <td><code>xProject.sourcesFolderName</code></td>
+            <td>The name of the sources folder.</td>
+          </tr>
+          <tr>
+            <td><code>xProject.sourcesFolder</code></td>
+            <td>Returns the full path of the sources folder.</td>
+          </tr>
+          <tr>
+            <td><code>xProject.sourcesPaths</code></td>
+            <td>Returns a list with the full paths of all parametric UFO sources.</td>
+          </tr>
+          <tr>
+            <td><code>xProject.sources</code></td>
+            <td>Returns a dict of tuning locations (keys) and their UFO sources (values).</td>
+          </tr>
+          <tr>
+            <td><code>xProject.defaultName</code></td>
+            <td>The name of the default source.</td>
+          </tr>
+          <tr>
+            <td><code>xProject.defaultSourcePath</code></td>
+            <td>Returns the full path of the default source.</td>
+          </tr>
+          <tr>
+            <td><code>xProject.defaultLocation</code></td>
+            <td>Returns the parametric location of the default source.</td>
+          </tr>
+          <tr>
+            <td><code>xProject.defaultFont</code></td>
+            <td>Returns an RFont object of the default font (cached).</td>
+          </tr>
+          <tr>
+            <td><code>xProject.measurementsFile</code></td>
+            <td>The name of the measurements file.</td>
+          </tr>
+          <tr>
+            <td><code>xProject.measurementsPath</code></td>
+            <td>Returns the full path of the measurements file.</td>
+          </tr>
+          <tr>
+            <td><code>xProject.measurements</code></td>
+            <td>Returns the imported measurements as a dictionary.</td>
+          </tr>
+          <tr>
+            <td><code>xProject.measurementsDefault</code></td>
+            <td>Returns a dictionary with measurements of the default source.</td>
+          </tr>
+          <tr>
+            <td><code>xProject.smartSetsFile</code></td>
+            <td>Returns the name of the smart sets file.</td>
+          </tr>
+          <tr>
+            <td><code>xProject.smartSetsPath</code></td>
+            <td>Returns the full path of the smart sets file.</td>
+          </tr>
+          <tr>
+            <td><code>xProject.smartSets</code></td>
+            <td>Returns the imported smart sets as a dictionary.</td>
+          </tr>
+          <tr>
+            <td><code>xProject.glyphConstructionsFile</code></td>
+            <td>Returns the name of the glyph construction file.</td>
+          </tr>
+          <tr>
+            <td><code>xProject.glyphConstructionsPath</code></td>
+            <td>Returns the full path of the glyph construction file.</td>
+          </tr>
+          <tr>
+            <td><code>xProject.glyphConstructions</code></td>
+            <td>Returns the imported glyph constructions as a dictionary.</td>
+          </tr>
+          <tr>
+            <td><code>xProject.blendsFile</code></td>
+            <td>The name of the blends file.</td>
+          </tr>
+          <tr>
+            <td><code>xProject.blendsPath</code></td>
+            <td>Returns the full path of the blends file.</td>
+          </tr>
+          <tr>
+            <td><code>xProject.blendedAxes</code></td>
+            <td>Returns the imported blended axes as a dictionary.</td>
+          </tr>
+          <tr>
+            <td><code>xProject.blendedSources</code></td>
+            <td>Returns the imported blended sources as a dictionary.</td>
+          </tr>
+          <tr>
+            <td><code>xProject.tuning</code></td>
+            <td>Enable/disable tuning (optional, disabled by default).</td>
+          </tr>
+          <tr>
+            <td><code>xProject.tuningSourcerFolderName</code></td>
+            <td>The name of the tuning folder.</td>
+          </tr>
+          <tr>
+            <td><code>xProject.tuningSourcesFolder</code></td>
+            <td>Returns the full path of the tuning sources subfolder.</td>
+          </tr>
+          <tr>
+            <td><code>xProject.tuningSourcesPaths</code></td>
+            <td>Returns a list with the full paths of all tuning UFO sources.</td>
+          </tr>
+          <tr>
+            <td><code>xProject.tuningSources</code></td>
+            <td>Returns a dict of tuning locations (keys) and their UFO sources (values).</td>
+          </tr>
+          <tr>
+            <td><code>xProject.instancesFolderName</code></td>
+            <td>The name of the instances folder.</td>
+          </tr>
+          <tr>
+            <td><code>xProject.instancesFolder</code></td>
+            <td>Returns the full path of the UFO instances folder.</td>
+          </tr>
+          <tr>
+            <td><code>xProject.fontsFolderName</code></td>
+            <td>The name of the fonts folder.</td>
+          </tr>
+          <tr>
+            <td><code>xProject.fontsFolder</code></td>
+            <td>Returns the full path of the binary fonts folder.</td>
+          </tr>
+          <tr>
+            <td><code>xProject.varFontFile</code></td>
+            <td>Returns the name of the variable font file.</td>
+          </tr>
+          <tr>
+            <td><code>xProject.varFontPath</code></td>
+            <td>Returns the full path of the variable font file.</td>
+          </tr>
+          <tr>
+            <td><code>xProject.proofsFolderName</code></td>
+            <td>The name of the proofs folder.</td>
+          </tr>
+          <tr>
+            <td><code>xProject.proofsFolder</code></td>
+            <td>Returns the full path of the proofs folder.</td>
+          </tr>
+          <tr>
+            <td><code>xProject.setSourceNamesFromMeasurements</code></td>
+            <td>Set source names from the actual measurement value in each source.</td>
+          </tr>
+          <tr>
+            <td><code>xProject.createParametricSources</code></td>
+            <td>Create fresh min/max sources for parametric axes from default.</td>
+          </tr>
+          <tr>
+            <td><code>xProject.createMeasurementsFile</code></td>
+            <td>Create a fresh measurements file.</td>
+          </tr>
+          <tr>
+            <td><code>xProject.createSmartSetsFile</code></td>
+            <td>Create a fresh smart sets file.</td>
+          </tr>
+          <tr>
+            <td><code>xProject.createGlyphConstructionFile</code></td>
+            <td>Create a fresh glyph construction file.</td>
+          </tr>
+          <tr>
+            <td><code>xProject.updateGlyphsFromDefault</code></td>
+            <td>Update default glyphs in all sources.</td>
+          </tr>
+          <tr>
+            <td><code>xProject.copyGlyphsFromDefault</code></td>
+            <td>Copy glyphs from the default source to other sources.</td>
+          </tr>
+          <tr>
+            <td><code>xProject.copyGroupsFromDefault</code></td>
+            <td>Copy groups from the default source to other sources.</td>
+          </tr>
+          <tr>
+            <td><code>xProject.copyUnicodesFromDefault</code></td>
+            <td>Copy unicodes from the default source to all other sources.</td>
+          </tr>
+          <tr>
+            <td><code>xProject.copyGlyphOrderFromDefault</code></td>
+            <td>Copy glyph order from the default source to all other sources.</td>
+          </tr>
+          <tr>
+            <td><code>xProject.buildCompositeGlyphs</code></td>
+            <td>Build composite glyphs from glyph constructions.</td>
+          </tr>
+          <tr>
+            <td><code>xProject.splitSources</code></td>
+            <td>Split new parametric sources from existing sources.</td>
+          </tr>
+          <tr>
+            <td><code>xProject.addParametricAxes</code></td>
+            <td>Add parametric axes to the designspace.</td>
+          </tr>
+          <tr>
+            <td><code>xProject.addParametricSources</code></td>
+            <td>Add parametric sources to the designspace.</td>
+          </tr>
+          <tr>
+            <td><code>xProject.addDefaultSource</code></td>
+            <td>Add the default source to the designspace.</td>
+          </tr>
+          <tr>
+            <td><code>xProject.addTuningAxes</code></td>
+            <td>Add tuning axes to the designspace.</td>
+          </tr>
+          <tr>
+            <td><code>xProject.addTuningSources</code></td>
+            <td>Add tuning sources to the designspace.</td>
+          </tr>
+          <tr>
+            <td><code>xProject.addInstances</code></td>
+            <td>Add instances to the designspace.</td>
+          </tr>
+          <tr>
+            <td><code>xProject.addBlendedAxes</code></td>
+            <td>Add blended axes to the designspace.</td>
+          </tr>
+          <tr>
+            <td><code>xProject.addBlendedSources</code></td>
+            <td>Add blended sources (mappings) to the designspace.</td>
+          </tr>
+          <tr>
+            <td><code>xProject.buildDesignspace</code></td>
+            <td>Build designspace file from source data.</td>
+          </tr>
+          <tr>
+            <td><code>xProject.buildInstances</code></td>
+            <td>Build UFO instances for blended sources.</td>
+          </tr>
+          <tr>
+            <td><code>xProject.buildVariableFont</code></td>
+            <td>Build avar2 variable font from designspace.</td>
+          </tr>
+          <tr>
+            <td><code>xProject.cleanupSources</code></td>
+            <td>Remove unnecessary data from UFO sources.</td>
+          </tr>
+          <tr>
+            <td><code>xProject.normalizeSources</code></td>
+            <td>Normalize UFO sources.</td>
+          </tr>
+          <tr>
+            <td><code>xProject.addCustomKeysToLib</code></td>
+            <td>Save paths to data files in the designspace lib.</td>
+          </tr>
+          <tr>
+            <td><code>xProject.save</code></td>
+            <td>Save current designspace to file.</td>
+          </tr>
+          <tr>
+            <td><code>xProject.printAxes</code></td>
+            <td>Print a list of all variation axes in this project.</td>
+          </tr>
+          <tr>
+            <td><code>xProject.printSettings</code></td>
+            <td>Print an overview of this project's settings.</td>
+          </tr>
+          <tr>
+            <td><code>xProject.validateDesignspace</code></td>
+            <td>Validate range of designspace locations.</td>
+          </tr>
+          <tr>
+            <td><code>xProject.proofGlyphMemes</code></td>
+            <td>Build glyph meme PDF proofs.</td>
+          </tr>
+          <tr>
+            <td><code>xProject.proofSourcesGlyphSet</code></td>
+            <td>Build glyph set PDF proofs.</td>
+          </tr>
+          <tr>
+            <td><code>xProject.proofBlends</code></td>
+            <td>Build PDF proof of blends.</td>
+          </tr>
+        </table>
+      </div>
+    </main>
+    <footer class="container mx-auto px-auto px-md-4 my-4" markdown=1>
+      <ul class="list-inline">
+        <li class="list-inline-item"><a href='https://gferreira.github.io/xTools4/changelog'>changelog</a></li>
+        <li class="list-inline-item"><a href='http://github.com/gferreira/xTools4'>source code</a></li>
+        <li class="list-inline-item"><a href='http://github.com/gferreira/xTools4/issues'>issues</a></li>
+      </ul>
+      <p class='small text-muted'>
+        This work is licensed under <a href='http://creativecommons.org/licenses/by-sa/4.0/'>Creative Commons Attribution-ShareAlike 4.0 International</a>.
+      </p>
+      <p class='small text-muted'>
+        <i class="bi bi-arrow-counterclockwise"></i> Last updated on 30 May 2026 14:26:12.
+      </p>
+    </footer>
+  </body>
+  <script>
+    $(document).ready(function(){$("img").click(function(){this.requestFullscreen()})});
+  </script>
+</html>

@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Creating a controller object · xTools4</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://gferreira.github.io/xTools4/css/style.css" type="text/css" />
+    <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js" integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
+  </head>
+  <body >
+    <nav id='navbar-main' class="navbar fixed-top navbar-expand-sm"> <!-- navbar-dark bg-secondary -->
+      <div class="container mx-auto px-md-4">
+        <a class="navbar-brand" id='logo' href="https://gferreira.github.io/xTools4/">
+          <i class="bi bi-tools fs-2"></i>
+        </a>
+        <button class="navbar-toggler navbar-light" type="button" data-bs-toggle="collapse" data-bs-target="#navbarItems" aria-controls="navbarItems" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse user-select-none" id="navbarItems">
+          <ul class="navbar-nav me-auto">
+            <li class="nav-item"><a class="nav-link" href="https://gferreira.github.io/xTools4/explanations/">explanations</a></li>
+            <li class="nav-item"><a class="nav-link" href="https://gferreira.github.io/xTools4/tutorials/">tutorials</a></li>
+            <li class="nav-item"><a class="nav-link" href="https://gferreira.github.io/xTools4/how-tos/">how-tos</a></li>
+            <li class="nav-item"><a class="nav-link" href="https://gferreira.github.io/xTools4/reference/">reference</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <main class='home mt-5'>
+      <div class="container mx-auto px-md-4 pt-4 pb-3 bg-white">
+        <div class='row mt-2'>
+          <h1 class='col-sm-9 mt-sm-1'>Creating a controller object</h1>
+          <nav class='col-sm-3 mt-sm-2'>
+            <ul class="pagination pagination-sm float-end">
+              <li class="page-item">
+                <a class="page-link px-3 rounded-0 prev" href="https://gferreira.github.io/xTools4//tutorials/building-designspace-from-measurements/" title='Building parametric designspace'>&laquo;</a>
+              </li>
+              <li class="page-item">
+                <a class="page-link px-3 rounded-0 next" href="https://gferreira.github.io/xTools4//tutorials/creating-default-quadratic" title='Creating a quadratic default font'>&raquo;</a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+        <nav aria-label="breadcrumb">
+          <ol class='breadcrumb'>
+            <li class='breadcrumb-item small'>
+              <a href="https://gferreira.github.io/xTools4">Index</a>
+            </li>
+            <li class='breadcrumb-item small'>
+              <a href="https://gferreira.github.io/xTools4/tutorials/">
+                Tutorials
+              </a>
+            </li>
+            <li class='breadcrumb-item small'>creating controller</li>
+          </ol>
+        </nav>
+        <p class="lead">The controller object is responsible for building and managing the designspace.</p>
+        <p><span class="badge bg-warning rounded-0">draft</span></p>
+        <ul id="markdown-toc">
+          <li><a href="#introduction" id="markdown-toc-introduction">Introduction</a>    
+            <ul>
+              <li><a href="#why-a-controller-is-needed" id="markdown-toc-why-a-controller-is-needed">Why a controller is needed</a></li>
+              <li><a href="#duties-of-the-controller" id="markdown-toc-duties-of-the-controller">Duties of the controller</a></li>
+            </ul>
+          </li>
+          <li><a href="#the-controller-object" id="markdown-toc-the-controller-object">The controller object</a>    
+            <ul>
+              <li><a href="#default-project-settings" id="markdown-toc-default-project-settings">Default project settings</a></li>
+            </ul>
+          </li>
+          <li><a href="#creating-a-custom-controller" id="markdown-toc-creating-a-custom-controller">Creating a custom controller</a></li>
+        </ul>
+        <h2 id="introduction">Introduction</h2>
+        <p>In parametric fonts, the designspace is tightly coupled to various measurements (parameters) in the fonts.</p>
+        <p>During the design stage, the glyph shapes are still changing all the time, and if a measurement changes the parametric designspace must change accordingly.</p>
+        <h3 class="h5" id="why-a-controller-is-needed">Why a controller is needed</h3>
+        <p>As designspaces get larger, it becomes harder and harder to keep track and update these relationships by hand.</p>
+        <p>The controller object takes care of building and managing the designspace, ensuring that file names are consistent and parametric values are always correct and up-do-date.</p>
+        <h3 class="h5" id="duties-of-the-controller">Duties of the controller</h3>
+        <ul>
+          <li>create new parametric sources</li>
+          <li>set source names automatically from measurements</li>
+          <li>clean-up and normalize UFO sources</li>
+          <li>build the parametric designspace from measurements</li>
+          <li>…</li>
+        </ul>
+        <p>A documentation of the xProject API is on its way.</p>
+        <h2 id="the-controller-object">The controller object</h2>
+        <p>The <code class="language-plaintext highlighter-rouge">xProject</code> controller is a base object which is meant to be subclassed and customized for each project. It provides a basic API for gathering different kinds of data from multiple files and building a parametric variable font from it.</p>
+        <div class="language-python highlighter-rouge">
+          <div class="highlight">
+            <pre class="highlight"><code><span class="kn">from</span> <span class="n">xTools4.modules.xproject</span> <span class="kn">import</span> <span class="n">xProject</span>
+
+<span class="n">folder</span> <span class="o">=</span> <span class="sh">'</span><span class="s">MyFolder/</span><span class="sh">'</span>
+
+<span class="n">p</span> <span class="o">=</span> <span class="nf">xProject</span><span class="p">(</span><span class="n">folder</span><span class="p">,</span> <span class="sh">'</span><span class="s">My Family</span><span class="sh">'</span><span class="p">)</span>
+<span class="n">p</span><span class="p">.</span><span class="nf">printSettings</span><span class="p">()</span>
+</code></pre>
+          </div>
+        </div>
+        <h3 class="h5" id="default-project-settings">Default project settings</h3>
+        <table class="table table-hover">
+          <tbody>
+            <tr>
+              <td>base folder</td>
+              <td>MyFolder/</td>
+            </tr>
+            <tr>
+              <td>family name</td>
+              <td>My Family</td>
+            </tr>
+            <tr>
+              <td>designspace file</td>
+              <td>MyFamily.designspace</td>
+            </tr>
+            <tr>
+              <td>designspace path</td>
+              <td>MyFolder/Sources/MyFamily.designspace</td>
+            </tr>
+            <tr>
+              <td>sources folder name</td>
+              <td>Sources</td>
+            </tr>
+            <tr>
+              <td>sources folder path</td>
+              <td>MyFolder/Sources/</td>
+            </tr>
+            <tr>
+              <td>default name</td>
+              <td>wght400</td>
+            </tr>
+            <tr>
+              <td>default path</td>
+              <td>MyFolder/Sources/MyFamily_wght400.ufo</td>
+            </tr>
+            <tr>
+              <td>measurements file</td>
+              <td>measurements.json</td>
+            </tr>
+            <tr>
+              <td>measurements path</td>
+              <td>MyFolder/Sources/measurements.json</td>
+            </tr>
+            <tr>
+              <td>smart sets file</td>
+              <td>MyFamily.roboFontSets</td>
+            </tr>
+            <tr>
+              <td>smart sets path</td>
+              <td>MyFolder/Sources/MyFamily.roboFontSets</td>
+            </tr>
+            <tr>
+              <td>blends file</td>
+              <td>blends.json</td>
+            </tr>
+            <tr>
+              <td>blends path</td>
+              <td>MyFolder/Sources/blends.json</td>
+            </tr>
+            <tr>
+              <td>tuning folder name</td>
+              <td>corners</td>
+            </tr>
+            <tr>
+              <td>tuning folder path</td>
+              <td>MyFolder/Sources/corners/</td>
+            </tr>
+            <tr>
+              <td>instances folder name</td>
+              <td>instances</td>
+            </tr>
+            <tr>
+              <td>instances folder path</td>
+              <td>MyFolder/Sources/instances/</td>
+            </tr>
+            <tr>
+              <td>fonts folder name</td>
+              <td>Fonts</td>
+            </tr>
+            <tr>
+              <td>fonts folder</td>
+              <td>MyFolder/Fonts/</td>
+            </tr>
+            <tr>
+              <td>variable font file</td>
+              <td>MyFamily.ttf</td>
+            </tr>
+            <tr>
+              <td>variable font path</td>
+              <td>MyFolder/Fonts/MyFamily.ttf</td>
+            </tr>
+          </tbody>
+        </table>
+        <h2 id="creating-a-custom-controller">Creating a custom controller</h2>
+        <p>To create a custom controller for your project, start by subclassing <code class="language-plaintext highlighter-rouge">xProject</code>. In the example below, we are adding a <em>subfamily</em> argument to the project constructor, and changing the designspace file name and the source folder path to accomodate multiple subfamilies.</p>
+        <div class="language-python highlighter-rouge">
+          <div class="highlight">
+            <pre class="highlight"><code><span class="kn">from</span> <span class="n">xTools4.modules.xproject</span> <span class="kn">import</span> <span class="n">xProject</span>
+
+<span class="k">class</span> <span class="nc">MyController</span><span class="p">(</span><span class="n">xProject</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">folder</span><span class="p">,</span> <span class="n">familyName</span><span class="p">,</span> <span class="n">subFamily</span><span class="p">):</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">baseFolder</span> <span class="o">=</span> <span class="n">folder</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">familyName</span> <span class="o">=</span> <span class="n">familyName</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">subFamily</span>  <span class="o">=</span> <span class="n">subFamily</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">designspaceFile</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="sh">"</span><span class="si">{</span><span class="n">self</span><span class="p">.</span><span class="n">familyName</span><span class="p">.</span><span class="nf">replace</span><span class="p">(</span><span class="sh">'</span><span class="s"> </span><span class="sh">'</span><span class="p">,</span> <span class="sh">''</span><span class="p">)</span><span class="si">}</span><span class="s">-</span><span class="si">{</span><span class="n">self</span><span class="p">.</span><span class="n">subFamily</span><span class="p">.</span><span class="nf">replace</span><span class="p">(</span><span class="sh">'</span><span class="s"> </span><span class="sh">'</span><span class="p">,</span> <span class="sh">''</span><span class="p">)</span><span class="si">}</span><span class="s">.designspace</span><span class="sh">"</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">sourcesFolder</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">baseFolder</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">sourcesFolderName</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">subFamily</span><span class="p">)</span>
+
+
+<span class="n">p</span> <span class="o">=</span> <span class="nc">MyController</span><span class="p">(</span><span class="n">folder</span><span class="p">,</span> <span class="sh">'</span><span class="s">My Family</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">Roman</span><span class="sh">'</span><span class="p">)</span>
+<span class="n">p</span><span class="p">.</span><span class="nf">printSettings</span><span class="p">()</span>
+</code></pre>
+          </div>
+        </div>
+        <p>This will produce the output below. Notice how the subfamily <em>Roman</em> is now part of the designspace name and sources folder.</p>
+        <div class="language-plaintext highlighter-rouge">
+          <div class="highlight">
+            <pre class="highlight"><code>base folder: MyFolder/
+family name: My Family
+
+designspace file: MyFamily-Roman.designspace
+designspace path: MyFolder/Sources/Roman/MyFamily-Roman.designspace (False)
+
+sources folder name: Sources
+sources folder path: MyFolder/Sources/Roman (False)
+
+...
+</code></pre>
+          </div>
+        </div>
+      </div>
+    </main>
+    <footer class="container mx-auto px-auto px-md-4 my-4" markdown=1>
+      <ul class="list-inline">
+        <li class="list-inline-item"><a href='https://gferreira.github.io/xTools4/changelog'>changelog</a></li>
+        <li class="list-inline-item"><a href='http://github.com/gferreira/xTools4'>source code</a></li>
+        <li class="list-inline-item"><a href='http://github.com/gferreira/xTools4/issues'>issues</a></li>
+      </ul>
+      <p class='small text-muted'>
+        This work is licensed under <a href='http://creativecommons.org/licenses/by-sa/4.0/'>Creative Commons Attribution-ShareAlike 4.0 International</a>.
+      </p>
+      <p class='small text-muted'>
+        <i class="bi bi-arrow-counterclockwise"></i> Last updated on 30 May 2026 14:26:12.
+      </p>
+    </footer>
+  </body>
+  <script>
+    $(document).ready(function(){$("img").click(function(){this.requestFullscreen()})});
+  </script>
+</html>

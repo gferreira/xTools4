@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Overview of the xProject model · xTools4</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://gferreira.github.io/xTools4/css/style.css" type="text/css" />
+    <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js" integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
+  </head>
+  <body >
+    <nav id='navbar-main' class="navbar fixed-top navbar-expand-sm"> <!-- navbar-dark bg-secondary -->
+      <div class="container mx-auto px-md-4">
+        <a class="navbar-brand" id='logo' href="https://gferreira.github.io/xTools4/">
+          <i class="bi bi-tools fs-2"></i>
+        </a>
+        <button class="navbar-toggler navbar-light" type="button" data-bs-toggle="collapse" data-bs-target="#navbarItems" aria-controls="navbarItems" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse user-select-none" id="navbarItems">
+          <ul class="navbar-nav me-auto">
+            <li class="nav-item"><a class="nav-link" href="https://gferreira.github.io/xTools4/explanations/">explanations</a></li>
+            <li class="nav-item"><a class="nav-link" href="https://gferreira.github.io/xTools4/tutorials/">tutorials</a></li>
+            <li class="nav-item"><a class="nav-link" href="https://gferreira.github.io/xTools4/how-tos/">how-tos</a></li>
+            <li class="nav-item"><a class="nav-link" href="https://gferreira.github.io/xTools4/reference/">reference</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <main class='home mt-5'>
+      <div class="container mx-auto px-md-4 pt-4 pb-3 bg-white">
+        <div class='row mt-2'>
+          <h1 class='col-sm-9 mt-sm-1'>Overview of the xProject model</h1>
+          <nav class='col-sm-3 mt-sm-2'>
+            <ul class="pagination pagination-sm float-end">
+              <li class="page-item">
+                <a class="page-link px-3 rounded-0 next" href="https://gferreira.github.io/xTools4//tutorials/creating-parametric-sources/XTRA/" title='Creating XTRA sources'>&raquo;</a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+        <nav aria-label="breadcrumb">
+          <ol class='breadcrumb'>
+            <li class='breadcrumb-item small'>
+              <a href="https://gferreira.github.io/xTools4">Index</a>
+            </li>
+            <li class='breadcrumb-item small'>
+              <a href="https://gferreira.github.io/xTools4/tutorials/">
+                Tutorials
+              </a>
+            </li>
+            <li class='breadcrumb-item small'>xproject overview</li>
+          </ol>
+        </nav>
+        <p><span class="badge bg-warning rounded-0">draft</span></p>
+        <ul id="markdown-toc">
+          <li><a href="#introduction" id="markdown-toc-introduction">Introduction</a>    
+            <ul>
+              <li><a href="#why-is-automation-needed" id="markdown-toc-why-is-automation-needed">Why is automation needed?</a></li>
+              <li><a href="#control-glyphs-as-single-source-of-truth" id="markdown-toc-control-glyphs-as-single-source-of-truth">Control glyphs as single source of truth</a></li>
+            </ul>
+          </li>
+          <li><a href="#file-formats" id="markdown-toc-file-formats">File formats</a>    
+            <ul>
+              <li><a href="#designspace-file" id="markdown-toc-designspace-file">Designspace file</a></li>
+              <li><a href="#default-source" id="markdown-toc-default-source">Default source</a></li>
+              <li><a href="#measurements-file" id="markdown-toc-measurements-file">Measurements file</a></li>
+              <li><a href="#parametric-sources" id="markdown-toc-parametric-sources">Parametric sources</a></li>
+              <li><a href="#blends-file" id="markdown-toc-blends-file">Blends file</a></li>
+              <li><a href="#tuning-sources" id="markdown-toc-tuning-sources">Tuning sources</a></li>
+              <li><a href="#smart-sets-file" id="markdown-toc-smart-sets-file">Smart sets file</a></li>
+              <li><a href="#glyph-construction-file" id="markdown-toc-glyph-construction-file">Glyph construction file</a></li>
+              <li><a href="#features-file" id="markdown-toc-features-file">Features file</a></li>
+            </ul>
+          </li>
+          <li><a href="#source-folder-examples" id="markdown-toc-source-folder-examples">Source folder examples</a>    
+            <ul>
+              <li><a href="#single-style-family" id="markdown-toc-single-style-family">Single-style family</a></li>
+              <li><a href="#multi-style-family" id="markdown-toc-multi-style-family">Multi-style family</a></li>
+            </ul>
+          </li>
+          <li><a href="#controller-examples" id="markdown-toc-controller-examples">Controller examples</a>    
+            <ul>
+              <li><a href="#single-style-family-1" id="markdown-toc-single-style-family-1">Single-style family</a></li>
+              <li><a href="#multi-style-family-1" id="markdown-toc-multi-style-family-1">Multi-style family</a></li>
+            </ul>
+          </li>
+        </ul>
+        <h2 id="introduction">Introduction</h2>
+        <p>The “xProject model” is an attempt to systematize and automate the production of parametric variable fonts.</p>
+        <p>The model consists of a standard set of data files, and a Python object to manage these files and perform various tasks during font development. This is not unlike UFO (data format) and <code class="language-plaintext highlighter-rouge">RFont</code> (Python object).</p>
+        <p>These are some of the tasks handled by the xProject controller:</p>
+        <ul>
+          <li>measuring and automatically naming UFO sources</li>
+          <li>automatically building the designspace from sources</li>
+          <li>blending typographic styles from parametric axes</li>
+          <li>cleaning up and normalizing UFO sources</li>
+          <li>copying default data to all other sources</li>
+          <li>navigating and filtering the glyph set</li>
+          <li>building composite glyphs</li>
+          <li>generating different kinds of proofs</li>
+          <li>building variable fonts</li>
+        </ul>
+        <p>The <code class="language-plaintext highlighter-rouge">xProject</code> object provides a basic set of functions which are essential to any parametric variable font project. Project-specific attributes and behavior can be added by subclassing and modifying this object.</p>
+        <p>This system was originally developed for the production of <a href="http://github.com/googlefonts/amstelvar-avar2">AmstelvarA2</a>, and is now being refined and expanded for use in other projects.</p>
+        <h3 class="h5" id="why-is-automation-needed">Why is automation needed?</h3>
+        <p>All general reasons for employing automation in the production of complex font projects apply:</p>
+        <ul>
+          <li>greater precision and consistency</li>
+          <li>reduce repetitive tasks, focus on typeface design</li>
+          <li>more flexibility for changes during the development process</li>
+          <li>handle a very large number of glyphs, axes and sources</li>
+        </ul>
+        <h3 class="h5" id="control-glyphs-as-single-source-of-truth">Control glyphs as single source of truth</h3>
+        <p>Parametric variable fonts introduce one additional challenge: keeping the parametric source names and designspace locations in synch with the actual measurements in the font.</p>
+        <p>In xProject, the control glyphs are the <a href="http://en.wikipedia.org/wiki/Single_source_of_truth">single source of truth</a>; source names and locations are derived automatically from them. This ensures that the parametric system is consistent and the numbers are meaningful.</p>
+        <h2 id="file-formats">File formats</h2>
+        <style>
+          .icon { width: 128px; float: right; margin-left: 2em; }
+        </style>
+        <h3 class="h5" id="designspace-file">Designspace file</h3>
+        <p><img src="https://gferreira.github.io/xTools4/images/icons/designspace.png" alt="" class="icon" /></p>
+        <p>The designspace file describes the complete font variation space, with all parametric axes and sources, blended axes, mappings, and everything needed to build a parametric variable font.</p>
+        <p>In xProject, the designspace file is not edited directly – it is built by the controller using data assembled from various source files. This automated approach ensures that font names and parametric locations stay in synch with the actual measurements in the font.</p>
+        <h3 class="h5" id="default-source">Default source</h3>
+        <p><img src="https://gferreira.github.io/xTools4/images/icons/ufo.png" alt="" class="icon" /></p>
+        <p>The default source is the origin of the designspace. All other sources are created from it.</p>
+        <p>The default source is usually named <code class="language-plaintext highlighter-rouge">wght400</code>. It contains quadratic contours with two off-curve points per curve segment.</p>
+        <p>Various kinds of data are copied from the default to all other sources: glyph order, unicodes, features, font info, etc.</p>
+        <h3 class="h5" id="measurements-file">Measurements file</h3>
+        <p><img src="https://gferreira.github.io/xTools4/images/icons/file.png" alt="" class="icon" /></p>
+        <p>The measurements file defines a set of measurements which can be taken from the sources of a given designspace.</p>
+        <p>Each measurement is defined as a pair of points. Contour points are identified by their index. Additional reference points (glyph margins, vertical metrics) are identified by one-letter codes.</p>
+        <p>There are <em>font-level measurements</em>, which are defined by key glyphs and represent the whole font; and there are <em>glyph-level measurements</em> for each glyph which is made out of contours (composite glyphs don’t have measurements).</p>
+        <p>The measurement definitions are stored in a JSON file, usually next to the designspace. The actual distances are not stored but measured in real-time for each source.</p>
+        <h3 class="h5" id="parametric-sources">Parametric sources</h3>
+        <p><img src="https://gferreira.github.io/xTools4/images/icons/ufo.png" alt="" class="icon" /></p>
+        <p>Each parametric source modifies only one parameter (measurement) of the default font.</p>
+        <p>Parametric source files are named with the actual measured value in the font. Such file names can be set automatically by the controller.</p>
+        <p>Some parametric sources may need to use an arbitrary scale, independent from a measurement (for example: <code class="language-plaintext highlighter-rouge">GRAD</code>). Handling of these special cases must be hard-coded in the controller.</p>
+        <p>Parametric sources are expected to have the same glyphset as the default (non-sparse sources).</p>
+        <p>There may be two parametric sources (min and max) for the same parameter, or just one (just min or just max).</p>
+        <h3 class="h5" id="blends-file">Blends file</h3>
+        <p><img src="https://gferreira.github.io/xTools4/images/icons/file.png" alt="" class="icon" /></p>
+        <p>The blends file contains a definition of the blended axes, and the mappings from blended styles to parametric locations. A typical blended designspace with <code class="language-plaintext highlighter-rouge">opsz</code>, <code class="language-plaintext highlighter-rouge">wght</code>, <code class="language-plaintext highlighter-rouge">wdth</code> axes contains mappings for all 27 corners.</p>
+        <p>The blends data is stored in a JSON file, usually next to the designspace.</p>
+        <h3 class="h5" id="tuning-sources">Tuning sources</h3>
+        <p>…</p>
+        <h3 class="h5" id="smart-sets-file">Smart sets file</h3>
+        <p><img src="https://gferreira.github.io/xTools4/images/icons/smartsets.png" alt="" class="icon" /></p>
+        <p>The smart sets file contains various sets of glyph names, which can be used to group, filter and navigate the glyphs in a large font project.</p>
+        <p>The smart sets are stored in a <code class="language-plaintext highlighter-rouge">.roboFontSets</code> file, usually next to the designspace. Smart sets may contain glyphs which are not (yet) included in the fonts.</p>
+        <h3 class="h5" id="glyph-construction-file">Glyph construction file</h3>
+        <p><img src="https://gferreira.github.io/xTools4/images/icons/file.png" alt="" class="icon" /></p>
+        <p>The glyph construction file contains recipes in <a href="#">Glyph Construction Language</a> for building composite glyphs from other glyphs. Most glyph recipes use anchors to align components to base glyph.</p>
+        <p>The glyph construction file has a <code class="language-plaintext highlighter-rouge">.glyphConstruction</code> extension, and is usually stored next to the designspace.</p>
+        <h3 class="h5" id="features-file">Features file</h3>
+        <p><img src="https://gferreira.github.io/xTools4/images/icons/fea.png" alt="" class="icon" /></p>
+        <p>…</p>
+        <h2 id="source-folder-examples">Source folder examples</h2>
+        <h3 class="h5" id="single-style-family">Single-style family</h3>
+        <p>The simplest example is a simple folder with parametric sources, using the default xProject folder structure and file naming scheme.</p>
+        <div class="language-plaintext highlighter-rouge">
+          <div class="highlight">
+            <pre class="highlight"><code>Sources
+├── MyFamily.designspaces         &lt;-- designspace file
+├── MyFamily_wght400.ufo          &lt;-- default source
+├── MyFamily_XOPQ3.ufo            &lt;-- parametric sources
+├── MyFamily_XOPQ305.ufo
+├── MyFamily_XTRA54.ufo
+├── MyFamily_XTRA496.ufo
+├── MyFamily_YOPQ2.ufo
+├── MyFamily_YOPQ96.ufo
+├── ...
+├── measurements.json             &lt;-- measurements file
+├── blends.json                   &lt;-- blends file
+├── MyFamily.roboFontSets         &lt;-- smart sets file
+├── MyFamily.glyphConstruction    &lt;-- glyph construction file
+├── features/
+│   └── MyFamily.fea              &lt;-- features file
+└── tuning/
+    ├── opsz8_wdth50.ufo          &lt;-- tuning sources (optional)
+    ├── opsz8_wdth125.ufo
+    ├── opsz8_wght100_wdth50.ufo
+    └── ...
+</code></pre>
+          </div>
+        </div>
+        <p>Different folder structure and file names can be used by subclassing the <code class="language-plaintext highlighter-rouge">xProject</code> object and overriding individual attributes and methods.</p>
+        <h3 class="h5" id="multi-style-family">Multi-style family</h3>
+        <p>The example below shows a family with two subfamilies, with two separate designspaces, managed with a single controller.</p>
+        <div class="language-plaintext highlighter-rouge">
+          <div class="highlight">
+            <pre class="highlight"><code>Sources
+├── Roman/
+│   ├── MyFamily-Roman.designspaces
+│   ├── MyFamily-Roman_wght400.ufo
+│   ├── MyFamily-Roman_XOPQ3.ufo
+│   ├── ...
+│   ├── measurements.json
+│   ├── blends.json
+│   ├── MyFamily-Roman.roboFontSets
+│   ├── MyFamily-Roman.glyphConstruction
+│   ├── features/
+│   └── tuning/
+└── Italic/
+    ├── MyFamily-Italic.designspaces
+    ├── MyFamily-Italic_wght400.ufo
+    ├── MyFamily-Italic_XOPQ3.ufo
+    ├── ...
+    ├── measurements.json
+    ├── blends.json
+    ├── MyFamily-Italic.roboFontSets
+    ├── MyFamily-Italic.glyphConstruction
+    ├── features/
+    └── tuning/
+</code></pre>
+          </div>
+        </div>
+        <p>Other folder structures and file naming systems are possible with some custom code. The system is designed to be flexible – you don’t need to force your idea into a certain format or structure, you can build your custom structure around it.</p>
+        <h2 id="controller-examples">Controller examples</h2>
+        <h3 class="h5" id="single-style-family-1">Single-style family</h3>
+        <div class="language-python highlighter-rouge">
+          <div class="highlight">
+            <pre class="highlight"><code><span class="kn">from</span> <span class="n">xTools4.modules.xproject</span> <span class="kn">import</span> <span class="n">xProject</span>
+
+<span class="k">class</span> <span class="nc">MyFamilyController</span><span class="p">(</span><span class="n">xProject</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+<span class="n">p</span> <span class="o">=</span> <span class="nc">MyFamilyController</span><span class="p">(</span><span class="sh">'</span><span class="s">/Users/gferreira/fontbureau/MyFamily</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">My Family</span><span class="sh">'</span><span class="p">)</span>
+<span class="n">p</span><span class="p">.</span><span class="nf">printSettings</span><span class="p">()</span>
+</code></pre>
+          </div>
+        </div>
+        <h3 class="h5" id="multi-style-family-1">Multi-style family</h3>
+        <div class="language-python highlighter-rouge">
+          <div class="highlight">
+            <pre class="highlight"><code><span class="kn">import</span> <span class="n">os</span>
+<span class="kn">from</span> <span class="n">xTools4.modules.xproject</span> <span class="kn">import</span> <span class="n">xProject</span>
+
+<span class="k">class</span> <span class="nc">MyFamilySubfamilyController</span><span class="p">(</span><span class="n">xProject</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">folder</span><span class="p">,</span> <span class="n">familyName</span><span class="p">,</span> <span class="n">subFamily</span><span class="p">):</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">baseFolder</span> <span class="o">=</span> <span class="n">folder</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">familyName</span> <span class="o">=</span> <span class="n">familyName</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">subFamily</span> <span class="o">=</span> <span class="n">subFamily</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">designspaceFile</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="sh">"</span><span class="si">{</span><span class="n">self</span><span class="p">.</span><span class="n">familyName</span><span class="si">}</span><span class="s">-</span><span class="si">{</span><span class="n">self</span><span class="p">.</span><span class="n">subFamily</span><span class="si">}</span><span class="s">.designspace</span><span class="sh">"</span><span class="p">.</span><span class="nf">replace</span><span class="p">(</span><span class="sh">'</span><span class="s"> </span><span class="sh">'</span><span class="p">,</span> <span class="sh">''</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">sourcesFolder</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">baseFolder</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">sourcesFolderName</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">subFamily</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">defaultSourcePath</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">sourcesFolder</span><span class="p">,</span> <span class="sa">f</span><span class="sh">"</span><span class="si">{</span><span class="n">self</span><span class="p">.</span><span class="n">familyName</span><span class="si">}</span><span class="s">-</span><span class="si">{</span><span class="n">self</span><span class="p">.</span><span class="n">subFamily</span><span class="si">}</span><span class="s">_</span><span class="si">{</span><span class="n">self</span><span class="p">.</span><span class="n">defaultName</span><span class="si">}</span><span class="s">.ufo</span><span class="sh">"</span><span class="p">.</span><span class="nf">replace</span><span class="p">(</span><span class="sh">'</span><span class="s"> </span><span class="sh">'</span><span class="p">,</span> <span class="sh">''</span><span class="p">))</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">varFontFile</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="sh">"</span><span class="si">{</span><span class="n">self</span><span class="p">.</span><span class="n">familyName</span><span class="si">}</span><span class="s">-</span><span class="si">{</span><span class="n">self</span><span class="p">.</span><span class="n">subFamily</span><span class="si">}</span><span class="s">_avar2.ttf</span><span class="sh">"</span><span class="p">.</span><span class="nf">replace</span><span class="p">(</span><span class="sh">'</span><span class="s"> </span><span class="sh">'</span><span class="p">,</span> <span class="sh">''</span><span class="p">)</span>
+
+<span class="n">p</span> <span class="o">=</span> <span class="nc">MyFamilySubfamilyController</span><span class="p">(</span><span class="sh">'</span><span class="s">/Users/gferreira/fontbureau/MyFamily</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">My Family</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">Roman</span><span class="sh">'</span><span class="p">)</span>
+<span class="n">p</span><span class="p">.</span><span class="nf">printSettings</span><span class="p">()</span>
+</code></pre>
+          </div>
+        </div>
+      </div>
+    </main>
+    <footer class="container mx-auto px-auto px-md-4 my-4" markdown=1>
+      <ul class="list-inline">
+        <li class="list-inline-item"><a href='https://gferreira.github.io/xTools4/changelog'>changelog</a></li>
+        <li class="list-inline-item"><a href='http://github.com/gferreira/xTools4'>source code</a></li>
+        <li class="list-inline-item"><a href='http://github.com/gferreira/xTools4/issues'>issues</a></li>
+      </ul>
+      <p class='small text-muted'>
+        This work is licensed under <a href='http://creativecommons.org/licenses/by-sa/4.0/'>Creative Commons Attribution-ShareAlike 4.0 International</a>.
+      </p>
+      <p class='small text-muted'>
+        <i class="bi bi-arrow-counterclockwise"></i> Last updated on 30 May 2026 14:26:12.
+      </p>
+    </footer>
+  </body>
+  <script>
+    $(document).ready(function(){$("img").click(function(){this.requestFullscreen()})});
+  </script>
+</html>

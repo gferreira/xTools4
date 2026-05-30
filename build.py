@@ -38,7 +38,7 @@ def buildExtension():
     B.developerURL         = 'http://hipertipo.com/'
     B.version              = version
     B.launchAtStartUp      = True
-    B.html                 = False
+    B.html                 = True
     B.mainScript           = 'start.py'
     B.requiresVersionMajor = '4'
     B.requiresVersionMinor = '4'
@@ -57,7 +57,7 @@ def buildExtension():
         shutil.rmtree(extensionPath)
 
     print('\tbuilding .roboFontExt package...')
-    B.save(extensionPath, libFolder=libFolder) # htmlFolder=docsFolder
+    B.save(extensionPath, libFolder=libFolder, htmlFolder=docsFolder)
 
     errors = B.validationErrors()
     if len(errors):

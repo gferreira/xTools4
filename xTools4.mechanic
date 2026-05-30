@@ -1,5 +1,5 @@
 extensionName: xTools4
-description:   A collection of expert tools for typeface design and font production in RoboFont 4.
+description:   A general-purpose font production toolbox + expert tools for parametric variable fonts.
 developer:     Gustavo Ferreira
 developerURL:  http://github.com/gferreira
 repository:    http://github.com/gferreira/xTools4

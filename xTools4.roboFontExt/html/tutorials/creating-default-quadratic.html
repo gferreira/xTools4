@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Creating a quadratic default font · xTools4</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://gferreira.github.io/xTools4/css/style.css" type="text/css" />
+    <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js" integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
+  </head>
+  <body >
+    <nav id='navbar-main' class="navbar fixed-top navbar-expand-sm"> <!-- navbar-dark bg-secondary -->
+      <div class="container mx-auto px-md-4">
+        <a class="navbar-brand" id='logo' href="https://gferreira.github.io/xTools4/">
+          <i class="bi bi-tools fs-2"></i>
+        </a>
+        <button class="navbar-toggler navbar-light" type="button" data-bs-toggle="collapse" data-bs-target="#navbarItems" aria-controls="navbarItems" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse user-select-none" id="navbarItems">
+          <ul class="navbar-nav me-auto">
+            <li class="nav-item"><a class="nav-link" href="https://gferreira.github.io/xTools4/explanations/">explanations</a></li>
+            <li class="nav-item"><a class="nav-link" href="https://gferreira.github.io/xTools4/tutorials/">tutorials</a></li>
+            <li class="nav-item"><a class="nav-link" href="https://gferreira.github.io/xTools4/how-tos/">how-tos</a></li>
+            <li class="nav-item"><a class="nav-link" href="https://gferreira.github.io/xTools4/reference/">reference</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <main class='home mt-5'>
+      <div class="container mx-auto px-md-4 pt-4 pb-3 bg-white">
+        <div class='row mt-2'>
+          <h1 class='col-sm-9 mt-sm-1'>Creating a quadratic default font</h1>
+          <nav class='col-sm-3 mt-sm-2'>
+            <ul class="pagination pagination-sm float-end">
+              <li class="page-item">
+                <a class="page-link px-3 rounded-0 prev" href="https://gferreira.github.io/xTools4//tutorials/creating-controller" title='Creating a controller object'>&laquo;</a>
+              </li>
+              <li class="page-item">
+                <a class="page-link px-3 rounded-0 next" href="https://gferreira.github.io/xTools4//tutorials/creating-measurements/" title='Creating a measurements file'>&raquo;</a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+        <nav aria-label="breadcrumb">
+          <ol class='breadcrumb'>
+            <li class='breadcrumb-item small'>
+              <a href="https://gferreira.github.io/xTools4">Index</a>
+            </li>
+            <li class='breadcrumb-item small'>
+              <a href="https://gferreira.github.io/xTools4/tutorials/">
+                Tutorials
+              </a>
+            </li>
+            <li class='breadcrumb-item small'>creating default quadratic</li>
+          </ol>
+        </nav>
+        <p class="lead">A quadratic default font is the center of the parametric designspace.</p>
+        <p><span class="badge bg-warning rounded-0">draft</span></p>
+        <ul id="markdown-toc">
+          <li><a href="#introduction" id="markdown-toc-introduction">Introduction</a></li>
+          <li><a href="#converting-from-cubic-contours" id="markdown-toc-converting-from-cubic-contours">Converting from cubic contours</a>    
+            <ul>
+              <li><a href="#scaling-the-font" id="markdown-toc-scaling-the-font">Scaling the font</a></li>
+              <li><a href="#deciding-on-the-point-structure" id="markdown-toc-deciding-on-the-point-structure">Deciding on the point structure</a></li>
+              <li><a href="#examples" id="markdown-toc-examples">Examples</a></li>
+            </ul>
+          </li>
+          <li><a href="#notes-about-italics-contours" id="markdown-toc-notes-about-italics-contours">Notes about italics contours</a></li>
+        </ul>
+        <h2 id="introduction">Introduction</h2>
+        <p>The default font is the center of the designspace. As a rule, it should be the first source to be created. All other sources start as copies of the default.</p>
+        <p>In order to create quadratic variable fonts, it is preferable to work directly with quadratic contours (instead of drawing in cubics and automatically converting to quadratics on font generation).</p>
+        <p>Depending on the project we can either draw glyphs from scratch as quadratic contours, or start by converting from existing cubic contours.</p>
+        <h2 id="converting-from-cubic-contours">Converting from cubic contours</h2>
+        <p>Cubic glyphs can be automatically converted to quadratic, but the result needs to be manually reviewed and corrected. Redundant points should be cleaned up, without distorting the original drawing. The proper point types (corner, smooth or smooth) should also be chosen.</p>
+        <h3 class="h4" id="scaling-the-font">Scaling the font</h3>
+        <ul>
+          <li>TrueType em-square needs 2000 or 2048 UPM</li>
+          <li>scale cubic contours before converting to quadratic</li>
+          <li>use <a href="#">Slinky</a> to scale the whole font</li>
+        </ul>
+        <h3 class="h4" id="deciding-on-the-point-structure">Deciding on the point structure</h3>
+        <p>When deciding on the quadratic point structure, consider how the glyph shape will change across the entire designspace, and include all necessary points even if they are not required for the default.</p>
+        <p>It is recommended for curve segments to always have two off-curve points – this makes it easier for the designer to edit the shapes. The script below can be used to find glyphs which have more or less than 2 off-curve points per curve segment in a given font.</p>
+        <div class="language-python highlighter-rouge">
+          <div class="highlight">
+            <pre class="highlight"><code><span class="c1"># menuTitle: find unwanted off-curve points
+</span>
+<span class="kn">from</span> <span class="n">xTools4.modules.validation</span> <span class="kn">import</span> <span class="n">findUnwantedQuadraticOffCurvePoints</span>
+
+<span class="n">font</span> <span class="o">=</span> <span class="nc">CurrentFont</span><span class="p">()</span>
+
+<span class="nf">findUnwantedQuadraticOffCurvePoints</span><span class="p">(</span><span class="n">font</span><span class="p">)</span>
+</code></pre>
+          </div>
+        </div>
+        <p>When converting from cubic to quadratic contours, it is also required to revert the contour direction — in TrueType fonts, the external contours are clockwise.</p>
+        <h3 class="h4" id="examples">Examples</h3>
+        <div class="row">
+          <div class="col-md">
+            <p><img src="https://gferreira.github.io/xTools4/images/tutorials/default-o-cubic.png" alt="" class="img-fluid" /></p>
+          </div>
+          <div class="col-md">
+            <p><img src="https://gferreira.github.io/xTools4/images/tutorials/default-o-quadratic.png" alt="" class="img-fluid" /></p>
+          </div>
+        </div>
+        <p class="small"><em>Cubic (left) and quadratic (right) versions of the same glyph.</em></p>
+        <div class="row">
+          <div class="col-md">
+            <p><img src="https://gferreira.github.io/xTools4/images/tutorials/default-n-cubic.png" alt="" class="img-fluid" /></p>
+          </div>
+          <div class="col-md">
+            <p><img src="https://gferreira.github.io/xTools4/images/tutorials/default-n-quadratic.png" alt="" class="img-fluid" /></p>
+          </div>
+        </div>
+        <p class="small"><em>Cubic (left) and quadratic (right). Notice the overlapped points at the serifs and crotch of the quadratic, which are needed for bolder and smaller styles.</em></p>
+        <h2 id="notes-about-italics-contours">Notes about italics contours</h2>
+        <p>When preparing a quadratic default font for italic, it’s recommended to have vertical extremes with the same angle as the font’s italic angle.</p>
+        <p>The horizontal extremes should be perpendicular to the italic angle – this approach helps to get nicer curves.</p>
+      </div>
+    </main>
+    <footer class="container mx-auto px-auto px-md-4 my-4" markdown=1>
+      <ul class="list-inline">
+        <li class="list-inline-item"><a href='https://gferreira.github.io/xTools4/changelog'>changelog</a></li>
+        <li class="list-inline-item"><a href='http://github.com/gferreira/xTools4'>source code</a></li>
+        <li class="list-inline-item"><a href='http://github.com/gferreira/xTools4/issues'>issues</a></li>
+      </ul>
+      <p class='small text-muted'>
+        This work is licensed under <a href='http://creativecommons.org/licenses/by-sa/4.0/'>Creative Commons Attribution-ShareAlike 4.0 International</a>.
+      </p>
+      <p class='small text-muted'>
+        <i class="bi bi-arrow-counterclockwise"></i> Last updated on 30 May 2026 14:26:12.
+      </p>
+    </footer>
+  </body>
+  <script>
+    $(document).ready(function(){$("img").click(function(){this.requestFullscreen()})});
+  </script>
+</html>
