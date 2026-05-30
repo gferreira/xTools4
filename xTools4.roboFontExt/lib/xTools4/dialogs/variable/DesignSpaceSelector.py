@@ -3,8 +3,8 @@ import ezui
 from defcon import Font
 from mojo.roboFont import OpenWindow, OpenFont
 from fontTools.designspaceLib import DesignSpaceDocument
-from xTools4.modules.linkPoints2 import readMeasurements # getPointAtIndex, getIndexForPoint, getAnchorPoint
-from xTools4.modules.xproject import measurementsPathKey
+from xTools4.modules.linkPoints2 import readMeasurements
+from xTools4.modules.xprojectLib import measurementsPathKey
 
 
 KEY = 'com.xTools4.dialogs.variable.designSpaceSelector'
@@ -159,9 +159,9 @@ class DesignSpaceSelector_EZUI(ezui.WindowController):
         sourcesTable.set(sourcesItems)
 
         # load measurements
-        measurementsFile = self.designspace.lib.get(measurementsPathKey)
-        if measurementsFile:
-            measurementsPath = os.path.join(sourcesFolder, measurementsFile)
+        relativePath = self.designspace.lib.get(measurementsPathKey)
+        if relativePath:
+            measurementsPath = os.path.normpath(os.path.join(self.sourcesFolder, relativePath))
             self._measurementsData = readMeasurements(measurementsPath)
             self._loadMeasurements()
 

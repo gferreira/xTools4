@@ -505,18 +505,16 @@ def findUnwantedQuadraticOffCurvePointsInGlyph(glyph):
             print(f'- segment #{segment.index} has {len(segment)-1} off-curve point{"s" if len(segment)-1 !=1 else ""}')
     print('\n...done.\n')
 
-
 # ----------------------
 # designspace validation
 # ----------------------
 
-def validateDesignspace(designspacePath, sources=True, instances=True):
+def validateDesignspace(designspacePath, locations=True, mappings=True, instances=True):
 
     doc = DesignSpaceDocument()
     doc.read(designspacePath)
 
-    # validate sources
-    if sources:
+    if locations:
         locations   = []
         sourceNames = []
         print('validating source locations...\n')
@@ -532,13 +530,12 @@ def validateDesignspace(designspacePath, sources=True, instances=True):
                 print()
         print('...done!\n')
 
-    # validate instances
-    if instances:
+    if mappings:
         expandAxes = {}
-        print('validating AmstelvarA2 instance locations...\n')
+        print('validating mapping locations...\n')
         axes = { axis.tag: axis for axis in doc.axes }
-        for instance in doc.instances:
-            for axisName, value in instance.designLocation.items():
+        for mapping in doc.axisMappings:
+            for axisName, value in mapping.outputLocation.items():
                 axis = axes[axisName]
                 if not axis.minimum <= value <= axis.maximum:
                     if axisName not in expandAxes:
@@ -555,6 +552,24 @@ def validateDesignspace(designspacePath, sources=True, instances=True):
 
         print('...done!\n')
 
+    if instances:
+        expandAxes = {}
+        print('validating instance locations...\n')
+        axes = { axis.tag: axis for axis in doc.axes }
+        for instance in doc.instances:
+            for axisName, value in instance.location.items():
+                axis = axes[axisName]
+                if not axis.minimum <= value <= axis.maximum:
+                    if axisName not in expandAxes:
+                        expandAxes[axisName] = []
+                    expandAxes[axisName].append(value)
 
+        for axisName, values in expandAxes.items():
+            print(f'{axisName}:')
+            if min(values) < axes[axisName].minimum:
+                print(f'\t- {min(values)} ({axes[axisName].minimum})')
+            if max(values) > axes[axisName].maximum:
+                print(f'\t+ {max(values)} ({axes[axisName].maximum})')
+            print()
 
-
+        print('...done!\n')

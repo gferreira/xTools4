@@ -1,7 +1,3 @@
-from importlib import reload
-import xTools4.modules.glyphMemeProofer
-reload(xTools4.modules.glyphMemeProofer)
-
 import os, time
 import AppKit
 import drawBot as DB
@@ -13,7 +9,7 @@ from mojo.smartSet import readSmartSets
 from fontTools.designspaceLib import DesignSpaceDocument
 from fontParts.world import OpenFont
 from xTools4.modules.linkPoints2 import readMeasurements
-from xTools4.modules.xproject import measurementsPathKey, smartSetsPathKey
+from xTools4.modules.xprojectLib import measurementsPathKey, smartSetsPathKey
 from xTools4.modules.glyphMemeProofer import GlyphMemeProofer
 
 
@@ -124,15 +120,15 @@ class GlyphMemeProoferController:
 
     @property
     def measurementsPath(self):
-        fileName = self.designspace.lib.get(measurementsPathKey)
-        if fileName:
-            return os.path.join(self.sourcesFolder, fileName)
+        relativePath = self.designspace.lib.get(measurementsPathKey)
+        if relativePath:
+            return os.path.normpath(os.path.join(self.sourcesFolder, relativePath))
 
     @property
     def smartSetsPath(self):
-        fileName = self.designspace.lib.get(smartSetsPathKey)
-        if fileName:
-            return os.path.join(self.sourcesFolder, fileName)
+        relativePath = self.designspace.lib.get(smartSetsPathKey)
+        if relativePath:
+            return os.path.normpath(os.path.join(self.sourcesFolder, relativePath))
 
     def getDesignspaceCallback(self, sender):
 

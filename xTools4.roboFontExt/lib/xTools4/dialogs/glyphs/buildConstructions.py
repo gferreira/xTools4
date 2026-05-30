@@ -216,7 +216,7 @@ class BuildConstructionController(ezui.WindowController):
 
         components = [(c.baseGlyph, c.transformation) for c in glyph.components]
 
-        # TO-DO: check if shapes are equal
+        # TO-DO: check if shapes are equal (?)
 
         if constructionGlyph.components == components and glyph.width == constructionGlyph.width:
             color = colorCheckTrue

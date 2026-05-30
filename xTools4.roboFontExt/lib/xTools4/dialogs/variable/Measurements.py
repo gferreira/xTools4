@@ -13,6 +13,7 @@ from xTools4.modules.linkPoints2 import readMeasurements, getPointAtIndex, getIn
 from xTools4.modules.measurements import Measurement
 from xTools4.modules.messages import showMessage
 from xTools4.modules.measureHandles import vector, getVector
+from xTools4.modules.xprojectLib import measurementsPathKey
 
 
 KEY = 'com.xTools4.dialogs.variable.measurements'
@@ -31,9 +32,6 @@ thresholdGlyphDefault = 0.1
 tempEditModeKey        = 'com.xTools4.tempEdit.mode'
 fontMeasurementsKey    = 'com.xTools4.measurements.font'
 defaultMeasurementsKey = 'com.xTools4.measurements.default'
-
-measurementsPathKey    = 'com.xTools4.xProject.measurementsPath'
-smartSetsPathKey       = 'com.xTools4.xProject.smartSetsPath'
 
 
 def scaleColorFormatter(attributes, threshold):
@@ -495,9 +493,9 @@ class MeasurementsController(ezui.WindowController):
     def measurementsPath(self):
         if not self.designspace:
             return
-        fileName = self.designspace.lib.get(measurementsPathKey)
-        if fileName:
-            return os.path.join(self.sourcesFolder, fileName)
+        relativePath = self.designspace.lib.get(measurementsPathKey)
+        if relativePath:
+            return os.path.normpath(os.path.join(self.sourcesFolder, relativePath))
 
     @property
     def defaultPath(self):
@@ -670,6 +668,8 @@ class MeasurementsController(ezui.WindowController):
 
         # editing measurements not supported in temp fonts!
         if self.font.lib.get(tempEditModeKey) == 'glyphs':
+            if self.verbose:
+                showMessage('creating measurements in temp fonts is not supported', self.messageMode)
             return
 
         table = self.w.getItem("glyphMeasurements")
@@ -799,6 +799,9 @@ class MeasurementsController(ezui.WindowController):
 
     def _loadDesignspace(self):
 
+        if self.verbose:
+            print(f'loading designspace...')
+
         self.designspace = DesignSpaceDocument()
         self.designspace.read(self.designspacePath)
 
@@ -806,7 +809,7 @@ class MeasurementsController(ezui.WindowController):
             return
 
         if self.verbose:
-            print(f'loading data from {os.path.split(self.measurementsPath)[-1]}... ', end='')
+            print(f'\tloading data from {os.path.split(self.measurementsPath)[-1]}...')
 
         self.measurements = readMeasurements(self.measurementsPath)
 
@@ -814,12 +817,12 @@ class MeasurementsController(ezui.WindowController):
         self._loadGlyphMeasurements()
 
         if self.verbose:
-            print(f'loading default source from {os.path.split(self.defaultPath)[-1]}... ', end='')
+            print(f'\tloading default source ({os.path.split(self.defaultPath)[-1]})...')
 
         self.defaultFont = OpenFont(self.defaultPath, showInterface=False)
 
         if self.verbose:
-            print('done.\n')
+            print('...done!\n')
 
         postEvent(f"{self.key}.changed")
 
@@ -880,11 +883,9 @@ class MeasurementsController(ezui.WindowController):
             if not self.glyph or not isTempFont:
                 distanceUnits = M.measure(self.font, italicCorrection=italicCorrection)
             else:
-                # print(item['name'], self.glyph.lib[fontMeasurementsKey][item['name']])
-
                 # if the font is temporary, get stored measurement values from the glyph lib
                 if isTempFont and fontMeasurementsKey in self.glyph.lib:
-                    distanceUnits = self.glyph.lib[fontMeasurementsKey][item['name']]
+                    distanceUnits = self.glyph.lib[fontMeasurementsKey].get(item['name'])
                 else:
                     distanceUnits = None
 

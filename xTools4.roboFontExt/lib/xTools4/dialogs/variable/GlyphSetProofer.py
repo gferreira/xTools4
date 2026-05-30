@@ -8,6 +8,7 @@ from mojo.roboFont import OpenWindow
 from fontParts.world import OpenFont
 from xTools4.modules.designspacePlus import DesignSpacePlus
 from xTools4.modules.glyphSetProofer import GlyphSetProofer
+from xTools4.modules.xprojectLib import glyphConstructionsPathKey
 
 
 KEY = 'com.xTools4.dialogs.variable.glyphSetProofer'
@@ -69,11 +70,25 @@ class GlyphSetProoferUI:
 
         y += self.lineHeight
         group1.sources = List(
-                (x, y, -p, -self.lineHeight*2 - p*3),
+                (x, y, -p, -self.lineHeight*4 - p*4),
                 [],
                 allowsMultipleSelection=True,
                 allowsEmptySelection=False,
                 enableDelete=False)
+
+        y = -self.lineHeight*4 - p*3
+        group1.showChecks = CheckBox(
+                (x, y, -p, self.lineHeight),
+                'check glyph attributes',
+                value=True,
+            )
+
+        y = -self.lineHeight*3 - p*3
+        group1.validateComposites = CheckBox(
+                (x, y, -p, self.lineHeight),
+                'validate composites',
+                value=True,
+            )
 
         y = -self.lineHeight*2 - p*2
         group1.makeProof = Button(
@@ -133,6 +148,10 @@ class GlyphSetProoferUI:
         return designspacePlus.document.sources
 
     @property
+    def sourcesFolder(self):
+        return os.path.dirname(self.selectedDesignspacePlus.document.path)
+
+    @property
     def selectedSources(self):
         group = self._groups[0]['view']
         selection = group.sources.getSelection()
@@ -189,20 +208,33 @@ class GlyphSetProoferUI:
         if default is None:
             return
 
-        group = self._groups[1]['view']
+        relativePath = self.selectedDesignspacePlus.document.lib.get(glyphConstructionsPathKey)
+        glyphConstructionPath = os.path.normpath(os.path.join(self.sourcesFolder, relativePath))
+
+        group1 = self._groups[0]['view']
+        group2 = self._groups[1]['view']
+
+        showChecks = group1.showChecks.get()
+        validateComposites = group1.validateComposites.get()
 
         sourcePaths = [self._sources[p] for p in self.selectedSources]
 
         print('building PDF proof... ', end='')
         # DB.newDrawing()
         start = time.time()
-        P = GlyphSetProofer(default.familyName, default.path, sourcePaths)
+
+        P = GlyphSetProofer(default.familyName, default.path, sourcePaths, glyphConstructionPath)
+        # set proof options from UI
+        for k, v in P.checks.items():
+            P.checks[k] = showChecks
+        P.validateComposites = validateComposites
+
         P.build(savePDF=False)
         end = time.time()
         print(f'done in {end - start:.2f} seconds.\n')
 
         pdfData = DB.pdfImage()
-        group.canvas.setPDFDocument(pdfData)
+        group2.canvas.setPDFDocument(pdfData)
 
     def savePDFCallback(self, sender):
 

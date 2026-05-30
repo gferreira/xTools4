@@ -20,7 +20,7 @@ Additional data formats linked to designspace files and used by different tools 
 | lib value     | name of the measurements file (in the same folder as the designspace) |
 | linked format | [Measurements format] | 
 | used by       | [Measurements], [GlyphMeme], [VarFontAssistant], [VarGlyphAssistant] |
-{: .table }
+{: .table .table-hover }
 
 ### Glyph Constructions
 
@@ -28,7 +28,7 @@ Additional data formats linked to designspace files and used by different tools 
 | lib value     | name of the glyph construction file (in the same folder as the designspace) | 
 | linked format | [GlyphConstruction] | 
 | used by       | [GlyphMeme] | 
-{: .table }
+{: .table .table-hover }
 
 ### Glyph Groups (Smart Sets)
 
@@ -36,7 +36,7 @@ Additional data formats linked to designspace files and used by different tools 
 | lib value     | name of the smart sets file (in the same folder as the designspace) | 
 | linked format | [Smart Sets] | 
 | used by       | [GlyphMeme] | 
-{: .table }
+{: .table .table-hover }
 
 [Measurements format]: ../measurements-format/
 [GlyphConstruction]: http://github.com/typemytype/GlyphConstruction

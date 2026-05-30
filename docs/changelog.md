@@ -9,6 +9,16 @@ All notable changes to xTools4 are documented in this file.
 {: .lead }
 
 
+0.2.10
+------
+
+- <span class='badge rounded-0'>Added</span> Adding composite validation and options to GlyphSetProofer.
+- <span class='badge rounded-0'>Changed</span> More work on xProject API: implementation, documentation, testing.
+- <span class='badge rounded-0'>Changed</span> Making xProject data file paths relative to the sources folder.
+- <span class='badge rounded-0'>Fixed</span> Fixing a bug in xProject cleanup sources, clear background layer.
+{: ._changelog .mb-4 }
+
+
 0.2.9
 -----
 

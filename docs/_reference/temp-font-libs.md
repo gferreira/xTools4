@@ -21,7 +21,7 @@ Custom data to make temporary fonts interoperable with other tools.
 | lib level  | font |
 | created by | [TempEdit], [GlyphMeme], [GlyphTuning] |
 | used by    | [TempEdit], [GlyphMeme], [GlyphTuning], [GlyphValidator], [VarGlyphViewer], [ImportLayer] |
-{: .table }
+{: .table .table-hover }
 
 ### Glyphset path
 
@@ -30,7 +30,7 @@ Custom data to make temporary fonts interoperable with other tools.
 | lib level  | glyph |
 | created by | [TempEdit], [GlyphMeme], [GlyphTuning] |
 | used by    | [TempEdit], [GlyphMeme], [GlyphTuning] |
-{: .table }
+{: .table .table-hover }
 
 ### Font measurements
 
@@ -39,7 +39,7 @@ Custom data to make temporary fonts interoperable with other tools.
 | lib level    | glyph |
 | created by   | [GlyphMeme] |
 | used by      | [Measurements] |
-{: .table }
+{: .table .table-hover }
 
 ### Default measurements
 
@@ -48,7 +48,7 @@ Custom data to make temporary fonts interoperable with other tools.
 | lib level    | glyph |
 | created by   | [GlyphMeme] |
 | used by      | [Measurements] |
-{: .table }
+{: .table .table-hover }
 
 [temporary fonts]: ../../explanations/temp-fonts/
 

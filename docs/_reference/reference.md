@@ -33,14 +33,12 @@ Formats
 - [Color codes](color-codes)
 </div>
 
-{% comment %}
 <div class='col' markdown='1'>
 APIs
 ----
 
 - [xProject](xproject)
-- [Measurements](measurements-api)
+<!-- - [Measurements](measurements-api) -->
 </div>
-{% endcomment %}
 
 </div>

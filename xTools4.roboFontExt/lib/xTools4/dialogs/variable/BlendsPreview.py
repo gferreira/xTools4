@@ -1,7 +1,3 @@
-from importlib import reload 
-import xTools4.modules.blendsPreview
-reload(xTools4.modules.blendsPreview)
-
 import os, time
 import drawBot as DB
 from drawBot.ui.drawView import DrawView
@@ -14,6 +10,7 @@ from xTools4.modules.sys import timer
 from xTools4.modules.blendsPreview import BlendsPreview
 from xTools4.modules.color import rgb2nscolor, nscolor2rgb
 from xTools4.dialogs.variable.GlyphMeme import tempEditModeKey
+from xTools4.modules.xprojectLib import referenceFontPathKey
 
 
 KEY = 'com.xTools4.dialogs.variable.blendsPreview'
@@ -271,35 +268,24 @@ class BlendsPreviewController:
     # callbacks
 
     def loadDesignspaceCallback(self, sender):
-        self.designspacePath = GetFile(
+        designspacePath = GetFile(
             message='Select designspace file:',
             title=self.title, 
             allowsMultipleSelection=False,
             fileTypes=["designspace"]
         )
-        if self.designspacePath is None:
+        if designspacePath is None:
             return
 
-        if self.verbose:
-            print(f'loading designspace from {os.path.split(self.designspacePath)[-1]}... ', end='')
+        self.designspacePath = designspacePath
 
-        if self.verbose:
-            print('done.\n')
-
-        # initiate operator
-        self.operator = UFOOperator()
-        self.operator.read(self.designspacePath)
-        self.operator.loadFonts()
-
-        self._updateAxesList()
+        self._loadDesignspace()
 
     def reloadCallback(self, sender):
         if not self.operator:
             return
-        self.operator.read(self.designspacePath)
-        self.operator.loadFonts()
 
-        self._updateAxesList()
+        self._loadDesignspace()
 
     def loadReferenceFontCallback(self, sender):
         self.referenceFontPath = GetFile(
@@ -330,19 +316,48 @@ class BlendsPreviewController:
 
     # methods
 
+    def _loadDesignspace(self):
+
+        if self.verbose:
+            print(f'loading designspace from {os.path.split(self.designspacePath)[-1]}... ')
+
+        # initiate operator
+        self.operator = UFOOperator()
+        self.operator.read(self.designspacePath)
+        self.operator.loadFonts()
+
+        # load reference font
+        relativePath = self.operator.doc.lib.get(referenceFontPathKey)
+        if relativePath:
+            print('loading reference font...')
+            sourcesFolder = os.path.dirname(self.designspacePath)
+            self.referenceFontPath = os.path.normpath(os.path.join(sourcesFolder, relativePath))
+            self._group1.compare.set(True)
+
+        self._updateAxesList()
+
+        if self.verbose:
+            print('done.\n')
+
     def _updateAxesList(self):
+        print('updating axes list...')
         axesItems = []
+
         for axis in self.operator.doc.axes:
             for axisName in self.blendedAxes:
+                # print('\t', axisName)
                 if axisName in self.ignoreAxes or axisName.startswith('TN'):
                     continue
                 if axisName == axis.name:
+                    # print(axisName)
+                    values = set([axis.minimum, axis.default, axis.maximum])
                     axesItems.append({
                         'axis' : axis.tag,
-                        'values': f'{int(axis.minimum)} {int(axis.default)} {int(axis.maximum)}',
+                        'values': f"{' '.join([str(int(v)) for v in values])}",
                     })
 
-        self._group1.axesList.set(axesItems)
+        # the first 3 axes must be: opsz wght wdth
+        self._group1.axesList.set(axesItems[:3])
 
     def _updatePreview(self):
 
@@ -366,6 +381,10 @@ class BlendsPreviewController:
                     glyphName = glyphName[:glyphName.rfind('.')]
             else:
                 glyphName = None
+
+        if not glyphName:
+            print('no glyph selected!\n')
+            return
 
         axesListItems = self._group1.axesList.get()
         axesList = [ (item['axis'], [int(v) for v in item['values'].split()]) for item in axesListItems ]

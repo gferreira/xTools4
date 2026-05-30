@@ -4,7 +4,7 @@ from fontParts.world import OpenFont
 from fontTools.designspaceLib import DesignSpaceDocument
 from fontTools.ufoLib.glifLib import glyphNameToFileName
 from xTools4.modules.linkPoints2 import readMeasurements
-from xTools4.modules.xproject import measurementsPathKey
+from xTools4.modules.xprojectLib import measurementsPathKey
 from xTools4.modules.measurements import Measurement
 from xTools4.modules.validation import *
 from xTools4.dialogs.variable.Measurements import colorCheckTrue, colorCheckFalse, colorCheckEqual
@@ -101,6 +101,10 @@ class GlyphMemeProofer:
             glyphs[srcName] = f[self.glyphName]
         return glyphs
 
+    @property
+    def defaultFont(self):
+        return OpenFont(self.designspace.default.path, showInterface=False)
+
     def draw(self):
         DB.newDrawing()
         for srcName, glyph in self.parametricGlyphs.items():
@@ -121,8 +125,6 @@ class GlyphMemeProofer:
         boxHeight = (max(metricsY) - min(metricsY)) * self.glyphScale
         boxY = (self.canvasHeight - boxHeight) * 0.5
         boxWidth = glyph.width * self.glyphScale
-
-        defaultFont = OpenFont(self.designspace.default.path, showInterface=False)
 
         DB.newPage(self.canvasWidth + self.panelWidth, self.canvasHeight)
         DB.blendMode('multiply')
@@ -147,18 +149,21 @@ class GlyphMemeProofer:
             self._drawInfo(glyph, (x, y), srcName)
 
         if self.measurementsDraw:
-            self._drawMeasurements(glyph, defaultFont)
+            self._drawMeasurements(glyph)
 
         if self.deltasDraw:
-            self._drawDeltas(glyph, (x, y), defaultFont)
+            self._drawDeltas(glyph, (x, y))
 
         if self.validationDraw:
-            self._drawValidation(glyph, defaultFont)
+            self._drawValidation(glyph)
 
     def save(self, folder, fileName):
 
         glifName = os.path.splitext(glyphNameToFileName(self.glyphName, None))[0]
         pdfFileName = f'{fileName}_{glifName}.pdf'
+
+        if not os.path.exists(folder):
+            os.makedirs(folder)
 
         pdfPath = os.path.join(folder, pdfFileName)
         if os.path.exists(pdfPath):
@@ -288,7 +293,7 @@ class GlyphMemeProofer:
 
         DB.restore()
 
-    def _drawMeasurements(self, glyph, defaultFont):
+    def _drawMeasurements(self, glyph):
 
         panelX = self.canvasWidth + self.captionSize
         panelY = self.captionSize
@@ -296,7 +301,7 @@ class GlyphMemeProofer:
         panelH = self.canvasHeight - self.captionSize * 2
         panelBox = panelX, panelY, panelW, panelH
 
-        defaultGlyph = defaultFont[glyph.name]
+        defaultGlyph = self.defaultFont[glyph.name]
 
         char = 7
 
@@ -311,6 +316,8 @@ class GlyphMemeProofer:
         T.append('name\tp1\tp2\tunits\tscale\n')
         T.append(f'{"-"*27}\n')
 
+        colorCheckNone = self.captionColor
+
         for k, v in self.glyphMeasurements.items():
             pt1, pt2 = k.split()
 
@@ -321,8 +328,11 @@ class GlyphMemeProofer:
                 glyph.name, pt2,
             )
             value = M.measure(glyph.font, italicCorrection=True)
-            valueDefault = M.measure(defaultFont, italicCorrection=True)
-            scaleDefault = value / valueDefault
+            valueDefault = M.measure(self.defaultFont, italicCorrection=True)
+            if valueDefault != 0:
+                scaleDefault = value / valueDefault
+            else:
+                scaleDefault = None
 
             if scaleDefault is None:
                 color = colorCheckNone
@@ -333,21 +343,27 @@ class GlyphMemeProofer:
             else:
                 color = colorCheckFalse
 
+            T.fill(*color)
+            T.append(f"{v['name']}\t")
+
             T.fill(*self.captionColor)
-            T.append(f"{v['name']}\t{pt1}\t{pt2}\t{value}\t")
+            T.append(f"{pt1}\t{pt2}\t{value}\t")
 
             T.fill(*color)
-            T.append(f"{scaleDefault:.2f}\n")
+            if scaleDefault is not None:
+                T.append(f"{scaleDefault:.2f}\n")
+            else:
+                T.append("–\n")
 
         DB.textBox(T, panelBox, align='left')
 
         DB.save()
 
-    def _drawDeltas(self, glyph, pos, defaultFont):
+    def _drawDeltas(self, glyph, pos):
 
         x, y = pos
 
-        defaultGlyph = defaultFont[glyph.name]
+        defaultGlyph = self.defaultFont[glyph.name]
 
         DB.save()
         DB.strokeWidth(self.contoursStrokeWidth)
@@ -444,9 +460,9 @@ class GlyphMemeProofer:
 
         DB.restore()
 
-    def _drawValidation(self, glyph, defaultFont):
+    def _drawValidation(self, glyph):
 
-        defaultGlyph = defaultFont[glyph.name]
+        defaultGlyph = self.defaultFont[glyph.name]
 
         checkResults = {
             'compatibility' : checkCompatibility(glyph, defaultGlyph),

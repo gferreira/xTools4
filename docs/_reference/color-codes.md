@@ -12,8 +12,7 @@ The systematic use of colors makes it easy to filter information from noise.
 
 <style>
 ._table td:nth-child(1) { width: 200px; }
-._label1 { margin-right: 0.2em; }
-._label2 { padding: 0.1em 0.4em; margin-right: 0.2em; }
+._label { padding: 0.1em 0.4em; margin-right: 0.2em; }
 ._white { border: solid 1px #DDD !important; }
 </style>
 
@@ -21,7 +20,7 @@ The systematic use of colors makes it easy to filter information from noise.
 Check colors
 ------------
 
-| color set      | <span class='_label1 red'>red</span> <span class='_label1 green'>green</span> <span class='_label1 blue'>blue</span> |
+| color code     | <span class='_label red _white'>red</span> <span class='_label green _white'>green</span> <span class='_label blue _white'>blue</span> |
 | applied to     | check labels, values, vectors |
 | representing   | low-level comparison of attributes, values, positions |
 | implemented in | [GlyphValidator]<br/>[GlyphSetProofer]<br/>[Measurements]<br/>[VarGlyphAssistant]<br/>[VarFontAssistant]<br/>[VarGlyphViewer] |
@@ -31,7 +30,7 @@ Check colors
 Validation colors
 -----------------
 
-| color set      | <span class='_label2 cells-contours-different _white'>white</span> <span class='_label2 cells-contours-equal'>blue</span> <span class='_label2 cells-components-equal'>yellow</span> <span class='_label2 cells-components-different'>orange</span> <span class='_label2 cells-warning'>red</span> |
+| color code     | <span class='_label cells-contours-different _white'>white</span> <span class='_label cells-contours-equal'>blue</span> <span class='_label cells-components-equal'>yellow</span> <span class='_label cells-components-different'>orange</span> <span class='_label cells-warning'>red</span> |
 | applied to     | glyph cell background color |
 | representing   | categorization of glyphs based on low-level checks |
 | implemented in | [GlyphValidator]<br/>[GlyphSetProofer] |

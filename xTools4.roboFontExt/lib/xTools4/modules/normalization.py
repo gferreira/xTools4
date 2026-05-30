@@ -3,7 +3,7 @@ from ufonormalizer import normalizeUFO
 from fontParts.world import OpenFont
 
 
-def cleanupSources(sourcesFolder, clearFontLibs=True, clearGlyphLibs=True, clearFontGuides=True, clearGlyphGuides=True, clearMarks=True, clearLayers=True, preflight=True, verbose=False, ignoreFontLibs=[], ignoreLayers=[]):
+def cleanupSources(sourcesFolder, clearFontLibs=True, clearGlyphLibs=True, clearFontGuides=True, clearGlyphGuides=True, clearMarks=True, clearLayers=True, preflight=False, verbose=False, ignoreFontLibs=[], ignoreLayers=[]):
 
     ufoPaths  = glob.glob(f'{sourcesFolder}/*.ufo')
 
@@ -75,7 +75,7 @@ def cleanupSources(sourcesFolder, clearFontLibs=True, clearGlyphLibs=True, clear
                 print(f'\t\tsaving UFO source...')
             f.save()
 
-        f.close()
+        # f.close()
 
     print()
     if clearFontLibs:
@@ -98,12 +98,11 @@ def cleanupSources(sourcesFolder, clearFontLibs=True, clearGlyphLibs=True, clear
 
     print('...done!\n')
 
-
-def normalizeSources(sourcesFolder, verbose=True):
+def normalizeSources(sourcesFolder, verbose=True, onlyModified=False, writeModTimes=False):
     ufoPaths  = glob.glob(f'{sourcesFolder}/*.ufo')
     print(f'normalizing UFO sources...\n')
     for ufoPath in ufoPaths:
         print(f'\tnormalizing {os.path.split(ufoPath)[-1]}...')
-        normalizeUFO(ufoPath, onlyModified=False, writeModTimes=False)
+        normalizeUFO(ufoPath, onlyModified=onlyModified, writeModTimes=writeModTimes)
     print('\n...done!\n')
 

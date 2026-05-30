@@ -1,5 +1,5 @@
 import ezui
-from math import atan, degrees
+# from math import atan, degrees
 from mojo.UI import GetFile
 from mojo.roboFont import OpenWindow, OpenFont
 from mojo.subscriber import Subscriber, registerSubscriberEvent, roboFontSubscriberEventRegistry, registerGlyphEditorSubscriber, unregisterGlyphEditorSubscriber
@@ -41,15 +41,15 @@ def getImplicitSelectedPoints(glyph):
                         pts.append(bcpOut)
     return pts
 
-def getAngle(p1, p2):
-    a = p2.x - p1.x
-    b = p2.y - p1.y
-    if a != 0:
-        angleRadians = atan(float(b) / a)
-        angleDegrees = degrees(angleRadians)
-    else:
-        angleDegrees = 0
-    return angleDegrees
+# def getAngle(p1, p2):
+#     a = p2.x - p1.x
+#     b = p2.y - p1.y
+#     if a != 0:
+#         angleRadians = atan(float(b) / a)
+#         angleDegrees = degrees(angleRadians)
+#     else:
+#         angleDegrees = 0
+#     return angleDegrees
 
 
 class VarGlyphViewer(ezui.WindowController):

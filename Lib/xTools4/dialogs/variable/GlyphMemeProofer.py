@@ -1,7 +1,3 @@
-from importlib import reload
-import xTools4.modules.glyphMemeProofer
-reload(xTools4.modules.glyphMemeProofer)
-
 import os, time
 import AppKit
 import drawBot as DB

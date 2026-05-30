@@ -1,11 +1,3 @@
-from importlib import reload
-import xTools4.modules.blendsPreview
-reload(xTools4.modules.blendsPreview)
-import xTools4.modules.glyphMemeProofer
-reload(xTools4.modules.glyphMemeProofer)
-import xTools4.modules.normalization
-reload(xTools4.modules.normalization)
-
 import os, glob, json, shutil, time, datetime
 import subprocess
 from functools import cached_property
@@ -31,6 +23,7 @@ class xProject:
     '''
 
     verbose = True
+    '''Enable/disable console output.'''
 
     def __init__(self, folder, familyName):
         self.baseFolder = folder
@@ -40,8 +33,8 @@ class xProject:
     # SETTINGS
     #----------
 
-    #: The name of the project settings file.
     settingsFile = 'xproject.json'
+    '''The name of the project settings file.'''
 
     @property
     def settingsPath(self):
@@ -60,19 +53,19 @@ class xProject:
         '''Returns the full path of the designspace file.'''
         return os.path.join(self.sourcesFolder, self.designspaceFile)
 
-    #: A fontTools designspace object.
     designspace = None
+    '''Returns a fontTools designspace object (after building).'''
 
     # parametric sources
 
-    #: A list of parametric axes (4-letter names).
     parametricAxes = []
+    '''A list of parametric axes as 4-letter tags.'''
 
-    #: A switch to make parametric axes hidden (or not).
     parametricAxesHidden = True
+    '''A switch to make parametric axes hidden (or not).'''
 
-    #: The name of the sources folder.
     sourcesFolderName = 'Sources'
+    '''The name of the sources folder.'''
 
     @property
     def sourcesFolder(self):
@@ -82,13 +75,18 @@ class xProject:
 
     @cached_property
     def sourcesPaths(self):
-        '''Returns a list with the full paths of all (parametric) UFO sources.'''
+        '''Returns a list with the full paths of all parametric UFO sources.'''
         return glob.glob(f'{self.sourcesFolder}/*.ufo')
+
+    @property
+    def sources(self):
+        '''Returns a dict of tuning locations (keys) and their UFO sources (values).'''
+        return { os.path.splitext(os.path.split(ufo)[-1])[0] : ufo for ufo in self.sourcesPaths }
 
     # default
 
-    #: The name of the default source.
     defaultName = 'wght400'
+    '''The name of the default source.'''
 
     @property
     def defaultSourcePath(self):
@@ -97,7 +95,7 @@ class xProject:
 
     @property
     def defaultLocation(self):
-        '''Returns the (parametric) location of the default source.'''
+        '''Returns the parametric location of the default source.'''
         if not self.measurementsDefault:
             return
 
@@ -117,12 +115,13 @@ class xProject:
 
     @cached_property
     def defaultFont(self):
+        '''Returns an RFont object of the default font (cached).'''
         return OpenFont(self.defaultSourcePath, showInterface=False)
 
     # measurements
 
-    #: The name of the measurements file.
     measurementsFile = 'measurements.json'
+    '''The name of the measurements file.'''
 
     @property
     def measurementsPath(self):
@@ -139,6 +138,7 @@ class xProject:
 
     @cached_property
     def measurementsDefault(self):
+        '''Returns a dictionary with measurements of the default source.'''
         if not os.path.exists(self.measurementsPath):
             return
         measurements = FontMeasurements()
@@ -182,8 +182,8 @@ class xProject:
 
     # blending
 
-    #: The name of the blends file.
     blendsFile = 'blends.json'
+    '''The name of the blends file.'''
 
     @property
     def blendsPath(self):
@@ -210,15 +210,15 @@ class xProject:
 
     # tuning
 
-    #: Enable/disable tuning (optional, disabled by default).
     tuning = False
+    '''Enable/disable tuning (optional, disabled by default).'''
 
-    #: The name of the tuning folder.
     tuningSourcerFolderName = 'corners'
+    '''The name of the tuning folder.'''
 
     @property
     def tuningSourcesFolder(self):
-        '''Returns the full path of the tuning sources (sub)folder.'''
+        '''Returns the full path of the tuning sources subfolder.'''
         return os.path.join(self.sourcesFolder, self.tuningSourcerFolderName)
 
     @property
@@ -228,12 +228,13 @@ class xProject:
 
     @property
     def tuningSources(self):
+        '''Returns a dict of tuning locations (keys) and their UFO sources (values).'''
         return { os.path.splitext(os.path.split(ufo)[-1])[0] : ufo for ufo in self.tuningSourcesPaths }
 
     # instances
 
-    #: The name of the instances folder.
     instancesFolderName = 'instances'
+    '''The name of the instances folder.'''
 
     @property
     def instancesFolder(self):
@@ -242,12 +243,12 @@ class xProject:
 
     # variable fonts
 
-    #: The name of the fonts folder.
     fontsFolderName = 'Fonts'
+    '''The name of the fonts folder.'''
 
     @property
     def fontsFolder(self):
-        '''Returns the full path of the (binary) fonts folder.'''
+        '''Returns the full path of the binary fonts folder.'''
         return os.path.join(self.baseFolder, self.fontsFolderName)
 
     @property
@@ -263,6 +264,7 @@ class xProject:
     # proofs
 
     proofsFolderName = 'Proofs'
+    '''The name of the proofs folder.'''
 
     @property
     def proofsFolder(self):
@@ -333,6 +335,7 @@ class xProject:
             print(f'{self.smartSetsPath} already exists.\n')
             return
         with open(self.smartSetsPath, 'w') as f:
+            # add boilerplate smart sets
             pass
 
     def createGlyphConstructionFile(self):
@@ -346,16 +349,19 @@ class xProject:
             pass
 
     def updateGlyphsFromDefault(self, glyphNames, oldDefaultPath, preflight=True):
+        '''Update default glyphs in all sources.'''
         batchUpdateGlyphsFromDefault(glyphNames, self.sourcesPaths, self.defaultSourcePath, oldDefaultPath, preflight=preflight)
 
-    def copyGlyphsFromDefault(self, glyphNames):
+    def copyGlyphsFromDefault(self, glyphNames, sourceNames=None):
+        '''Copy glyphs from the default source to other sources.'''
         pass
 
-    def copyGroupsFromDefault(self, glyphNames):
+    def copyGroupsFromDefault(self):
+        '''Copy groups from the default source to other sources.'''
         pass
 
     def copyUnicodesFromDefault(self, preflight=False):
-        '''Copy all unicodes from the default source to all other sources.'''
+        '''Copy unicodes from the default source to all other sources.'''
 
         srcFont = OpenFont(self.defaultSourcePath, showInterface=False)
 
@@ -399,6 +405,19 @@ class xProject:
         print('...done!\n')
 
     def buildCompositeGlyphs(self, glyphNames):
+        '''Build composite glyphs from glyph constructions.'''
+        pass
+
+    def splitSources(self, srcName, dstName, glyphNames):
+        '''Split new parametric sources from existing sources.'''
+        for srcPath in self.sourcesPaths:
+            srcFileName = os.path.split(srcPath)[-1]
+            if srcName in srcFileName:
+                dstFileName = srcFileName.replace(srcName, dstName)
+                print(srcFileName, dstFileName)
+                # 1. duplicate default as dstName
+                # 2. copy glyphNames from srcName to dstName
+                # 3. copy glyphNames from default to srcName
         pass
 
     # designspace
@@ -484,8 +503,8 @@ class xProject:
         if self.verbose:
             print('\tadding tuning axes...')
 
-        #: A dict of blended location names (keys) and tuning axes (values).
         self._tuningAxes = {}
+        '''A dict of blended location names (keys) and tuning axes (values).'''
 
         for i, styleName in enumerate(self.tuningSources):
             ufo = self.tuningSources[styleName]
@@ -593,6 +612,7 @@ class xProject:
     # building
 
     def buildDesignspace(self, instances=False):
+        '''Build designspace file from source data.'''
 
         if self.verbose:
             print(f'building {os.path.split(self.designspacePath)[-1]}...')
@@ -620,9 +640,11 @@ class xProject:
         self.save()
 
     def buildInstances(self, clear=True):
+        '''Build UFO instances for blended sources.'''
         pass
 
     def buildVariableFont(self, debug=False, featureWriter=True, noGDEF=False):
+        '''Build avar2 variable font from designspace.'''
 
         print(f'generating variable font for {self.designspaceFile}...')
 
@@ -661,9 +683,6 @@ class xProject:
         print(f'{os.path.exists(self.varFontPath)}')
 
         print('...done.\n')
-
-    def buildInstancesVariableFont(self, clear=True, ufo=False):
-        pass
 
     # saving
 
@@ -717,6 +736,7 @@ class xProject:
             normalizeSources(self.tuningSourcesFolder, onlyModified=False, writeModTimes=False, verbose=self.verbose)
 
     def addCustomKeysToLib(self):
+        '''Save paths to data files in the designspace lib.'''
 
         if self.verbose:
             print('\tadding custom keys to lib...')
@@ -734,6 +754,8 @@ class xProject:
             self.designspace.lib[referenceFontPathKey] = os.path.relpath(self.referenceFontPath, self.sourcesFolder)
 
     def save(self):
+        '''Save current designspace to file.'''
+
         if not self.designspace:
             return
 
@@ -748,9 +770,12 @@ class xProject:
     # project info
 
     def printAxes(self):
+        '''Print a list of all variation axes in this project.'''
         pass
 
     def printSettings(self):
+        '''Print an overview of this project's settings.'''
+
         txt  = f'base folder: {self.baseFolder}\n'
         txt += f'family name: {self.familyName}\n\n'
         # txt += f'settings file: {self.settingsFile}\n'
@@ -797,14 +822,14 @@ class xProject:
     # validation
 
     def validateDesignspace(self, locations=True, mappings=True, instances=True):
+        '''Validate range of designspace locations.'''
         validateDesignspace(self.designspacePath, locations=locations, mappings=mappings, instances=instances)
 
     # proofing
 
     def proofGlyphMemes(self, glyphNames, anchors=True):
-
+        '''Build glyph meme PDF proofs.'''
         for glyphName in glyphNames:
-
             P = GlyphMemeProofer(glyphName, self.designspacePath)
             P.anchorsDraw = anchors
             P.draw()
@@ -814,7 +839,7 @@ class xProject:
             P.save(glyphMemesFolder, pdfFileName)
 
     def proofSourcesGlyphSet(self, familyName=None, showCompatible=True, validateComposites=True):
-
+        '''Build glyph set PDF proofs.'''
         if not familyName:
             familyName = self.familyName
 
@@ -827,6 +852,7 @@ class xProject:
         P.build(savePDF=True, folder=glyphsetProofsFolder)
 
     def proofBlends(self, glyphNames, familyName=None, margins=True, labels=True, levels=False, levelsShow=[1, 2, 3, 4], header=True, footer=True, points=False):
+        '''Build PDF proof of blends.'''
 
         B = BlendsPreview(self.designspacePath)
 
@@ -867,14 +893,4 @@ class xProject:
         print(f'saving {pdfPath}...', end=' ')
         B.save(pdfPath)
         print(f'done!\n')
-
-
-
-
-
-
-
-
-
-
 
