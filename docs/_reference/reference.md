@@ -31,6 +31,7 @@ Formats
 - [Custom designspace libs](custom-designspace-libs)
 - [Custom libs in temporary fonts](temp-font-libs)
 - [Color codes](color-codes)
+- [Measurement keys (proposal)](measurement-keys)
 </div>
 
 <div class='col' markdown='1'>
@@ -38,7 +39,6 @@ APIs
 ----
 
 - [xProject](xproject)
-<!-- - [Measurements](measurements-api) -->
 </div>
 
 </div>

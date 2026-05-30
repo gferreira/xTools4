@@ -1,16 +1,3 @@
-$boxPadding: 0.6em;
-$boxMargin: 1em 0 1em 0;
-
-pre.highlight {
-  padding: $boxPadding;
-  margin: $boxMargin;
-  overflow: scroll;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none; // Firefox
-}
-
-code.highlighter-rouge {}
-
 // copied from: http://github.com/richleland/pygments-css/
 
 .highlight .hll { background-color: #ffffcc }
