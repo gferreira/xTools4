@@ -3,10 +3,10 @@ developer: Gustavo Ferreira
 developerURL: http://hipertipo.com
 launchAtStartUp: true
 mainScript: start.py
-version: 0.2.9
+version: 0.2.11
 addToMenu:
 - path: xTools4/dialogs/old/preferences.py
   preferredName: preferences
-html: false
+html: true
 requiresVersionMajor: '4'
 requiresVersionMinor: '5'

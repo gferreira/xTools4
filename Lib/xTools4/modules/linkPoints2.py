@@ -481,3 +481,36 @@ def importMeasurements(font, jsonPath, verbose=True, key=KEY):
 
 
 
+
+def getReferencePoint(glyph, ptRef, offset=None):
+
+    if ptRef in list('ABCDX'):
+        P = getAnchorPoint(glyph.font, ptRef)
+
+    else:
+        ptIndex = int(ptRef)
+
+        # get linear point indexes
+        n = 0
+        points = {}
+        for ci, c in enumerate(glyph):
+            for pi, p in enumerate(c.points):
+                points[n] = ci, pi
+                n += 1
+
+        # n+1 : right margin
+        if ptIndex > len(points)-1:
+            P = RPoint()
+            P.x = glyph.width
+            P.y = 0
+        # -1 : left margin
+        elif ptIndex < 0:
+            P = RPoint()
+            P.x = 0
+            P.y = 0
+
+    if offset:
+        P.x += offset
+
+    return P
+

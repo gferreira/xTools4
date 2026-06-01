@@ -1,3 +1,7 @@
+from importlib import reload
+import xTools4.modules.linkPoints2
+reload(xTools4.modules.linkPoints2)
+
 import os, glob, shutil
 from collections import Counter
 from fontTools.agl import UV2AGL
@@ -402,7 +406,7 @@ def convertMeasurementIndexesToIDs(font, measurements):
     for glyphName, glyphMeasurements in _measurements['glyphs'].items():
 
         glyph = font[glyphName]
-        pointCount = sum(len(c) for c in glyph)
+        pointCount = sum(len(c.points) for c in glyph)
         _glyphMeasurements = {}
 
         for glyphMeasurementKey, glyphMeasurement in glyphMeasurements.items():
