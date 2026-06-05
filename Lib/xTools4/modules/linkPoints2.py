@@ -479,9 +479,6 @@ def importMeasurements(font, jsonPath, verbose=True, key=KEY):
     if verbose:
         print('...done.\n')
 
-
-
-
 def getReferencePoint(glyph, ptRef, offset=None):
 
     if ptRef in list('ABCDX'):

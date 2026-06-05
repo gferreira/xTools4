@@ -232,10 +232,6 @@ class BlendsPreview:
 
         defaultGlyph = self.defaultFont[glyphName]
 
-        # if defaultGlyph.components:
-        #     print('glyph contains components, skipping…')
-        #     return
-
         cellWidth  = self.cellSize * self.glyphScale * 1.5
         cellHeight = self.cellSize * self.glyphScale
 

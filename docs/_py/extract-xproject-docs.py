@@ -13,6 +13,7 @@ folder = os.path.dirname(os.getcwd())
 outputPath = os.path.join(folder, '_reference', 'xproject.md')
 print(outputPath)
 
+# copied from http://davidism.com/attribute-docstrings/
 def get_attr_docs(cls):
     """Get any docstrings placed after attribute assignments in a class body."""
     cls_node = ast.parse(textwrap.dedent(inspect.getsource(cls))).body[0]

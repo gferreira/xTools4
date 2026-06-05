@@ -8,7 +8,7 @@ from defcon import Font
 from xTools4.modules.linkPoints2 import readMeasurements
 from xTools4.modules.measurements import FontMeasurements, permille, setSourceNamesFromMeasurements
 from xTools4.modules.normalization import cleanupSources, normalizeSources
-from xTools4.modules.validation import validateDesignspace
+from xTools4.modules.validation import validateDesignspace, validateFonts
 from xTools4.modules.ttx import ttf2ttx, ttx2ttf
 from xTools4.modules.glyphMemeProofer import GlyphMemeProofer
 from xTools4.modules.glyphSetProofer import GlyphSetProofer
@@ -598,10 +598,14 @@ class xProject:
             for axisName in blendedSources[styleName]:
                 outputLocation[axisName] = int(blendedSources[styleName][axisName])
 
-            # # set value for corner tuning axes
-            # if styleName in self.cornerTuningAxes:
-            #     axisTag = self.cornerTuningAxes[styleName]
-            #     outputLocation[axisTag] = 100
+            # set value for corner tuning axes
+            if self.tuning:
+                for i, tuningStyleName in enumerate(self.tuningSources):
+                    axisTag = f'TN{i:02}'
+                    if styleName == tuningStyleName:
+                        outputLocation[axisTag] = 100
+                    else:
+                        outputLocation[axisTag] = 0
 
             m.inputLocation  = inputLocation
             m.outputLocation = outputLocation
@@ -824,6 +828,43 @@ class xProject:
     def validateDesignspace(self, locations=True, mappings=True, instances=True):
         '''Validate range of designspace locations.'''
         validateDesignspace(self.designspacePath, locations=locations, mappings=mappings, instances=instances)
+
+    def validateSources(self, width=False, left=False, right=False, points=True, components=True, anchors=True, unicodes=True, targetSources=[]):
+        '''Validate glyph attributes in all sources against the default.'''
+
+        options = {
+            'width'      : width,
+            'left'       : left,
+            'right'      : right,
+            'points'     : points,
+            'components' : components,
+            'anchors'    : anchors,
+            'unicodes'   : unicodes,
+        }
+
+        txt = 'validating sources...\n\n'
+        for check in options:
+            if options[check]:
+                txt += f'\t- {check}\n'
+        txt += '\n'
+
+        # get default font
+        txt += f'\tdefault font: {self.defaultFont.info.familyName} {self.defaultFont.info.styleName}\n\n'
+
+        # get target sources
+        if not targetSources:
+            targetPaths = self.sourcesPaths
+        else:
+            targetPaths = [os.path.join(self.sourcesFolder, f'{srcName}.ufo') for srcName in targetSources]
+
+        if self.defaultSourcePath in targetPaths:
+            targetPaths.remove(self.defaultSourcePath)
+        targetFonts = [OpenFont(f, showInterface=False) for f in targetPaths]
+
+        txt += validateFonts(targetFonts, self.defaultFont, options)
+        txt += '...done!\n\n'
+
+        print(txt)
 
     # proofing
 

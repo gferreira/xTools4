@@ -303,6 +303,10 @@ A Pythonic API for scripting font source data for parametric variable fonts.
 <td>Validate range of designspace locations.</td>
 </tr>
 <tr>
+<td><code>xProject.validateSources</code></td>
+<td>Validate glyph attributes in all sources against the default.</td>
+</tr>
+<tr>
 <td><code>xProject.proofGlyphMemes</code></td>
 <td>Build glyph meme PDF proofs.</td>
 </tr>

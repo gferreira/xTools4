@@ -517,5 +517,61 @@ def convertMeasurementIDsToIndexes(font, measurements):
 
     return _measurements
 
+def transferGlyphMeasurements(glyphMeasurements, srcGlyph, dstGlyph):
+    '''Transfer glyph measurements from one source to another based on matching point positions.'''
+
+    _glyphMeasurements = {}
+
+    for ID, m in glyphMeasurements.items():
+        pointIndexes = ID.split()
+
+        for i, ptIndex in enumerate(pointIndexes):
+            try:
+                ptIndex = int(ptIndex)
+                if ptIndex in [-1, 99]: # HACK! write better logic
+                    continue
+                pt = getPointAtIndex(srcGlyph, ptIndex)
+                n = 0
+                for c in dstGlyph.contours:
+                    for p in c.points:
+                        if p.x == pt.x and p.y == pt.y:
+                            pointIndexes[i] = n
+                        n += 1
+            except:
+                pass
+
+        _glyphMeasurements[f'{pointIndexes[0]} {pointIndexes[1]}'] = m
+
+    return _glyphMeasurements
 
 
+
+def makeTuningGlyph(glyph1, glyph2, defaultGlyph, matchingPoints):
+
+    tuningGlyph = defaultGlyph.copy()
+
+    for mp1, mp2 in matchingPoints:
+        ci1, pi1 = mp1
+        ci2, pi2 = mp2
+        p1 = glyph1.contours[ci1].points[pi1]
+        p2 = glyph2.contours[ci2].points[pi2]
+        deltaX = p2.x - p1.x
+        deltaY = p2.y - p1.y
+        pt = tuningGlyph.contours[ci1].points[pi1]
+        pt.x += deltaX
+        pt.y += deltaY
+
+    tuningGlyph.width += (glyph2.width - glyph1.width)
+
+    return tuningGlyph
+
+def getMatchingPoints(glyph1, glyph2):
+    matchingPoints = []
+    for ci1, c1 in enumerate(glyph1.contours):
+        for pi1, p1 in enumerate(c1.points):
+            # find matching reference point
+            for ci2, c2 in enumerate(glyph2.contours):
+                for pi2, p2 in enumerate(c2.points):
+                    if p1.x == p2.x and p1.y == p2.y:
+                        matchingPoints.append(((ci1, pi1), (ci2, pi2)))
+    return matchingPoints

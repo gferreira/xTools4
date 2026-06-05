@@ -329,7 +329,7 @@ class BlendsPreviewController:
         # load reference font
         relativePath = self.operator.doc.lib.get(referenceFontPathKey)
         if relativePath:
-            print('loading reference font...')
+            print('loading reference font...' )
             sourcesFolder = os.path.dirname(self.designspacePath)
             self.referenceFontPath = os.path.normpath(os.path.join(sourcesFolder, relativePath))
             self._group1.compare.set(True)
