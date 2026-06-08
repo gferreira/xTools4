@@ -32,6 +32,7 @@ Formats
 - [Custom libs in temporary fonts](temp-font-libs)
 - [Color codes](color-codes)
 - [Measurement keys (proposal)](measurement-keys)
+- [Smart Sets template](smart-sets-template)
 </div>
 
 <div class='col' markdown='1'>

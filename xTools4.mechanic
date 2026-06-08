@@ -4,7 +4,7 @@ developer:     Gustavo Ferreira
 developerURL:  http://github.com/gferreira
 repository:    http://github.com/gferreira/xTools4
 extensionPath: xTools4.roboFontExt
-icon:          http://raw.githubusercontent.com/gferreira/xTools4/dev/Resources/icon2.png
+icon:          http://raw.githubusercontent.com/gferreira/xTools4/main/Resources/icon.png
 infoPath:      http://raw.githubusercontent.com/gferreira/xTools4/HEAD/info.yaml
 zipPath:       http://github.com/gferreira/xTools4/archive/main.zip
 tags:          [design helpers, variable fonts]

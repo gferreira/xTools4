@@ -35,13 +35,14 @@ The model consists of a standard set of data files, and a Python object to manag
 - building and validating composite glyphs
 - generating different kinds of PDF proofs
 - building variable fonts and instances
+– …and more!
 
 ### A base object providing core attributes and functions
 {: .h5 }
 
-The `xProject` object provides an [API][xProject API] for core attributes and functions, streamlining the development of any parametric variable font. In this method, the source data is stored in human-readable formats which are easy to edit, and the designspace is built automatically by the controller. Project-specific attributes and behavior are added by subclassing `xProject` and modifying the controller.
+The `xProject` object provides an [API][xProject API] for core attributes and functions, streamlining the development of parametric variable fonts. The source data is stored in human-readable formats, which are easy to edit; the designspace file is built automatically by the controller. Project-specific attributes and behavior are added by subclassing `xProject` and modifying the controller.
 
-This system was originally developed for the production of [AmstelvarA2], and is now being refined and expanded for use in other projects. We are also developing [Computer Modern avar2] as a demo project for this documentation.
+This system was originally developed for the production of [AmstelvarA2], and is now being refined and expanded for use in other projects. We have also started working on [Computer Modern avar2] as a simpler demo project for use in this documentation.
 
 [xProject API]: ../../reference/xproject/
 [AmstelvarA2]: http://github.com/googlefonts/amstelvar-avar2
@@ -50,9 +51,9 @@ This system was originally developed for the production of [AmstelvarA2], and is
 ### Control glyphs as the single source of truth
 {: .h5 }
 
-One of the main challenges in the production of parametric variable fonts is keeping the parametric source names and designspace locations in synch with the actual measurements in the font.
+**One of the main challenges in the production of parametric variable fonts is keeping the parametric source names and designspace locations in synch with the actual measurements in the font.**
 
-In xProject, the control glyphs are the [single source of truth]; source names and locations are derived automatically from them. This ensures that the parametric system is consistent and the numbers are meaningful.
+In xProject, the control glyphs are the [single source of truth]; source names and locations are derived automatically from them. This ensures that the parametric system is consistent and the numbers are correct.
 
 [single source of truth]: http://en.wikipedia.org/wiki/Single_source_of_truth
 
@@ -65,22 +66,6 @@ In xProject, the control glyphs are the [single source of truth]; source names a
 - handle a very large number of glyphs, axes and sources
 
 
-
-
-<!--
-### A pilot system
-{: .h5 }
-
-> Where a new system concept or new technology is used, one has to build a system to throw away, for even the best planning is not so omniscient as to get it right the first time. Hence plan to throw one away; you will, anyhow.  
->
-> — Fred Brooks, The Mythical Man-Month
-
-xProject is a [pilot system], a first implementation that will eventually lead to a complete redesign of the system.
-
-[pilot system]: https://en.wikipedia.org/wiki/The_Mythical_Man-Month#The_pilot_system
--->
-
-
 File formats
 ------------
 
@@ -88,14 +73,18 @@ File formats
 .icon { width: 128px; float: right; margin-left: 2em; }
 </style>
 
+Below is an overview of the file formats required by xProject:
+
 ### Designspace file (required)
 {: .h5 }
 
 ![]({{ site.url }}/images/icons/designspace.png){: .icon }
 
-The designspace file describes the complete font variation space, with all parametric axes and sources, blended axes, mappings, and everything needed to build a parametric variable font.
+The designspace file describes the complete font variation space, with all parametric axes and sources, blended axes, mappings, and instances. The designspace also includes, in its lib, links to additional files (with measurements, glyph constructions, and smart sets).
 
-In xProject, the designspace file is not edited directly – it is built by the controller using data assembled from various source files. This automated approach ensures that font names and parametric locations stay in synch with the actual measurements in the font.
+The designspace file is written in XML language, which is very verbose. The bigger the project, the harder it is to edit these files by hand. The designspace file for RobotoDelta has 5.000 lines, for example; AmstelvarA2 has 15.000 lines (so far).
+
+In xProject, the designspace file is not edited directly – it is built by the controller using data assembled from various source files. This automated approach makes large parametric systems manageable, and ensures that font names and locations stay in synch with the actual measurements in the font.
 
 ### Default source (required)
 {: .h5 }
@@ -104,55 +93,69 @@ In xProject, the designspace file is not edited directly – it is built by the 
 
 The default source is the origin of the designspace. All other sources are created from it.
 
-The default source is usually named `wght400`. It contains quadratic contours with two off-curve points per curve segment.
+The default name of the default source in xProject is `wght400`. All sources contain quadratic contours with two off-curve points per curve segment.
 
-Various kinds of data are copied from the default to all other sources: glyph order, unicodes, features, font info, etc.
+Various kinds of data are copied from the default to the other sources: glyph order, unicodes, features, font info, etc. 
+
+If a default glyph shape changes, all instances of the old version of this glyph in other sources must be updated too – this is handled by the project controller.
 
 ### Measurements file (required)
 {: .h5 }
 
 ![]({{ site.url }}/images/icons/file.png){: .icon }
 
-The measurements file defines a set of measurements which can be taken from the sources of a given designspace.
+The measurements file defines a set of measurements which can be taken from any source in a designspace.
 
-Each measurement is defined as a pair of points. Contour points are identified by their index. Additional reference points (glyph margins, vertical metrics) are identified by one-letter codes.
+Each measurement is defined by a pair of points. Points can be *contour points*, which are identified by their linear index; or *reference points* (left or right glyph margins, vertical metrics), which are identified by one-letter codes.
 
-There are *font-level measurements*, which are defined by key glyphs and represent the whole font; and there are *glyph-level measurements* for each glyph which is made out of contours (composite glyphs don’t have measurements).
+There are *font-level measurements*, which are defined by control glyphs and represent the whole font; and there are *glyph-level measurements* for each glyph which is made out of contours. Composite glyphs don’t have measurements.
 
-The measurement definitions are stored in a JSON file, usually next to the designspace. The actual distances are not stored but measured in real-time for each source.
+The measurement definitions are stored in a JSON file next to the designspace. The actual measured distances are not stored in this file.
+
+Measurement definitions can be temporarily converted from point indexes to point IDs, to perform contour changes that modify the point indexes, and then converted back from IDs to indexes.
 
 ### Parametric sources (required)
 {: .h5 }
 
 ![]({{ site.url }}/images/icons/ufo.png){: .icon }
 
-Each parametric source modifies only one parameter (measurement) of the default font.
+Each parametric source changes only one parameter (measurement) of the default font.
 
-Parametric source files are named with the actual measured distance in the font (as a permille value). For example: `XOPQ310.ufo` or `MyFamily_XOPQ310.ufo`. Such file names are set automatically by the controller.
+Parametric sources are named with the actual measured distance in the font, as a permille value. For example: `XOPQ310.ufo`, `MyFamily_XOPQ310.ufo`, or `MyFamily-SubFamily_XOPQ310.ufo` (depending on project settings). Such file names are set automatically by the controller.
 
-Some parametric sources may need to use an arbitrary scale, independent from a measurement (for example: `GRAD`). Handling of these special cases must be added to the project’s controller.
+Parametric axes may use an arbitrary scale, independent from a measurement – like the `GRAD` and `XTSP` axes, for example. These special cases are handled by adding custom code to the project controller.
 
-Parametric sources are expected to have the same glyphset as the default (non-sparse sources).
+Parametric sources have the same glyphset as the default (that is, they are not sparse). The toolkit includes interactive tools to compare the current source to the default and show if a glyph is equal/different or compatible/incompatible with the default glyph.
 
-There may be two parametric sources (both min and max) for the same parameter, or just one (just min or just max).
+There may be two parametric sources (min and max) for the same parameter, or just one (just min or just max).
+
+Parametric axes must cover the full range required for a given set of blends. If a blend includes a value outside of range, then the range of that axis must be expanded (by extrapolating the current parametric source). The project controller can check if its parametric ranges are valid.
 
 ### Smart sets file (required)
 {: .h5 }
 
 ![]({{ site.url }}/images/icons/smartsets.png){: .icon }
 
-The smart sets file contains various sets of glyph names, which can be used to group, filter and navigate the glyphs in a large font project.
+The smart sets file contains sets with groups of glyph names, which can be used to filter glyphs in font sources.
 
-The smart sets are stored in a `.roboFontSets` file, usually next to the designspace. Smart sets may contain glyphs which are not (yet) included in the fonts.
+These sets of glyph names are stored in a `.roboFontSets` file, usually next to the designspace. Smart sets may contain glyphs which are not included in the fonts.
+
+Smart Sets for use with xProject should have a two-level structure: the first level consisting of folders, one for each case (*lowercase*, *uppercase*, *figures*, and *etcetera*); and the second level consisting of the actual groups of glyph names (for example *lowercase latin*, *oldstyle figures*, *punctuation*, etc). A [template Smart Sets file] is available.
+
+[template Smart Sets file]: ../../reference/smart-sets-template
 
 ### Glyph construction file (required)
 {: .h5 }
 
 ![]({{ site.url }}/images/icons/file.png){: .icon }
 
-The glyph construction file contains recipes in [Glyph Construction Language](#) for building composite glyphs from other glyphs. Most glyph recipes use anchors to align components to base glyph.
+The glyph construction file contains recipes in [Glyph Construction Language] for building composite glyphs from other glyphs. Most glyph recipes use anchors to align or attach components to base glyph.
 
 The glyph construction file has a `.glyphConstruction` extension, and is usually stored next to the designspace.
+
+Glyph constructions are used not just to build, but also to validate composite glyphs, making outdated components visible.
+
+[Glyph Construction Language]: http://github.com/typemytype/GlyphConstruction
 
 ### Features file (required)
 {: .h5 }
