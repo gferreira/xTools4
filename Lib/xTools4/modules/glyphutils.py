@@ -2,7 +2,7 @@
 
 import operator
 import math
-
+import drawBot as DB
 from fontPens.guessSmoothPointPen import GuessSmoothPointPen
 from fontParts.world import RGlyph
 
@@ -135,6 +135,11 @@ def setSmoothPoints(glyph):
     glyph.drawPoints(pen)
     glyph.clearContours()
     glyph.appendGlyph(result)
+
+def drawGlyph(glyph):
+    B = DB.BezierPath()
+    glyph.draw(B)
+    DB.drawPath(B)
 
 # --------
 # rounding

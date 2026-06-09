@@ -75,7 +75,7 @@ class GlyphMemeProofer:
         return measurementsDict['glyphs'].get(self.glyphName)
         
     @property
-    def parameters(self):        
+    def parameters(self):
         return sorted(list(set([m['name'] for m in self.glyphMeasurements.values()])))
 
     @property    
@@ -93,7 +93,7 @@ class GlyphMemeProofer:
                     print(f'no sources for {parameter}')
         return sources
 
-    @property    
+    @property
     def parametricGlyphs(self):
         glyphs = {}
         for srcName, srcPath in self.parametricSources.items():
@@ -104,76 +104,6 @@ class GlyphMemeProofer:
     @property
     def defaultFont(self):
         return OpenFont(self.designspace.default.path, showInterface=False)
-
-    def draw(self):
-        DB.newDrawing()
-        for srcName, glyph in self.parametricGlyphs.items():
-            self.drawGlyph(glyph, srcName)
-
-    def drawGlyph(self, glyph, srcName):
-
-        # get vertical metrics
-        metricsY = {
-            0,
-            glyph.font.info.descender,
-            glyph.font.info.xHeight,
-            glyph.font.info.capHeight,
-            glyph.font.info.ascender,
-        }
-
-        # get bounding box
-        boxHeight = (max(metricsY) - min(metricsY)) * self.glyphScale
-        boxY = (self.canvasHeight - boxHeight) * 0.5
-        boxWidth = glyph.width * self.glyphScale
-
-        DB.newPage(self.canvasWidth + self.panelWidth, self.canvasHeight)
-        DB.blendMode('multiply')
-
-        # calculate origin point
-        x = (self.canvasWidth - boxWidth) * 0.5
-        y = boxY + abs(glyph.font.info.descender) * self.glyphScale
-
-        # get horizontal metrics
-        metricsX = {x, x + boxWidth}
-
-        if self.metricsDraw:
-            self._drawMetrics((x, y), metricsX, metricsY)
-
-        if self.contoursDraw:
-            self._drawContours(glyph, (x, y))
-
-        if self.anchorsDraw:
-            self._drawAnchors(glyph, (x, y))
-
-        if self.glyphInfoDraw:
-            self._drawInfo(glyph, (x, y), srcName)
-
-        if self.measurementsDraw:
-            self._drawMeasurements(glyph)
-
-        if self.deltasDraw:
-            self._drawDeltas(glyph, (x, y))
-
-        if self.validationDraw:
-            self._drawValidation(glyph)
-
-    def save(self, folder, fileName):
-
-        glifName = os.path.splitext(glyphNameToFileName(self.glyphName, None))[0]
-        pdfFileName = f'{fileName}_{glifName}.pdf'
-
-        if not os.path.exists(folder):
-            os.makedirs(folder)
-
-        pdfPath = os.path.join(folder, pdfFileName)
-        if os.path.exists(pdfPath):
-            os.remove(pdfPath)
-
-        print(f'saving {pdfFileName}...', end=' ')
-
-        DB.saveImage(pdfPath)
-
-        print(os.path.exists(pdfPath))
 
     def _drawMetrics(self, pos, metricsX, metricsY):
         x, y = pos
@@ -491,7 +421,85 @@ class GlyphMemeProofer:
 
         DB.text(T, (vX, vY))
 
+    def draw(self):
+        if self.glyphName not in self.defaultFont:
+            print(f'ERROR: glyph /{self.glyphName} not in font {self.defaultFont.info.familyName} {self.defaultFont.info.styleName}.\n')
+            return
 
+        defaultGlyph = self.defaultFont[self.glyphName]
+
+        if defaultGlyph.components:
+            print(f'glyph /{self.glyphName} contains components, skipping...')
+            return
+
+        DB.newDrawing()
+        for srcName, glyph in self.parametricGlyphs.items():
+            self.drawGlyph(glyph, srcName)
+
+    def drawGlyph(self, glyph, srcName):
+
+        # get vertical metrics
+        metricsY = {
+            0,
+            glyph.font.info.descender,
+            glyph.font.info.xHeight,
+            glyph.font.info.capHeight,
+            glyph.font.info.ascender,
+        }
+
+        # get bounding box
+        boxHeight = (max(metricsY) - min(metricsY)) * self.glyphScale
+        boxY = (self.canvasHeight - boxHeight) * 0.5
+        boxWidth = glyph.width * self.glyphScale
+
+        DB.newPage(self.canvasWidth + self.panelWidth, self.canvasHeight)
+        DB.blendMode('multiply')
+
+        # calculate origin point
+        x = (self.canvasWidth - boxWidth) * 0.5
+        y = boxY + abs(glyph.font.info.descender) * self.glyphScale
+
+        # get horizontal metrics
+        metricsX = {x, x + boxWidth}
+
+        if self.metricsDraw:
+            self._drawMetrics((x, y), metricsX, metricsY)
+
+        if self.contoursDraw:
+            self._drawContours(glyph, (x, y))
+
+        if self.anchorsDraw:
+            self._drawAnchors(glyph, (x, y))
+
+        if self.glyphInfoDraw:
+            self._drawInfo(glyph, (x, y), srcName)
+
+        if self.measurementsDraw:
+            self._drawMeasurements(glyph)
+
+        if self.deltasDraw:
+            self._drawDeltas(glyph, (x, y))
+
+        if self.validationDraw:
+            self._drawValidation(glyph)
+
+    def save(self, folder, fileName):
+
+        glifName = os.path.splitext(glyphNameToFileName(self.glyphName, None))[0]
+        pdfFileName = f'{fileName}_{glifName}.pdf'
+
+        if not os.path.exists(folder):
+            os.makedirs(folder)
+
+        pdfPath = os.path.join(folder, pdfFileName)
+        if os.path.exists(pdfPath):
+            os.remove(pdfPath)
+
+        print(f'saving {pdfFileName}...', end=' ')
+
+        DB.saveImage(pdfPath)
+
+        print(os.path.exists(pdfPath))
 
 
 if __name__ == '__main__':
@@ -513,4 +521,6 @@ if __name__ == '__main__':
 
     if savePDF:
         P.save(proofsFolder, pdfFileName)
+
+
 

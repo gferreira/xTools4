@@ -1,19 +1,28 @@
+from importlib import reload
+import xTools4.modules.glyphMemeProofer
+reload(xTools4.modules.glyphMemeProofer)
+import xTools4.modules.tuningPreview
+reload(xTools4.modules.tuningPreview)
+import xTools4.modules.measurements
+reload(xTools4.modules.measurements)
+
 import os, glob, json, shutil, time, datetime
 import subprocess
 from functools import cached_property
 from xml.etree.ElementTree import parse
 from fontTools.designspaceLib import DesignSpaceDocument, AxisDescriptor, SourceDescriptor, InstanceDescriptor, AxisMappingDescriptor
-from fontParts.world import OpenFont
 from defcon import Font
-from xTools4.modules.linkPoints2 import readMeasurements
-from xTools4.modules.measurements import FontMeasurements, permille, setSourceNamesFromMeasurements
+from mojo.roboFont import OpenFont, RGlyph
+from ufoProcessor.ufoOperator import UFOOperator
+from xTools4.modules.measurements import *
 from xTools4.modules.normalization import cleanupSources, normalizeSources
 from xTools4.modules.validation import validateDesignspace, validateFonts
 from xTools4.modules.ttx import ttf2ttx, ttx2ttf
+from xTools4.modules.xprojectLib import *
 from xTools4.modules.glyphMemeProofer import GlyphMemeProofer
 from xTools4.modules.glyphSetProofer import GlyphSetProofer
-from xTools4.modules.blendsPreview import BlendsPreview
-from xTools4.modules.xprojectLib import *
+from xTools4.modules.blendsPreview import BlendsPreview, getEffectiveLocation, instantiateGlyph
+from xTools4.modules.tuningPreview import TuningPreview
 
 
 class xProject:
@@ -419,6 +428,51 @@ class xProject:
                 # 2. copy glyphNames from srcName to dstName
                 # 3. copy glyphNames from default to srcName
         pass
+
+    def updateTuningSources(self, glyphNames, referenceSource, level=3):
+
+        referenceFont = OpenFont(referenceSource, showInterface=False)
+
+        operator = UFOOperator()
+        operator.read(self.designspacePath)
+        operator.loadFonts()
+
+        referenceSources = {'_'.join(k.split('_')[1:]): OpenFont(v, showInterface=False) for k, v in self.referenceSources.items()}
+
+        for glyphName in glyphNames:
+
+            glyphDefault   = self.defaultFont[glyphName]
+            glyphReference = referenceFont[glyphName]
+            matchingPoints = getMatchingPoints(glyphDefault, glyphReference)
+
+            print(f'calculating tuning sources for /{glyphName}...\n')
+
+            for styleName, ufoPath in self.tuningSources.items():
+                styleNameParts = styleName.split('_')
+                if len(styleNameParts) > level:
+                    continue
+
+                print(f'\ttuning {styleName}...')
+
+                # get blended glyph (parametric)
+                blendedLocation = { part[:4]: int(part[4:]) for part in styleNameParts }
+                parametricLocation = getEffectiveLocation(self.designspacePath, blendedLocation)
+                blendedGlyph = RGlyph(instantiateGlyph(operator, glyphName, parametricLocation))
+
+                # get reference glyph
+                blendedReference = referenceSources[styleName][glyphName]
+
+                # make tuning glyph
+                tuningGlyph = makeTuningGlyph(blendedGlyph, blendedReference, glyphDefault, matchingPoints)
+
+                # save glyph to tuning source
+                tuningSource = OpenFont(ufoPath, showInterface=False)
+                tuningSource.insertGlyph(tuningGlyph, name=glyphName)
+                tuningSource.save()
+
+            print()
+
+        print('...done!\n')
 
     # designspace
 
@@ -934,4 +988,25 @@ class xProject:
         print(f'saving {pdfPath}...', end=' ')
         B.save(pdfPath)
         print(f'done!\n')
+
+    def proofTuning(self, glyphNames, referenceSource, level=1):
+        '''Build PDF proofs of tuning sources.'''
+
+        T = TuningPreview(self, referenceSource)
+
+        for glyphName in glyphNames:
+            # skip composite glyphs
+            defaultGlyph = self.defaultFont[glyphName]
+            if defaultGlyph.components:
+                continue
+
+            T.draw(glyphName, level=1)
+
+            pdfFileName = os.path.splitext(os.path.split(self.designspacePath)[-1])[0]
+            tuningProofsFolder = os.path.join(self.proofsFolder, 'PDF', 'tuning')
+            T.save(tuningProofsFolder, pdfFileName)
+
+
+
+
 

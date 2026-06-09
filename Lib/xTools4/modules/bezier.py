@@ -113,6 +113,7 @@ def glyphToBezierSegments(glyph):
 
     return contours
 
+
 class Point:
     '''
     A basic Bezier Point object with support for math operations and normalization.
