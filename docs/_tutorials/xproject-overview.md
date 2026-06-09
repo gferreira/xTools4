@@ -153,7 +153,7 @@ The glyph construction file contains recipes in [Glyph Construction Language] fo
 
 The glyph construction file has a `.glyphConstruction` extension, and is usually stored next to the designspace.
 
-Glyph constructions are used not just to build, but also to validate composite glyphs, making outdated components visible.
+Glyph constructions are also used to validate composite glyphs, making outdated components visible.
 
 [Glyph Construction Language]: http://github.com/typemytype/GlyphConstruction
 
@@ -162,31 +162,60 @@ Glyph constructions are used not just to build, but also to validate composite g
 
 ![]({{ site.url }}/images/icons/fea.png){: .icon }
 
-...
+The features file(s) contains the [OpenType features] in the font.
+
+Feature files have a `.fea` extension, and are usually stored in a `features` subfolder next to the designspace.
+
+The default source, and all other sources, link to the project’s features file using the `include();` statement.
+
+Kerning data should be stored in the UFO’s kerning dictionary, not in feature files.
+
+[OpenType features]: http://adobe-type-tools.github.io/afdko/OpenTypeFeatureFileSpecification.html
 
 ### Blends file (required)
 {: .h5 }
 
 ![]({{ site.url }}/images/icons/file.png){: .icon }
 
-The blends file contains a definition of the blended axes, and the mappings from blended styles to parametric locations. A typical blended designspace with `opsz`, `wght`, `wdth` axes contains mappings for all 27 corners.
+The blends file contains definitions of blended axes, and mappings from blended styles to parametric locations. 
+
+The typical blended designspace with `opsz`, `wght`, `wdth` axes contains mappings for 27 corner locations.
 
 The blends data is stored in a JSON file, usually next to the designspace.
 
 ### Tuning sources (optional)
 {: .h5 }
 
-...
+![]({{ site.url }}/images/icons/ufo.png){: .icon }
+
+Tuning sources are optional UFO sources used to tune glyphs at specific corners of the blended designspace.
+
+Glyphs in tuning sources encode the deltas between pure parametric blends and the desired blended styles. Each tuning source is mapped to an individual tuning axis, which is used to tune glyphs at one specific corner of the blended designspace.
+
+Tuning sources can be calculated automatically if a compatible reference font is available.
+
+The impact of tuning on file size and usability still needs to be discussed. It should be considered highly experimental.
 
 
-
-Source folder examples
-----------------------
+xProject examples
+-----------------
 
 ### Single-style family
 {: .h5 }
 
-The simplest example is a simple folder with parametric sources, using the default xProject folder structure and file naming scheme.
+The example below shows the simplest use if `xProject`, without any customization:
+
+```python
+from xTools4.modules.xproject import xProject
+
+class MyFamilyController(xProject):
+    pass
+
+p = MyFamilyController('/Users/gferreira/fontbureau/MyFamily', 'My Family')
+p.printSettings()
+```
+
+This corresponds to the following folder structure and file names:
 
 ```
 Sources
@@ -212,60 +241,12 @@ Sources
     └── ...
 ```
 
-Different folder structure and file names can be used by subclassing the `xProject` object and overriding individual attributes and methods.
+Different folder structure and file names are possible by overriding individual attributes and methods (see the multi-style example below).
 
 ### Multi-style family
 {: .h5 }
 
-The example below shows a family with two subfamilies, with two separate designspaces, managed with a single controller.
-
-```
-Sources
-├── Roman/
-│   ├── MyFamily-Roman.designspaces
-│   ├── MyFamily-Roman_wght400.ufo
-│   ├── MyFamily-Roman_XOPQ3.ufo
-│   ├── ...
-│   ├── measurements.json
-│   ├── blends.json
-│   ├── MyFamily-Roman.roboFontSets
-│   ├── MyFamily-Roman.glyphConstruction
-│   ├── features/
-│   └── tuning/
-└── Italic/
-    ├── MyFamily-Italic.designspaces
-    ├── MyFamily-Italic_wght400.ufo
-    ├── MyFamily-Italic_XOPQ3.ufo
-    ├── ...
-    ├── measurements.json
-    ├── blends.json
-    ├── MyFamily-Italic.roboFontSets
-    ├── MyFamily-Italic.glyphConstruction
-    ├── features/
-    └── tuning/
-```
-
-Other folder structures and file naming systems are possible with some custom code. The system is designed to be flexible – you don’t need to force your idea into a certain format or structure, you can build your custom structure around it.
-
-
-Controller examples
--------------------
-
-### Single-style family
-{: .h5 }
-
-```python
-from xTools4.modules.xproject import xProject
-
-class MyFamilyController(xProject):
-    pass
-
-p = MyFamilyController('/Users/gferreira/fontbureau/MyFamily', 'My Family')
-p.printSettings()
-```
-
-### Multi-style family
-{: .h5 }
+A family with multiple sub-families can be created by overriding certain project attributes:
 
 ```python
 import os
@@ -298,7 +279,38 @@ p = MyFamilySubfamilyController('/Users/gferreira/fontbureau/MyFamily', 'My Fami
 p.printSettings()
 ```
 
+In the example folder below, both Roman and Italic sub-families are managed from a single controller:
 
+```
+Sources
+├── Roman/
+│   ├── MyFamily-Roman.designspaces
+│   ├── MyFamily-Roman_wght400.ufo
+│   ├── MyFamily-Roman_XOPQ3.ufo
+│   ├── ...
+│   ├── measurements.json
+│   ├── blends.json
+│   ├── MyFamily-Roman.roboFontSets
+│   ├── MyFamily-Roman.glyphConstruction
+│   ├── features/
+│   └── tuning/
+└── Italic/
+    ├── MyFamily-Italic.designspaces
+    ├── MyFamily-Italic_wght400.ufo
+    ├── MyFamily-Italic_XOPQ3.ufo
+    ├── ...
+    ├── measurements.json
+    ├── blends.json
+    ├── MyFamily-Italic.roboFontSets
+    ├── MyFamily-Italic.glyphConstruction
+    ├── features/
+    └── tuning/
+```
 
+The system is designed to be flexible – instead of forcing your idea into a certain format or structure, you can build your custom structure around it.
 
+### More examples
+{: .h5 }
 
+- [AmstelvarA2 controller](http://github.com/googlefonts/amstelvar-avar2/blob/main/Tools/controller.py)
+- [Computer Modern avar2 controller](http://github.com/gferreira/computer-modern-avar2/blob/main/Tools/controller.py)
