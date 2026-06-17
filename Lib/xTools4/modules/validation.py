@@ -4,7 +4,7 @@ from fontPens.digestPointPen import DigestPointPen
 from defcon.pens.transformPointPen import TransformPointPen
 from defcon.objects.component import _defaultTransformation
 from fontTools.designspaceLib import DesignSpaceDocument
-from xTools4.modules.decomposePointPen import DecomposePointPen
+from xTools4.modules.glyphutils import decomposeGlyph
 
 
 colorComponentsDifferent = 1.00, 0.30, 0.00, 0.35
@@ -155,17 +155,8 @@ def checkEqualComponents(g1, g2):
     if not len(g1.components) or not len(g2.components):
         return False
 
-    _g1 = RGlyph()
-    pointPen = _g1.getPointPen()
-    decomposePen = DecomposePointPen(g1.font, pointPen)
-    g1.drawPoints(decomposePen)
-    _g1.width = g1.width
-
-    _g2 = RGlyph()
-    pointPen = _g2.getPointPen()
-    decomposePen = DecomposePointPen(g2.font, pointPen)
-    g2.drawPoints(decomposePen)
-    _g2.width = g2.width
+    _g1 = decomposeGlyph(g1)
+    _g2 = decomposeGlyph(g2)
 
     return checkEqualContours(_g1, _g2)
 

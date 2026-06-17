@@ -5,6 +5,7 @@ import math
 import drawBot as DB
 from fontPens.guessSmoothPointPen import GuessSmoothPointPen
 from fontParts.world import RGlyph
+from xTools4.modules.pens import DecomposePointPen
 
 def autoStartPoints(glyph):
     '''
@@ -140,6 +141,19 @@ def drawGlyph(glyph):
     B = DB.BezierPath()
     glyph.draw(B)
     DB.drawPath(B)
+
+def decomposeGlyph(glyph):
+    if glyph.components:
+        g = RGlyph()
+        pointPen = g.getPointPen()
+        decomposePen = DecomposePointPen(glyph.font, pointPen)
+        glyph.drawPoints(decomposePen)
+        g.name    = glyph.name
+        g.unicode = glyph.unicode
+        g.width   = glyph.width
+    else:
+        g = glyph.copy()
+    return g
 
 # --------
 # rounding

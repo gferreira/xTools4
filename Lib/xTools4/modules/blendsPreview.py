@@ -12,7 +12,7 @@ from fontTools.varLib.avar.map import map as avar2_map
 from mutatorMath.objects.location import Location
 from ufoProcessor.ufoOperator import UFOOperator
 from glyphNameFormatter.reader import n2u
-from xTools4.modules.glyphSetProofer import decomposeGlyph
+from xTools4.modules.glyphutils import drawGlyph, decomposeGlyph
 
 
 def getEffectiveLocation(designspacePath, blendedLocation):
@@ -27,11 +27,6 @@ def instantiateGlyph(operator, glyphName, location):
     instance = glyphMutator.makeInstance(Location(**location))
     g = instance.extractGlyph(Glyph())
     return g
-
-def drawGlyph(g):
-    B = DB.BezierPath()
-    g.draw(B)
-    DB.drawPath(B)
 
 def drawGlyphTTF(ttfPath, glyphName):
     char = chr(n2u(glyphName))

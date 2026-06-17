@@ -4,25 +4,7 @@ from fontParts.world import OpenFont
 from glyphConstruction import ParseGlyphConstructionListFromString, GlyphConstructionBuilder
 from xTools4.modules.validation import *
 from xTools4.dialogs.variable.Measurements import colorCheckTrue, colorCheckFalse, colorCheckEqual
-
-
-def drawGlyph(glyph):
-    B = DB.BezierPath()
-    glyph.draw(B)
-    DB.drawPath(B)
-
-def decomposeGlyph(glyph):
-    if glyph.components:
-        g = RGlyph()
-        pointPen = g.getPointPen()
-        decomposePen = DecomposePointPen(glyph.font, pointPen)
-        glyph.drawPoints(decomposePen)
-        g.name    = glyph.name
-        g.unicode = glyph.unicode
-        g.width   = glyph.width
-    else:
-        g = glyph.copy()
-    return g
+from xTools4.modules.glyphutils import drawGlyph, decomposeGlyph
 
 
 class GlyphSetProofer:

@@ -5,6 +5,8 @@ import xTools4.modules.tuningPreview
 reload(xTools4.modules.tuningPreview)
 import xTools4.modules.measurements
 reload(xTools4.modules.measurements)
+import xTools4.modules.xprojectLib
+reload(xTools4.modules.xprojectLib)
 
 import os, glob, json, shutil, time, datetime
 import subprocess
@@ -116,9 +118,8 @@ class xProject:
 
         # add tuning axes
         if self.tuning:
-            for i, styleName in enumerate(self.tuningSources):
-                axisTag = f'TN{i:02}'
-                L[axisTag] = 0
+            for styleName, axis in self.tuningAxes.items():
+                L[axis.tag] = axis.default
 
         return L
 
@@ -222,8 +223,14 @@ class xProject:
     tuning = False
     '''Enable/disable tuning (optional, disabled by default).'''
 
+    tuningLevel = 3 # 1: duovars / 2: duovars + trivars / 3: duovars + trivars + quadvars
+    '''The level of tuning to include in the designspace.'''
+
     tuningSourcerFolderName = 'corners'
     '''The name of the tuning folder.'''
+
+    tuningAxesHidden = True
+    '''A switch to make tuning axes hidden (or not).'''
 
     @property
     def tuningSourcesFolder(self):
@@ -239,6 +246,32 @@ class xProject:
     def tuningSources(self):
         '''Returns a dict of tuning locations (keys) and their UFO sources (values).'''
         return { os.path.splitext(os.path.split(ufo)[-1])[0] : ufo for ufo in self.tuningSourcesPaths }
+
+    @property
+    def tuningAxes(self):
+        '''A dict of blended location names (keys) and tuning axes (values).'''
+
+        tuningAxes = {}
+
+        for i, styleName in enumerate(sorted(self.tuningSources)):
+            ufo = self.tuningSources[styleName]
+
+            styleNameParts = styleName.split('_')
+            if len(styleNameParts) > self.tuningLevel:
+                continue
+
+            axisTag = f'TN{i:02}'
+
+            a = AxisDescriptor()
+            a.name    = axisTag # styleName
+            a.tag     = axisTag
+            a.minimum = 0
+            a.maximum = 100
+            a.default = 0
+            a.hidden  = self.tuningAxesHidden
+            tuningAxes[styleName] = a
+
+        return tuningAxes
 
     # instances
 
@@ -367,7 +400,41 @@ class xProject:
 
     def copyGroupsFromDefault(self):
         '''Copy groups from the default source to other sources.'''
-        pass
+
+        srcFont = OpenFont(self.defaultSourcePath, showInterface=False)
+
+        print(f'copying groups from the default to all other sources...')
+
+        for dstPath in self.sourcesPaths:
+            if dstPath == self.defaultSourcePath:
+                continue
+
+            print(f'\tcopying groups to {os.path.split(dstPath)[-1]}...')
+            dstFont = OpenFont(dstPath, showInterface=False)
+            dstFont.groups.clear()
+            dstFont.groups.update(srcFont.groups)
+            dstFont.save()
+
+        print('...done!\n')
+
+    def copyKerningFromDefault(self):
+        '''Copy glyphs from the default source to other sources.'''
+
+        srcFont = OpenFont(self.defaultSourcePath, showInterface=False)
+
+        print(f'copying kerning from the default to all other sources...')
+
+        for dstPath in self.sourcesPaths:
+            if dstPath == self.defaultSourcePath:
+                continue
+
+            print(f'\tcopying kerning to {os.path.split(dstPath)[-1]}...')
+            dstFont = OpenFont(dstPath, showInterface=False)
+            dstFont.kerning.clear()
+            dstFont.kerning.update(srcFont.kerning)
+            dstFont.save()
+
+        print('...done!\n')
 
     def copyUnicodesFromDefault(self, preflight=False):
         '''Copy unicodes from the default source to all other sources.'''
@@ -429,7 +496,41 @@ class xProject:
                 # 3. copy glyphNames from default to srcName
         pass
 
-    def updateTuningSources(self, glyphNames, referenceSource, level=3):
+    def createTuningSources(self):
+        if self.verbose:
+            print('creating tuning sources...')
+
+        for styleName in self.blendedSources.keys():
+
+            if 'opsz' not in styleName and 'wght' not in styleName and 'wght' not in styleName:
+                continue
+
+            ufoPath = os.path.join(self.tuningSourcesFolder, f'{styleName}.ufo')
+            if os.path.exists(ufoPath):
+                continue
+
+            if self.verbose:
+                print(f'\tcreating {styleName}...')
+
+            # duplicate default
+            shutil.copytree(self.defaultSourcePath, ufoPath)
+
+            f = OpenFont(ufoPath, showInterface=False)
+
+            # for glyphName in f.glyphOrder:
+            #     f.removeGlyph(glyphName)
+
+            f.info.styleName = styleName
+            f.kerning.clear()
+            f.features.text = ''
+
+            f.close(save=True)
+
+        if self.verbose:
+            print('...done!\n')
+
+    def calculateTuningSources(self, glyphNames, referenceSource, level=3):
+        '''Calculate tuning sources for the given glyph names, based on a reference default source.'''
 
         referenceFont = OpenFont(referenceSource, showInterface=False)
 
@@ -441,18 +542,26 @@ class xProject:
 
         for glyphName in glyphNames:
 
-            glyphDefault   = self.defaultFont[glyphName]
+            glyphDefault = self.defaultFont[glyphName]
+
+            # SKIP COMPOSITE GLYPHS!
+            # collect base glyphs for tuning?
+            if glyphDefault.components:
+                continue
+
             glyphReference = referenceFont[glyphName]
             matchingPoints = getMatchingPoints(glyphDefault, glyphReference)
 
-            print(f'calculating tuning sources for /{glyphName}...\n')
+            if self.verbose:
+                print(f'calculating tuning sources for /{glyphName}...\n')
 
             for styleName, ufoPath in self.tuningSources.items():
                 styleNameParts = styleName.split('_')
                 if len(styleNameParts) > level:
                     continue
 
-                print(f'\ttuning {styleName}...')
+                if self.verbose:
+                    print(f'\ttuning {styleName}...')
 
                 # get blended glyph (parametric)
                 blendedLocation = { part[:4]: int(part[4:]) for part in styleNameParts }
@@ -470,9 +579,29 @@ class xProject:
                 tuningSource.insertGlyph(tuningGlyph, name=glyphName)
                 tuningSource.save()
 
-            print()
+            if self.verbose:
+                print()
 
-        print('...done!\n')
+        if self.verbose:
+            print('...done!\n')
+
+    def resetTuningSources(self):
+        '''Clear all glyphs from all tuning sources.'''
+
+        if self.verbose:
+            print('resetting tuning sources...\n')
+
+        for styleName, ufoPath in self.tuningSources.items():
+            f = OpenFont(ufoPath, showInterface=False)
+            if self.verbose:
+                print(f'\tresetting all glyphs from {styleName}...')
+            for glyphName in self.defaultFont.glyphOrder:
+                f.insertGlyph(self.defaultFont[glyphName], name=glyphName)
+            f.glyphOrder = self.defaultFont.glyphOrder
+            f.close(save=True)
+
+        if self.verbose:
+            print('\n...done!\n')
 
     # designspace
 
@@ -551,38 +680,15 @@ class xProject:
 
         self.designspace.addSource(src)
 
-    def addTuningAxes(self, duovars=True, trivars=True, quadvars=True):
+    def addTuningAxes(self):
         '''Add tuning axes to the designspace.'''
 
         if self.verbose:
             print('\tadding tuning axes...')
 
-        self._tuningAxes = {}
-        '''A dict of blended location names (keys) and tuning axes (values).'''
-
-        for i, styleName in enumerate(self.tuningSources):
-            ufo = self.tuningSources[styleName]
-            styleNameParts = styleName.split('_')
-
-            if duovars is False and len(styleNameParts) == 1:
-                continue
-            if trivars is False and len(styleNameParts) == 2:
-                continue
-            if quadvars is False and len(styleNameParts) == 3:
-                continue
-
-            axisTag = f'TN{i:02}'
-
-            a = AxisDescriptor()
-            a.name    = axisTag # styleName
-            a.tag     = axisTag
-            a.minimum = 0
-            a.maximum = 100
-            a.default = 0
-            a.hidden  = True
-            self.designspace.addAxis(a)
-
-            self._tuningAxes[styleName] = axisTag
+        for styleName, axis in self.tuningAxes.items():
+            # print(f'\t\tadding tuning axis: {styleName} {axis.tag}...')
+            self.designspace.addAxis(axis)
 
     def addTuningSources(self, familyName=None):
         '''Add tuning sources to the designspace.'''
@@ -590,20 +696,20 @@ class xProject:
         if self.verbose:
             print('\tadding tuning sources...')
 
-        for i, styleName in enumerate(self.tuningSources):
-            ufo = self.tuningSources[styleName]
-
-            if styleName not in self._tuningAxes:
-                continue
-
-            axisTag = f'TN{i:02}'
-
+        for styleName, axis in self.tuningAxes.items():
+            tuningSourcePath = self.tuningSources[styleName]
+            # print(f'\t\tadding tuning source: {styleName} {axis.tag}...')
             src = SourceDescriptor()
-            src.path = ufo
+            src.path = tuningSourcePath
             src.familyName = self.familyName if not familyName else familyName
-            src.styleName = src.name = axisTag
+            src.styleName = src.name = styleName
             L = self.defaultLocation.copy()
-            L[axisTag] = 100
+
+            # for styleNamePart in styleName.split('_'):
+            #     tag, value = styleNamePart[:4], styleNamePart[4:]
+            #     L[tag] = value
+
+            L[axis.tag] = axis.maximum
             src.location = L
             self.designspace.addSource(src)
 
@@ -654,12 +760,11 @@ class xProject:
 
             # set value for corner tuning axes
             if self.tuning:
-                for i, tuningStyleName in enumerate(self.tuningSources):
-                    axisTag = f'TN{i:02}'
+                for tuningStyleName, tuningAxis in self.tuningAxes.items():
                     if styleName == tuningStyleName:
-                        outputLocation[axisTag] = 100
+                        outputLocation[tuningAxis.tag] = tuningAxis.maximum
                     else:
-                        outputLocation[axisTag] = 0
+                        outputLocation[tuningAxis.tag] = tuningAxis.default
 
             m.inputLocation  = inputLocation
             m.outputLocation = outputLocation
@@ -829,7 +934,21 @@ class xProject:
 
     def printAxes(self):
         '''Print a list of all variation axes in this project.'''
-        pass
+
+        measurements = {}
+        for d in self.measurementsDefault.definitions:
+            name, description = d[0], d[7]
+            measurements[name] = description
+
+        print('\n### Parametric axes\n')
+        for n, axis in enumerate(self.parametricAxes):
+            print(f'{n+1}. `{axis}` {measurements.get(axis)}')
+
+        print('\n### Tuning axes\n')
+        for styleName, tuningAxis in self.tuningAxes.items():
+            print(f"- `{tuningAxis.tag}` {styleName.replace('_', ' ')}")
+
+        print()
 
     def printSettings(self):
         '''Print an overview of this project's settings.'''
@@ -1005,6 +1124,8 @@ class xProject:
             pdfFileName = os.path.splitext(os.path.split(self.designspacePath)[-1])[0]
             tuningProofsFolder = os.path.join(self.proofsFolder, 'PDF', 'tuning')
             T.save(tuningProofsFolder, pdfFileName)
+
+
 
 
 

@@ -7,31 +7,7 @@ from defcon import Font
 from defcon.objects.component import _defaultTransformation
 from xTools4.modules.designspacePlus import DesignSpacePlus
 from xTools4.modules.kerningPairPlus import KerningPairPlus
-
-
-def drawGlyph(g):
-    B = DB.BezierPath()
-    g.draw(B)
-    DB.drawPath(B)
-
-
-class DecomposePointPen:
-
-    def __init__(self, glyphSet, outPointPen):
-        self._glyphSet = glyphSet
-        self._outPointPen = outPointPen
-        self.beginPath = outPointPen.beginPath
-        self.endPath = outPointPen.endPath
-        self.addPoint = outPointPen.addPoint
-
-    def addComponent(self, baseGlyphName, transformation, *args, **kwargs):
-        if baseGlyphName in self._glyphSet:
-            baseGlyph = self._glyphSet[baseGlyphName]
-            if transformation == _defaultTransformation:
-                baseGlyph.drawPoints(self)
-            else:
-                transformPointPen = TransformPointPen(self, transformation)
-                baseGlyph.drawPoints(transformPointPen)
+from xTools4.modules.glyphutils import drawGlyph, decomposeGlyph
 
 
 class VariableKerningPreview:
@@ -70,7 +46,6 @@ class VariableKerningPreview:
         self._kerning = {}
 
         for source in self.selectedSources:
-            # print(source)
 
             sourcePath = self.sources[source]
             f = OpenFont(sourcePath, showInterface=False)
@@ -106,12 +81,7 @@ class VariableKerningPreview:
 
             # flatten components
             if len(g.components):
-                _g = RGlyph()
-                pointPen = _g.getPointPen()
-                decomposePen = DecomposePointPen(font, pointPen)
-                g.drawPoints(decomposePen)
-                _g.width = g.width
-                g = _g
+                g = decomposeGlyph(g)
 
             DB.save()
             DB.translate(x, y)
