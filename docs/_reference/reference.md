@@ -31,7 +31,6 @@ Formats
 - [Custom designspace libs](custom-designspace-libs)
 - [Custom libs in temporary fonts](temp-font-libs)
 - [Color codes](color-codes)
-- [Measurement keys (proposal)](measurement-keys)
 - [Smart Sets template](smart-sets-template)
 </div>
 
@@ -40,6 +39,7 @@ APIs
 ----
 
 - [xProject](xproject)
+- [Measurement keys (proposal)](measurement-keys)
 </div>
 
 </div>

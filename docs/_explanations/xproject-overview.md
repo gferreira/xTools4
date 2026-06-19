@@ -1,7 +1,7 @@
 ---
 title     : Overview of the xProject model
 layout    : default
-permalink : /tutorials/xproject-overview/
+permalink : /explanations/xproject-overview/
 ---
 
 Introducing the xProject data model and scripting API.

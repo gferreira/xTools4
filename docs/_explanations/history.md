@@ -4,7 +4,7 @@ layout    : page
 permalink : /explanations/history
 ---
 
-xTools4 is a fusion of hTools3 and variableValues extensions, updated to the new RoboFont 4 APIs.
+xTools4 started as a fusion of hTools3 and variableValues extensions, updated to the new RoboFont 4 APIs.
 {: .lead}
 
 * Table of Contents

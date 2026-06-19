@@ -223,8 +223,8 @@ class xProject:
     tuning = False
     '''Enable/disable tuning (optional, disabled by default).'''
 
-    tuningLevel = 3 # 1: duovars / 2: duovars + trivars / 3: duovars + trivars + quadvars
-    '''The level of tuning to include in the designspace.'''
+    tuningLevels = [1, 2, 3] # 1: duovars / 2: trivars / 3: quadvars
+    '''The level(s) of tuning to include in the designspace.'''
 
     tuningSourcerFolderName = 'corners'
     '''The name of the tuning folder.'''
@@ -257,7 +257,7 @@ class xProject:
             ufo = self.tuningSources[styleName]
 
             styleNameParts = styleName.split('_')
-            if len(styleNameParts) > self.tuningLevel:
+            if len(styleNameParts) not in self.tuningLevels:
                 continue
 
             axisTag = f'TN{i:02}'
@@ -529,7 +529,7 @@ class xProject:
         if self.verbose:
             print('...done!\n')
 
-    def calculateTuningSources(self, glyphNames, referenceSource, level=3):
+    def calculateTuningSources(self, glyphNames, referenceSource, levels=[1, 2, 3]):
         '''Calculate tuning sources for the given glyph names, based on a reference default source.'''
 
         referenceFont = OpenFont(referenceSource, showInterface=False)
@@ -557,7 +557,7 @@ class xProject:
 
             for styleName, ufoPath in self.tuningSources.items():
                 styleNameParts = styleName.split('_')
-                if len(styleNameParts) > level:
+                if len(styleNameParts) not in levels:
                     continue
 
                 if self.verbose:

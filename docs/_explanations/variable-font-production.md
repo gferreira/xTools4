@@ -30,7 +30,7 @@ When working on variable font sources, the designer needs to know, at a glance, 
 
 Changes from the default should all be intentional, and not caused by errors and imprecision during a manual design process.
 
-Visual proof is not sufficient: glyphs that appear equal may be numerically different!
+Visual proof is not sufficient: glyphs that appear equal may be numerically different! 
 
 As designspaces become larger, it becomes exponentially harder to keep track of what is changing where.
 
@@ -54,8 +54,24 @@ B. glyph-level
 
 ##### 2. Validation groups (glyph-level)
 
-- equal to default / different from default
-- contours only / components only
+<table class='table'>
+<tr>
+<th></th>
+<th>equal to default</th>
+<th>different from default</th>
+</tr>
+<tr>
+<th>contours only</th>
+<td>contours only<br/>equal to default</td>
+<td>contours only<br/>different from default</td>
+</tr>
+<tr>
+<th>components only</th>
+<td>components only<br/>equal to default</td>
+<td>components only<br/>different from default</td>
+</tr>
+</table>
+
 - errors: mixed contours & components, nested components
 
 ##### 3. Measurements (font- and glyph-level)

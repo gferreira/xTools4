@@ -4,7 +4,7 @@ layout    : default
 permalink : /reference/measurement-keys/
 ---
 
-Proposal of an extensible syntax for measurement keys.
+Proposal of an extensible syntax for measurement names.
 {: .lead}
 
 <span class='badge bg-danger rounded-0'>draft</span>
@@ -14,111 +14,86 @@ Proposal of an extensible syntax for measurement keys.
 
 <style>
     td:nth-child(1) { width: 10em; }
+    td:nth-child(2) { width: 15em; }
 </style>
 
 
 Context
 -------
 
-- beyond a certain level of complexity, 4-letter naming system makes it hard to create meaningful parameter names
-- [UFO proposal] to store named values in the font lib, with a focus on stems
-- it would be useful for us to store measurements in the font lib too
+Because measurements are tied to variation axes, it is common for measurement names to follow the same convention of 4-letter tags (`XOPQ`, `XTRA`, etc). This system, however, works only until a certain level of complexity; as the number of axes/measurements increases (think of multi-script fonts), it gets harder to create meaningful names with only 4 letters – measurement names become cryptic, arbitrary, and hard to remember.
 
-The syntax below started as a counter-proposal. The main ideas behind it are:
+The [measurements format] itself allows strings of arbitrary length as measurement names. 
 
-- allow the creation of other measurements (not just stems)
-- allow different levels of specificity
+The syntax below is a more expressive alternative to the 4-letter tags. It was sketched as a response to a [proposal to store named values in the font lib], but could have other uses too.
 
-[UFO proposal]: http://github.com/unified-font-object/ufo-spec/issues/237#issuecomment-3094462560
-
-
-Syntax
-------
-
-`script.measurement.direction.glyph`
-{: .fs-4 }
+[measurements format]: ../measurements-format
+[proposal to store named values in the font lib]: http://github.com/unified-font-object/ufo-spec/issues/237#issuecomment-3094462560
 
 
 Level 1
 -------
 
-Font-wide parametric axes.
+The simpler 3-part syntax is sufficient for naming measurements in single-script fonts:
 
-| tag  | key           |
-|------|---------------|
-| XOPQ | `stem.x`      |
-| YOPQ | `stem.y`      |
-| XTRA | `counter.x`   |
-| YTOS | `overshoot.y` |
-| XSHA | `hserif.x`    |
-| YSHA | `hserif.y`    |
-| XSVA | `vserif.x`    |
-{: .table .mb-4 }
+`measurement.direction.glyph`
+{: .fs-4 }
 
+This syntax can be used to name global measurements, case-specific measurements, and subgroup-specific measurements.
 
-```python
-font.lib['com.xTools4.measurements'] = {
-    'stem.x'      : 89,
-    'stem.y'      : 31,
-    'counter.x'   : 299,
-    'overshoot.y' : 22,
-    'hserif.x'    : 103,
-    'hserif.y'    : 31,
-    'vserif.x'    : 25,
-}
-```
+### Global measurements
+{: .h5 }
+
+| tag  | key             | description                  |
+|------|-----------------|------------------------------|
+| XOPQ | `stem.x.H`      | general x opaque             |
+| YOPQ | `stem.y.H`      | general y opaque             |
+| XTRA | `counter.x.H`   | general x transparent        |
+| YTOS | `overshoot.y.O` | overshoot                    |
+| XSHA | `hserif.x.H`    | general x horizontal serifs  |
+| YSHA | `hserif.y.H`    | general y horizontal serif   |
+| XSVA | `vserif.x.T`    | general x vertical serifs    |
+{: .table .table-hover .mb-4 }
+
+### Case-specific measurements
+{: .h5 }
+
+| tag  | key               | description              |
+|------|-------------------|--------------------------|
+| XTUC | `counter.x.H`     | x transparent uppercase  |
+| XTLC | `counter.x.n`     | x transparent lowercase  |
+| XTFI | `counter.x.zero`  | x transparent figures    |
+{: .table .table-hover .mb-4 }
+
+### Subgroup-specific measurements
+{: .h5 }
+
+| tag  | key           | description                       |
+|------|---------------|-----------------------------------|
+| XTUC | `counter.x.H` | x transparent uppercase straight  |
+| XTUR | `counter.x.O` | x transparent uppercase round     |
+| XTUD | `counter.x.V` | x transparent uppercase diagonal  |
+{: .table .table-hover .mb-4 }
 
 
 Level 2
 -------
 
-Splits font-wide axes into cases.
+The 4-part syntax is intended for multi-script fonts. It extends the 3-part syntax above with a script prefix:
 
-| tag  | key          |
-|------|--------------|
-| XOUC | `stem.x.H`   |
-| XOLC | `stem.x.n`   |
-| XOFI | `stem.x.one` |
-{: .table }
+`script.measurement.direction.glyph`
+{: .fs-4 }
 
-```python
-font.lib['com.xTools4.measurements'] = {
-    'stem.x.H'   : 89,
-    'stem.x.n'   : 69,
-    'stem.x.one' : 74,
-}
-```
+### Script-specific measurements
+{: .h5 }
 
-
-Level 3
--------
-
-Splits cases into shape groups.
-
-| tag  | key           |
-|------|---------------|
-| XTUC | `counter.x.H` |
-| XTUR | `counter.x.O` |
-| XTUD | `counter.x.V` |
-{: .table }
-
-```python
-font.lib['com.xTools4.measurements'] = {
-    'counter.x.H' : 299,
-    'counter.x.O' : 459,
-    'counter.x.V' : 380,
-}
-```
-
-Level 4
--------
-
-Splits axes into scripts (with prefix).
-
-| tag  | key                       |
-|------|---------------------------|
-| ???? |  `latin.counter.x.etc`    |
-| ???? |  `cyrillic.counter.x.etc` |
-| ???? |  `greek.counter.x.etc`    |
-{: .table }
+| tag  | key                 | description               |
+|------|---------------------|---------------------------|
+| XOUC | `latin.stem.x.H`    | latin x opaque uppercase  |
+| YOUC | `latin.stem.y.H`    | latin y opaque uppercase  |
+| XOAR | `arabic.stem.x.??`  | arabic x opaque           |
+| YOAR | `arabic.stem.y.??`  | arabic y opaque           |
+| XOCH | `chinese.stem.x.??` | chinese x opaque          |
+| YOCH | `chinese.stem.y.??` | chinese y opaque          |
+{: .table .table-hover .mb-4 }
 
