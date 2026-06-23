@@ -226,7 +226,7 @@ class xProject:
     tuningLevels = [1, 2, 3] # 1: duovars / 2: trivars / 3: quadvars
     '''The level(s) of tuning to include in the designspace.'''
 
-    tuningSourcerFolderName = 'corners'
+    tuningSourcesFolderName = 'tuning'
     '''The name of the tuning folder.'''
 
     tuningAxesHidden = True
@@ -235,7 +235,7 @@ class xProject:
     @property
     def tuningSourcesFolder(self):
         '''Returns the full path of the tuning sources subfolder.'''
-        return os.path.join(self.sourcesFolder, self.tuningSourcerFolderName)
+        return os.path.join(self.sourcesFolder, self.tuningSourcesFolderName)
 
     @property
     def tuningSourcesPaths(self):
@@ -272,6 +272,34 @@ class xProject:
             tuningAxes[styleName] = a
 
         return tuningAxes
+
+    # reference
+
+    referenceSourcesFolderName = 'reference'
+    '''The name of the reference folder.'''
+
+    @property
+    def referenceSourcesFolder(self):
+        '''Returns the full path of the reference sources subfolder.'''
+        return os.path.join(self.sourcesFolder, self.referenceSourcesFolderName)
+
+    @property
+    def referenceSourcesPaths(self):
+        '''Returns a list with the full paths of all reference UFO sources.'''
+        return { os.path.splitext(os.path.split(f)[-1])[0]: f for f in glob.glob(f'{self.referenceSourcesFolder}/*.ufo')}
+
+    @property
+    def referenceBlendsPath(self):
+        return os.path.join(self.referenceSourcesFolder, self.blendsFile)
+
+    @property
+    def referenceFontName(self):
+        '''The name of the reference font file.'''
+        return os.path.split(self.varFontFile)[-1]
+
+    @property
+    def referenceFontPath(self):
+        return os.path.join(self.referenceSourcesFolder, self.referenceFontName)
 
     # instances
 
@@ -390,9 +418,14 @@ class xProject:
         with open(self.glyphConstructionsPath, 'w') as f:
             pass
 
-    def updateGlyphsFromDefault(self, glyphNames, oldDefaultPath, preflight=True):
+    def updateGlyphsFromDefault(self, glyphNames, oldDefaultPath, preflight=True, parametricSources=True, tuningSources=False):
         '''Update default glyphs in all sources.'''
-        batchUpdateGlyphsFromDefault(glyphNames, self.sourcesPaths, self.defaultSourcePath, oldDefaultPath, preflight=preflight)
+        ufoPaths = []
+        if parametricSources:
+            ufoPaths += self.sourcesPaths
+        if tuningSources:
+            ufoPaths += self.tuningSourcesPaths
+        batchUpdateGlyphsFromDefault(glyphNames, ufoPaths, self.defaultSourcePath, oldDefaultPath, preflight=preflight)
 
     def copyGlyphsFromDefault(self, glyphNames, sourceNames=None):
         '''Copy glyphs from the default source to other sources.'''
@@ -496,7 +529,7 @@ class xProject:
                 # 3. copy glyphNames from default to srcName
         pass
 
-    def createTuningSources(self):
+    def createTuningSources(self, sparse=False):
         if self.verbose:
             print('creating tuning sources...')
 
@@ -517,8 +550,9 @@ class xProject:
 
             f = OpenFont(ufoPath, showInterface=False)
 
-            # for glyphName in f.glyphOrder:
-            #     f.removeGlyph(glyphName)
+            if sparse:
+                for glyphName in f.glyphOrder:
+                    f.removeGlyph(glyphName)
 
             f.info.styleName = styleName
             f.kerning.clear()
@@ -982,9 +1016,15 @@ class xProject:
         txt += f'blended axes: {list(self.blendedAxes.keys())}\n'
         txt += f'blended sources: {list(self.blendedSources.keys())}\n\n'
 
-        txt += f'tuning folder name: {self.tuningSourcerFolderName}\n'
+        txt += f'tuning folder name: {self.tuningSourcesFolderName}\n'
         txt += f'tuning folder path: {self.tuningSourcesFolder} ({os.path.exists(self.tuningSourcesFolder)})\n'
         txt += f'tuning sources paths: {self.tuningSourcesPaths}\n\n'
+
+        txt += f'reference folder name: {self.referenceSourcesFolderName}\n'
+        txt += f'reference folder path: {self.referenceSourcesFolder} ({os.path.exists(self.referenceSourcesFolder)})\n'
+        txt += f'reference sources paths: {self.referenceSourcesPaths}\n'
+        txt += f'reference blends path: {self.referenceBlendsPath} ({os.path.exists(self.referenceBlendsPath)})\n'
+        txt += f'reference font path: {self.referenceFontPath} ({os.path.exists(self.referenceFontPath)})\n\n'
 
         txt += f'instances folder name: {self.instancesFolderName}\n'
         txt += f'instances folder path: {self.instancesFolder} ({os.path.exists(self.instancesFolder)})\n\n'
@@ -1119,7 +1159,7 @@ class xProject:
             if defaultGlyph.components:
                 continue
 
-            T.draw(glyphName, level=1)
+            T.draw(glyphName, level=level)
 
             pdfFileName = os.path.splitext(os.path.split(self.designspacePath)[-1])[0]
             tuningProofsFolder = os.path.join(self.proofsFolder, 'PDF', 'tuning')

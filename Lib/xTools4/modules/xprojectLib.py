@@ -153,8 +153,9 @@ def batchUpdateGlyphsFromDefault(glyphNames, ufoPaths, newDefaultPath, oldDefaul
     newDefault = OpenFont(newDefaultPath, showInterface=False)
     oldDefault = OpenFont(oldDefaultPath, showInterface=False)
 
-    ufoPaths.remove(newDefaultPath)
-    ufoPaths.remove(oldDefaultPath)
+    for ufoPath in [newDefaultPath, oldDefaultPath]:
+        if ufoPath in ufoPaths:
+            ufoPaths.remove(ufoPath)
 
     for ufoPath in sorted(ufoPaths):
         font = OpenFont(ufoPath, showInterface=False)
