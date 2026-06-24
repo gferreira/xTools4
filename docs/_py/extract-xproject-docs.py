@@ -87,5 +87,5 @@ txt += '''\
 </table>
 '''
 
-with open(outputPath, mode='w') as f:
+with open(outputPath, mode='w', encoding='utf-8') as f:
     f.write(txt)

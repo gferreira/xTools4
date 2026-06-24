@@ -15,6 +15,7 @@ from xml.etree.ElementTree import parse
 from fontTools.designspaceLib import DesignSpaceDocument, AxisDescriptor, SourceDescriptor, InstanceDescriptor, AxisMappingDescriptor
 from defcon import Font
 from mojo.roboFont import OpenFont, RGlyph
+from mojo.smartSet import readSmartSets
 from ufoProcessor.ufoOperator import UFOOperator
 from xTools4.modules.measurements import *
 from xTools4.modules.normalization import cleanupSources, normalizeSources
@@ -170,8 +171,19 @@ class xProject:
 
     @property
     def smartSets(self):
-        '''Returns the imported smart sets as a dictionary.'''
-        return {}
+        '''Returns the imported smart sets as a two-level dictionary (cases > groups).'''
+        smartSetsRaw = readSmartSets(self.smartSetsPath, useAsDefault=False, font=None)
+
+        smartSets = {}
+        for smartGroup in smartSetsRaw:
+            # skip empty folders
+            if not smartGroup.groups:
+                continue
+            smartSets[smartGroup.name] = {}
+            for smartSet in smartGroup.groups:
+                smartSets[smartGroup.name][smartSet.name] = smartSet.glyphNames
+
+        return smartSets
 
     # glyph construction
 
@@ -290,6 +302,7 @@ class xProject:
 
     @property
     def referenceBlendsPath(self):
+        '''Returns the full path of the blends file for reference sources.'''
         return os.path.join(self.referenceSourcesFolder, self.blendsFile)
 
     @property
@@ -299,6 +312,7 @@ class xProject:
 
     @property
     def referenceFontPath(self):
+        '''Returns the full path of the reference variable font file.'''
         return os.path.join(self.referenceSourcesFolder, self.referenceFontName)
 
     # instances
@@ -530,6 +544,7 @@ class xProject:
         pass
 
     def createTuningSources(self, sparse=False):
+        '''Initialize tuning sources for all blended locations.'''
         if self.verbose:
             print('creating tuning sources...')
 
@@ -564,7 +579,7 @@ class xProject:
             print('...done!\n')
 
     def calculateTuningSources(self, glyphNames, referenceSource, levels=[1, 2, 3]):
-        '''Calculate tuning sources for the given glyph names, based on a reference default source.'''
+        '''Calculate tuning sources for glyphs based on reference default source.'''
 
         referenceFont = OpenFont(referenceSource, showInterface=False)
 
@@ -985,7 +1000,7 @@ class xProject:
         print()
 
     def printSettings(self):
-        '''Print an overview of this project's settings.'''
+        '''Print an overview of this project’s settings.'''
 
         txt  = f'base folder: {self.baseFolder}\n'
         txt += f'family name: {self.familyName}\n\n'
@@ -1164,6 +1179,7 @@ class xProject:
             pdfFileName = os.path.splitext(os.path.split(self.designspacePath)[-1])[0]
             tuningProofsFolder = os.path.join(self.proofsFolder, 'PDF', 'tuning')
             T.save(tuningProofsFolder, pdfFileName)
+
 
 
 

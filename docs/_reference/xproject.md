@@ -100,7 +100,7 @@ A Pythonic API for scripting font source data for parametric variable fonts.
 </tr>
 <tr>
 <td><code>xProject.smartSets</code></td>
-<td>Returns the imported smart sets as a dictionary.</td>
+<td>Returns the imported smart sets as a two-level dictionary (cases > groups).</td>
 </tr>
 <tr>
 <td><code>xProject.glyphConstructionsFile</code></td>
@@ -135,8 +135,16 @@ A Pythonic API for scripting font source data for parametric variable fonts.
 <td>Enable/disable tuning (optional, disabled by default).</td>
 </tr>
 <tr>
-<td><code>xProject.tuningSourcerFolderName</code></td>
+<td><code>xProject.tuningLevels</code></td>
+<td>The level(s) of tuning to include in the designspace.</td>
+</tr>
+<tr>
+<td><code>xProject.tuningSourcesFolderName</code></td>
 <td>The name of the tuning folder.</td>
+</tr>
+<tr>
+<td><code>xProject.tuningAxesHidden</code></td>
+<td>A switch to make tuning axes hidden (or not).</td>
 </tr>
 <tr>
 <td><code>xProject.tuningSourcesFolder</code></td>
@@ -149,6 +157,34 @@ A Pythonic API for scripting font source data for parametric variable fonts.
 <tr>
 <td><code>xProject.tuningSources</code></td>
 <td>Returns a dict of tuning locations (keys) and their UFO sources (values).</td>
+</tr>
+<tr>
+<td><code>xProject.tuningAxes</code></td>
+<td>A dict of blended location names (keys) and tuning axes (values).</td>
+</tr>
+<tr>
+<td><code>xProject.referenceSourcesFolderName</code></td>
+<td>The name of the reference folder.</td>
+</tr>
+<tr>
+<td><code>xProject.referenceSourcesFolder</code></td>
+<td>Returns the full path of the reference sources subfolder.</td>
+</tr>
+<tr>
+<td><code>xProject.referenceSourcesPaths</code></td>
+<td>Returns a list with the full paths of all reference UFO sources.</td>
+</tr>
+<tr>
+<td><code>xProject.referenceBlendsPath</code></td>
+<td>Returns the full path of the blends file for reference sources.</td>
+</tr>
+<tr>
+<td><code>xProject.referenceFontName</code></td>
+<td>The name of the reference font file.</td>
+</tr>
+<tr>
+<td><code>xProject.referenceFontPath</code></td>
+<td>Returns the full path of the reference variable font file.</td>
 </tr>
 <tr>
 <td><code>xProject.instancesFolderName</code></td>
@@ -215,6 +251,10 @@ A Pythonic API for scripting font source data for parametric variable fonts.
 <td>Copy groups from the default source to other sources.</td>
 </tr>
 <tr>
+<td><code>xProject.copyKerningFromDefault</code></td>
+<td>Copy glyphs from the default source to other sources.</td>
+</tr>
+<tr>
 <td><code>xProject.copyUnicodesFromDefault</code></td>
 <td>Copy unicodes from the default source to all other sources.</td>
 </tr>
@@ -229,6 +269,18 @@ A Pythonic API for scripting font source data for parametric variable fonts.
 <tr>
 <td><code>xProject.splitSources</code></td>
 <td>Split new parametric sources from existing sources.</td>
+</tr>
+<tr>
+<td><code>xProject.createTuningSources</code></td>
+<td>Initialize tuning sources for all blended locations.</td>
+</tr>
+<tr>
+<td><code>xProject.calculateTuningSources</code></td>
+<td>Calculate tuning sources for glyphs based on reference default source.</td>
+</tr>
+<tr>
+<td><code>xProject.resetTuningSources</code></td>
+<td>Clear all glyphs from all tuning sources.</td>
 </tr>
 <tr>
 <td><code>xProject.addParametricAxes</code></td>
@@ -296,7 +348,7 @@ A Pythonic API for scripting font source data for parametric variable fonts.
 </tr>
 <tr>
 <td><code>xProject.printSettings</code></td>
-<td>Print an overview of this project's settings.</td>
+<td>Print an overview of this project’s settings.</td>
 </tr>
 <tr>
 <td><code>xProject.validateDesignspace</code></td>
@@ -317,5 +369,9 @@ A Pythonic API for scripting font source data for parametric variable fonts.
 <tr>
 <td><code>xProject.proofBlends</code></td>
 <td>Build PDF proof of blends.</td>
+</tr>
+<tr>
+<td><code>xProject.proofTuning</code></td>
+<td>Build PDF proofs of tuning sources.</td>
 </tr>
 </table>
