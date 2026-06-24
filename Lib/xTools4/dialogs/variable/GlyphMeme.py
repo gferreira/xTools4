@@ -37,6 +37,7 @@ class GlyphMemeController(ezui.WindowController):
     glyphGroups = {}
 
     content = """
+    (case ...)    @caseSelector
     (groups ...)  @groupSelector
     (glyphs ...)  @glyphSelector
 
@@ -55,6 +56,9 @@ class GlyphMemeController(ezui.WindowController):
     descriptionData = dict(
         content=dict(
             sizeStyle="small",
+        ),
+        caseSelector=dict(
+            width='fill',
         ),
         groupSelector=dict(
             width='fill',
@@ -151,6 +155,7 @@ class GlyphMemeController(ezui.WindowController):
         for smartGroup in smartSets:
             if not smartGroup.groups:
                 continue
+            self.glyphGroups[smartGroup.name] = {}
             for smartSet in smartGroup.groups:
                 # remove component glyphs from glyph lists
                 glyphNames = []
@@ -161,11 +166,11 @@ class GlyphMemeController(ezui.WindowController):
                     if not len(g.components):
                         glyphNames.append(glyphName)
                 if len(glyphNames):
-                    self.glyphGroups[smartSet.name] = glyphNames
+                    self.glyphGroups[smartGroup.name][smartSet.name] = glyphNames
 
-        groupSelector = self.w.getItem("groupSelector")
-        groupSelector.setItems(self.glyphGroups.keys())
-        self.groupSelectorCallback(None)
+        caseSelector = self.w.getItem("caseSelector")
+        caseSelector.setItems(self.glyphGroups.keys())
+        self.caseSelectorCallback(None)
 
         if self.verbose:
             print('done.\n')
@@ -182,11 +187,17 @@ class GlyphMemeController(ezui.WindowController):
         self.designspacePath = designspacePath
         self._loadDesignspace()
 
-    def groupSelectorCallback(self, sender):
+    def caseSelectorCallback(self, sender):
+        selectedCase = self.w.getItem("caseSelector").getItem()
         groupSelector = self.w.getItem("groupSelector")
+        groupSelector.setItems(self.glyphGroups[selectedCase])
+        self.groupSelectorCallback(None)
+
+    def groupSelectorCallback(self, sender):
+        selectedCase = self.w.getItem("caseSelector").getItem()
+        selectedGroup = self.w.getItem("groupSelector").getItem()
         glyphSelector = self.w.getItem("glyphSelector")
-        selectedGroup = groupSelector.getItem()
-        glyphSelector.setItems(self.glyphGroups[selectedGroup])
+        glyphSelector.setItems(self.glyphGroups[selectedCase][selectedGroup])
         self.glyphSelectorCallback(None)
 
     def glyphSelectorCallback(self, sender):
