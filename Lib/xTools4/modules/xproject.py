@@ -13,9 +13,12 @@ import subprocess
 from functools import cached_property
 from xml.etree.ElementTree import parse
 from fontTools.designspaceLib import DesignSpaceDocument, AxisDescriptor, SourceDescriptor, InstanceDescriptor, AxisMappingDescriptor
+from fontTools.subset import Subsetter
+from fontTools.ttLib import TTFont
 from defcon import Font
 from mojo.roboFont import OpenFont, RGlyph
 from mojo.smartSet import readSmartSets
+from glyphConstruction import ParseGlyphConstructionListFromString
 from ufoProcessor.ufoOperator import UFOOperator
 from xTools4.modules.measurements import *
 from xTools4.modules.normalization import cleanupSources, normalizeSources
@@ -26,6 +29,7 @@ from xTools4.modules.glyphMemeProofer import GlyphMemeProofer
 from xTools4.modules.glyphSetProofer import GlyphSetProofer
 from xTools4.modules.blendsPreview import BlendsPreview, getEffectiveLocation, instantiateGlyph
 from xTools4.modules.tuningPreview import TuningPreview
+from xTools4.modules.accents import buildAccentedGlyphs
 
 
 class xProject:
@@ -169,19 +173,19 @@ class xProject:
         '''Returns the full path of the smart sets file.'''
         return os.path.join(self.sourcesFolder, self.smartSetsFile)
 
-    @property
+    @cached_property
     def smartSets(self):
         '''Returns the imported smart sets as a two-level dictionary (cases > groups).'''
         smartSetsRaw = readSmartSets(self.smartSetsPath, useAsDefault=False, font=None)
 
         smartSets = {}
         for smartGroup in smartSetsRaw:
-            # skip empty folders
-            if not smartGroup.groups:
-                continue
             smartSets[smartGroup.name] = {}
-            for smartSet in smartGroup.groups:
-                smartSets[smartGroup.name][smartSet.name] = smartSet.glyphNames
+            if smartGroup.groups:
+                for smartSet in smartGroup.groups:
+                    smartSets[smartGroup.name][smartSet.name] = smartSet.glyphNames
+            else:
+                smartSets[smartGroup.name] = smartGroup.glyphNames
 
         return smartSets
 
@@ -197,10 +201,18 @@ class xProject:
         '''Returns the full path of the glyph construction file.'''
         return os.path.join(self.sourcesFolder, self.glyphConstructionsFile)
 
+    @cached_property
+    def glyphConstructionsRaw(self):
+        '''Returns the raw glyph construction source.'''
+        with open(self.glyphConstructionsPath, 'r') as f:
+            constructionsRaw = f.read()
+        return constructionsRaw
+
     @property
     def glyphConstructions(self):
-        '''Returns the imported glyph constructions as a dictionary.'''
-        pass
+        '''Returns the project’s glyph constructions as a dictionary.'''
+        constructions = ParseGlyphConstructionListFromString(self.glyphConstructionsRaw)
+        return { c.split('=')[0].strip() : c.strip() for c in constructions if len(c) }
 
     # blending
 
@@ -215,19 +227,25 @@ class xProject:
     @property
     def blendedAxes(self):
         '''Returns the imported blended axes as a dictionary.'''
+
         if not os.path.exists(self.blendsPath):
             return {}
+
         with open(self.blendsPath, 'r', encoding='utf-8') as f:
             blendsData = json.load(f)
+
         return blendsData['axes']
 
     @property
     def blendedSources(self):
         '''Returns the imported blended sources as a dictionary.'''
+
         if not os.path.exists(self.blendsPath):
             return {}
+
         with open(self.blendsPath, 'r', encoding='utf-8') as f:
             blendsData = json.load(f)
+
         return blendsData['sources']
 
     # tuning
@@ -262,7 +280,7 @@ class xProject:
     @property
     def tuningAxes(self):
         '''A dict of blended location names (keys) and tuning axes (values).'''
-
+        
         tuningAxes = {}
 
         for i, styleName in enumerate(sorted(self.tuningSources)):
@@ -359,7 +377,7 @@ class xProject:
     # METHODS
     #---------
 
-    def setSourceNamesFromMeasurements(self, preflight=True, ignoreTags=['wght']):
+    def setSourceNamesFromMeasurements(self, preflight=False, ignoreTags=['wght']):
         '''Set source names from the actual measurement value in each source.'''
         setSourceNamesFromMeasurements(
                 self.sourcesFolder,
@@ -432,7 +450,7 @@ class xProject:
         with open(self.glyphConstructionsPath, 'w') as f:
             pass
 
-    def updateGlyphsFromDefault(self, glyphNames, oldDefaultPath, preflight=True, parametricSources=True, tuningSources=False):
+    def updateGlyphsFromDefault(self, glyphNames, oldDefaultPath, preflight=False, parametricSources=True, tuningSources=False):
         '''Update default glyphs in all sources.'''
         ufoPaths = []
         if parametricSources:
@@ -527,9 +545,28 @@ class xProject:
 
         print('...done!\n')
 
-    def buildCompositeGlyphs(self, glyphNames):
+    def buildCompositeGlyphs(self, glyphNames,  parametricSources=True, tuningSources=False, preflight=False):
         '''Build composite glyphs from glyph constructions.'''
-        pass
+
+        ufoPaths = []
+        if parametricSources:
+            ufoPaths += self.sourcesPaths
+        if tuningSources:
+            ufoPaths += self.tuningSourcesPaths
+
+        print('building composite glyphs:\n')
+
+        for ufoPath in ufoPaths:
+            f = OpenFont(ufoPath, showInterface=False)
+            print(f'\tbuilding glyphs in {os.path.split(ufoPath)[-1]}...')
+            buildAccentedGlyphs(f, glyphNames, self.glyphConstructionsRaw, clear=True, verbose=True, indentLevel=2, autoUnicodes=False)
+            if not preflight:
+                print(f'\tsaving {os.path.split(ufoPath)[-1]}...')
+                f.save()
+            f.close()
+            print()
+
+        print('...done!\n')
 
     def splitSources(self, srcName, dstName, glyphNames):
         '''Split new parametric sources from existing sources.'''
@@ -855,7 +892,7 @@ class xProject:
         '''Build UFO instances for blended sources.'''
         pass
 
-    def buildVariableFont(self, debug=False, featureWriter=True, noGDEF=False):
+    def buildVariableFont(self, debug=False, featureWriter=True, noGDEF=False, subset=None):
         '''Build avar2 variable font from designspace.'''
 
         print(f'generating variable font for {self.designspaceFile}...')
@@ -893,6 +930,19 @@ class xProject:
             retval = p.wait()
 
         print(f'{os.path.exists(self.varFontPath)}')
+
+        # subset variable font with pyftsubset
+        if subset:
+            glyphNames = self.smartSets.get(subset)
+            if glyphNames:
+                print(f'\tsubsetting font ({subset})...')
+                font = TTFont(self.varFontPath)
+                subsetter = Subsetter()
+                subsetter.populate(glyphs=glyphNames)
+                subsetter.subset(font)
+                font.save(self.varFontPath)
+            else:
+                print(f'\tsubsetting aborted: no subset glyphs available.')
 
         print('...done.\n')
 
@@ -1179,6 +1229,8 @@ class xProject:
             pdfFileName = os.path.splitext(os.path.split(self.designspacePath)[-1])[0]
             tuningProofsFolder = os.path.join(self.proofsFolder, 'PDF', 'tuning')
             T.save(tuningProofsFolder, pdfFileName)
+
+
 
 
 
