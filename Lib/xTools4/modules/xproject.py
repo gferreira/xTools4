@@ -3,6 +3,8 @@ import xTools4.modules.measurements
 reload(xTools4.modules.measurements)
 import xTools4.modules.blendsPreview
 reload(xTools4.modules.blendsPreview)
+import xTools4.modules.xprojectLib
+reload(xTools4.modules.xprojectLib)
 
 import os, glob, json, shutil, time, datetime
 import subprocess
@@ -457,21 +459,21 @@ class xProject:
         with open(self.glyphConstructionsPath, 'w') as f:
             pass
 
-    def updateGlyphsFromDefault(self, glyphNames, oldDefaultPath, preflight=False, parametricSources=True, tuningSources=False):
+    def updateGlyphsFromDefault(self, glyphNames, oldDefaultPath, preflight=False, parametric=True, tuning=False):
         '''Update default glyphs in all sources.'''
         ufoPaths = []
-        if parametricSources:
+        if parametric:
             ufoPaths += self.sourcesPaths
-        if tuningSources:
+        if tuning:
             ufoPaths += self.tuningSourcesPaths
         batchUpdateGlyphsFromDefault(glyphNames, ufoPaths, self.defaultSourcePath, oldDefaultPath, preflight=preflight)
 
-    def copyGlyphsFromDefault(self, glyphNames, parametricSources=True, tuningSources=False):
+    def copyGlyphsFromDefault(self, glyphNames, parametric=True, tuning=False):
         '''Copy default glyphs to all sources.'''
         ufoPaths = []
-        if parametricSources:
+        if parametric:
             ufoPaths += self.sourcesPaths
-        if tuningSources:
+        if tuning:
             ufoPaths += self.tuningSourcesPaths
 
         srcFont = OpenFont(self.defaultSourcePath, showInterface=False)
@@ -531,13 +533,21 @@ class xProject:
 
         print('...done!\n')
 
-    def copyUnicodesFromDefault(self, preflight=False):
+    def copyUnicodesFromDefault(self, parametric=True, tuning=True, reference=True, preflight=False):
         '''Copy unicodes from the default source to all other sources.'''
 
         srcFont = OpenFont(self.defaultSourcePath, showInterface=False)
 
+        ufoPaths = []
+        if parametric:
+            ufoPaths += self.sourcesPaths
+        if tuning:
+            ufoPaths += self.tuningSourcesPaths
+        if reference:
+            ufoPaths += self.referenceSourcesPaths.values().values()
+
         print(f'copying all unicodes from the default to all other sources...')
-        for dstPath in self.sourcesPaths:
+        for dstPath in ufoPaths:
             if dstPath == self.defaultSourcePath:
                 continue
 
@@ -558,14 +568,22 @@ class xProject:
 
         print('...done!\n')
 
-    def copyGlyphOrderFromDefault(self):
+    def copyGlyphOrderFromDefault(self, parametric=True, tuning=True, reference=True):
         '''Copy glyph order from the default source to all other sources.'''
+
+        ufoPaths = []
+        if parametric:
+            ufoPaths += self.sourcesPaths
+        if tuning:
+            ufoPaths += self.tuningSourcesPaths
+        if reference:
+            ufoPaths += self.referenceSourcesPaths.values().values()
 
         srcFont = OpenFont(self.defaultSourcePath, showInterface=False)
         glyphOrder = srcFont.templateGlyphOrder # srcFont.glyphOrder
 
         print(f'copying glyph order from the default to all other sources...')
-        for dstPath in self.sourcesPaths:
+        for dstPath in ufoPaths:
             if dstPath == self.defaultSourcePath:
                 continue
             dstFont = OpenFont(dstPath, showInterface=False)
@@ -575,14 +593,16 @@ class xProject:
 
         print('...done!\n')
 
-    def buildCompositeGlyphs(self, glyphNames,  parametricSources=True, tuningSources=False, preflight=False):
+    def buildCompositeGlyphs(self, glyphNames,  parametric=True, tuning=False, reference=False, preflight=False):
         '''Build composite glyphs from glyph constructions.'''
 
         ufoPaths = []
-        if parametricSources:
+        if parametric:
             ufoPaths += self.sourcesPaths
-        if tuningSources:
+        if tuning:
             ufoPaths += self.tuningSourcesPaths
+        if reference:
+            ufoPaths += self.referenceSourcesPaths.values().values()
 
         print('building composite glyphs:\n')
 
@@ -758,12 +778,9 @@ class xProject:
 
     # designspace
 
-    def addParametricAxes(self, customAxes={}):
-        '''Add parametric axes to the designspace.'''
+    def getParametricAxesFromSourceNames(self, customAxes={}):
 
-        if self.verbose:
-            print('\tadding parametric axes...')
-
+        parametricAxesAsDict = {}
         for tag in self.parametricAxes:
 
             # get default value
@@ -792,16 +809,30 @@ class xProject:
             # get axis name
             name = self.parametricAxesNames[tag] if tag in self.parametricAxesNames else tag
 
-            # create axis
-            a = AxisDescriptor()
-            a.name    = name
-            a.tag     = tag
-            a.minimum = minValue
-            a.maximum = maxValue
-            a.default = defaultValue
-            a.hidden  = self.parametricAxesHidden
+            parametricAxesAsDict[tag] = {
+                'name'    : name,
+                'minimum' : minValue,
+                'maximum' : maxValue,
+                'default' : defaultValue,
+                'hidden'  : self.parametricAxesHidden,
+            }
 
-            self.designspace.addAxis(a)
+        return parametricAxesAsDict
+
+    def addParametricAxes(self, customAxes={}):
+        '''Add parametric axes to the designspace.'''
+
+        if self.verbose:
+            print('\tadding parametric axes...')
+
+        parametricAxes = self.getParametricAxesFromSourceNames(customAxes=customAxes)
+
+        for tag, attrs in parametricAxes.items():
+            axis = AxisDescriptor()
+            axis.tag = tag
+            for attr, value in attrs.items():
+                setattr(axis, attr, value)
+            self.designspace.addAxis(axis)
 
     def addParametricSources(self, familyName=None):
         '''Add parametric sources to the designspace.'''
@@ -884,8 +915,6 @@ class xProject:
             a.minimum = self.blendedAxes[tag]['minimum']
             a.maximum = self.blendedAxes[tag]['maximum']
             a.default = self.blendedAxes[tag]['default']
-            # if tag == 'opsz':
-            #     a.map = self.opszMapping
             self.designspace.addAxis(a)
 
     def addBlendedSources(self):
@@ -1034,6 +1063,7 @@ class xProject:
 
         # subset variable font with pyftsubset
         if subset:
+            # subsets must exist in the project’s SmartSets file
             glyphNames = self.smartSets.get(subset)
             if glyphNames:
                 print(f'\tsubsetting font ({subset})...')
@@ -1205,7 +1235,7 @@ class xProject:
 
         txt += f'reference folder name: {self.referenceSourcesFolderName}\n'
         txt += f'reference folder path: {self.referenceSourcesFolder} ({os.path.exists(self.referenceSourcesFolder)})\n'
-        txt += f'reference sources paths: {self.referenceSourcesPaths}\n'
+        txt += f'reference sources paths: {self.referenceSourcesPaths.values()}\n'
         txt += f'reference blends path: {self.referenceBlendsPath} ({os.path.exists(self.referenceBlendsPath)})\n'
         txt += f'reference font path: {self.referenceFontPath} ({os.path.exists(self.referenceFontPath)})\n\n'
 
@@ -1225,7 +1255,7 @@ class xProject:
         '''Validate range of designspace locations.'''
         validateDesignspace(self.designspacePath, locations=locations, mappings=mappings, instances=instances)
 
-    def validateSources(self, width=False, left=False, right=False, points=True, components=True, anchors=True, unicodes=True, targetSources=[]):
+    def validateSources(self, width=False, left=False, right=False, points=True, components=True, anchors=True, unicodes=True, parametric=True, tuning=True, reference=True):
         '''Validate glyph attributes in all sources against the default.'''
 
         options = {
@@ -1248,10 +1278,13 @@ class xProject:
         txt += f'\tdefault font: {self.defaultFont.info.familyName} {self.defaultFont.info.styleName}\n\n'
 
         # get target sources
-        if not targetSources:
-            targetPaths = self.sourcesPaths
-        else:
-            targetPaths = [os.path.join(self.sourcesFolder, f'{srcName}.ufo') for srcName in targetSources]
+        targetPaths = []
+        if parametric:
+            targetPaths += self.sourcesPaths
+        if tuning:
+            targetPaths += self.tuningSourcesPaths
+        if reference:
+            targetPaths += self.referenceSourcesPaths.values()
 
         if self.defaultSourcePath in targetPaths:
             targetPaths.remove(self.defaultSourcePath)
@@ -1347,6 +1380,7 @@ class xProject:
             pdfFileName = os.path.splitext(os.path.split(self.designspacePath)[-1])[0]
             tuningProofsFolder = os.path.join(self.proofsFolder, 'PDF', 'tuning')
             T.save(tuningProofsFolder, pdfFileName)
+
 
 
 

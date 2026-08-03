@@ -121,8 +121,6 @@ def updateGlyphsFromDefault(currentFont, oldDefaultFont, newDefaultFont, glyphNa
         if glyphName not in oldDefaultFont or glyphName not in currentFont or glyphName not in newDefaultFont:
             continue
 
-        # print(familyName, subFamilyName, name)
-
         oldDefaultGlyph = oldDefaultFont[glyphName]
         currentGlyph    = currentFont[glyphName]
         newDefaultGlyph = newDefaultFont[glyphName]
