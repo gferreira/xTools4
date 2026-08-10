@@ -19,6 +19,7 @@ p.createParametricSources(['XOPQ', 'YOPQ', 'XTRA'], minSource=True, maxSource=Tr
 - YOPQmin.ufo, YOPQmax.ufo
 - XTRAmin.ufo, XTRAmax.ufo
 
+<!--
 
 ### Notes about individual parameters
 {: .h5 }
@@ -31,3 +32,5 @@ p.createParametricSources(['XOPQ', 'YOPQ', 'XTRA'], minSource=True, maxSource=Tr
 - [XSHA](#)
 - [YSHA](#)
 - [XQUC](#)
+
+-->
