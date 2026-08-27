@@ -85,6 +85,9 @@ class xProject:
     }
     '''A dict with custom parametric axis names (values) for 4-letter tags (keys).'''
 
+    useLongAxisNames = False
+    '''A toggle to switch between short names (tags) and long names for parametric axes.'''
+
     parametricAxesHidden = True
     '''A switch to make parametric axes hidden (or not).'''
 
@@ -125,14 +128,16 @@ class xProject:
 
         # get parametric measurements
         L = {}
-        for name in self.parametricAxes:
-            if name in self.measurementsDefault.values:
-                L[name] = permille(self.measurementsDefault.values[name], self.defaultFont.info.unitsPerEm)
+        for tag in self.parametricAxes:
+            if tag in self.measurementsDefault.values:
+                name = self.getAxisName(tag)
+                L[name] = permille(self.measurementsDefault.values[tag], self.defaultFont.info.unitsPerEm)
 
         # add tuning axes
         if self.tuning:
             for styleName, axis in self.tuningAxes.items():
-                L[axis.tag] = axis.default
+                axisName = styleName if self.useLongAxisNames else axis.tag
+                L[axisName] = axis.default
 
         return L
 
@@ -301,7 +306,7 @@ class xProject:
             axisTag = f'TN{i:02}'
 
             a = AxisDescriptor()
-            a.name    = axisTag # styleName
+            a.name    = axisTag if not self.useLongAxisNames else styleName
             a.tag     = axisTag
             a.minimum = 0
             a.maximum = 100
@@ -789,6 +794,43 @@ class xProject:
         if self.verbose:
             print('\n...done!\n')
 
+    def makeParentParametricAxis(self, parentAxisTag, parametricAxes, parentDefaultTag):
+
+        parentAxisName = self.getAxisName(parentAxisTag)
+        parentDefaultName = self.getAxisName(parentDefaultTag)
+
+        defaultValue = parametricAxes[parentDefaultName]['default']
+        minValues = []
+        maxValues = []
+        for axisTag, axis in parametricAxes.items():
+            axisShift = defaultValue - axis['default']
+            minValue  = axis['minimum'] + axisShift
+            maxValue  = axis['maximum'] + axisShift
+            minValues.append(minValue)
+            maxValues.append(maxValue)
+
+        parentAxis = {
+            'name'    : parentAxisName,
+            'default' : defaultValue,
+            'minimum' : min(minValues),
+            'maximum' : max(maxValues),
+        }
+
+        mappingValues = set(minValues + maxValues)
+        mappings = {}
+        for mappingValue in sorted(mappingValues):
+            mappings[mappingValue] = {}
+            for axisTag, axis in parametricAxes.items():
+                axisName = self.getAxisName(axisTag)
+                axisShift = defaultValue - axis['default']
+                value = mappingValue - axisShift
+                mappings[mappingValue][axisName] = value
+
+        return parentAxis, mappings
+
+    def sparsifySources(self, parametric=True, tuning=True, reference=True):
+        pass
+
     # designspace
 
     def getParametricAxesFromSourceNames(self, customAxes={}):
@@ -819,11 +861,11 @@ class xProject:
                 print(f'ERROR: {tag}: {values}')
                 continue
 
-            # get axis name
-            name = self.parametricAxesNames[tag] if tag in self.parametricAxesNames else tag
+            # optinal: get long axis name from measurements file
+            axisName = self.getAxisName(tag)
 
             parametricAxesAsDict[tag] = {
-                'name'    : name,
+                'name'    : axisName,
                 'minimum' : minValue,
                 'maximum' : maxValue,
                 'default' : defaultValue,
@@ -831,6 +873,15 @@ class xProject:
             }
 
         return parametricAxesAsDict
+
+    def getAxisName(self, tag):
+        name = tag
+        if self.useLongAxisNames:
+            if tag in self.measurements['font']:
+                name = self.measurements['font'][tag]['description']
+            elif tag in self.parametricAxesNames:
+                name = self.parametricAxesNames[tag]
+        return name
 
     def addParametricAxes(self, customAxes={}):
         '''Add parametric axes to the designspace.'''
@@ -842,7 +893,7 @@ class xProject:
 
         for tag, attrs in parametricAxes.items():
             axis = AxisDescriptor()
-            axis.tag = tag
+            axis.tag  = tag
             for attr, value in attrs.items():
                 setattr(axis, attr, value)
             self.designspace.addAxis(axis)
@@ -855,17 +906,14 @@ class xProject:
         for tag in self.parametricAxes:
             for ufoPath in self.sourcesPaths:
                 if tag in ufoPath:
-                    # get axis name
-                    name = self.parametricAxesNames[tag] if tag in self.parametricAxesNames else tag
-                    # if self.verbose:
-                    #     print(f'\t\tadding {ufoPath}...', end='')
+                    axisName = self.getAxisName(tag)
                     src = SourceDescriptor()
                     src.path = ufoPath
                     src.familyName = self.familyName if not familyName else familyName
                     L = self.defaultLocation.copy()
                     value = int(os.path.splitext(os.path.split(ufoPath)[-1])[0].split('_')[-1][4:])
                     src.styleName = src.name = f'{tag}{value}'
-                    L[name] = value
+                    L[axisName] = value
                     src.location = L
                     self.designspace.addSource(src)
 
@@ -901,18 +949,14 @@ class xProject:
 
         for styleName, axis in self.tuningAxes.items():
             tuningSourcePath = self.tuningSources[styleName]
+            axisName = axis.tag if not self.useLongAxisNames else styleName
             # print(f'\t\tadding tuning source: {styleName} {axis.tag}...')
             src = SourceDescriptor()
             src.path = tuningSourcePath
             src.familyName = self.familyName if not familyName else familyName
             src.styleName = src.name = styleName
             L = self.defaultLocation.copy()
-
-            # for styleNamePart in styleName.split('_'):
-            #     tag, value = styleNamePart[:4], styleNamePart[4:]
-            #     L[tag] = value
-
-            L[axis.tag] = axis.maximum
+            L[axisName] = axis.maximum
             src.location = L
             self.designspace.addSource(src)
 
@@ -923,7 +967,7 @@ class xProject:
 
         for tag in self.blendedAxes.keys():
             a = AxisDescriptor()
-            a.name    = self.blendedAxes[tag]['name']
+            a.name    = self.blendedAxes[tag]['name'] if self.useLongAxisNames else tag
             a.tag     = tag
             a.minimum = self.blendedAxes[tag]['minimum']
             a.maximum = self.blendedAxes[tag]['maximum']
@@ -946,33 +990,31 @@ class xProject:
             inputLocation = {}
             for param in styleName.split('_'):
                 tag = param[:4]
-                # get axis name
-                # name = self.parametricAxesNames[tag] if tag in self.parametricAxesNames else tag
-
                 value = int(param[4:])
-                axisName  = blendedAxes[tag]['name']
+                # get axis name
+                axisName  = blendedAxes[tag]['name'] if self.useLongAxisNames else tag
                 inputLocation[axisName] = value
 
             # get output value from blends.json file
             outputLocation = {}
-            for axisName in blendedSources[styleName]:
-                outputLocation[axisName] = int(blendedSources[styleName][axisName])
+            for tag, axisValue in blendedSources[styleName].items():
+                axisName = self.getAxisName(tag)
+                outputLocation[axisName] = int(axisValue)
 
             # set value for corner tuning axes
             if self.tuning:
                 for tuningStyleName, tuningAxis in self.tuningAxes.items():
-                    tag = tuningAxis.tag
+                    # tag = tuningAxis.tag
                     # get axis name
                     # name = self.parametricAxesNames[tag] if tag in self.parametricAxesNames else tag
-
                     if styleName == tuningStyleName:
-                        outputLocation[tag] = tuningAxis.maximum
+                        outputLocation[tuningAxis.name] = tuningAxis.maximum
                     else:
-                        outputLocation[tag] = tuningAxis.default
+                        outputLocation[tuningAxis.name] = tuningAxis.default
 
             m.inputLocation  = inputLocation
             m.outputLocation = outputLocation
-            m.description    = styleName
+            # m.description    = styleName
 
             self.designspace.addAxisMapping(m)
 
@@ -990,8 +1032,9 @@ class xProject:
                 continue
 
             L = self.defaultLocation.copy()
-            for axis, value in self.blendedSources[styleName].items():
-                L[axis] = value
+            for axisTag, value in self.blendedSources[styleName].items():
+                axisName = self.getAxisName(axisTag)
+                L[axisName] = value
 
             I = InstanceDescriptor()
             I.familyName = familyName_
