@@ -1,10 +1,14 @@
 from importlib import reload
 import xTools4.modules.measurements
 reload(xTools4.modules.measurements)
-import xTools4.modules.blendsPreview
-reload(xTools4.modules.blendsPreview)
 import xTools4.modules.xprojectLib
 reload(xTools4.modules.xprojectLib)
+import xTools4.modules.blendsPreview
+reload(xTools4.modules.blendsPreview)
+import xTools4.modules.glyphMemeProofer
+reload(xTools4.modules.glyphMemeProofer)
+import xTools4.modules.tuningPreview
+reload(xTools4.modules.tuningPreview)
 
 import os, glob, json, shutil, time, datetime
 import subprocess
@@ -725,6 +729,8 @@ class xProject:
 
             matchingPoints = getMatchingPoints(glyphDefault, glyphReference)
 
+            totalDelta = 0
+
             if self.verbose:
                 print(f'calculating tuning sources for /{glyphName}...\n')
 
@@ -734,7 +740,7 @@ class xProject:
                     continue
 
                 if self.verbose:
-                    print(f'\ttuning {styleName}...')
+                    print(f'\ttuning {styleName}... ', end='')
 
                 # get blended glyph (parametric)
                 blendedLocation = { part[:4]: int(part[4:]) for part in styleNameParts }
@@ -747,12 +753,19 @@ class xProject:
                 # make tuning glyph
                 tuningGlyph = makeTuningGlyph(blendedGlyph, blendedReference, glyphDefault, matchingPoints)
 
+                deltaValue = calculateDeltaValue(glyphDefault, tuningGlyph)
+                if self.verbose:
+                    print(f'{deltaValue:.2f}')
+
+                totalDelta += deltaValue
+
                 # save glyph to tuning source
                 tuningSource = OpenFont(ufoPath, showInterface=False)
                 tuningSource.insertGlyph(tuningGlyph, name=glyphName)
                 tuningSource.save()
 
             if self.verbose:
+                print(f'\taverage glyph delta: {totalDelta / len(self.tuningSources):.2f} units per point')
                 print()
 
         if self.verbose:
@@ -1192,8 +1205,9 @@ class xProject:
             print(f'{n+1}. `{axis}` {measurements.get(axis)}')
 
         print('\n### Tuning axes\n')
-        for styleName, tuningAxis in self.tuningAxes.items():
-            print(f"- `{tuningAxis.tag}` {styleName.replace('_', ' ')}")
+        for n, styleName in enumerate(self.tuningAxes.keys()):
+            tuningAxis = self.tuningAxes[styleName]
+            print(f"{n+1}. `{tuningAxis.tag}` {styleName.replace('_', ' ')}")
 
         print()
 
@@ -1297,18 +1311,24 @@ class xProject:
 
     # proofing
 
-    def proofGlyphMemes(self, glyphNames, anchors=True):
+    def proofGlyphMemes(self, glyphNames, anchors=True, proofsFolder=None):
         '''Build glyph meme PDF proofs.'''
+
+        if proofsFolder:
+            glyphMemesFolder = proofsFolder
+        else:
+            glyphMemesFolder = os.path.join(self.proofsFolder, 'PDF', 'glyph-memes')
+
         for glyphName in glyphNames:
             P = GlyphMemeProofer(glyphName, self.designspacePath)
             P.anchorsDraw = anchors
             P.draw()
 
             pdfFileName = os.path.splitext(os.path.split(self.designspacePath)[-1])[0]
-            glyphMemesFolder = os.path.join(self.proofsFolder, 'PDF', 'glyph-memes')
+
             P.save(glyphMemesFolder, pdfFileName)
 
-    def proofSourcesGlyphSet(self, familyName=None, showCompatible=True, validateComposites=True):
+    def proofSourcesGlyphSet(self, familyName=None, showCompatible=False, validateComposites=True):
         '''Build glyph set PDF proofs.'''
         if not familyName:
             familyName = self.familyName
@@ -1321,7 +1341,7 @@ class xProject:
         P.validateComposites = validateComposites
         P.build(savePDF=True, folder=glyphsetProofsFolder)
 
-    def proofBlends(self, glyphNames, familyName=None, margins=True, labels=True, levels=False, levelsShow=[1, 2, 3, 4], header=True, footer=True, points=False):
+    def proofBlends(self, glyphNames, margins=True, labels=True, levels=False, levelsShow=[1, 2, 3, 4], header=True, footer=True, points=False, proofsFolder=None): # familyName=None
         '''Build PDF proof of blends.'''
 
         B = BlendsPreview(self.designspacePath)
@@ -1351,21 +1371,35 @@ class xProject:
         B.footer     = footer
         B.points     = points
 
+        if proofsFolder:
+            blendsFolder = proofsFolder
+        else:
+            blendsFolder = os.path.join(self.proofsFolder, 'PDF', 'blending')
+
         for glyphName in glyphNames:
             if not glyphName:
                 continue
             B.draw(glyphName)
 
-        if not familyName:
-            familyName = self.familyName
+            pdfFileName = os.path.splitext(os.path.split(self.designspacePath)[-1])[0]
 
-        pdfPath = os.path.join(self.proofsFolder, 'PDF', 'blending', f'blending-preview_{familyName}.pdf')
-        print(f'saving {pdfPath}...', end=' ')
-        B.save(pdfPath)
-        print(f'done!\n')
+            B.save(blendsFolder, pdfFileName)
 
-    def proofTuning(self, glyphNames, referenceSource, level=1):
+        # if not familyName:
+        #     familyName = self.familyName
+
+        # pdfPath = os.path.join(self.proofsFolder, 'PDF', 'blending', f'blending-preview_{familyName}.pdf')
+        # print(f'saving {pdfPath}...', end=' ')
+        # B.save(pdfPath)
+        # print(f'done!\n')
+
+    def proofTuning(self, glyphNames, referenceSource, levels=[1], proofsFolder=None):
         '''Build PDF proofs of tuning sources.'''
+
+        if proofsFolder:
+            tuningProofsFolder = proofsFolder
+        else:
+            tuningProofsFolder = os.path.join(self.proofsFolder, 'PDF', 'tuning')
 
         T = TuningPreview(self, referenceSource)
 
@@ -1375,22 +1409,8 @@ class xProject:
             if defaultGlyph.components:
                 continue
 
-            T.draw(glyphName, level=level)
+            T.draw(glyphName, levels=levels, calibration=False)
 
             pdfFileName = os.path.splitext(os.path.split(self.designspacePath)[-1])[0]
-            tuningProofsFolder = os.path.join(self.proofsFolder, 'PDF', 'tuning')
             T.save(tuningProofsFolder, pdfFileName)
-
-
-
-
-
-
-
-
-
-
-
-
-
 

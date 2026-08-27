@@ -9,7 +9,7 @@ glyphConstructionsPathKey = 'com.xTools4.xProject.glyphConstructionsPath'
 referenceFontPathKey      = 'com.xTools4.xProject.referenceFontPath'
 
 
-def makeParentAxis(parentName, parametricAxes, defaultName, matchRangeAxes):
+def makeParentAxis(parentName, parametricAxes, defaultName, matchRangeAxes={}):
     r'''
     Calculate a parent axis to control several parametric axes,
     with mappings to limit the range of each child axis.

@@ -277,7 +277,7 @@ class GlyphMemeController(ezui.WindowController):
             # store the import mode in the font lib
             tmpFont.lib[tempEditModeKey] = 'glyphs'
 
-            # store default fontmeasurements in the font lib
+            # store default font measurements in the font lib
             tmpFont.lib[defaultMeasurementsKey] = {
                 'font'  : FM.values,
                 'glyph' : GM.values,

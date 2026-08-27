@@ -495,7 +495,7 @@ class GlyphMemeProofer:
         if os.path.exists(pdfPath):
             os.remove(pdfPath)
 
-        print(f'saving {pdfFileName}...', end=' ')
+        print(f'saving glyph memes proof {pdfFileName}...', end=' ')
 
         DB.saveImage(pdfPath)
 

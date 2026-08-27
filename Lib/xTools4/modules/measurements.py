@@ -2,7 +2,7 @@ from importlib import reload
 import xTools4.modules.linkPoints2
 reload(xTools4.modules.linkPoints2)
 
-import os, glob, shutil
+import os, glob, shutil, math
 from collections import Counter
 from fontTools.agl import UV2AGL
 from fontParts.world import RFont, OpenFont
@@ -543,6 +543,26 @@ def transferGlyphMeasurements(glyphMeasurements, srcGlyph, dstGlyph):
         _glyphMeasurements[f'{pointIndexes[0]} {pointIndexes[1]}'] = m
 
     return _glyphMeasurements
+
+def calculateDeltaValue(glyph1, glyph2):
+
+    # points
+    deltaPoints = 0
+    pointCount = 0
+    for ci, c in enumerate(glyph1.contours):
+        for pi, p in enumerate(c.points):
+            p1 = glyph1.contours[ci].points[pi]
+            p2 = glyph2.contours[ci].points[pi]
+            deltaX = p2.x - p1.x
+            deltaY = p2.y - p1.y
+            deltaPoints += math.hypot(deltaX, deltaY)
+            pointCount += 1
+
+    # components?
+    # width?
+    # anchors?
+
+    return deltaPoints / pointCount
 
 def makeTuningGlyph(glyph1, glyph2, defaultGlyph, matchingPoints):
 

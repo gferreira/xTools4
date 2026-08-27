@@ -7,6 +7,7 @@ import uharfbuzz as hb
 from defcon.objects.glyph import Glyph
 from defcon.objects.font import Font
 from fontTools.ttLib import TTFont
+from fontTools.ufoLib.glifLib import glyphNameToFileName
 from fontTools.varLib.avar.build import build as avar2_build
 from fontTools.varLib.avar.map import map as avar2_map
 from mutatorMath.objects.location import Location
@@ -156,8 +157,9 @@ class BlendsPreview:
 
     @property
     def blendedAxes(self):
-        allAxes = [axis.name for axis in self.operator.doc.axes]
-        return list(set(allAxes).difference(set(self.parametricAxes)))
+        # allAxes = [axis.name for axis in self.operator.doc.axes]
+        # return list(set(allAxes).difference(set(self.parametricAxes)))
+        return ['Optical size', 'Weight', 'Width']
 
     def getColors(self, level=1):
         colors = {
@@ -226,6 +228,8 @@ class BlendsPreview:
 
     def draw(self, glyphName):
 
+        self.glyphName = glyphName
+
         defaultGlyph = self.defaultFont[glyphName]
 
         cellWidth  = self.cellSize * self.glyphScale * 1.5
@@ -247,6 +251,7 @@ class BlendsPreview:
             h += self.footerHeight
             y += self.footerHeight
 
+        DB.newDrawing()
         DB.newPage(w, h)
         DB.blendMode('multiply')
 
@@ -452,8 +457,22 @@ class BlendsPreview:
 
             DB.translate(0, cellHeight * len(axis2Values))
 
-    def save(self, pdfPath):
-        folder = os.path.dirname(pdfPath)
+    def save(self, folder, fileName):
+
+        glifName = os.path.splitext(glyphNameToFileName(self.glyphName, None))[0]
+        pdfFileName = f'{fileName}_{glifName}.pdf'
+
         if not os.path.exists(folder):
             os.makedirs(folder)
+
+        pdfPath = os.path.join(folder, pdfFileName)
+        if os.path.exists(pdfPath):
+            os.remove(pdfPath)
+
+        print(f'saving blends proof {pdfFileName}...', end=' ')
+
         DB.saveImage(pdfPath)
+
+        print(os.path.exists(pdfPath))
+
+
