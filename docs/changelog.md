@@ -9,6 +9,18 @@ All notable changes to xTools4 are documented in this file.
 {: .lead }
 
 
+0.3.1
+-----
+
+- <span class='badge rounded-0'>Changed</span> Various updates to the xProject API: component tuning, long axis names, .
+- <span class='badge rounded-0'>Changed</span> Adding update composites function to GlyphMeme tool.
+- <span class='badge rounded-0'>Changed</span> Disabling automatic sorting of glyph-level measurements in the Measurements tool.
+- <span class='badge rounded-0'>Changed</span> Adding a top-level case dropdown list to GlyphMemeProofer tool.
+- <span class='badge rounded-0'>Changed</span> Splitting blend preview PDF proofs per glyph.
+- <span class='badge rounded-0'>Changed</span> Hide calibration page in tuning proofs, introduce measurement of total tuning per glyph.
+{: ._changelog .mb-4 }
+
+
 0.3.0
 -----
 

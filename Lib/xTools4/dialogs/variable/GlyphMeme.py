@@ -1,14 +1,16 @@
 import os, glob
+from fontTools.designspaceLib import DesignSpaceDocument
+from fontTools.ufoLib.glifLib import GlyphSet
 import ezui
 from mojo.UI import GetFile
 from mojo.roboFont import OpenWindow, NewFont, OpenFont, CurrentFont
 from mojo.smartSet import readSmartSets
-from fontTools.designspaceLib import DesignSpaceDocument
-from fontTools.ufoLib.glifLib import GlyphSet
+from glyphConstruction import ParseGlyphConstructionListFromString, GlyphConstructionBuilder
 from xTools4.modules.linkPoints2 import readMeasurements
 from xTools4.modules.fontutils import getGlyphs2
 from xTools4.modules.measurements import FontMeasurements, GlyphMeasurements
-from xTools4.modules.xprojectLib import measurementsPathKey, smartSetsPathKey
+from xTools4.modules.xprojectLib import measurementsPathKey, smartSetsPathKey, glyphConstructionsPathKey
+from xTools4.modules.accents import buildGlyphConstruction
 from xTools4.dialogs.variable.old.TempEdit import setupNewFont, splitall
 
 
@@ -43,8 +45,9 @@ class GlyphMemeController(ezui.WindowController):
 
     | | @glyphMeme
 
-    ( open )  @openButton
-    ( save )  @saveButton
+    ( open )    @openButton
+    ( save )    @saveButton
+    ( update )  @updateButton
 
     ---
 
@@ -72,6 +75,9 @@ class GlyphMemeController(ezui.WindowController):
         saveButton=dict(
             width='fill',
         ),
+        updateButton=dict(
+            width='fill',
+        ),
         getDesignspaceButton=dict(
             width='fill',
         ),
@@ -87,8 +93,8 @@ class GlyphMemeController(ezui.WindowController):
             descriptionData=self.descriptionData,
             controller=self,
             margins=self.margins,
-            size=(123, 400),
-            minSize=(123, 300),
+            size=(123, 360),
+            minSize=(123, 280),
             maxSize=(123, 960),
         )
         self.w.workspaceWindowIdentifier = KEY
@@ -117,6 +123,22 @@ class GlyphMemeController(ezui.WindowController):
         relativePath = self.designspace.lib.get(smartSetsPathKey)
         if relativePath:
             return os.path.normpath(os.path.join(self.sourcesFolder, relativePath))
+
+    @property
+    def glyphConstructionsPath(self):
+        relativePath = self.designspace.lib.get(glyphConstructionsPathKey)
+        if relativePath:
+            return os.path.normpath(os.path.join(self.sourcesFolder, relativePath))
+
+    @property
+    def constructions(self):
+        with open(self.glyphConstructionsPath, 'r', encoding='utf-8') as f:
+            self.constructionsTxt = f.read()
+        if not self.constructionsTxt:
+            return
+        constructionsRaw  = ParseGlyphConstructionListFromString(self.constructionsTxt)
+        constructionsDict = { c.split('=')[0].strip() : c for c in constructionsRaw }
+        return constructionsDict
 
     def _loadDesignspace(self):
 
@@ -324,6 +346,63 @@ class GlyphMemeController(ezui.WindowController):
             glyphSet.writeContents()
 
         print('\n...done!\n')
+
+    def updateButtonCallback(self, sender):
+        # for selected glyphs:
+        # - find all of its composites in its font
+        # - rebuild all its composites from their constructions
+        # - save font source 
+
+        f = CurrentFont()
+
+        if f is None:
+            return
+
+        glyphNames = getGlyphs2(f, glyphNames=True)
+        glyphMeasurements = self.w.getItem("glyphMeme").get()
+        parametricSources = glob.glob(f'{self.sourcesFolder}/*.ufo')
+
+        print('updating composites of selected glyphs...\n')
+
+        for tempGlyphName in glyphNames:
+            
+            glyphName = tempGlyphName[:tempGlyphName.rfind('.')]
+            srcName   = tempGlyphName[tempGlyphName.rfind('.')+1:]
+
+            srcPath = None
+            for src in self.designspace.sources:
+                if srcName == src.styleName:
+                    srcPath = src.path
+
+            assert srcPath
+
+            print(f'\t updating composites in {srcName}...')
+
+            srcFont = OpenFont(srcPath, showInterface=False)
+            glyph = srcFont[glyphName].getLayer('foreground')
+
+            compositeGlyphs = []
+            for g in srcFont:
+                componentNames = [c.baseGlyph for c in g.components]
+                if glyphName in componentNames:
+                    if g.name not in compositeGlyphs:
+                        compositeGlyphs.append(g.name)
+
+            for compGlyphName in compositeGlyphs:
+                construction = self.constructions.get(compGlyphName)
+                if construction is None:
+                    print(f'\t\tskipping {compGlyphName} (no construction)...')
+                else:
+                    # print(f'\trebuilding {srcGlyphName} in {ufoName}...')
+                    buildGlyphConstruction(srcFont, construction, clear=True, verbose=True, autoUnicodes=False, indentLevel=2)
+
+            print(f'\t\tsaving UFO...')
+            srcFont.close(save=True)
+
+            print()
+
+        print('...done!\n')
+
 
     def reloadButtonCallback(self, sender):
         self._loadDesignspace()
