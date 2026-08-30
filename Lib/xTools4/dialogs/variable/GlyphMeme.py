@@ -348,10 +348,6 @@ class GlyphMemeController(ezui.WindowController):
         print('\n...done!\n')
 
     def updateButtonCallback(self, sender):
-        # for selected glyphs:
-        # - find all of its composites in its font
-        # - rebuild all its composites from their constructions
-        # - save font source 
 
         f = CurrentFont()
 
@@ -365,7 +361,6 @@ class GlyphMemeController(ezui.WindowController):
         print('updating composites of selected glyphs...\n')
 
         for tempGlyphName in glyphNames:
-            
             glyphName = tempGlyphName[:tempGlyphName.rfind('.')]
             srcName   = tempGlyphName[tempGlyphName.rfind('.')+1:]
 
@@ -373,7 +368,6 @@ class GlyphMemeController(ezui.WindowController):
             for src in self.designspace.sources:
                 if srcName == src.styleName:
                     srcPath = src.path
-
             assert srcPath
 
             print(f'\t updating composites in {srcName}...')
@@ -393,12 +387,10 @@ class GlyphMemeController(ezui.WindowController):
                 if construction is None:
                     print(f'\t\tskipping {compGlyphName} (no construction)...')
                 else:
-                    # print(f'\trebuilding {srcGlyphName} in {ufoName}...')
                     buildGlyphConstruction(srcFont, construction, clear=True, verbose=True, autoUnicodes=False, indentLevel=2)
 
-            print(f'\t\tsaving UFO...')
+            # print(f'\t\tsaving UFO...')
             srcFont.close(save=True)
-
             print()
 
         print('...done!\n')

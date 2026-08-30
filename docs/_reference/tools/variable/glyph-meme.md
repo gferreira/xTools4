@@ -39,32 +39,18 @@ reload
 </div>
 </div>
 
-<!-- move steps to a tutorial:
-
-Step-by-step
-------------
-
-1. Open the GlyphMeme tool from the menu *xTools4 > variable > glyph meme*.
-2. Use the buttons at the bottom to load the necessary data files (designspace, measurements, smart sets).
-3. Use the first drop-down menu to select a group of glyphs, and the second one to choose one glyph for editing.
-4. Select which parameters of this glyph you would like to edit.
-5. Click the “open” button to import glyphs from the corresponding sources into a temporary font.
-6. Multiple glyphs can be opened this way, with one temporary font for each.
-7. Edit glyphs as needed, and then use the “save” button to export the selected glyphs back to their UFOs.
-
--->
-
 
 Example
 -------
 
 <img class='img-fluid' src='{{ site.url }}/images/variable/GlyphMeme_font.png' />
 
-
 <div class="card bg-light my-3 rounded-0">
 <div class="card-header">note</div>
 <div class="card-body" markdown='1'>
 Temporary fonts created with GlyphMeme are compatible with [GlyphValidator], [Measurements] and [Import Layer] tools.
+
+Interoperability is achieved by adding [custom data] to the glyphs imported into a temporary font.
 {: .card-text }
 </div>
 </div>
@@ -72,3 +58,4 @@ Temporary fonts created with GlyphMeme are compatible with [GlyphValidator], [Me
 [GlyphValidator]: ../glyph-validator
 [Measurements]: ../measurements
 [Import Layer]: ../../glyphs/layers/import/
+[custom data]: ../../temp-font-libs
