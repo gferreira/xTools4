@@ -1,24 +1,23 @@
 import os, time
 import AppKit
 import drawBot as DB
-from drawBot.ui.drawView import DrawView
 from vanilla import *
-from mojo.UI import GetFile, GetFolder
-from mojo.roboFont import OpenWindow
-from mojo.smartSet import readSmartSets
 from fontTools.designspaceLib import DesignSpaceDocument
-from fontParts.world import OpenFont
+from drawBot.ui.drawView import DrawView
+from mojo.UI import GetFile, GetFolder
+from mojo.roboFont import OpenWindow, OpenFont
+from mojo.smartSet import readSmartSets
 from xTools4.modules.measurements import readMeasurements
-from xTools4.modules.xprojectLib import measurementsPathKey, smartSetsPathKey
-from xTools4.modules.glyphMemeProofer import GlyphMemeProofer
+from xTools4.modules.tuningPreview import TuningPreview
+from xTools4.modules.xprojectLib import smartSetsPathKey, measurementsPathKey
 
 
-KEY = 'com.xTools4.dialogs.variable.glyphMemeProofer'
+KEY = 'com.xTools4.dialogs.variable.glyphTuningProofer'
 
 
-class GlyphMemeProoferController:
+class GlyphTuningProoferController:
 
-    title      = 'GlyphMemeProofer'
+    title      = 'GlyphTuningProofer'
     width      = 800
     height     = 600
     padding    = 10
@@ -45,7 +44,6 @@ class GlyphMemeProoferController:
                 (x, y, -p, self.lineHeight),
                 'designspace…',
                 callback=self.getDesignspaceCallback,
-                # sizeStyle='small'
             )
 
         y += self.lineHeight + p
@@ -53,7 +51,6 @@ class GlyphMemeProoferController:
                 (x, y, -p, self.lineHeight),
                 'reload ↺',
                 callback=self.reloadCallback,
-                # sizeStyle='small'
             )
 
         y += self.lineHeight + p
@@ -62,35 +59,45 @@ class GlyphMemeProoferController:
         y += p + 1
         group1.caseSelector = PopUpButton((x, y, -p, self.lineHeight),
                 [],
-                callback=self.caseSelectorCallback
+                callback=self.caseSelectorCallback,
             )
 
         y += self.lineHeight + p
         group1.groupSelector = PopUpButton((x, y, -p, self.lineHeight),
                 [],
-                callback=self.groupSelectorCallback
+                callback=self.groupSelectorCallback,
             )
 
         y += self.lineHeight + p
         group1.glyphSelector = PopUpButton((x, y, -p, self.lineHeight),
                 [],
-                callback=self.glyphSelectorCallback
+                # callback=self.glyphSelectorCallback,
             )
 
         y += self.lineHeight + p
-        group1.glyphMeme = List(
-                (x, y, -p, -self.lineHeight*2 - p*3),
-                [],
-                allowsMultipleSelection=True,
-                allowsEmptySelection=False,
-                enableDelete=False,
+        group1.duovars = CheckBox(
+                (x, y, -p, self.lineHeight),
+                'duovars',
+                value=True)
+
+        y += self.lineHeight
+        group1.trivars = CheckBox(
+                (x, y, -p, self.lineHeight),
+                'trivars',
+                value=False,
+            )
+
+        y += self.lineHeight
+        group1.quadvars = CheckBox(
+                (x, y, -p, self.lineHeight),
+                'quadvars',
+                value=False,
             )
 
         y = -self.lineHeight*2 - p*2
         group1.makeProof = Button(
                 (x, y, -p, self.lineHeight),
                 'make proof',
-                # sizeStyle='small',
                 callback=self.makeProofCallback
             )
 
@@ -98,7 +105,6 @@ class GlyphMemeProoferController:
         group1.savePDF = Button(
                 (x, y, -p, self.lineHeight),
                 'save PDF…',
-                # sizeStyle='small',
                 callback=self.savePDFCallback
             )
 
@@ -155,23 +161,27 @@ class GlyphMemeProoferController:
     def caseSelectorCallback(self, sender):
         group = self._groups[0]['view']
         selectedCase = group.caseSelector.getItem()
-        group.groupSelector.setItems(self.glyphGroups[selectedCase])
+        if selectedCase is None:
+            return
+        if not self.smartSets:
+            return
+        group.groupSelector.setItems(self.smartSets[selectedCase])
         self.groupSelectorCallback(None)
 
     def groupSelectorCallback(self, sender):
         group = self._groups[0]['view']
         selectedCase = group.caseSelector.getItem()
         selectedGroup = group.groupSelector.getItem()
-        group.glyphSelector.setItems(self.glyphGroups[selectedCase][selectedGroup])
-        self.glyphSelectorCallback(None)
+        if selectedCase is None or selectedGroup is None:
+            return
+        if not self.smartSets:
+            return
+        group.glyphSelector.setItems(self.smartSets[selectedCase][selectedGroup])
+        # self.glyphSelectorCallback(None)
 
-    def glyphSelectorCallback(self, sender):
-        group = self._groups[0]['view']
-        glyphName = group.glyphSelector.getItem()
-        measurementsDict = self.measurements.get(glyphName, {})
-        measurements = sorted(list(set([m['name'] for m in measurementsDict.values()])))
-        group.glyphMeme.set(measurements)
-        group.glyphMeme.setSelection(range(len(measurements)))
+    # def glyphSelectorCallback(self, sender):
+    #     group = self._groups[0]['view']
+    #     self.glyphName = group.glyphSelector.getItem()
 
     def reloadCallback(self, sender):
         self._loadDesignspace()
@@ -183,9 +193,10 @@ class GlyphMemeProoferController:
 
         DB.newDrawing()
 
-        self.proofer = GlyphMemeProofer(glyphName, self.designspacePath)
-        # self.proofer.anchorsDraw = False
-        self.proofer.draw()
+        referenceSource = self.designspace.default.path
+
+        self.proofer = TuningPreview(self, referenceSource)
+        self.proofer.draw(glyphName, level=1)
 
         pdfData = DB.pdfImage()
 
@@ -194,13 +205,15 @@ class GlyphMemeProoferController:
 
     def savePDFCallback(self, sender):
 
-        proofsFolder = GetFolder(message="Choose a folder to save this PDF")
-        if not proofsFolder:
-            return
+        print('saving...\n')
 
-        familyName = os.path.splitext(os.path.split(self.designspace.path)[-1])[0]
+        # proofsFolder = GetFolder(message="Choose a folder to save this PDF")
+        # if not proofsFolder:
+        #     return
 
-        self.proofer.save(proofsFolder, familyName)
+        # familyName = os.path.splitext(os.path.split(self.designspace.path)[-1])[0]
+
+        # self.proofer.save(proofsFolder, familyName)
 
     def _loadDesignspace(self):
 
@@ -223,6 +236,7 @@ class GlyphMemeProoferController:
             print(f'loading measurements from {os.path.split(self.measurementsPath)[-1]}... ', end='')
 
         measurements = readMeasurements(self.measurementsPath)
+        print(measurements.keys())
         self.measurements = measurements['glyphs']
 
         if self.verbose:
@@ -233,27 +247,20 @@ class GlyphMemeProoferController:
         if self.verbose:
             print(f'loading glyph groups from {os.path.split(self.smartSetsPath)[-1]}... ', end='')
 
-        smartSets = readSmartSets(self.smartSetsPath, useAsDefault=False, font=None)
+        smartSetsRaw = readSmartSets(self.smartSetsPath, useAsDefault=False, font=None)
 
-        self.glyphGroups = {}
-        for smartGroup in smartSets:
-            if not smartGroup.groups:
-                continue
-            self.glyphGroups[smartGroup.name] = {}
-            for smartSet in smartGroup.groups:
-                # remove component glyphs from glyph lists
-                glyphNames = []
-                for glyphName in smartSet.glyphNames:
-                    if glyphName not in self.defaultFont:
-                        continue
-                    g = self.defaultFont[glyphName]
-                    if not len(g.components):
-                        glyphNames.append(glyphName)
-                if len(glyphNames):
-                    self.glyphGroups[smartGroup.name][smartSet.name] = glyphNames
+        self.smartSets = {}
+        for smartGroup in smartSetsRaw:
+            self.smartSets[smartGroup.name] = {}
+            if smartGroup.groups:
+                for smartSet in smartGroup.groups:
+                    self.smartSets[smartGroup.name][smartSet.name] = smartSet.glyphNames
+            else:
+                self.smartSets[smartGroup.name] = smartGroup.glyphNames
 
         group = self._groups[0]['view']
-        group.caseSelector.setItems(self.glyphGroups.keys())
+
+        group.caseSelector.setItems(self.smartSets.keys())
         self.caseSelectorCallback(None)
 
         if self.verbose:
@@ -262,4 +269,4 @@ class GlyphMemeProoferController:
 
 if __name__ == '__main__':
 
-    OpenWindow(GlyphMemeProoferController)
+    OpenWindow(GlyphTuningProoferController)

@@ -2,7 +2,7 @@ from importlib import reload
 import xTools4.modules.linkPoints2
 reload(xTools4.modules.linkPoints2)
 
-import os, glob, shutil
+import os, glob, shutil, math
 from collections import Counter
 from fontTools.agl import UV2AGL
 from fontParts.world import RFont, OpenFont
@@ -230,12 +230,12 @@ class Measurement:
 
 def extractMeasurements(ufos, measurementsPath, parametricAxes):
     sources = {}
-    print('extracting measurements from UFOs...')
+    print('extracting measurements from UFO sources...')
     for ufoPath in sorted(ufos):
         fontName = os.path.splitext(os.path.split(ufoPath)[-1])[0]
         styleName = '_'.join(fontName.split('_')[1:])
         f = OpenFont(ufoPath, showInterface=False)
-        print(f'\tmeasuring {fontName}…')
+        print(f'\tmeasuring {fontName}...')
         M = FontMeasurements()
         M.read(measurementsPath)
         M.measure(f)
@@ -544,22 +544,49 @@ def transferGlyphMeasurements(glyphMeasurements, srcGlyph, dstGlyph):
 
     return _glyphMeasurements
 
+def calculateDeltaValue(glyph1, glyph2):
 
+    # points
+    deltaPoints = 0
+    pointCount = 0
+    for ci, c in enumerate(glyph1.contours):
+        for pi, p in enumerate(c.points):
+            p1 = glyph1.contours[ci].points[pi]
+            p2 = glyph2.contours[ci].points[pi]
+            deltaX = p2.x - p1.x
+            deltaY = p2.y - p1.y
+            deltaPoints += math.hypot(deltaX, deltaY)
+            pointCount += 1
+
+    # components?
+    # width?
+    # anchors?
+
+    return deltaPoints / pointCount
 
 def makeTuningGlyph(glyph1, glyph2, defaultGlyph, matchingPoints):
 
     tuningGlyph = defaultGlyph.copy()
 
-    for mp1, mp2 in matchingPoints:
-        ci1, pi1 = mp1
-        ci2, pi2 = mp2
-        p1 = glyph1.contours[ci1].points[pi1]
-        p2 = glyph2.contours[ci2].points[pi2]
-        deltaX = p2.x - p1.x
-        deltaY = p2.y - p1.y
-        pt = tuningGlyph.contours[ci1].points[pi1]
-        pt.x += deltaX
-        pt.y += deltaY
+    if tuningGlyph.components:
+        for i, c in enumerate(tuningGlyph.components):
+            c1 = glyph1.components[i]
+            c2 = glyph2.components[i]
+            deltaX = c2.offset[0] - c1.offset[0]
+            deltaY = c2.offset[1] - c1.offset[1]
+            c.offset = c.offset[0] + deltaX, c.offset[1] + deltaY
+
+    else:
+        for mp1, mp2 in matchingPoints:
+            ci1, pi1 = mp1
+            ci2, pi2 = mp2
+            p1 = glyph1.contours[ci1].points[pi1]
+            p2 = glyph2.contours[ci2].points[pi2]
+            deltaX = p2.x - p1.x
+            deltaY = p2.y - p1.y
+            pt = tuningGlyph.contours[ci1].points[pi1]
+            pt.x += deltaX
+            pt.y += deltaY
 
     tuningGlyph.width += (glyph2.width - glyph1.width)
 
@@ -575,3 +602,4 @@ def getMatchingPoints(glyph1, glyph2):
                     if p1.x == p2.x and p1.y == p2.y:
                         matchingPoints.append(((ci1, pi1), (ci2, pi2)))
     return matchingPoints
+

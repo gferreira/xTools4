@@ -342,6 +342,31 @@ def assignValidationGroup(g1, g2):
 
     return validationGroup
 
+# sparsification
+
+def sparsifySource(font, referenceFont):
+    # collect required base glyphs
+
+    for glyphName in font.glyphOrder:
+        if glyphName not in referenceFont:
+            continue
+        glyph = font[glyphName]
+        referenceGlyph = referenceFont[glyphName]
+        validationGroup = assignValidationGroup(glyph, referenceGlyph)
+
+        if validationGroup in ['contoursEqual', 'componentsEqual']:
+            # don't delete glyph if it’s used in composite glyphs
+            del font[glyphName]
+
+    font.changed()
+
+def desparsifySource(font, referenceFont):
+    for glyphName in referenceFont.glyphOrder:
+        if glyphName in font:
+            continue
+        font[glyphName] = referenceFont[glyphName]
+    font.changed()
+
 # ---------------------
 # font-level validation
 # ---------------------
@@ -564,3 +589,5 @@ def validateDesignspace(designspacePath, locations=True, mappings=True, instance
             print()
 
         print('...done!\n')
+
+

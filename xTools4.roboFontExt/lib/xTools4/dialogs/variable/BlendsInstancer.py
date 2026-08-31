@@ -27,7 +27,7 @@ def getStyleNameFromReferenceSourcePath(referenceSourcePath):
 def blendedGlyphFactory(glyph, font, operator):
 
     if not (glyph and font and operator):
-        return
+        return Glyph()
 
     styleName = getStyleNameFromReferenceSourcePath(font.path)
 
@@ -99,6 +99,8 @@ class BlendsInstancerController(ezui.WindowController):
         self.w.open()
 
     def started(self):
+        registerRepresentationFactory(Glyph, f"{KEY}.preview", blendedGlyphFactory)
+
         BlendsInstancerSubscriberRoboFont.controller = self
         registerRoboFontSubscriber(BlendsInstancerSubscriberRoboFont)
 
@@ -108,13 +110,13 @@ class BlendsInstancerController(ezui.WindowController):
         BlendsInstancerSubscriberGlyphEditor.controller = self
         registerGlyphEditorSubscriber(BlendsInstancerSubscriberGlyphEditor)
 
-        registerRepresentationFactory(Glyph, KEY, blendedGlyphFactory)
-
         self.showPreviewCallback(None)
         self.font = CurrentFont()
         self._updateFontLayers()
 
     def destroy(self):
+        unregisterRepresentationFactory(Glyph, f"{KEY}.preview")
+
         unregisterRoboFontSubscriber(BlendsInstancerSubscriberRoboFont)
         BlendsInstancerSubscriberRoboFont.controller = None
 
@@ -123,8 +125,6 @@ class BlendsInstancerController(ezui.WindowController):
 
         unregisterGlyphEditorSubscriber(BlendsInstancerSubscriberGlyphEditor)
         BlendsInstancerSubscriberGlyphEditor.controller = None
-
-        unregisterRepresentationFactory(Glyph, KEY)
 
     def getDesignspaceButtonCallback(self, sender):
         designspacePath = GetFile(
@@ -179,7 +179,10 @@ class BlendsInstancerController(ezui.WindowController):
             if self.verbose:
                 print(f'\tinstantiating {glyphName}...')
 
-            instanceGlyph = glyph.getRepresentation(KEY, font=self.font, operator=self.operator)
+            instanceGlyph = glyph.getRepresentation(f"{KEY}.preview", font=self.font, operator=self.operator)
+            if instanceGlyph is None:
+                continue
+
             instanceGlyph = RGlyph(instanceGlyph)
 
             targetGlyph = glyph.getLayer(targetLayer)
@@ -286,8 +289,7 @@ class BlendsInstancerSubscriberGlyphEditor(Subscriber):
         if glyph is None:
             return
 
-        instanceGlyph = glyph.getRepresentation(KEY, font=self.controller.font, operator=self.controller.operator)
-        
+        instanceGlyph = glyph.getRepresentation(f"{KEY}.preview", font=self.controller.font, operator=self.controller.operator)
         if not instanceGlyph:
             return
 
@@ -308,6 +310,7 @@ class BlendsInstancerSubscriberGlyphEditor(Subscriber):
             return
 
         instanceGlyph = RGlyph(instanceGlyph)
+
         instanceGlyph.round()
 
         dash = 2, 2

@@ -150,7 +150,7 @@ class TuningPreview:
         self.controller = controller
         self.referenceSource = referenceSource
 
-    def draw(self, glyphName, level=1):
+    def draw(self, glyphName, levels=[1,2,3], calibration=True):
 
         self.glyphName = glyphName
 
@@ -173,30 +173,36 @@ class TuningPreview:
         # transfer glyph measurements to reference font
         glyphMeasurementsReference = transferGlyphMeasurements(self.controller.measurements['glyphs'][glyphName], glyphDefault, glyphReference)
 
-        DB.newDrawing()
-        DB.newPage(self.width, self.height)
-        DB.blendMode('multiply')
-
-        _drawVerticalMetrics((x, y), yMetrics, s)
-        _drawGlyph(glyphDefault, (x, y), s, 'default')
-        _drawMeasurements(glyphDefault, self.controller.measurements['glyphs'][glyphName], (x, y), s)
-
-        x += glyphDefault.width * s + self.margin
-
-        _drawGlyph(glyphReference, (x, y), s, 'reference')
-        _drawMeasurements(glyphReference, glyphMeasurementsReference, (x, y), s)
-
         operator = UFOOperator()
         operator.read(self.controller.designspacePath)
         operator.loadFonts()
 
+        DB.newDrawing()
+
+        if calibration:
+            DB.newPage(self.width, self.height)
+            DB.blendMode('multiply')
+
+            # draw calibration (default / reference)
+            _drawVerticalMetrics((x, y), yMetrics, s)
+            _drawGlyph(glyphDefault, (x, y), s, 'default')
+            _drawMeasurements(glyphDefault, self.controller.measurements['glyphs'][glyphName], (x, y), s)
+
+            x += glyphDefault.width * s + self.margin
+
+            _drawGlyph(glyphReference, (x, y), s, 'reference')
+            _drawMeasurements(glyphReference, glyphMeasurementsReference, (x, y), s)
+
+        # draw tuning previews
         referenceSources = {'_'.join(k.split('_')[1:]): OpenFont(v, showInterface=False) for k, v in self.controller.referenceSourcesPaths.items()}
+        sourceNamesAsTuples = [styleName.split('_') for styleName in self.controller.tuningSources.keys()]
 
-        for styleName, ufoPath in self.controller.tuningSources.items():
-            styleNameParts = styleName.split('_')
-
-            if len(styleNameParts) > level:
+        for styleNameParts in sorted(sourceNamesAsTuples, key=len):
+            if len(styleNameParts) not in levels:
                 continue
+
+            styleName = '_'.join(styleNameParts)
+            ufoPath = self.controller.tuningSources[styleName]
 
             # get blended glyph (parametric)
             blendedLocation = { part[:4]: int(part[4:]) for part in styleNameParts }
@@ -210,12 +216,22 @@ class TuningPreview:
             matchingPoints = getMatchingPoints(glyphDefault, glyphReference)
             tuningGlyph = makeTuningGlyph(blendedGlyph, blendedReference, glyphDefault, matchingPoints)
 
+            # calculate delta value
+            deltaValue = calculateDeltaValue(glyphDefault, tuningGlyph)
+
             # draw page
             x, y = self.x, self.y
             DB.newPage(self.width, self.height)
             DB.blendMode('multiply')
-            _drawVerticalMetrics((x, y), yMetrics, s)    
-            _drawGlyph(blendedGlyph, (x, y), s, styleName, color=self.color1)
+
+            # styleName & total deltas
+            with DB.savedState():
+                DB.font('Menlo')
+                DB.fontSize(28)
+                DB.text(f'{styleName} ({deltaValue:.2f})', (45, DB.height() - 60))
+
+            _drawVerticalMetrics((x, y), yMetrics, s)
+            _drawGlyph(blendedGlyph, (x, y), s, 'parametric', color=self.color1)
 
             x += blendedGlyph.width * s + self.margin
 
@@ -243,7 +259,7 @@ class TuningPreview:
 
         pdfPath = os.path.join(folder, pdfFileName)
 
-        print(f'saving {pdfFileName}...', end=' ')
+        print(f'saving tuning proof {pdfFileName}...', end=' ')
 
         DB.saveImage(pdfPath)
 

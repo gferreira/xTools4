@@ -8,7 +8,7 @@ from mojo.roboFont import OpenWindow
 from mojo.smartSet import readSmartSets
 from fontTools.designspaceLib import DesignSpaceDocument
 from fontParts.world import OpenFont
-from xTools4.modules.linkPoints2 import readMeasurements
+from xTools4.modules.measurements import readMeasurements
 from xTools4.modules.xprojectLib import measurementsPathKey, smartSetsPathKey
 from xTools4.modules.glyphMemeProofer import GlyphMemeProofer
 
@@ -54,6 +54,15 @@ class GlyphMemeProoferController:
                 'reload ↺',
                 callback=self.reloadCallback,
                 # sizeStyle='small'
+            )
+
+        y += self.lineHeight + p
+        group1.line = HorizontalLine((x, y, -p, 1))
+
+        y += p + 1
+        group1.caseSelector = PopUpButton((x, y, -p, self.lineHeight),
+                [],
+                callback=self.caseSelectorCallback
             )
 
         y += self.lineHeight + p
@@ -143,10 +152,17 @@ class GlyphMemeProoferController:
         self.designspacePath = designspacePath
         self._loadDesignspace()
 
+    def caseSelectorCallback(self, sender):
+        group = self._groups[0]['view']
+        selectedCase = group.caseSelector.getItem()
+        group.groupSelector.setItems(self.glyphGroups[selectedCase])
+        self.groupSelectorCallback(None)
+
     def groupSelectorCallback(self, sender):
         group = self._groups[0]['view']
+        selectedCase = group.caseSelector.getItem()
         selectedGroup = group.groupSelector.getItem()
-        group.glyphSelector.setItems(self.glyphGroups[selectedGroup])
+        group.glyphSelector.setItems(self.glyphGroups[selectedCase][selectedGroup])
         self.glyphSelectorCallback(None)
 
     def glyphSelectorCallback(self, sender):
@@ -223,6 +239,7 @@ class GlyphMemeProoferController:
         for smartGroup in smartSets:
             if not smartGroup.groups:
                 continue
+            self.glyphGroups[smartGroup.name] = {}
             for smartSet in smartGroup.groups:
                 # remove component glyphs from glyph lists
                 glyphNames = []
@@ -233,12 +250,11 @@ class GlyphMemeProoferController:
                     if not len(g.components):
                         glyphNames.append(glyphName)
                 if len(glyphNames):
-                    self.glyphGroups[smartSet.name] = glyphNames
+                    self.glyphGroups[smartGroup.name][smartSet.name] = glyphNames
 
         group = self._groups[0]['view']
-
-        group.groupSelector.setItems(self.glyphGroups.keys())
-        self.groupSelectorCallback(None)
+        group.caseSelector.setItems(self.glyphGroups.keys())
+        self.caseSelectorCallback(None)
 
         if self.verbose:
             print('done.\n')

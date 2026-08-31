@@ -262,8 +262,9 @@ class BlendsPreviewController:
 
     @property
     def blendedAxes(self):
-        allAxes = [axis.name for axis in self.operator.doc.axes]
-        return list(set(allAxes).difference(set(self.parametricAxes)))
+        # allAxes = [axis.name for axis in self.operator.doc.axes]
+        # return list(set(allAxes).difference(set(self.parametricAxes)))
+        return ['Optical size', 'Weight', 'Width']
 
     # callbacks
 

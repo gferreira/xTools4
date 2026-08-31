@@ -82,7 +82,7 @@
           <li><a href="#json-format" id="markdown-toc-json-format">JSON format</a></li>
         </ul>
         <h2 id="data-structure">Data structure</h2>
-        <p>A measurement establishes a link between two points and allows us to calculate the distance between them.</p>
+        <p>A measurement establishes a link between two points and returns the distance between them.</p>
         <p>The order of the points matters: a measurement can be positive or negative.</p>
         <h3 id="font-level-measurements">Font-level measurements</h3>
         <ul>
@@ -95,49 +95,61 @@
             <tr>
               <th>attribute</th>
               <th>description</th>
+              <th> </th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <td>name</td>
               <td>name of the measurement</td>
+              <td>required</td>
             </tr>
             <tr>
               <td>glyph 1</td>
               <td>name of the glyph containing the 1st measurement point</td>
+              <td>required</td>
             </tr>
             <tr>
               <td>point 1</td>
               <td>index or shortcut of 1st measurement point</td>
+              <td>required</td>
             </tr>
             <tr>
               <td>glyph 2</td>
               <td>name of the glyph containing the 2nd measurement point</td>
+              <td>required</td>
             </tr>
             <tr>
               <td>point 2</td>
               <td>index or shortcut of 2nd measurement point</td>
+              <td>required</td>
             </tr>
             <tr>
               <td>direction</td>
               <td>direction of measurement</td>
+              <td>required</td>
             </tr>
             <tr>
               <td>parent</td>
-              <td>parent measurement (optional)</td>
+              <td>parent measurement</td>
+              <td>optional</td>
             </tr>
             <tr>
               <td>description</td>
-              <td>description of this measurement (optional)</td>
+              <td>description of this measurement</td>
+              <td>optional</td>
             </tr>
           </tbody>
         </table>
+        <div class="alert alert-warning my-4 rounded-0" role="alert">
+          <p class="card-text">The attribute <em>glyph 2</em> can be made optional. If it is omitted, we assume <em>glyph 2</em> to be the same as <em>glyph 1</em>.</p>
+        </div>
         <h3 id="glyph-level-measurements">Glyph-level measurements</h3>
         <ul>
           <li>A glyph may contain multiple glyph-level measurements.</li>
-          <li>Glyph measurement names are usually related to font-level measurements.</li>
+          <li>Glyph measurement names are related to font-level measurements.</li>
           <li>Glyph measurement names must <strong>not</strong> be unique.</li>
-          <li>Glyph measurement identifiers are created from the point indexes.</li>
+          <li>Glyph measurement identifiers are created from the index or name of its two points.</li>
           <li>The order of glyph measurements follows the order of font measurements.</li>
         </ul>
         <table class="table table-hover">
@@ -154,11 +166,11 @@
             </tr>
             <tr>
               <td>point 1</td>
-              <td>index or shortcut of 1st measurement point</td>
+              <td>index or name of 1st measurement point</td>
             </tr>
             <tr>
               <td>point 2</td>
-              <td>index or shortcut of 2nd measurement point</td>
+              <td>index or name of 2nd measurement point</td>
             </tr>
             <tr>
               <td>direction</td>
@@ -190,58 +202,50 @@
             </tr>
           </tbody>
         </table>
-        <div class="alert alert-primary my-4 rounded-0" role="alert">
-          The sign of the measured value indicates its direction. Some measurements are by definition negative, for example the descender value or a bottom overshoot.
-        </div>
+        <p>The order of the points in a measurement matters: the sign of the measured value indicates its direction. Some measurements are by definition negative, for example the descender value or a bottom overshoot.</p>
         <h3 id="point-ids">Point IDs</h3>
         <p>Points can be identified by a <strong>number</strong> (point index) or a <strong>letter</strong> (reference point).</p>
         <h4 id="point-indexes">Point indexes</h4>
         <p>Contour points are identified by their index (an integer).</p>
         <h4 id="reference-points">Reference points</h4>
-        <p>Font-level vertical metrics values are also available using the following shortcut characters:</p>
+        <p>Font-level vertical metrics are also available using the following shortcut characters:</p>
         <table class="table table-hover">
           <thead>
             <tr>
               <th>character</th>
               <th>description</th>
-              <th>x</th>
-              <th>y</th>
+              <th>y-position</th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <td>A</td>
               <td>ascender</td>
-              <td><code class="language-plaintext highlighter-rouge">0</code></td>
               <td><code class="language-plaintext highlighter-rouge">font.info.ascender</code></td>
             </tr>
             <tr>
               <td>B</td>
               <td>baseline</td>
               <td><code class="language-plaintext highlighter-rouge">0</code></td>
-              <td><code class="language-plaintext highlighter-rouge">0</code></td>
             </tr>
             <tr>
               <td>C</td>
               <td>cap height</td>
-              <td><code class="language-plaintext highlighter-rouge">0</code></td>
               <td><code class="language-plaintext highlighter-rouge">font.info.capHeight</code></td>
             </tr>
             <tr>
               <td>D</td>
               <td>descender</td>
-              <td><code class="language-plaintext highlighter-rouge">0</code></td>
               <td><code class="language-plaintext highlighter-rouge">font.info.descender</code></td>
             </tr>
             <tr>
               <td>X</td>
               <td>x-height</td>
-              <td><code class="language-plaintext highlighter-rouge">0</code></td>
               <td><code class="language-plaintext highlighter-rouge">font.info.xHeight</code></td>
             </tr>
           </tbody>
         </table>
-        <div class="alert alert-warning  my-4 rounded-0" role="alert">
+        <div class="alert alert-warning my-4 rounded-0" role="alert">
           <p class="card-text">In addition to the standard (latin) vertical metrics values above, custom reference points can be defined – for example alignment zones for other scripts, or additional alignment points for latin.</p>
         </div>
         <h2 id="python-example">Python example</h2>
@@ -280,7 +284,7 @@
 </code></pre>
           </div>
         </div>
-        <div class="alert alert-primary my-4 rounded-0" role="alert">
+        <div class="alert alert-warning my-4 rounded-0" role="alert">
           The current glyph-level measurement format has one limitation: a pair of points can only have one measurement attached to it. It should be possible to have both x and y measurements for same pair of points though (for example, the width and height of a serif). The format can be updated in the future to address this issue.
         </div>
         <div class="alert alert-warning  my-4 rounded-0" role="alert">
@@ -364,7 +368,7 @@
         This work is licensed under <a href='http://creativecommons.org/licenses/by-sa/4.0/'>Creative Commons Attribution-ShareAlike 4.0 International</a>.
       </p>
       <p class='small text-muted'>
-        <i class="bi bi-arrow-counterclockwise"></i> Last updated on 10 Jul 2026 18:33:06.
+        <i class="bi bi-arrow-counterclockwise"></i> Last updated on 29 Aug 2026 12:55:02.
       </p>
     </footer>
   </body>

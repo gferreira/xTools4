@@ -121,6 +121,9 @@ class BuildConstructionController(ezui.WindowController):
         self.updateFontViewCallback(None)
         self.settingsChangedCallback(None)
 
+    def previewCallback(self, sender):
+        self.settingsChangedCallback(None)
+
     def buildButtonCallback(self, sender):
 
         font = CurrentFont()

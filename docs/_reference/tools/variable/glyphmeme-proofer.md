@@ -16,8 +16,11 @@ designspace…
 reload
 : Reload the previously selected designspace file.
 
+glyph case
+: Select a glyph case from the list (imported from smart sets).
+
 glyph group
-: Select a glyph group from the list (imported from smart sets).
+: Select a glyph group from the currently selected case.
 
 glyph name
 : Select a glyph from which to load parameters (meme).

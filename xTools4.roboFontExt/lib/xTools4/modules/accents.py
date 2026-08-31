@@ -280,3 +280,5 @@ def extractGlyphConstruction(glyph, accents=ACCENTS):
     # done
     return construction
 
+
+

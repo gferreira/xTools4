@@ -961,14 +961,14 @@ class MeasurementsController(ezui.WindowController):
             )
             items.append(item)
 
-        # follow order of font measurements
-        sortedItems = []
-        for fontMeasurementName in self.fontMeasurements.keys():
-            for item in items:
-                if item['name'] == fontMeasurementName:
-                    sortedItems.append(item)
+        # follow order of font measurements (??)
+        # sortedItems = []
+        # for fontMeasurementName in self.fontMeasurements.keys():
+        #     for item in items:
+        #         if item['name'] == fontMeasurementName:
+        #             sortedItems.append(item)
 
-        table.set(sortedItems)
+        table.set(items)
 
         postEvent(f"{self.key}.changed")
 
