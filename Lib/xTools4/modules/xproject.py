@@ -730,8 +730,11 @@ class xProject:
         for glyphName in glyphNames:
 
             glyphDefault   = self.defaultFont[glyphName]
-            glyphReference = referenceFont[glyphName]
+            if glyphName not in referenceFont:
+                print(f'glyph /{glyphName} not in reference font, skipping...\n')
+                continue
 
+            glyphReference = referenceFont[glyphName]
             matchingPoints = getMatchingPoints(glyphDefault, glyphReference)
 
             totalDelta = 0

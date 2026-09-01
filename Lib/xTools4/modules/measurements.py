@@ -561,20 +561,24 @@ def calculateDeltaValue(glyph1, glyph2):
     # components?
     # width?
     # anchors?
-
-    return deltaPoints / pointCount
+    if pointCount:
+        return deltaPoints / pointCount
+    else:
+        return 0
 
 def makeTuningGlyph(glyph1, glyph2, defaultGlyph, matchingPoints):
 
     tuningGlyph = defaultGlyph.copy()
 
     if tuningGlyph.components:
-        for i, c in enumerate(tuningGlyph.components):
-            c1 = glyph1.components[i]
-            c2 = glyph2.components[i]
-            deltaX = c2.offset[0] - c1.offset[0]
-            deltaY = c2.offset[1] - c1.offset[1]
-            c.offset = c.offset[0] + deltaX, c.offset[1] + deltaY
+        if len(glyph1.components) == len(glyph2.components) == len(tuningGlyph.components):
+            for i, c in enumerate(tuningGlyph.components):
+                if len(glyph1.components) == len(glyph2.components):
+                    c1 = glyph1.components[i]
+                    c2 = glyph2.components[i]
+                    deltaX = c2.offset[0] - c1.offset[0]
+                    deltaY = c2.offset[1] - c1.offset[1]
+                    c.offset = c.offset[0] + deltaX, c.offset[1] + deltaY
 
     else:
         for mp1, mp2 in matchingPoints:

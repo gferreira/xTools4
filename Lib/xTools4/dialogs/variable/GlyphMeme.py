@@ -330,7 +330,6 @@ class GlyphMemeController(ezui.WindowController):
         glyphNames = getGlyphs2(f, glyphNames=True)
 
         for glyphName in glyphNames:
-
             glyph = f[glyphName].getLayer('foreground')
 
             if glyphSetPathKey not in glyph.lib:
