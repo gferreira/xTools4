@@ -77,6 +77,10 @@ class VarGlyphViewer(ezui.WindowController):
             sizeStyle="regular",
             width='fill',
         ),
+        threshold=dict(
+            minValue=0,
+            maxValue=1000,
+        ),
     )
 
     def build(self):

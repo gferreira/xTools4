@@ -19,20 +19,17 @@ get default…
 reload
 : Reload the selected source from disk (in case it has changed).
 
-show default
-: Show the default glyph in the background.
-
 show distance
 : Show x and/or y distance of each point in relation to the default.
 
 selection only
 : Show the distance visualization only for selected points.
 
-subtract (-)
-: Subtract the default glyph from the current glyph.
+delta values
+: Display average delta values.
 
-add (+)
-: Add the default glyph to the current glyph.
+threshold
+: Adjust the threshold value between green and red values.
 
 display
 : Turn the visualisation on/off.
@@ -46,20 +43,37 @@ Display
 ![]({{ site.url }}/images/variable/VarGlyphViewer_preview.png){: .img-fluid}
 
 
-
 Color code
 ----------
+
+<style>
+.table { td:nth-child(1) { width: 8em; }
+</style>
+
+##### Vectors
 
 | <span class='blue'>blue</span>   | neither x nor y values changing | 
 | <span class='red'>red</span>     | only x or y value changing      | 
 | <span class='green'>green</span> | both x and y values changing    | 
 {: .table .table-hover }
 
+##### Values
 
-<div class="card bg-light mt-5 mb-3 rounded-0">
-<div class="card-header">note</div>
-<div class="card-body" markdown='1'>
-For more info on adding and subtracting glyphs, see [Using GlyphMath](http://doc.robofont.com/documentation/tutorials/using-glyphmath/).
-{: .card-text }
-</div>
-</div>
+| <span class='blue'>blue</span>   | no change               | 
+| <span class='red'>red</span>     | change beyond threshold | 
+| <span class='green'>green</span> | change below threshold  | 
+{: .table .table-hover }
+
+
+Average delta values
+--------------------
+
+Values are expressed in average delta units (per point / anchor / component).
+
+| Σ | total       |
+| P | points      |
+| A | anchors     |
+| C | components  |
+| W | width       |
+{: .table .table-hover }
+
