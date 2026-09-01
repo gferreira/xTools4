@@ -9,6 +9,8 @@ import xTools4.modules.glyphMemeProofer
 reload(xTools4.modules.glyphMemeProofer)
 import xTools4.modules.tuningPreview
 reload(xTools4.modules.tuningPreview)
+import xTools4.modules.glyphSetProofer
+reload(xTools4.modules.glyphSetProofer)
 
 import os, glob, json, shutil, time, datetime
 import subprocess
@@ -1374,18 +1376,22 @@ class xProject:
 
             P.save(glyphMemesFolder, pdfFileName)
 
-    def proofSourcesGlyphSet(self, familyName=None, showCompatible=False, validateComposites=True):
+    def proofSourcesGlyphSet(self, familyName=None, showCompatible=False, validateComposites=True, proofsFolder=None):
         '''Build glyph set PDF proofs.'''
         if not familyName:
             familyName = self.familyName
 
         sourcePaths = sorted(glob.glob(f'{self.sourcesFolder}/*.ufo'))
-        glyphsetProofsFolder = os.path.join(self.proofsFolder, 'PDF', 'glyphset')
+
+        if proofsFolder:
+            glyphsetProofsFolder = proofsFolder
+        else:
+            glyphsetProofsFolder = os.path.join(self.proofsFolder, 'PDF', 'glyphset')
 
         P = GlyphSetProofer(f'{familyName}', self.defaultSourcePath, sourcePaths, self.glyphConstructionsPath)
         P.checksShowCompatible = showCompatible
         P.validateComposites = validateComposites
-        P.build(savePDF=True, folder=glyphsetProofsFolder)
+        P.build(savePDF=True, folder=glyphsetProofsFolder, splitSave=True)
 
     def proofBlends(self, glyphNames, margins=True, labels=True, levels=False, levelsShow=[1, 2, 3, 4], header=True, footer=True, points=False, proofsFolder=None): # familyName=None
         '''Build PDF proof of blends.'''
