@@ -50,14 +50,14 @@ Color code
 .table { td:nth-child(1) { width: 8em; }
 </style>
 
-##### Vectors
+##### Delta vectors
 
 | <span class='blue'>blue</span>   | neither x nor y values changing | 
 | <span class='red'>red</span>     | only x or y value changing      | 
 | <span class='green'>green</span> | both x and y values changing    | 
 {: .table .table-hover }
 
-##### Values
+##### Delta values
 
 | <span class='blue'>blue</span>   | no change               | 
 | <span class='red'>red</span>     | change beyond threshold | 
@@ -68,12 +68,16 @@ Color code
 Average delta values
 --------------------
 
-Values are expressed in average delta units (per point / anchor / component).
+Average delta values allow us to quantify the variation between two glyphs. This is specially useful when analysing tuning glyphs.
 
-| Σ | total       |
-| P | points      |
-| A | anchors     |
-| C | components  |
-| W | width       |
+Values are expressed in **average delta units per item**.
+
+The total average delta value (Σ) is computed as the sum of all specific average delta values (points, anchors, components, width), divided by the total item count.
+
+| Σ     | total average delta values / total item count  |
+| P     | total point deltas / point count               |
+| A     | total anchor deltas / anchor count             |
+| C     | total component deltas / component count       |
+| W     | width delta                                    |
 {: .table .table-hover }
 
