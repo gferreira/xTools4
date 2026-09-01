@@ -1,9 +1,13 @@
 from importlib import reload
 import xTools4.modules.glyphutils
 reload(xTools4.modules.glyphutils)
+import xTools4.modules.measurements
+reload(xTools4.modules.measurements)
 
 import ezui
 # from math import atan, degrees
+from random import random
+from merz import MerzView
 from mojo.UI import GetFile
 from mojo.pens import DecomposePointPen
 from mojo.roboFont import OpenWindow, OpenFont, RGlyph
@@ -11,6 +15,7 @@ from mojo.subscriber import Subscriber, registerSubscriberEvent, roboFontSubscri
 from mojo.events import postEvent
 from xTools4.modules.glyphutils import getImplicitSelectedPoints
 from xTools4.dialogs.variable.Measurements import colorCheckTrue, colorCheckFalse, colorCheckEqual
+from xTools4.modules.measurements import calculateDeltaValues
 
 
 KEY = 'com.xTools4.dialogs.variable.varGlyphViewer'
@@ -46,16 +51,19 @@ class VarGlyphViewer(ezui.WindowController):
     defaultFont     = None
 
     content = """
-    ( get default… )  @getDefaultButton
-    ( reload ↺ )      @reloadDefaultButton
+    ( get default… )    @getDefaultButton
+    ( reload ↺ )        @reloadDefaultButton
 
     [X] show default    @showDefault
     [X] show distance   @showValues
     [ ] selection only  @selectionOnly
 
-    ((( – | + )))     @addSubtractButton
+    [__](±)             @threshold
+    [X] show info       @showInfo
 
-    [X] display       @preview
+    ((( – | + )))       @addSubtractButton
+
+    [X] display         @preview
     """
 
     descriptionData = dict(
@@ -146,6 +154,12 @@ class VarGlyphViewer(ezui.WindowController):
     def showDefaultCallback(self, sender):
         self.settingsChangedCallback(None)
 
+    def showInfoCallback(self, sender):
+        self.settingsChangedCallback(None)
+
+    def thresholdCallback(self, sender):
+        self.settingsChangedCallback(None)
+
     def previewCallback(self, sender):
         postEvent(f"{self.key}.changed")
 
@@ -183,8 +197,32 @@ class VarGlyphViewerSubscriberGlyphEditor(Subscriber):
         )
         self.displayLayer = container.appendBaseSublayer()
 
+        #---------------------
+        # average delta values
+
+        sizeX, sizeY = 800, 60
+        color = 0, 0.5, 1, 1
+        self.merzViewReport = MerzView((0, 0, sizeX, sizeY))
+        container = self.merzViewReport.getMerzContainer()
+
+        self.reportLayer = container.appendTextBoxSublayer(
+            name=f'{KEY}.report',
+            backgroundColor=None,
+            position=(0, 0),
+            size=(sizeX, sizeY),
+            padding=(10, 10),
+            fillColor=color,
+            pointSize=13,
+            font='Menlo-Bold',
+            horizontalAlignment="left",
+            verticalAlignment="top",
+        )
+        glyphEditor.addGlyphEditorSubview(self.merzViewReport)
+
     def destroy(self):
         self.displayLayer.clearSublayers()
+        glyphEditor = self.getGlyphEditor()
+        glyphEditor.removeGlyphEditorSubview(self.merzViewReport)
 
     def glyphEditorDidSetGlyph(self, info):
         self.controller.glyph = info["glyph"]
@@ -477,7 +515,9 @@ class VarGlyphViewerSubscriberGlyphEditor(Subscriber):
         showDeltas    = True
         showValues    = self.controller.w.getItem('showValues').get()
         showDefault   = self.controller.w.getItem('showDefault').get()
+        showInfo      = self.controller.w.getItem('showInfo').get()
         preview       = self.controller.w.getItem("preview").get()
+        threshold     = self.controller.w.getItem("threshold").get()
 
         if not preview:
             return
@@ -518,6 +558,31 @@ class VarGlyphViewerSubscriberGlyphEditor(Subscriber):
             self._drawAnchors(defaultGlyph, selectionOnly=selectionOnly, showEqual=showEqual, showDeltas=showDeltas, showValues=showValues, preview=preview, italicAngle=italicAngle)
             self._drawComponents(defaultGlyph, selectionOnly=selectionOnly, showEqual=showEqual, showDeltas=showDeltas, showValues=showValues, preview=preview, italicAngle=italicAngle)
 
+        if showInfo:
+
+            with self.reportLayer.propertyGroup():
+
+                deltas = calculateDeltaValues(self.controller.glyph, defaultGlyph)
+
+                colorPoints     = colorCheckEqual if deltas['points']     == 0 else colorCheckTrue if deltas['points']     < threshold else colorCheckFalse
+                colorAnchors    = colorCheckEqual if deltas['anchors']    == 0 else colorCheckTrue if deltas['anchors']    < threshold else colorCheckFalse
+                colorComponents = colorCheckEqual if deltas['components'] == 0 else colorCheckTrue if deltas['components'] < threshold else colorCheckFalse
+                colorWidth      = colorCheckEqual if deltas['width']      == 0 else colorCheckTrue if deltas['width']      < threshold else colorCheckFalse
+                colorTotal      = colorCheckEqual if deltas['total']      == 0 else colorCheckTrue if deltas['total']      < threshold else colorCheckFalse
+
+                txt = [
+                    dict(text=f"Σ {deltas['total']:.2f}  ",      fillColor=colorTotal),
+                    dict(text=f"P {deltas['points']:.2f}  ",     fillColor=colorPoints),
+                    dict(text=f"A {deltas['anchors']:.2f}  ",    fillColor=colorAnchors),
+                    dict(text=f"C {deltas['components']:.2f}  ", fillColor=colorComponents),
+                    dict(text=f"W {abs(deltas['width']):.2f}  ", fillColor=colorWidth),
+                ]
+
+                self.reportLayer.setText(txt)
+                self.reportLayer.setVisible(True)
+
+        else:
+                self.reportLayer.setVisible(False)
 
 eventName = f"{VarGlyphViewer.key}.changed"
 

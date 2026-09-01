@@ -761,9 +761,9 @@ class xProject:
                 # make tuning glyph
                 tuningGlyph = makeTuningGlyph(blendedGlyph, blendedReference, glyphDefault, matchingPoints)
 
-                deltaValue = calculateDeltaValue(glyphDefault, tuningGlyph)
+                deltaValues = calculateDeltaValues(glyphDefault, tuningGlyph)
                 if self.verbose:
-                    print(f'{deltaValue:.2f}')
+                    print(f"{deltaValues['total']:.2f}")
 
                 totalDelta += deltaValue
 

@@ -217,7 +217,7 @@ class TuningPreview:
             tuningGlyph = makeTuningGlyph(blendedGlyph, blendedReference, glyphDefault, matchingPoints)
 
             # calculate delta value
-            deltaValue = calculateDeltaValue(glyphDefault, tuningGlyph)
+            deltaValues = calculateDeltaValues(glyphDefault, tuningGlyph)
 
             # draw page
             x, y = self.x, self.y
@@ -228,7 +228,7 @@ class TuningPreview:
             with DB.savedState():
                 DB.font('Menlo')
                 DB.fontSize(28)
-                DB.text(f'{styleName} ({deltaValue:.2f})', (45, DB.height() - 60))
+                DB.text(f"{styleName} ({deltaValues['total']:.2f})", (45, DB.height() - 60))
 
             _drawVerticalMetrics((x, y), yMetrics, s)
             _drawGlyph(blendedGlyph, (x, y), s, 'parametric', color=self.color1)
