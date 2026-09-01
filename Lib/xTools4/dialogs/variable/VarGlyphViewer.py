@@ -54,14 +54,11 @@ class VarGlyphViewer(ezui.WindowController):
     ( get default… )    @getDefaultButton
     ( reload ↺ )        @reloadDefaultButton
 
-    [X] show default    @showDefault
-    [X] show distance   @showValues
+    [ ] show distance   @showValues
     [ ] selection only  @selectionOnly
+    [X] delta values    @showInfo
 
     [__](±)             @threshold
-    [X] show info       @showInfo
-
-    ((( – | + )))       @addSubtractButton
 
     [X] display         @preview
     """
@@ -142,16 +139,7 @@ class VarGlyphViewer(ezui.WindowController):
     def selectionOnlyCallback(self, sender):
         self.settingsChangedCallback(None)
 
-    # def showEqualCallback(self, sender):
-    #     self.settingsChangedCallback(None)
-
-    # def showDeltasCallback(self, sender):
-    #     self.settingsChangedCallback(None)
-
     def showValuesCallback(self, sender):
-        self.settingsChangedCallback(None)
-
-    def showDefaultCallback(self, sender):
         self.settingsChangedCallback(None)
 
     def showInfoCallback(self, sender):
@@ -238,6 +226,8 @@ class VarGlyphViewerSubscriberGlyphEditor(Subscriber):
         self._drawVarGlyphViewer()
 
     def _drawPoints(self, defaultGlyph, selectionOnly=False, showEqual=True, showDeltas=True, showValues=True, preview=True, italicAngle=None):
+
+        selectedPoints = getImplicitSelectedPoints(self.controller.glyph)
 
         for ci, c in enumerate(self.controller.glyph):
             for pi, p in enumerate(c.points):
@@ -514,7 +504,7 @@ class VarGlyphViewerSubscriberGlyphEditor(Subscriber):
         showEqual     = True
         showDeltas    = True
         showValues    = self.controller.w.getItem('showValues').get()
-        showDefault   = self.controller.w.getItem('showDefault').get()
+        showDefault   = True # self.controller.w.getItem('showDefault').get()
         showInfo      = self.controller.w.getItem('showInfo').get()
         preview       = self.controller.w.getItem("preview").get()
         threshold     = self.controller.w.getItem("threshold").get()
@@ -540,8 +530,6 @@ class VarGlyphViewerSubscriberGlyphEditor(Subscriber):
                 defaultGlyph.drawPoints(decomposePen)
                 glyphPathComponents = defaultGlyphComponents.getRepresentation("merz.CGPath")
                 defaultLayer.setPath(glyphPathComponents)
-
-        selectedPoints = getImplicitSelectedPoints(self.controller.glyph)
 
         italicAngle = self.controller.glyph.font.info.italicAngle
 
