@@ -1,4 +1,4 @@
-import os
+import os, math
 import drawBot as DB
 from fontParts.world import OpenFont
 from fontTools.designspaceLib import DesignSpaceDocument
@@ -54,6 +54,8 @@ class GlyphMemeProofer:
     deltasDraw = True
     validationDraw = True
 
+    useItalicAngle = False
+
     verbose = False
     
     def __init__(self, glyphName, designspacePath):
@@ -107,13 +109,31 @@ class GlyphMemeProofer:
 
     def _drawMetrics(self, pos, metricsX, metricsY):
         x, y = pos
+
         DB.save()
         DB.stroke(*self.metricsColor)
-        for mx in metricsX:
-            DB.line((mx, 0), (mx, DB.height()))
         for my in metricsY:
             my = y + my * self.glyphScale
             DB.line((0, my), (self.canvasWidth, my))
+
+        with DB.savedState():
+            if self.useItalicAngle and self.italicAngle:
+                slantOffset = math.tan(self.italicAngle * math.pi / 180) * y
+                DB.translate(slantOffset, 0)
+                DB.skew(-self.italicAngle)
+
+            for mx in metricsX:
+                DB.line((mx, 0), (mx, DB.height()))
+
+        # draw origin position
+        with DB.savedState():
+            r = 4
+            DB.stroke(0.5)
+            DB.fill(None)
+            DB.oval(x-r, y-r, r*2, r*2)
+            DB.line((x-10, y), (x+10, y))
+            DB.line((x, y-10), (x, y+10))
+
         DB.restore()
 
     def _drawContours(self, glyph, pos):
@@ -134,6 +154,12 @@ class GlyphMemeProofer:
 
         DB.translate(x, y)
         DB.scale(self.glyphScale)
+
+        if self.useItalicAngle and self.italicAngle:
+            # slantOffset = math.tan(self.italicAngle * math.pi / 180) * glyph.font.info.xHeight * 0.5
+            slantOffset = glyph.font.lib["com.typemytype.robofont.italicSlantOffset"]
+            DB.translate(-slantOffset, 0)
+
         DB.drawGlyph(glyph)
 
         if self.pointsDraw:
@@ -185,6 +211,12 @@ class GlyphMemeProofer:
 
         DB.translate(x, y)
         DB.scale(self.glyphScale)
+
+        if self.useItalicAngle and self.italicAngle:
+            # slantOffset = math.tan(self.italicAngle * math.pi / 180) * glyph.font.info.xHeight * 0.5
+            slantOffset = glyph.font.lib["com.typemytype.robofont.italicSlantOffset"]
+            DB.translate(-slantOffset, 0)
+
         for anchor in glyph.anchors:
             aX, aY = anchor.position
             DB.oval(aX - r, aY - r, r*2, r*2)
@@ -218,8 +250,10 @@ class GlyphMemeProofer:
         captionBox = captionX, captionY, captionW, captionH
         DB.textBox(f'{glyph.width}', captionBox, align='center')
         if glyph.bounds:
-            DB.textBox(f'{glyph.leftMargin}', captionBox, align='left')
-            DB.textBox(f'{glyph.rightMargin}', captionBox, align='right')
+            leftMargin  = glyph.angledLeftMargin if (self.useItalicAngle and self.italicAngle) else glyph.leftMargin
+            rightMargin = glyph.angledRightMargin if (self.useItalicAngle and self.italicAngle) else glyph.rightMargin
+            DB.textBox(f'{leftMargin:.2f}', captionBox, align='left')
+            DB.textBox(f'{rightMargin:.2f}', captionBox, align='right')
 
         DB.restore()
 
@@ -310,6 +344,11 @@ class GlyphMemeProofer:
 
         with DB.savedState():
             DB.scale(self.glyphScale)
+            if self.useItalicAngle and self.italicAngle:
+                # slantOffset = math.tan(self.italicAngle * math.pi / 180) * glyph.font.info.xHeight * 0.5
+                slantOffset = glyph.font.lib["com.typemytype.robofont.italicSlantOffset"]
+                DB.translate(-slantOffset, 0)
+
             DB.drawGlyph(defaultGlyph)
 
         dash = 2, 2
@@ -317,15 +356,17 @@ class GlyphMemeProofer:
         r2 = 4
         s =  self.glyphScale
 
-        italicAngle = glyph.font.info.italicAngle
-
-        if italicAngle:
+        if self.useItalicAngle and self.italicAngle:
+            # italicAngle = glyph.font.info.italicAngle
             g1_ = defaultGlyph.copy()
-            g1_.skewBy((italicAngle, 0))
+            g1_.skewBy((self.italicAngle, 0))
             g1_.round()
             g2_ = glyph.copy()
-            g2_.skewBy((italicAngle, 0))
+            g2_.skewBy((self.italicAngle, 0))
             g2_.round()
+
+        if self.useItalicAngle and self.italicAngle:
+            DB.translate(-slantOffset * self.glyphScale, 0)
 
         DB.lineDash(None)
         for ci, c in enumerate(glyph):
@@ -333,7 +374,7 @@ class GlyphMemeProofer:
                 p2 = defaultGlyph.contours[ci].points[pi]
                 isEqual = p2.x == p.x and p2.y == p.y
 
-                if italicAngle:
+                if self.useItalicAngle and self.italicAngle:
                     p1_ = g1_.contours[ci].points[pi]
                     p2_ = g2_.contours[ci].points[pi]
                     isOrthogonal = p2_.x == p1_.x or p2_.y == p1_.y
@@ -363,7 +404,7 @@ class GlyphMemeProofer:
                 a2 = defaultGlyph.anchors[ai]
                 isEqual = a2.x == a.x and a2.y == a.y
 
-                if italicAngle:
+                if self.useItalicAngle and self.italicAngle:
                     a1_ = g1_.anchors[ai]
                     a2_ = g2_.anchors[ai]
                     isOrthogonal = a2_.x == a1_.x or a2_.y == a1_.y
@@ -451,6 +492,8 @@ class GlyphMemeProofer:
         boxHeight = (max(metricsY) - min(metricsY)) * self.glyphScale
         boxY = (self.canvasHeight - boxHeight) * 0.5
         boxWidth = glyph.width * self.glyphScale
+
+        self.italicAngle = glyph.font.info.italicAngle
 
         DB.newPage(self.canvasWidth + self.panelWidth, self.canvasHeight)
         DB.blendMode('multiply')

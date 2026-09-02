@@ -239,8 +239,8 @@ class VarGlyphViewerSubscriberGlyphEditor(Subscriber):
                 isEqual = p2.x == p.x and p2.y == p.y
 
                 if italicAngle:
-                    p1_ = g1_.contours[ci].points[pi]
-                    p2_ = g2_.contours[ci].points[pi]
+                    p1_ = self.g1_.contours[ci].points[pi]
+                    p2_ = self.g2_.contours[ci].points[pi]
                     isOrthogonal = p2_.x == p1_.x or p2_.y == p1_.y
                 else:
                     isOrthogonal = p2.x == p.x or p2.y == p.y
@@ -323,8 +323,8 @@ class VarGlyphViewerSubscriberGlyphEditor(Subscriber):
             isEqual = a.x == a2.x and a.y == a2.y
 
             if italicAngle:
-                a1_ = g1_.anchors[ai]
-                a2_ = g2_.anchors[ai]
+                a1_ = self.g1_.anchors[ai]
+                a2_ = self.g2_.anchors[ai]
                 isOrthogonal = a2_.x == a1_.x or a2_.y == a1_.y
             else:
                 isOrthogonal = a2.x == a.x or a2.y == a.y
@@ -413,8 +413,8 @@ class VarGlyphViewerSubscriberGlyphEditor(Subscriber):
             xMin2, yMin2, xMax2, yMax2 = c2.bounds
 
             if italicAngle:
-                c1_ = g1_.components[ci]
-                c2_ = g2_.components[ci]
+                c1_ = self.g1_.components[ci]
+                c2_ = self.g2_.components[ci]
                 isOrthogonal = c2_.offset[0] == c1_.offset[0] or c2_.offset[1] == c1_.offset[1]
                 xMin2_, yMin2_, xMax2_, yMax2_ = c2_.bounds
             else:
@@ -507,8 +507,8 @@ class VarGlyphViewerSubscriberGlyphEditor(Subscriber):
         selectionOnly = self.controller.w.getItem('selectionOnly').get()
         showEqual     = True
         showDeltas    = True
+        showDefault   = True
         showValues    = self.controller.w.getItem('showValues').get()
-        showDefault   = True # self.controller.w.getItem('showDefault').get()
         showInfo      = self.controller.w.getItem('showInfo').get()
         preview       = self.controller.w.getItem("preview").get()
         threshold     = self.controller.w.getItem("threshold").get()
@@ -538,12 +538,13 @@ class VarGlyphViewerSubscriberGlyphEditor(Subscriber):
         italicAngle = self.controller.glyph.font.info.italicAngle
 
         if italicAngle:
-            g1_ = defaultGlyph.copy()
-            g1_.skewBy((italicAngle, 0))
-            g1_.round()
-            g2_ = self.controller.glyph.copy()
-            g2_.skewBy((italicAngle, 0))
-            g2_.round()
+            # hack to make slanted duplicates available to drawing sub-functions
+            self.g1_ = defaultGlyph.copy()
+            self.g1_.skewBy((italicAngle, 0))
+            self.g1_.round()
+            self.g2_ = self.controller.glyph.copy()
+            self.g2_.skewBy((italicAngle, 0))
+            self.g2_.round()
 
         with self.displayLayer.sublayerGroup():
             self._drawPoints(defaultGlyph, selectionOnly=selectionOnly, showEqual=showEqual, showDeltas=showDeltas, showValues=showValues, preview=preview, italicAngle=italicAngle)
