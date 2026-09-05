@@ -767,7 +767,7 @@ class xProject:
                 if self.verbose:
                     print(f"{deltaValues['total']:.2f}")
 
-                totalDelta += deltaValue
+                totalDelta += deltaValues['total']
 
                 # save glyph to tuning source
                 tuningSource = OpenFont(ufoPath, showInterface=False)
@@ -775,8 +775,7 @@ class xProject:
                 tuningSource.save()
 
             if self.verbose:
-                print(f'\taverage glyph delta: {totalDelta / len(self.tuningSources):.2f} units per point')
-                print()
+                print(f'\n\taverage glyph delta: {totalDelta / len(self.tuningSources):.2f} units per item\n')
 
         if self.verbose:
             print('...done!\n')
@@ -1009,9 +1008,6 @@ class xProject:
             # set value for corner tuning axes
             if self.tuning:
                 for tuningStyleName, tuningAxis in self.tuningAxes.items():
-                    # tag = tuningAxis.tag
-                    # get axis name
-                    # name = self.parametricAxesNames[tag] if tag in self.parametricAxesNames else tag
                     if styleName == tuningStyleName:
                         outputLocation[tuningAxis.name] = tuningAxis.maximum
                     else:
@@ -1019,7 +1015,6 @@ class xProject:
 
             m.inputLocation  = inputLocation
             m.outputLocation = outputLocation
-            # m.description    = styleName
 
             self.designspace.addAxisMapping(m)
 
@@ -1098,6 +1093,11 @@ class xProject:
 
         # generate variable font with fontmake
 
+        if not self.tuning:
+            varFontPath = self.varFontPath.replace('.ttf', '_no-tuning.ttf')
+        else:
+            varFontPath = self.varFontPath
+
         if 'PYTHONHOME' in os.environ:
            del os.environ['PYTHONHOME']
 
@@ -1106,7 +1106,7 @@ class xProject:
         cmd  = ['/Library/Frameworks/Python.framework/Versions/3.11/bin/fontmake']
         cmd += ['-m', self.designspacePath]
         cmd += ['-o', 'variable']
-        cmd += ['--output-path', self.varFontPath]
+        cmd += ['--output-path', varFontPath]
         if not featureWriter:
             cmd += ['--feature-writer', 'None']
         if noGDEF:
@@ -1120,7 +1120,7 @@ class xProject:
                 print(line,)
             retval = p.wait()
 
-        print(f'({os.path.exists(self.varFontPath)})')
+        print(f'({os.path.exists(varFontPath)})')
 
         # subset variable font with pyftsubset
         if subset:
@@ -1128,11 +1128,11 @@ class xProject:
             glyphNames = self.smartSets.get(subset)
             if glyphNames:
                 print(f'\tsubsetting font ({subset})...')
-                font = TTFont(self.varFontPath)
+                font = TTFont(varFontPath)
                 subsetter = Subsetter()
                 subsetter.populate(glyphs=glyphNames)
                 subsetter.subset(font)
-                font.save(self.varFontPath)
+                font.save(varFontPath)
             else:
                 print(f'\tsubsetting aborted: no subset glyphs available.')
 
@@ -1465,4 +1465,6 @@ class xProject:
 
             pdfFileName = os.path.splitext(os.path.split(self.designspacePath)[-1])[0]
             T.save(tuningProofsFolder, pdfFileName)
+
+
 

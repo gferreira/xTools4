@@ -170,16 +170,17 @@ class TuningPreview:
         referenceFont = OpenFont(self.referenceSource, showInterface=False)
         glyphReference = referenceFont[glyphName]
 
-        # transfer glyph measurements to reference font
-        glyphMeasurementsReference = transferGlyphMeasurements(self.controller.measurements['glyphs'][glyphName], glyphDefault, glyphReference)
-
         operator = UFOOperator()
         operator.read(self.controller.designspacePath)
         operator.loadFonts()
 
         DB.newDrawing()
 
-        if calibration:
+        # draw calibration page # is this still needed with matching point structures? I think not.
+        if calibration and glyphName in self.controller.measurements['glyphs']:
+            # transfer glyph measurements to reference font
+            glyphMeasurementsReference = transferGlyphMeasurements(self.controller.measurements['glyphs'][glyphName], glyphDefault, glyphReference)
+
             DB.newPage(self.width, self.height)
             DB.blendMode('multiply')
 
@@ -226,9 +227,15 @@ class TuningPreview:
 
             # styleName & total deltas
             with DB.savedState():
+                txt  = f"Σ {deltaValues['total']:.2f}  "
+                txt += f"P {deltaValues['points']:.2f}  "
+                txt += f"A {deltaValues['anchors']:.2f}  "
+                txt += f"C {deltaValues['components']:.2f}  "
+                txt += f"W {abs(deltaValues['width']):.2f}  "
+
                 DB.font('Menlo')
                 DB.fontSize(28)
-                DB.text(f"{styleName} ({deltaValues['total']:.2f})", (45, DB.height() - 60))
+                DB.text(f"{styleName}  {txt}", (45, DB.height() - 60))
 
             _drawVerticalMetrics((x, y), yMetrics, s)
             _drawGlyph(blendedGlyph, (x, y), s, 'parametric', color=self.color1)
@@ -264,3 +271,6 @@ class TuningPreview:
         DB.saveImage(pdfPath)
 
         print(os.path.exists(pdfPath))
+
+
+

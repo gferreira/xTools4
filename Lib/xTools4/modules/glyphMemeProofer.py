@@ -78,9 +78,9 @@ class GlyphMemeProofer:
         
     @property
     def parameters(self):
-        return sorted(list(set([m['name'] for m in self.glyphMeasurements.values()])))
+        return sorted(list(set([m['name'] for m in self.glyphMeasurements.values()]))) if self.glyphMeasurements else {}
 
-    @property    
+    @property
     def parametricSources(self):
         sources = {}
         for parameter in self.parameters:
@@ -527,6 +527,12 @@ class GlyphMemeProofer:
             self._drawValidation(glyph)
 
     def save(self, folder, fileName):
+
+        if not DB.pages():
+            return
+
+        if self.defaultFont[self.glyphName].components:
+            return
 
         glifName = os.path.splitext(glyphNameToFileName(self.glyphName, None))[0]
         pdfFileName = f'{fileName}_{glifName}.pdf'

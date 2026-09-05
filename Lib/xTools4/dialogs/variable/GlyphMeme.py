@@ -27,7 +27,7 @@ italicOffsetKey = 'com.typemytype.robofont.italicSlantOffset'
 
 class GlyphMemeController(ezui.WindowController):
 
-    title   = 'GlyphMeme'
+    title   = 'parameters'
     margins = 10
     verbose = True
 

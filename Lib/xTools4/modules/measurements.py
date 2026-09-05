@@ -633,3 +633,5 @@ def getMatchingPoints(glyph1, glyph2):
                         matchingPoints.append(((ci1, pi1), (ci2, pi2)))
     return matchingPoints
 
+
+
