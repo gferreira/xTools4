@@ -18,7 +18,6 @@ from xTools4.modules.glyphutils import drawGlyph, decomposeGlyph
 
 def getEffectiveLocation(designspacePath, blendedLocation):
     font = TTFont()
-
     avar2_build(font, designspacePath)
     return avar2_map(font, blendedLocation)
 

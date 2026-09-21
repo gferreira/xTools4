@@ -90,7 +90,6 @@ class GlyphTuningController(ezui.WindowController):
         )
         self.w.workspaceWindowIdentifier = KEY
         self.w.getNSWindow().setTitlebarAppearsTransparent_(True)
-        # self.w.getItem("axesList").getNSTableView().setRowHeight_(17)
         self.w.open()
 
     @property
@@ -113,10 +112,6 @@ class GlyphTuningController(ezui.WindowController):
             os.path.splitext(os.path.split(srcPath)[-1])[0] : OpenFont(srcPath, showInterface=False)
             for srcPath in glob.glob(f'{self.tuningSourcesFolder}/*.ufo')
         }
-
-    # @property
-    # def parametricAxes(self):
-    #     return self.designspace.default.location.keys()
 
     @property
     def blendedAxes(self):
@@ -199,10 +194,6 @@ class GlyphTuningController(ezui.WindowController):
         selectedGroup = self.w.getItem("groupSelector").getItem()
         glyphSelector = self.w.getItem("glyphSelector")
         glyphSelector.setItems(self.glyphGroups[selectedCase][selectedGroup])
-        # self.glyphSelectorCallback(None)
-
-    # def glyphSelectorCallback(self, sender):
-    #     self._updateTuningSources()
 
     def openButtonCallback(self, sender):
 
@@ -339,16 +330,6 @@ class GlyphTuningController(ezui.WindowController):
 
     def reloadButtonCallback(self, sender):
         self._loadDesignspace()
-
-    def duovarsCallback(self, sender):
-        self._updateTuningSources()
-
-    def trivarsCallback(self, sender):
-        self._updateTuningSources()
-
-    def quadvarsCallback(self, sender):
-        self._updateTuningSources()
-
 
 
 if __name__ == '__main__':

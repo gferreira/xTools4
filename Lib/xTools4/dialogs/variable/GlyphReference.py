@@ -199,14 +199,8 @@ class GlyphReferenceController(ezui.WindowController):
         selectedGroup = self.w.getItem("groupSelector").getItem()
         glyphSelector = self.w.getItem("glyphSelector")
         glyphSelector.setItems(self.glyphGroups[selectedCase][selectedGroup])
-        # self.glyphSelectorCallback(None)
-
-    # def glyphSelectorCallback(self, sender):
-    #     self._updateTuningSources()
 
     def openButtonCallback(self, sender):
-
-        print(self.referenceSources.keys())
 
         glyphName = self.w.getItem("glyphSelector").getItem()
         duovars   = self.w.getItem("duovars").get()
@@ -341,15 +335,6 @@ class GlyphReferenceController(ezui.WindowController):
 
     def reloadButtonCallback(self, sender):
         self._loadDesignspace()
-
-    # def duovarsCallback(self, sender):
-    #     self._updateTuningSources()
-
-    # def trivarsCallback(self, sender):
-    #     self._updateTuningSources()
-
-    # def quadvarsCallback(self, sender):
-    #     self._updateTuningSources()
 
 
 if __name__ == '__main__':
