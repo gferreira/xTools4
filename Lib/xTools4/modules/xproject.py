@@ -610,7 +610,7 @@ class xProject:
                         del dstFont[g.name]
 
             if not preflight:
-                print('\tsaving...')
+                # print('\tsaving...')
                 dstFont.save()
             dstFont.close()
 
