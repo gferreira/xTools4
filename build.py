@@ -25,6 +25,7 @@ libFolder        = os.path.join(baseFolder, 'Lib')
 licensePath      = os.path.join(baseFolder, 'LICENSE')
 extensionPath    = os.path.join(baseFolder, 'xTools4.roboFontExt')
 docsFolder       = os.path.join(baseFolder, 'Docs', '_site')
+iconPath         = os.path.join(baseFolder, 'Resources', 'icon.png')
 
 # ---------------
 # build extension
@@ -39,6 +40,7 @@ def buildExtension():
     B.version              = version
     B.launchAtStartUp      = True
     B.html                 = True
+    B.icon                 = iconPath
     B.mainScript           = 'start.py'
     B.requiresVersionMajor = '4'
     B.requiresVersionMinor = '4'

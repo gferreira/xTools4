@@ -8,7 +8,8 @@ from mojo.UI import AccordionView
 from mojo.roboFont import OpenFont, NewFont, CurrentFont
 
 
-KEY = 'com.xTools4.dialogs.variable.old.tempEdit'
+KEY = 'com.xTools4.tempEdit'
+tempEditModeKey = f'{KEY}.mode'
 
 
 def splitall(path):
@@ -437,6 +438,9 @@ class TempEdit:
 
             if tmpFontIsNew:
                 setupNewFont(tmpFont, showPoints=False)
+
+        # store import mode in the font lib (for compatibility with other tools)
+        tmpFont.lib[tempEditModeKey] = ['fonts', 'glyphs', 'layers'][self.importMode]
 
         if self.verbose:
             print('...done.\n')

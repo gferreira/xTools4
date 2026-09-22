@@ -10,7 +10,7 @@ from xTools4.modules.validation import assignValidationGroup
 from xTools4.dialogs.variable.old.TempEdit import setupNewFont, splitall
 
 
-KEY = 'com.xTools4.dialogs.variable.glyphTuning'
+KEY = 'com.xTools4.dialogs.variable.glyphReference'
 
 
 glyphSetPathKey = 'com.xTools4.tempEdit.glyphSetPath'
@@ -18,9 +18,9 @@ tempEditModeKey = 'com.xTools4.tempEdit.mode'
 italicOffsetKey = 'com.typemytype.robofont.italicSlantOffset'
 
 
-class GlyphTuningController(ezui.WindowController):
+class GlyphReferenceController(ezui.WindowController):
 
-    title   = 'tuning'
+    title   = 'reference'
     margins = 10
     verbose = True
 
@@ -29,16 +29,16 @@ class GlyphTuningController(ezui.WindowController):
 
     defaultFont   = None
     glyphGroups   = {}
-    tuningSources = {}
+    referenceSources = {}
 
-    tuningSourcesFolderName = 'tuning'
+    referenceSourcesFolderName = 'reference'
 
     content = """
-    (case ...)    @caseSelector
+    (cases ...)   @caseSelector
     (groups ...)  @groupSelector
     (glyphs ...)  @glyphSelector
 
-    [X] duovars   @duovars 
+    [X] duovars   @duovars
     [X] trivars   @trivars
     [X] quadvars  @quadvars
 
@@ -90,6 +90,7 @@ class GlyphTuningController(ezui.WindowController):
         )
         self.w.workspaceWindowIdentifier = KEY
         self.w.getNSWindow().setTitlebarAppearsTransparent_(True)
+        # self.w.getItem("axesList").getNSTableView().setRowHeight_(17)
         self.w.open()
 
     @property
@@ -103,15 +104,19 @@ class GlyphTuningController(ezui.WindowController):
         return os.path.dirname(self.designspacePath)
 
     @property
-    def tuningSourcesFolder(self):
-        return os.path.join(self.sourcesFolder, self.tuningSourcesFolderName)
+    def referenceSourcesFolder(self):
+        return os.path.join(self.sourcesFolder, self.referenceSourcesFolderName)
 
     @property
-    def tuningSources(self):
+    def referenceSources(self):
         return {
-            os.path.splitext(os.path.split(srcPath)[-1])[0] : OpenFont(srcPath, showInterface=False)
-            for srcPath in glob.glob(f'{self.tuningSourcesFolder}/*.ufo')
+            '_'.join(os.path.splitext(os.path.split(srcPath)[-1])[0].split('_')[1:]) : OpenFont(srcPath, showInterface=False)
+            for srcPath in glob.glob(f'{self.referenceSourcesFolder}/*.ufo')
         }
+
+    # @property
+    # def parametricAxes(self):
+    #     return self.designspace.default.location.keys()
 
     @property
     def blendedAxes(self):
@@ -250,10 +255,10 @@ class GlyphTuningController(ezui.WindowController):
                         continue
 
                     styleName = '_'.join(styleName)
-                    if styleName not in self.tuningSources:
+                    if styleName not in self.referenceSources:
                         continue
 
-                    srcFont = self.tuningSources[styleName]
+                    srcFont = self.referenceSources[styleName]
 
                     # copy vertical metrics etc. from 1st source
                     if i == 0:
@@ -334,5 +339,5 @@ class GlyphTuningController(ezui.WindowController):
 
 if __name__ == '__main__':
 
-    OpenWindow(GlyphTuningController)
+    OpenWindow(GlyphReferenceController)
 

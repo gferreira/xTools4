@@ -1,5 +1,10 @@
-import os, time
+from importlib import reload
+import xTools4.modules.tuningPreview
+reload(xTools4.modules.tuningPreview)
+
+import os, glob, time
 import AppKit
+from functools import cached_property
 import drawBot as DB
 from vanilla import *
 from fontTools.designspaceLib import DesignSpaceDocument
@@ -139,11 +144,42 @@ class GlyphTuningProoferController:
         if relativePath:
             return os.path.normpath(os.path.join(self.sourcesFolder, relativePath))
 
+    @cached_property
+    def measurements(self):
+        if self.measurementsPath is None or not os.path.exists(self.measurementsPath):
+            return {}
+        else:
+            return readMeasurements(self.measurementsPath)
+
     @property
     def smartSetsPath(self):
         relativePath = self.designspace.lib.get(smartSetsPathKey)
         if relativePath:
             return os.path.normpath(os.path.join(self.sourcesFolder, relativePath))
+
+    @cached_property
+    def smartSets(self):
+        smartSetsRaw = readSmartSets(self.smartSetsPath, useAsDefault=False, font=None)
+        smartSets = {}
+        for smartGroup in smartSetsRaw:
+            smartSets[smartGroup.name] = {}
+            if smartGroup.groups:
+                for smartSet in smartGroup.groups:
+                    smartSets[smartGroup.name][smartSet.name] = smartSet.glyphNames
+            else:
+                smartSets[smartGroup.name] = smartGroup.glyphNames
+        return smartSets
+
+    referenceSourcesFolderName = 'reference'
+
+    @property
+    def referenceSourcesFolder(self):
+        return os.path.join(self.sourcesFolder, self.referenceSourcesFolderName)
+
+    @property
+    def referenceSourcesPaths(self):
+        '''Returns a list with the full paths of all reference UFO sources.'''
+        return { os.path.splitext(os.path.split(f)[-1])[0]: f for f in glob.glob(f'{self.referenceSourcesFolder}/*.ufo')}
 
     def getDesignspaceCallback(self, sender):
 
@@ -191,12 +227,20 @@ class GlyphTuningProoferController:
         group = self._groups[0]['view']
         glyphName = group.glyphSelector.getItem()
 
+        levels = []
+        if group.duovars.get():
+            levels.append(1)
+        if group.trivars.get():
+            levels.append(2)
+        if group.quadvars.get():
+            levels.append(3)
+
         DB.newDrawing()
 
         referenceSource = self.designspace.default.path
 
         self.proofer = TuningPreview(self, referenceSource)
-        self.proofer.draw(glyphName, level=1)
+        self.proofer.draw(glyphName, levels=levels)
 
         pdfData = DB.pdfImage()
 
@@ -227,44 +271,48 @@ class GlyphTuningProoferController:
         if self.verbose:
             print('done.\n')
 
-        self._loadMeasurements()
-        self._loadSmartSets()
-
-    def _loadMeasurements(self):
-
-        if self.verbose:
-            print(f'loading measurements from {os.path.split(self.measurementsPath)[-1]}... ', end='')
-
-        measurements = readMeasurements(self.measurementsPath)
-        print(measurements.keys())
-        self.measurements = measurements['glyphs']
-
-        if self.verbose:
-            print('done.\n')
-
-    def _loadSmartSets(self):
-
-        if self.verbose:
-            print(f'loading glyph groups from {os.path.split(self.smartSetsPath)[-1]}... ', end='')
-
-        smartSetsRaw = readSmartSets(self.smartSetsPath, useAsDefault=False, font=None)
-
-        self.smartSets = {}
-        for smartGroup in smartSetsRaw:
-            self.smartSets[smartGroup.name] = {}
-            if smartGroup.groups:
-                for smartSet in smartGroup.groups:
-                    self.smartSets[smartGroup.name][smartSet.name] = smartSet.glyphNames
-            else:
-                self.smartSets[smartGroup.name] = smartGroup.glyphNames
+        # self._loadMeasurements()
+        # self._loadSmartSets()
 
         group = self._groups[0]['view']
-
         group.caseSelector.setItems(self.smartSets.keys())
         self.caseSelectorCallback(None)
 
-        if self.verbose:
-            print('done.\n')
+    # def _loadMeasurements(self):
+
+    #     if self.verbose:
+    #         print(f'loading measurements from {os.path.split(self.measurementsPath)[-1]}... ', end='')
+
+    #     measurements = readMeasurements(self.measurementsPath)
+    #     print(measurements.keys())
+    #     self.measurements = measurements['glyphs']
+
+    #     if self.verbose:
+    #         print('done.\n')
+
+    # def _loadSmartSets(self):
+
+    #     if self.verbose:
+    #         print(f'loading glyph groups from {os.path.split(self.smartSetsPath)[-1]}... ', end='')
+
+    #     smartSetsRaw = readSmartSets(self.smartSetsPath, useAsDefault=False, font=None)
+
+    #     self.smartSets = {}
+    #     for smartGroup in smartSetsRaw:
+    #         self.smartSets[smartGroup.name] = {}
+    #         if smartGroup.groups:
+    #             for smartSet in smartGroup.groups:
+    #                 self.smartSets[smartGroup.name][smartSet.name] = smartSet.glyphNames
+    #         else:
+    #             self.smartSets[smartGroup.name] = smartGroup.glyphNames
+
+    #     group = self._groups[0]['view']
+
+    #     group.caseSelector.setItems(self.smartSets.keys())
+    #     self.caseSelectorCallback(None)
+
+    #     if self.verbose:
+    #         print('done.\n')
 
 
 if __name__ == '__main__':

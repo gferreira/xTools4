@@ -1,4 +1,6 @@
 from importlib import reload
+import xTools4.modules.accents
+reload(xTools4.modules.accents)
 import xTools4.modules.measurements
 reload(xTools4.modules.measurements)
 import xTools4.modules.xprojectLib
@@ -9,6 +11,8 @@ import xTools4.modules.glyphMemeProofer
 reload(xTools4.modules.glyphMemeProofer)
 import xTools4.modules.tuningPreview
 reload(xTools4.modules.tuningPreview)
+import xTools4.modules.glyphSetProofer
+reload(xTools4.modules.glyphSetProofer)
 
 import os, glob, json, shutil, time, datetime
 import subprocess
@@ -577,7 +581,7 @@ class xProject:
 
         print('...done!\n')
 
-    def copyGlyphOrderFromDefault(self, parametric=True, tuning=True, reference=True):
+    def copyGlyphOrderFromDefault(self, parametric=True, tuning=True, reference=True, preflight=False, trim=False):
         '''Copy glyph order from the default source to all other sources.'''
 
         ufoPaths = []
@@ -598,7 +602,17 @@ class xProject:
             dstFont = OpenFont(dstPath, showInterface=False)
             print(f'\tcopying default glyph order to {os.path.split(dstPath)[-1]}...')
             dstFont.templateGlyphOrder = glyphOrder
-            dstFont.save()
+
+            if trim:
+                for g in dstFont:
+                    if g.name not in srcFont:
+                        print(f'\t\tdeleting glyph /{g.name}...')
+                        del dstFont[g.name]
+
+            if not preflight:
+                # print('\tsaving...')
+                dstFont.save()
+            dstFont.close()
 
         print('...done!\n')
 
@@ -611,7 +625,7 @@ class xProject:
         if tuning:
             ufoPaths += self.tuningSourcesPaths
         if reference:
-            ufoPaths += self.referenceSourcesPaths.values().values()
+            ufoPaths += self.referenceSourcesPaths.values()
 
         print('building composite glyphs:\n')
 
@@ -721,6 +735,8 @@ class xProject:
         if tuneBaseGlyphs:
             baseGlyphs = []
             for glyphName in glyphNames:
+                if glyphName not in self.defaultFont:
+                    continue
                 g = self.defaultFont[glyphName]
                 for c in g.components:
                     baseGlyphs.append(c.baseGlyph)
@@ -729,11 +745,17 @@ class xProject:
 
         for glyphName in glyphNames:
 
+            if glyphName not in self.defaultFont:
+                print(f'glyph /{glyphName} not in default font, skipping...\n')
+                continue
             glyphDefault   = self.defaultFont[glyphName]
+
+            if glyphName not in referenceFont:
+                print(f'glyph /{glyphName} not in reference font, skipping...\n')
+                continue
             glyphReference = referenceFont[glyphName]
 
             matchingPoints = getMatchingPoints(glyphDefault, glyphReference)
-
             totalDelta = 0
 
             if self.verbose:
@@ -758,11 +780,11 @@ class xProject:
                 # make tuning glyph
                 tuningGlyph = makeTuningGlyph(blendedGlyph, blendedReference, glyphDefault, matchingPoints)
 
-                deltaValue = calculateDeltaValue(glyphDefault, tuningGlyph)
+                deltaValues = calculateDeltaValues(glyphDefault, tuningGlyph)
                 if self.verbose:
-                    print(f'{deltaValue:.2f}')
+                    print(f"Σ {deltaValues['total']:.2f}")
 
-                totalDelta += deltaValue
+                totalDelta += deltaValues['total']
 
                 # save glyph to tuning source
                 tuningSource = OpenFont(ufoPath, showInterface=False)
@@ -770,8 +792,7 @@ class xProject:
                 tuningSource.save()
 
             if self.verbose:
-                print(f'\taverage glyph delta: {totalDelta / len(self.tuningSources):.2f} units per point')
-                print()
+                print(f'\n\taverage delta: Σ {totalDelta / len(self.tuningSources):.2f}\n')
 
         if self.verbose:
             print('...done!\n')
@@ -1004,9 +1025,6 @@ class xProject:
             # set value for corner tuning axes
             if self.tuning:
                 for tuningStyleName, tuningAxis in self.tuningAxes.items():
-                    # tag = tuningAxis.tag
-                    # get axis name
-                    # name = self.parametricAxesNames[tag] if tag in self.parametricAxesNames else tag
                     if styleName == tuningStyleName:
                         outputLocation[tuningAxis.name] = tuningAxis.maximum
                     else:
@@ -1014,7 +1032,6 @@ class xProject:
 
             m.inputLocation  = inputLocation
             m.outputLocation = outputLocation
-            # m.description    = styleName
 
             self.designspace.addAxisMapping(m)
 
@@ -1093,6 +1110,11 @@ class xProject:
 
         # generate variable font with fontmake
 
+        if not self.tuning:
+            varFontPath = self.varFontPath.replace('.ttf', '_no-tuning.ttf')
+        else:
+            varFontPath = self.varFontPath
+
         if 'PYTHONHOME' in os.environ:
            del os.environ['PYTHONHOME']
 
@@ -1101,7 +1123,7 @@ class xProject:
         cmd  = ['/Library/Frameworks/Python.framework/Versions/3.11/bin/fontmake']
         cmd += ['-m', self.designspacePath]
         cmd += ['-o', 'variable']
-        cmd += ['--output-path', self.varFontPath]
+        cmd += ['--output-path', varFontPath]
         if not featureWriter:
             cmd += ['--feature-writer', 'None']
         if noGDEF:
@@ -1115,7 +1137,7 @@ class xProject:
                 print(line,)
             retval = p.wait()
 
-        print(f'({os.path.exists(self.varFontPath)})')
+        print(f'({os.path.exists(varFontPath)})')
 
         # subset variable font with pyftsubset
         if subset:
@@ -1123,11 +1145,11 @@ class xProject:
             glyphNames = self.smartSets.get(subset)
             if glyphNames:
                 print(f'\tsubsetting font ({subset})...')
-                font = TTFont(self.varFontPath)
+                font = TTFont(varFontPath)
                 subsetter = Subsetter()
                 subsetter.populate(glyphs=glyphNames)
                 subsetter.subset(font)
-                font.save(self.varFontPath)
+                font.save(varFontPath)
             else:
                 print(f'\tsubsetting aborted: no subset glyphs available.')
 
@@ -1371,18 +1393,22 @@ class xProject:
 
             P.save(glyphMemesFolder, pdfFileName)
 
-    def proofSourcesGlyphSet(self, familyName=None, showCompatible=False, validateComposites=True):
+    def proofSourcesGlyphSet(self, familyName=None, showCompatible=False, validateComposites=True, proofsFolder=None):
         '''Build glyph set PDF proofs.'''
         if not familyName:
             familyName = self.familyName
 
         sourcePaths = sorted(glob.glob(f'{self.sourcesFolder}/*.ufo'))
-        glyphsetProofsFolder = os.path.join(self.proofsFolder, 'PDF', 'glyphset')
+
+        if proofsFolder:
+            glyphsetProofsFolder = proofsFolder
+        else:
+            glyphsetProofsFolder = os.path.join(self.proofsFolder, 'PDF', 'glyphset')
 
         P = GlyphSetProofer(f'{familyName}', self.defaultSourcePath, sourcePaths, self.glyphConstructionsPath)
         P.checksShowCompatible = showCompatible
         P.validateComposites = validateComposites
-        P.build(savePDF=True, folder=glyphsetProofsFolder)
+        P.build(savePDF=True, folder=glyphsetProofsFolder, splitSave=True)
 
     def proofBlends(self, glyphNames, margins=True, labels=True, levels=False, levelsShow=[1, 2, 3, 4], header=True, footer=True, points=False, proofsFolder=None): # familyName=None
         '''Build PDF proof of blends.'''
@@ -1456,4 +1482,7 @@ class xProject:
 
             pdfFileName = os.path.splitext(os.path.split(self.designspacePath)[-1])[0]
             T.save(tuningProofsFolder, pdfFileName)
+
+
+
 

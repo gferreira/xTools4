@@ -266,7 +266,7 @@ class GlyphSetProofer:
 
                 n += 1
 
-    def build(self, savePDF=False, folder=None):
+    def build(self, savePDF=False, splitSave=False, folder=None):
 
         defaultFont = OpenFont(self.defaultFontPath, showInterface=False)
         sources     = [OpenFont(srcPath, showInterface=False) for srcPath in self.sourcePaths]
@@ -274,15 +274,27 @@ class GlyphSetProofer:
 
         now = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
-        DB.newDrawing()
-        for font in sources:
-            self._makePage(font, defaultFont, now)
+        if folder is None:
+            folder = os.getcwd()
 
-        if savePDF:
-            if folder is None:
-                folder = os.getcwd()
-            pdfPath = os.path.join(folder, f"glyphset_{self.familyName.replace(' ', '-')}.pdf")
-            DB.saveImage(pdfPath)
+        if not os.path.exists(folder):
+            os.makedirs(folder)
+
+        if savePDF and splitSave:
+            for font in sources:
+                DB.newDrawing()
+                self._makePage(font, defaultFont, now)
+                pdfPath = os.path.join(folder, f"{self.familyName.replace(' ', '-')}_{font.info.styleName}.pdf")
+                DB.saveImage(pdfPath)
+
+        else:
+            DB.newDrawing()
+            for font in sources:
+                self._makePage(font, defaultFont, now)
+
+            if savePDF:
+                pdfPath = os.path.join(folder, f"{self.familyName.replace(' ', '-')}.pdf")
+                DB.saveImage(pdfPath)
 
 
 class GlyphSetProoferDesignspace:

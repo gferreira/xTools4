@@ -214,18 +214,22 @@ class GlyphValidatorController(ezui.WindowController):
         nestedMixed         = []
 
         for glyphName in currentFont.glyphOrder:
-            defaultGlyph = defaultFont[glyphName]
-            group = currentFont[glyphName].getRepresentation(f"{KEY}.validationGroup", defaultGlyph=defaultGlyph)
-            if group == 'componentsEqual':
-                componentsEqual.append(glyphName)
-            elif group == 'componentsDifferent':
-                componentsDifferent.append(glyphName)
-            elif group == 'contoursEqual':
-                contoursEqual.append(glyphName)
-            elif group == 'contoursDifferent':
-                contoursDifferent.append(glyphName)
-            elif group == 'warning':
+            if glyphName not in defaultFont:
+                print(f'ERROR: glyph /{glyphName} not in default font')
                 nestedMixed.append(glyphName)
+            else:
+                defaultGlyph = defaultFont[glyphName]
+                group = currentFont[glyphName].getRepresentation(f"{KEY}.validationGroup", defaultGlyph=defaultGlyph)
+                if group == 'componentsEqual':
+                    componentsEqual.append(glyphName)
+                elif group == 'componentsDifferent':
+                    componentsDifferent.append(glyphName)
+                elif group == 'contoursEqual':
+                    contoursEqual.append(glyphName)
+                elif group == 'contoursDifferent':
+                    contoursDifferent.append(glyphName)
+                elif group == 'warning':
+                    nestedMixed.append(glyphName)
 
         filters = {
             'contoursEqual'       : self.w.getItem('filterContoursEqual').get(),

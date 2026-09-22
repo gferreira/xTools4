@@ -14,7 +14,7 @@
     <nav id='navbar-main' class="navbar fixed-top navbar-expand-sm"> <!-- navbar-dark bg-secondary -->
       <div class="container mx-auto px-md-4">
         <a class="navbar-brand" id='logo' href="http://localhost:4000/">
-          <i class="bi bi-tools fs-2"></i>
+          <img style="height:2.5em;" src='http://localhost:4000/images/icons/xtools-3.png' />
         </a>
         <button class="navbar-toggler navbar-light" type="button" data-bs-toggle="collapse" data-bs-target="#navbarItems" aria-controls="navbarItems" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
@@ -78,16 +78,14 @@
               <dd>Open a dialog to select the source to check against the current font.</dd>
               <dt>reload</dt>
               <dd>Reload the selected source from disk (in case it has changed).</dd>
-              <dt>show default</dt>
-              <dd>Show the default glyph in the background.</dd>
               <dt>show distance</dt>
               <dd>Show x and/or y distance of each point in relation to the default.</dd>
               <dt>selection only</dt>
               <dd>Show the distance visualization only for selected points.</dd>
-              <dt>subtract (-)</dt>
-              <dd>Subtract the default glyph from the current glyph.</dd>
-              <dt>add (+)</dt>
-              <dd>Add the default glyph to the current glyph.</dd>
+              <dt>delta values</dt>
+              <dd>Display average delta values.</dd>
+              <dt>threshold</dt>
+              <dd>Adjust the threshold value between green and red values.</dd>
               <dt>display</dt>
               <dd>Turn the visualisation on/off.</dd>
             </dl>
@@ -96,6 +94,10 @@
         <h2 id="display">Display</h2>
         <p><img src="http://localhost:4000/images/variable/VarGlyphViewer_preview.png" alt="" class="img-fluid" /></p>
         <h2 id="color-code">Color code</h2>
+        <style>
+          .table { td:nth-child(1) { width: 8em; }
+        </style>
+        <h5 id="delta-vectors">Delta vectors</h5>
         <table class="table table-hover">
           <tbody>
             <tr>
@@ -112,12 +114,51 @@
             </tr>
           </tbody>
         </table>
-        <div class="card bg-light mt-5 mb-3 rounded-0">
-          <div class="card-header">note</div>
-          <div class="card-body">
-            <p class="card-text">For more info on adding and subtracting glyphs, see <a href="http://doc.robofont.com/documentation/tutorials/using-glyphmath/">Using GlyphMath</a>.</p>
-          </div>
-        </div>
+        <h5 id="delta-values">Delta values</h5>
+        <table class="table table-hover">
+          <tbody>
+            <tr>
+              <td><span class="blue">blue</span></td>
+              <td>no change</td>
+            </tr>
+            <tr>
+              <td><span class="red">red</span></td>
+              <td>change beyond threshold</td>
+            </tr>
+            <tr>
+              <td><span class="green">green</span></td>
+              <td>change below threshold</td>
+            </tr>
+          </tbody>
+        </table>
+        <h2 id="average-delta-values">Average delta values</h2>
+        <p>Average delta values allow us to quantify the variation between two glyphs. This is specially useful when analysing tuning glyphs.</p>
+        <p>Values are expressed in <strong>average delta units per item</strong>.</p>
+        <p>The total average delta value (Σ) is computed as the sum of all specific average delta values (points, anchors, components, width), divided by the total item count.</p>
+        <table class="table table-hover">
+          <tbody>
+            <tr>
+              <td>Σ</td>
+              <td>total average delta values / total item count</td>
+            </tr>
+            <tr>
+              <td>P</td>
+              <td>total point deltas / point count</td>
+            </tr>
+            <tr>
+              <td>A</td>
+              <td>total anchor deltas / anchor count</td>
+            </tr>
+            <tr>
+              <td>C</td>
+              <td>total component deltas / component count</td>
+            </tr>
+            <tr>
+              <td>W</td>
+              <td>width delta</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </main>
     <footer class="container mx-auto px-auto px-md-4 my-4" markdown=1>
@@ -130,7 +171,7 @@
         This work is licensed under <a href='http://creativecommons.org/licenses/by-sa/4.0/'>Creative Commons Attribution-ShareAlike 4.0 International</a>.
       </p>
       <p class='small text-muted'>
-        <i class="bi bi-arrow-counterclockwise"></i> Last updated on 29 Aug 2026 12:55:02.
+        <i class="bi bi-arrow-counterclockwise"></i> Last updated on 21 Sep 2026 20:45:38.
       </p>
     </footer>
   </body>

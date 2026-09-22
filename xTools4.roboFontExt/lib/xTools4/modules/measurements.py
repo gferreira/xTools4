@@ -544,11 +544,10 @@ def transferGlyphMeasurements(glyphMeasurements, srcGlyph, dstGlyph):
 
     return _glyphMeasurements
 
-def calculateDeltaValue(glyph1, glyph2):
+def calculateDeltaValues(glyph1, glyph2):
 
-    # points
     deltaPoints = 0
-    pointCount = 0
+    countPoints = 0
     for ci, c in enumerate(glyph1.contours):
         for pi, p in enumerate(c.points):
             p1 = glyph1.contours[ci].points[pi]
@@ -556,25 +555,56 @@ def calculateDeltaValue(glyph1, glyph2):
             deltaX = p2.x - p1.x
             deltaY = p2.y - p1.y
             deltaPoints += math.hypot(deltaX, deltaY)
-            pointCount += 1
+            countPoints += 1
+    valuePoints = deltaPoints  / countPoints if countPoints else 0
 
-    # components?
-    # width?
-    # anchors?
+    deltaAnchors = 0
+    countAnchors = 0
+    for ai, a in enumerate(glyph1.anchors):
+        a1 = glyph1.anchors[ai]
+        a2 = glyph2.anchors[ai]
+        deltaX = a2.x - a1.x
+        deltaY = a2.y - a1.y
+        deltaAnchors += math.hypot(deltaX, deltaY)
+        countAnchors += 1
+    valueAnchors = deltaAnchors / countAnchors if countAnchors else 0
 
-    return deltaPoints / pointCount
+    deltaComponents = 0
+    countComponents = 0
+    for ai, a in enumerate(glyph1.components):
+        a1 = glyph1.components[ai]
+        a2 = glyph2.components[ai]
+        deltaX = a2.offset[0] - a1.offset[0]
+        deltaY = a2.offset[1] - a1.offset[1]
+        deltaComponents += math.hypot(deltaX, deltaY)
+        countComponents += 1
+    valueComponents = deltaComponents / countComponents if countComponents else 0
+
+    valueWidth = glyph2.width - glyph1.width
+
+    valueTotal = (deltaPoints + deltaAnchors + deltaComponents + abs(valueWidth)) / (countPoints + countAnchors + countComponents + 1)
+
+    return {
+        'points'     : valuePoints,
+        'anchors'    : valueAnchors,
+        'components' : valueComponents,
+        'width'      : valueWidth,
+        'total'      : valueTotal,
+    }
 
 def makeTuningGlyph(glyph1, glyph2, defaultGlyph, matchingPoints):
 
     tuningGlyph = defaultGlyph.copy()
 
     if tuningGlyph.components:
-        for i, c in enumerate(tuningGlyph.components):
-            c1 = glyph1.components[i]
-            c2 = glyph2.components[i]
-            deltaX = c2.offset[0] - c1.offset[0]
-            deltaY = c2.offset[1] - c1.offset[1]
-            c.offset = c.offset[0] + deltaX, c.offset[1] + deltaY
+        if len(glyph1.components) == len(glyph2.components) == len(tuningGlyph.components):
+            for i, c in enumerate(tuningGlyph.components):
+                if len(glyph1.components) == len(glyph2.components):
+                    c1 = glyph1.components[i]
+                    c2 = glyph2.components[i]
+                    deltaX = c2.offset[0] - c1.offset[0]
+                    deltaY = c2.offset[1] - c1.offset[1]
+                    c.offset = c.offset[0] + deltaX, c.offset[1] + deltaY
 
     else:
         for mp1, mp2 in matchingPoints:
@@ -602,4 +632,6 @@ def getMatchingPoints(glyph1, glyph2):
                     if p1.x == p2.x and p1.y == p2.y:
                         matchingPoints.append(((ci1, pi1), (ci2, pi2)))
     return matchingPoints
+
+
 

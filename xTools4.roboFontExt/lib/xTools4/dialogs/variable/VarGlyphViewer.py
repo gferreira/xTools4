@@ -1,15 +1,21 @@
 from importlib import reload
 import xTools4.modules.glyphutils
 reload(xTools4.modules.glyphutils)
+import xTools4.modules.measurements
+reload(xTools4.modules.measurements)
 
 import ezui
 # from math import atan, degrees
+from random import random
+from merz import MerzView
 from mojo.UI import GetFile
-from mojo.roboFont import OpenWindow, OpenFont
+from mojo.pens import DecomposePointPen
+from mojo.roboFont import OpenWindow, OpenFont, RGlyph
 from mojo.subscriber import Subscriber, registerSubscriberEvent, roboFontSubscriberEventRegistry, registerGlyphEditorSubscriber, unregisterGlyphEditorSubscriber
 from mojo.events import postEvent
 from xTools4.modules.glyphutils import getImplicitSelectedPoints
 from xTools4.dialogs.variable.Measurements import colorCheckTrue, colorCheckFalse, colorCheckEqual
+from xTools4.modules.measurements import calculateDeltaValues
 
 
 KEY = 'com.xTools4.dialogs.variable.varGlyphViewer'
@@ -45,16 +51,16 @@ class VarGlyphViewer(ezui.WindowController):
     defaultFont     = None
 
     content = """
-    ( get default… )  @getDefaultButton
-    ( reload ↺ )      @reloadDefaultButton
+    ( get default… )    @getDefaultButton
+    ( reload ↺ )        @reloadDefaultButton
 
-    [X] show default    @showDefault
-    [X] show distance   @showValues
+    [ ] show distance   @showValues
     [ ] selection only  @selectionOnly
+    [X] delta values    @showInfo
 
-    ((( – | + )))     @addSubtractButton
+    [__](±)             @threshold
 
-    [X] display       @preview
+    [X] display         @preview
     """
 
     descriptionData = dict(
@@ -70,6 +76,10 @@ class VarGlyphViewer(ezui.WindowController):
         addSubtractButton=dict(
             sizeStyle="regular",
             width='fill',
+        ),
+        threshold=dict(
+            minValue=0,
+            maxValue=1000,
         ),
     )
 
@@ -133,16 +143,13 @@ class VarGlyphViewer(ezui.WindowController):
     def selectionOnlyCallback(self, sender):
         self.settingsChangedCallback(None)
 
-    # def showEqualCallback(self, sender):
-    #     self.settingsChangedCallback(None)
-
-    # def showDeltasCallback(self, sender):
-    #     self.settingsChangedCallback(None)
-
     def showValuesCallback(self, sender):
         self.settingsChangedCallback(None)
 
-    def showDefaultCallback(self, sender):
+    def showInfoCallback(self, sender):
+        self.settingsChangedCallback(None)
+
+    def thresholdCallback(self, sender):
         self.settingsChangedCallback(None)
 
     def previewCallback(self, sender):
@@ -171,6 +178,9 @@ class VarGlyphViewerSubscriberGlyphEditor(Subscriber):
 
     controller = None
 
+    dash = 2, 2
+    dotSize = 4
+
     def build(self):
         glyphEditor = self.getGlyphEditor()
         container = glyphEditor.extensionContainer(
@@ -179,8 +189,32 @@ class VarGlyphViewerSubscriberGlyphEditor(Subscriber):
         )
         self.displayLayer = container.appendBaseSublayer()
 
+        #---------------------
+        # average delta values
+
+        sizeX, sizeY = 800, 60
+        color = 0, 0.5, 1, 1
+        self.merzViewReport = MerzView((0, 0, sizeX, sizeY))
+        container = self.merzViewReport.getMerzContainer()
+
+        self.reportLayer = container.appendTextBoxSublayer(
+            name=f'{KEY}.report',
+            backgroundColor=None,
+            position=(0, 0),
+            size=(sizeX, sizeY),
+            padding=(10, 10),
+            fillColor=color,
+            pointSize=13,
+            font='Menlo-Bold',
+            horizontalAlignment="left",
+            verticalAlignment="top",
+        )
+        glyphEditor.addGlyphEditorSubview(self.merzViewReport)
+
     def destroy(self):
         self.displayLayer.clearSublayers()
+        glyphEditor = self.getGlyphEditor()
+        glyphEditor.removeGlyphEditorSubview(self.merzViewReport)
 
     def glyphEditorDidSetGlyph(self, info):
         self.controller.glyph = info["glyph"]
@@ -195,171 +229,34 @@ class VarGlyphViewerSubscriberGlyphEditor(Subscriber):
     def varGlyphViewerDidChange(self, info):
         self._drawVarGlyphViewer()
 
-    def _drawVarGlyphViewer(self):
-        self.displayLayer.clearSublayers()
-
-        if self.controller.defaultFont is None:
-            return
-
-        # if self.controller.glyph.name not in self.controller.defaultFont:
-        #     return
-
-        defaultGlyph  = self.controller.defaultGlyph
-
-        if not defaultGlyph:
-            return
-
-        selectionOnly = self.controller.w.getItem('selectionOnly').get()
-        showEqual     = True
-        showDeltas    = True
-        showValues    = self.controller.w.getItem('showValues').get()
-        showDefault   = self.controller.w.getItem('showDefault').get()
-        preview       = self.controller.w.getItem("preview").get()
-
-        if not preview:
-            return
-
-        if showDefault:
-            defaultLayer = self.displayLayer.appendPathSublayer(
-                fillColor=None,
-                strokeColor=(0.5, 0.5, 0.5, 1),
-                strokeWidth=2,
-                opacity=0.2,
-            )
-            glyphPath = defaultGlyph.getRepresentation("merz.CGPath")
-            defaultLayer.setPath(glyphPath)
-
-        dash = 2, 2
-        dotSize = 4
+    def _drawPoints(self, defaultGlyph, selectionOnly=False, showEqual=True, showDeltas=True, showValues=True, preview=True, italicAngle=None):
 
         selectedPoints = getImplicitSelectedPoints(self.controller.glyph)
 
-        italicAngle = self.controller.glyph.font.info.italicAngle
-
-        if italicAngle:
-            g1_ = defaultGlyph.copy()
-            g1_.skewBy((italicAngle, 0))
-            g1_.round()
-            g2_ = self.controller.glyph.copy()
-            g2_.skewBy((italicAngle, 0))
-            g2_.round()
-
-        with self.displayLayer.sublayerGroup():
-
-            #-------------
-            # draw points
-            #-------------
-
-            for ci, c in enumerate(self.controller.glyph):
-                for pi, p in enumerate(c.points):
-                    p2 = defaultGlyph.contours[ci].points[pi]
-                    isEqual = p2.x == p.x and p2.y == p.y
-
-                    if italicAngle:
-                        p1_ = g1_.contours[ci].points[pi]
-                        p2_ = g2_.contours[ci].points[pi]
-                        isOrthogonal = p2_.x == p1_.x or p2_.y == p1_.y
-                    else:
-                        isOrthogonal = p2.x == p.x or p2.y == p.y
-
-                    color   = colorCheckTrue   if isOrthogonal else colorCheckFalse
-                    colorBG = colorCheckTrueBG if isOrthogonal else colorCheckFalseBG
-
-                    if isEqual:
-                        if showEqual:
-                            pointEqual = self.displayLayer.appendSymbolSublayer(
-                                position=(p2.x, p2.y),
-                            )
-                            pointEqual.setImageSettings(
-                                dict(
-                                    name="oval",
-                                    size=(dotSize*4, dotSize*4),
-                                    strokeColor=colorCheckEqual,
-                                    strokeWidth=2,
-                                    fillColor=None,
-                                )
-                            )
-                    else:
-                        if showDeltas:
-                            line = self.displayLayer.appendLineSublayer(
-                                startPoint=(p.x, p.y),
-                                endPoint=(p2.x, p2.y),
-                                strokeWidth=1,
-                                strokeColor=color,
-                                strokeDash=dash,
-                            )
-                            ovalSymbol = dict(
-                                name="oval",
-                                size=(dotSize, dotSize),
-                                fillColor=color,
-                            )
-                            line.setEndSymbol(ovalSymbol)
-
-                            if showValues:
-                                if selectionOnly and p not in selectedPoints:
-                                    continue
-
-                                cx = p.x + (p2.x - p.x) * 0.5
-                                cy = p.y + (p2.y - p.y) * 0.5
-
-                                if italicAngle:
-                                    deltaX = p2_.x - p1_.x
-                                    deltaY = p2_.y - p1_.y
-                                else:
-                                    deltaX = p2.x - p.x
-                                    deltaY = p2.y - p.y
-
-                                caption = ''
-
-                                if deltaX:
-                                    caption += f'{int(deltaX)} '
-                                if deltaY:
-                                    caption += f'{int(deltaY)}'
-
-                                self.displayLayer.appendTextLineSublayer(
-                                    position=(cx, cy),
-                                    backgroundColor=colorBG,
-                                    text=caption,
-                                    font="system",
-                                    weight="bold",
-                                    pointSize=9,
-                                    padding=(4, 0),
-                                    cornerRadius=4,
-                                    fillColor=color,
-                                    horizontalAlignment='center',
-                                    verticalAlignment='center',
-                                )
-
-            #--------------
-            # draw anchors
-            #--------------
-
-            for ai, a in enumerate(self.controller.glyph.anchors):
-                if selectionOnly and not a.selected:
-                    continue
-
-                a2 = defaultGlyph.anchors[ai]
-                isEqual = a.x == a2.x and a.y == a2.y
+        for ci, c in enumerate(self.controller.glyph):
+            for pi, p in enumerate(c.points):
+                p2 = defaultGlyph.contours[ci].points[pi]
+                isEqual = p2.x == p.x and p2.y == p.y
 
                 if italicAngle:
-                    a1_ = g1_.anchors[ai]
-                    a2_ = g2_.anchors[ai]
-                    isOrthogonal = a2_.x == a1_.x or a2_.y == a1_.y
+                    p1_ = self.g1_.contours[ci].points[pi]
+                    p2_ = self.g2_.contours[ci].points[pi]
+                    isOrthogonal = p2_.x == p1_.x or p2_.y == p1_.y
                 else:
-                    isOrthogonal = a2.x == a.x or a2.y == a.y
+                    isOrthogonal = p2.x == p.x or p2.y == p.y
 
-                color = colorCheckTrue if isOrthogonal else colorCheckFalse
+                color   = colorCheckTrue   if isOrthogonal else colorCheckFalse
                 colorBG = colorCheckTrueBG if isOrthogonal else colorCheckFalseBG
 
-                if a.x == a2.x and a.y == a2.y:
+                if isEqual:
                     if showEqual:
                         pointEqual = self.displayLayer.appendSymbolSublayer(
-                            position=(a2.x, a2.y),
+                            position=(p2.x, p2.y),
                         )
                         pointEqual.setImageSettings(
                             dict(
                                 name="oval",
-                                size=(dotSize*4, dotSize*4),
+                                size=(self.dotSize*4, self.dotSize*4),
                                 strokeColor=colorCheckEqual,
                                 strokeWidth=2,
                                 fillColor=None,
@@ -367,35 +264,33 @@ class VarGlyphViewerSubscriberGlyphEditor(Subscriber):
                         )
                 else:
                     if showDeltas:
-                        pointDelta = self.displayLayer.appendSymbolSublayer(
-                            position=(a2.x, a2.y),
-                        )
-                        pointDelta.setImageSettings(
-                            dict(
-                                name="oval",
-                                size=(dotSize, dotSize),
-                                strokeWidth=None,
-                                fillColor=color,
-                            )
-                        )
                         line = self.displayLayer.appendLineSublayer(
-                            startPoint=(a.x, a.y),
-                            endPoint=(a2.x, a2.y),
+                            startPoint=(p.x, p.y),
+                            endPoint=(p2.x, p2.y),
                             strokeWidth=1,
                             strokeColor=color,
-                            strokeDash=dash,
+                            strokeDash=self.dash,
                         )
+                        ovalSymbol = dict(
+                            name="oval",
+                            size=(self.dotSize, self.dotSize),
+                            fillColor=color,
+                        )
+                        line.setEndSymbol(ovalSymbol)
 
                         if showValues:
-                            cx = a.x + (a2.x - a.x) * 0.5
-                            cy = a.y + (a2.y - a.y) * 0.5
+                            if selectionOnly and p not in selectedPoints:
+                                continue
+
+                            cx = p.x + (p2.x - p.x) * 0.5
+                            cy = p.y + (p2.y - p.y) * 0.5
 
                             if italicAngle:
-                                deltaX = a2_.x - a1_.x
-                                deltaY = a2_.y - a1_.y
+                                deltaX = p2_.x - p1_.x
+                                deltaY = p2_.y - p1_.y
                             else:
-                                deltaX = a2.x - a.x
-                                deltaY = a2.y - a.y
+                                deltaX = p2.x - p.x
+                                deltaY = p2.y - p.y
 
                             caption = ''
 
@@ -418,6 +313,269 @@ class VarGlyphViewerSubscriberGlyphEditor(Subscriber):
                                 verticalAlignment='center',
                             )
 
+    def _drawAnchors(self, defaultGlyph, selectionOnly=False, showEqual=True, showDeltas=True, showValues=True, preview=True, italicAngle=None):
+
+        for ai, a in enumerate(self.controller.glyph.anchors):
+            if selectionOnly and not a.selected:
+                continue
+
+            a2 = defaultGlyph.anchors[ai]
+            isEqual = a.x == a2.x and a.y == a2.y
+
+            if italicAngle:
+                a1_ = self.g1_.anchors[ai]
+                a2_ = self.g2_.anchors[ai]
+                isOrthogonal = a2_.x == a1_.x or a2_.y == a1_.y
+            else:
+                isOrthogonal = a2.x == a.x or a2.y == a.y
+
+            color = colorCheckTrue if isOrthogonal else colorCheckFalse
+            colorBG = colorCheckTrueBG if isOrthogonal else colorCheckFalseBG
+
+            if a.x == a2.x and a.y == a2.y:
+                if showEqual:
+                    pointEqual = self.displayLayer.appendSymbolSublayer(
+                        position=(a2.x, a2.y),
+                    )
+                    pointEqual.setImageSettings(
+                        dict(
+                            name="oval",
+                            size=(self.dotSize*4, self.dotSize*4),
+                            strokeColor=colorCheckEqual,
+                            strokeWidth=2,
+                            fillColor=None,
+                        )
+                    )
+            else:
+                if showDeltas:
+                    pointDelta = self.displayLayer.appendSymbolSublayer(
+                        position=(a2.x, a2.y),
+                    )
+                    pointDelta.setImageSettings(
+                        dict(
+                            name="oval",
+                            size=(self.dotSize, self.dotSize),
+                            strokeWidth=None,
+                            fillColor=color,
+                        )
+                    )
+                    line = self.displayLayer.appendLineSublayer(
+                        startPoint=(a.x, a.y),
+                        endPoint=(a2.x, a2.y),
+                        strokeWidth=1,
+                        strokeColor=color,
+                        strokeDash=self.dash,
+                    )
+
+                    if showValues:
+                        cx = a.x + (a2.x - a.x) * 0.5
+                        cy = a.y + (a2.y - a.y) * 0.5
+
+                        if italicAngle:
+                            deltaX = a2_.x - a1_.x
+                            deltaY = a2_.y - a1_.y
+                        else:
+                            deltaX = a2.x - a.x
+                            deltaY = a2.y - a.y
+
+                        caption = ''
+
+                        if deltaX:
+                            caption += f'{int(deltaX)} '
+                        if deltaY:
+                            caption += f'{int(deltaY)}'
+
+                        self.displayLayer.appendTextLineSublayer(
+                            position=(cx, cy),
+                            backgroundColor=colorBG,
+                            text=caption,
+                            font="system",
+                            weight="bold",
+                            pointSize=9,
+                            padding=(4, 0),
+                            cornerRadius=4,
+                            fillColor=color,
+                            horizontalAlignment='center',
+                            verticalAlignment='center',
+                        )
+
+    def _drawComponents(self, defaultGlyph, selectionOnly=False, showEqual=True, showDeltas=True, showValues=True, preview=True, italicAngle=None):
+
+        for ci, c in enumerate(self.controller.glyph.components):
+            if selectionOnly and not c.selected:
+                continue
+
+            c2 = defaultGlyph.components[ci]
+
+            isEqual = c.offset[0] == c2.offset[0] and c.offset[1] == c2.offset[1]
+
+            xMin, yMin, xMax, yMax = c.bounds
+            xMin2, yMin2, xMax2, yMax2 = c2.bounds
+
+            if italicAngle:
+                c1_ = self.g1_.components[ci]
+                c2_ = self.g2_.components[ci]
+                isOrthogonal = c2_.offset[0] == c1_.offset[0] or c2_.offset[1] == c1_.offset[1]
+                xMin2_, yMin2_, xMax2_, yMax2_ = c2_.bounds
+            else:
+                isOrthogonal = c2.offset[0] == c.offset[0] or c2.offset[1] == c.offset[1]
+
+            color = colorCheckTrue if isOrthogonal else colorCheckFalse
+            colorBG = colorCheckTrueBG if isOrthogonal else colorCheckFalseBG
+
+            if c.offset[0] == c2.offset[0] and c.offset[1] == c2.offset[1]:
+                if showEqual:
+                    pointEqual = self.displayLayer.appendSymbolSublayer(
+                        position=(xMin2, yMin2),
+                    )
+                    pointEqual.setImageSettings(
+                        dict(
+                            name="oval",
+                            size=(self.dotSize*4, self.dotSize*4),
+                            strokeColor=colorCheckEqual,
+                            strokeWidth=2,
+                            fillColor=None,
+                        )
+                    )
+            else:
+                if showDeltas:
+                    pointDelta = self.displayLayer.appendSymbolSublayer(
+                        position=(xMin2, yMin2),
+                    )
+                    pointDelta.setImageSettings(
+                        dict(
+                            name="oval",
+                            size=(self.dotSize, self.dotSize),
+                            strokeWidth=None,
+                            fillColor=color,
+                        )
+                    )
+                    line = self.displayLayer.appendLineSublayer(
+                        startPoint=(xMin, yMin),
+                        endPoint=(xMin2, yMin2),
+                        strokeWidth=1,
+                        strokeColor=color,
+                        strokeDash=self.dash,
+                    )
+
+                    if showValues:
+                        cx = xMin + (xMin2 - xMin) * 0.5
+                        cy = yMin + (yMin2 - yMin) * 0.5
+
+                        if italicAngle:
+                            deltaX = xMin2_ - xMin_
+                            deltaY = yMin2_ - yMin_
+                        else:
+                            deltaX = xMin2 - xMin
+                            deltaY = yMin2 - yMin
+
+                        caption = ''
+
+                        if deltaX:
+                            caption += f'{int(deltaX)} '
+                        if deltaY:
+                            caption += f'{int(deltaY)}'
+
+                        self.displayLayer.appendTextLineSublayer(
+                            position=(cx, cy),
+                            backgroundColor=colorBG,
+                            text=caption,
+                            font="system",
+                            weight="bold",
+                            pointSize=9,
+                            padding=(4, 0),
+                            cornerRadius=4,
+                            fillColor=color,
+                            horizontalAlignment='center',
+                            verticalAlignment='center',
+                        )
+
+    def _drawVarGlyphViewer(self):
+        self.displayLayer.clearSublayers()
+
+        if self.controller.defaultFont is None:
+            return
+
+        # if self.controller.glyph.name not in self.controller.defaultFont:
+        #     return
+
+        defaultGlyph  = self.controller.defaultGlyph
+
+        if defaultGlyph is None:
+            return
+
+        selectionOnly = self.controller.w.getItem('selectionOnly').get()
+        showEqual     = True
+        showDeltas    = True
+        showDefault   = True
+        showValues    = self.controller.w.getItem('showValues').get()
+        showInfo      = self.controller.w.getItem('showInfo').get()
+        preview       = self.controller.w.getItem("preview").get()
+        threshold     = self.controller.w.getItem("threshold").get()
+
+        if not preview:
+            return
+
+        if showDefault:
+
+            defaultLayer = self.displayLayer.appendPathSublayer(
+                fillColor=None,
+                strokeColor=(0.5, 0.5, 0.5, 1),
+                strokeWidth=2,
+                opacity=0.2,
+            )
+            glyphPath = defaultGlyph.getRepresentation("merz.CGPath")
+            defaultLayer.setPath(glyphPath)
+
+            if defaultGlyph.components:
+                defaultGlyphComponents = RGlyph()
+                pointPen = defaultGlyphComponents.getPointPen()
+                decomposePen = DecomposePointPen(defaultGlyph.font, pointPen)
+                defaultGlyph.drawPoints(decomposePen)
+                glyphPathComponents = defaultGlyphComponents.getRepresentation("merz.CGPath")
+                defaultLayer.setPath(glyphPathComponents)
+
+        italicAngle = self.controller.glyph.font.info.italicAngle
+
+        if italicAngle:
+            # hack to make slanted duplicates available to drawing sub-functions
+            self.g1_ = defaultGlyph.copy()
+            self.g1_.skewBy((italicAngle, 0))
+            self.g1_.round()
+            self.g2_ = self.controller.glyph.copy()
+            self.g2_.skewBy((italicAngle, 0))
+            self.g2_.round()
+
+        with self.displayLayer.sublayerGroup():
+            self._drawPoints(defaultGlyph, selectionOnly=selectionOnly, showEqual=showEqual, showDeltas=showDeltas, showValues=showValues, preview=preview, italicAngle=italicAngle)
+            self._drawAnchors(defaultGlyph, selectionOnly=selectionOnly, showEqual=showEqual, showDeltas=showDeltas, showValues=showValues, preview=preview, italicAngle=italicAngle)
+            self._drawComponents(defaultGlyph, selectionOnly=selectionOnly, showEqual=showEqual, showDeltas=showDeltas, showValues=showValues, preview=preview, italicAngle=italicAngle)
+
+        if showInfo:
+
+            with self.reportLayer.propertyGroup():
+
+                deltas = calculateDeltaValues(self.controller.glyph, defaultGlyph)
+
+                colorPoints     = colorCheckEqual if deltas['points']     == 0 else colorCheckTrue if deltas['points']     < threshold else colorCheckFalse
+                colorAnchors    = colorCheckEqual if deltas['anchors']    == 0 else colorCheckTrue if deltas['anchors']    < threshold else colorCheckFalse
+                colorComponents = colorCheckEqual if deltas['components'] == 0 else colorCheckTrue if deltas['components'] < threshold else colorCheckFalse
+                colorWidth      = colorCheckEqual if deltas['width']      == 0 else colorCheckTrue if deltas['width']      < threshold else colorCheckFalse
+                colorTotal      = colorCheckEqual if deltas['total']      == 0 else colorCheckTrue if deltas['total']      < threshold else colorCheckFalse
+
+                txt = [
+                    dict(text=f"Σ {deltas['total']:.2f}  ",      fillColor=colorTotal),
+                    dict(text=f"P {deltas['points']:.2f}  ",     fillColor=colorPoints),
+                    dict(text=f"A {deltas['anchors']:.2f}  ",    fillColor=colorAnchors),
+                    dict(text=f"C {deltas['components']:.2f}  ", fillColor=colorComponents),
+                    dict(text=f"W {abs(deltas['width']):.2f}  ", fillColor=colorWidth),
+                ]
+
+                self.reportLayer.setText(txt)
+                self.reportLayer.setVisible(True)
+
+        else:
+                self.reportLayer.setVisible(False)
 
 eventName = f"{VarGlyphViewer.key}.changed"
 

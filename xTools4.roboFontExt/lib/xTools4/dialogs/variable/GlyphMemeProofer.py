@@ -1,3 +1,7 @@
+from importlib import reload
+import xTools4.modules.glyphMemeProofer
+reload(xTools4.modules.glyphMemeProofer)
+
 import os, time
 import AppKit
 import drawBot as DB
@@ -79,11 +83,18 @@ class GlyphMemeProoferController:
 
         y += self.lineHeight + p
         group1.glyphMeme = List(
-                (x, y, -p, -self.lineHeight*2 - p*3),
+                (x, y, -p, -self.lineHeight*3 - p*4),
                 [],
                 allowsMultipleSelection=True,
                 allowsEmptySelection=False,
                 enableDelete=False,
+            )
+
+        y = -self.lineHeight*3 - p*3
+        group1.useItalicAngle = CheckBox(
+                (x, y, -p, self.lineHeight),
+                'use italic angle',
+                # sizeStyle='small',
             )
 
         y = -self.lineHeight*2 - p*2
@@ -180,10 +191,12 @@ class GlyphMemeProoferController:
 
         group = self._groups[0]['view']
         glyphName = group.glyphSelector.getItem()
+        useItalicAngle = group.useItalicAngle.get()
 
         DB.newDrawing()
 
         self.proofer = GlyphMemeProofer(glyphName, self.designspacePath)
+        self.proofer.useItalicAngle = useItalicAngle
         # self.proofer.anchorsDraw = False
         self.proofer.draw()
 

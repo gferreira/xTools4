@@ -27,7 +27,7 @@ italicOffsetKey = 'com.typemytype.robofont.italicSlantOffset'
 
 class GlyphMemeController(ezui.WindowController):
 
-    title   = 'GlyphMeme'
+    title   = 'parameters'
     margins = 10
     verbose = True
 
@@ -330,7 +330,6 @@ class GlyphMemeController(ezui.WindowController):
         glyphNames = getGlyphs2(f, glyphNames=True)
 
         for glyphName in glyphNames:
-
             glyph = f[glyphName].getLayer('foreground')
 
             if glyphSetPathKey not in glyph.lib:
