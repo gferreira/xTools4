@@ -236,18 +236,18 @@ class CopyMarginsDialog(hDialog, BaseWindowController):
             print('\t', end='')
             print(' '.join(glyphNames), end='\n')
 
-        # -----------
-        # copy widths
-        # -----------
+        # ------------
+        # copy margins
+        # ------------
 
         for glyphName in glyphNames:
             sourceGlyph = sourceFont[glyphName].getLayer(self.sourceLayer)
             targetGlyph = targetFont[glyphName].getLayer(self.targetLayer)
             targetGlyph.prepareUndo('copy margins')
             if left:
-                targetGlyph.leftMargin = sourceGlyph.leftMargin
+                targetGlyph.angledLeftMargin = sourceGlyph.angledLeftMargin
             if right:
-                targetGlyph.rightMargin = sourceGlyph.rightMargin
+                targetGlyph.angledRightMargin = sourceGlyph.angledRightMargin
             targetGlyph.changed()
             targetGlyph.performUndo()
 

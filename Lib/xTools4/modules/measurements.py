@@ -592,7 +592,7 @@ def calculateDeltaValues(glyph1, glyph2):
         'total'      : valueTotal,
     }
 
-def makeTuningGlyph(glyph1, glyph2, defaultGlyph, matchingPoints):
+def makeTuningGlyph(glyph1, glyph2, defaultGlyph): # matchingPoints
 
     tuningGlyph = defaultGlyph.copy()
 
@@ -607,16 +607,20 @@ def makeTuningGlyph(glyph1, glyph2, defaultGlyph, matchingPoints):
                     c.offset = c.offset[0] + deltaX, c.offset[1] + deltaY
 
     else:
-        for mp1, mp2 in matchingPoints:
-            ci1, pi1 = mp1
-            ci2, pi2 = mp2
-            p1 = glyph1.contours[ci1].points[pi1]
-            p2 = glyph2.contours[ci2].points[pi2]
-            deltaX = p2.x - p1.x
-            deltaY = p2.y - p1.y
-            pt = tuningGlyph.contours[ci1].points[pi1]
-            pt.x += deltaX
-            pt.y += deltaY
+        # for mp1, mp2 in matchingPoints:
+        #     ci1, pi1 = mp1
+        #     ci2, pi2 = mp2
+        #     p1 = glyph1.contours[ci1].points[pi1]
+        #     p2 = glyph2.contours[ci2].points[pi2]
+
+        for ci, c1 in enumerate(glyph1.contours):
+            for pi, p1 in enumerate(c1.points):
+                p2 = glyph2.contours[ci].points[pi]
+                deltaX = p2.x - p1.x
+                deltaY = p2.y - p1.y
+                pt = tuningGlyph.contours[ci].points[pi]
+                pt.x += deltaX
+                pt.y += deltaY
 
     tuningGlyph.width += (glyph2.width - glyph1.width)
 

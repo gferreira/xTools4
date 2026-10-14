@@ -343,22 +343,15 @@ class BlendsPreviewController:
     def _updateAxesList(self):
         print('updating axes list...')
         axesItems = []
-
-        for axis in self.operator.doc.axes:
-            for axisName in self.blendedAxes:
-                # print('\t', axisName)
-                if axisName in self.ignoreAxes or axisName.startswith('TN'):
-                    continue
-                if axisName == axis.name:
-                    # print(axisName)
+        for axisTag in ['opsz', 'wght', 'wdth']:
+            for axis in self.operator.doc.axes:
+                if axisTag == axis.tag:
                     values = set([axis.minimum, axis.default, axis.maximum])
                     axesItems.append({
                         'axis' : axis.tag,
                         'values': f"{' '.join([str(int(v)) for v in values])}",
                     })
-
-        # the first 3 axes must be: opsz wght wdth
-        self._group1.axesList.set(axesItems[:3])
+        self._group1.axesList.set(axesItems)
 
     def _updatePreview(self):
 

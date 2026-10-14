@@ -409,6 +409,91 @@ class xProject:
                 ignoreTags=ignoreTags,
         )
 
+    def updateGlyphsFromDefault(self, glyphNames, oldDefaultPath, parametric=True, tuning=False, reference=False, preflight=False):
+        '''Update default glyphs in all sources.'''
+        ufoPaths = self.collectSources(parametric=parametric, tuning=tuning, reference=reference)
+
+        batchUpdateGlyphsFromDefault(glyphNames, ufoPaths, self.defaultSourcePath, oldDefaultPath, preflight=preflight)
+
+    def buildCompositeGlyphs(self, glyphNames,  parametric=True, tuning=False, reference=False, preflight=False):
+        '''Build composite glyphs from glyph constructions.'''
+
+        ufoPaths = self.collectSources(parametric=parametric, tuning=tuning, reference=reference)
+
+        print('building composite glyphs:\n')
+
+        for ufoPath in ufoPaths:
+            f = OpenFont(ufoPath, showInterface=False)
+            print(f'\tbuilding glyphs in {os.path.split(ufoPath)[-1]}...')
+            buildAccentedGlyphs(f, glyphNames, self.glyphConstructionsRaw, clear=True, verbose=True, indentLevel=2, autoUnicodes=False)
+            if not preflight:
+                print(f'\tsaving {os.path.split(ufoPath)[-1]}...')
+                f.save()
+            f.close()
+            print()
+
+        print('...done!\n')
+
+    def splitSources(self, srcName, dstName, glyphNames, preflight=True):
+        '''Split new parametric sources from existing sources.'''
+        print('splitting parametric sources...\n')
+
+        for srcPath in self.sourcesPaths:
+            srcFileName = os.path.split(srcPath)[-1]
+            if srcName in srcFileName:
+                # get source font
+                srcFont = OpenFont(srcPath, showInterface=False)
+                # make dest font
+                dstFileName = srcFileName.replace(srcName, dstName)
+                print(f'\tcreating {dstFileName} from {srcFileName}...')
+                # duplicate default as dstName
+                print(f'\t\tduplicating default as {dstFileName}...')
+                dstPath = os.path.join(self.sourcesFolder, dstFileName)
+                if os.path.exists(dstPath):
+                    shutil.rmtree(dstPath)
+                shutil.copytree(self.defaultSourcePath, dstPath)
+                dstFont = OpenFont(dstPath, showInterface=False)
+                # copy glyphNames from srcName to dstName
+                print('\t\tcopying source glyphs to new font...')
+                for glyphName in glyphNames:
+                    if glyphName not in srcFont:
+                        continue
+                    srcGlyph = srcFont[glyphName]
+                    # print(f'\t\t\tcopying {glyphName} from {srcFileName} to {dstFileName}...')
+                    dstFont.insertGlyph(srcGlyph, name=glyphName)
+                # copy glyphNames from default to srcName
+                print('\t\tcopying default glyphs to source font...')
+                for glyphName in glyphNames:
+                    if glyphName not in self.defaultFont:
+                        continue
+                    defaultGlyph = self.defaultFont[glyphName]
+                    # print(f'\t\t\tcopying {glyphName} from default to {srcFileName}...')
+                    srcFont.insertGlyph(defaultGlyph, name=glyphName)
+                # save fonts
+                if not preflight:
+                    print(f'\t\tsaving fonts...')
+                    srcFont.close(save=True)
+                    dstFont.close(save=True)
+
+                print()
+
+        print('...done!\n')
+
+    def sparsifySources(self, parametric=True, tuning=True, reference=True):
+        pass
+
+    def collectSources(self, parametric=True, tuning=True, reference=True):
+        ufoPaths = []
+        if parametric:
+            ufoPaths += self.sourcesPaths
+        if tuning:
+            ufoPaths += self.tuningSourcesPaths
+        if reference:
+            ufoPaths += self.referenceSourcesPaths.values()
+        return ufoPaths
+
+    # creating files
+
     def createParametricSources(self, parameters, minSource=True, maxSource=True):
         '''Create fresh min/max sources for parametric axes from default.'''
         if self.verbose:
@@ -472,24 +557,11 @@ class xProject:
         with open(self.glyphConstructionsPath, 'w') as f:
             pass
 
-    def updateGlyphsFromDefault(self, glyphNames, oldDefaultPath, preflight=False, parametric=True, tuning=False):
-        '''Update default glyphs in all sources.'''
-        ufoPaths = []
-        if parametric:
-            ufoPaths += self.sourcesPaths
-        if tuning:
-            ufoPaths += self.tuningSourcesPaths
-        batchUpdateGlyphsFromDefault(glyphNames, ufoPaths, self.defaultSourcePath, oldDefaultPath, preflight=preflight)
+    # copy from default
 
-    def copyGlyphsFromDefault(self, glyphNames, parametric=True, tuning=False):
+    def copyGlyphsFromDefault(self, glyphNames, parametric=True, tuning=False, reference=False):
         '''Copy default glyphs to all sources.'''
-        ufoPaths = []
-        if parametric:
-            ufoPaths += self.sourcesPaths
-        if tuning:
-            ufoPaths += self.tuningSourcesPaths
-
-        srcFont = OpenFont(self.defaultSourcePath, showInterface=False)
+        ufoPaths = self.collectSources(parametric=parametric, tuning=tuning, reference=reference)
 
         print(f'copying glyphs from the default to all other sources...')
 
@@ -500,48 +572,48 @@ class xProject:
             print(f'\tcopying glyphs to {os.path.split(dstPath)[-1]}...')
             dstFont = OpenFont(dstPath, showInterface=False)
             for glyphName in glyphNames:
-                if glyphName not in srcFont:
+                if glyphName not in self.defaultFont:
                     continue
                 print(f'\t\tcopying /{glyphName}...')
-                dstFont[glyphName] = srcFont[glyphName]
+                dstFont[glyphName] = self.defaultFont[glyphName]
             dstFont.save()
 
         print('...done!\n')
 
-    def copyGroupsFromDefault(self):
+    def copyGroupsFromDefault(self, parametric=True, tuning=True, reference=True):
         '''Copy groups from the default source to other sources.'''
 
-        srcFont = OpenFont(self.defaultSourcePath, showInterface=False)
+        ufoPaths = self.collectSources(parametric=parametric, tuning=tuning, reference=reference)
 
         print(f'copying groups from the default to all other sources...')
 
-        for dstPath in self.sourcesPaths:
+        for dstPath in ufoPaths:
             if dstPath == self.defaultSourcePath:
                 continue
 
             print(f'\tcopying groups to {os.path.split(dstPath)[-1]}...')
             dstFont = OpenFont(dstPath, showInterface=False)
             dstFont.groups.clear()
-            dstFont.groups.update(srcFont.groups)
+            dstFont.groups.update(self.defaultFont.groups)
             dstFont.save()
 
         print('...done!\n')
 
-    def copyKerningFromDefault(self):
+    def copyKerningFromDefault(self, parametric=True, tuning=True, reference=True):
         '''Copy glyphs from the default source to other sources.'''
-
-        srcFont = OpenFont(self.defaultSourcePath, showInterface=False)
 
         print(f'copying kerning from the default to all other sources...')
 
-        for dstPath in self.sourcesPaths:
+        ufoPaths = self.collectSources(parametric=parametric, tuning=tuning, reference=reference)
+
+        for dstPath in ufoPaths:
             if dstPath == self.defaultSourcePath:
                 continue
 
             print(f'\tcopying kerning to {os.path.split(dstPath)[-1]}...')
             dstFont = OpenFont(dstPath, showInterface=False)
             dstFont.kerning.clear()
-            dstFont.kerning.update(srcFont.kerning)
+            dstFont.kerning.update(self.defaultFont.kerning)
             dstFont.save()
 
         print('...done!\n')
@@ -549,15 +621,7 @@ class xProject:
     def copyUnicodesFromDefault(self, parametric=True, tuning=True, reference=True, preflight=False):
         '''Copy unicodes from the default source to all other sources.'''
 
-        srcFont = OpenFont(self.defaultSourcePath, showInterface=False)
-
-        ufoPaths = []
-        if parametric:
-            ufoPaths += self.sourcesPaths
-        if tuning:
-            ufoPaths += self.tuningSourcesPaths
-        if reference:
-            ufoPaths += self.referenceSourcesPaths.values().values()
+        ufoPaths = self.collectSources(parametric=parametric, tuning=tuning, reference=reference)
 
         print(f'copying all unicodes from the default to all other sources...')
         for dstPath in ufoPaths:
@@ -567,13 +631,13 @@ class xProject:
             dstFont = OpenFont(dstPath, showInterface=False)
 
             print(f'\tcopying unicodes to {os.path.split(dstPath)[-1]}...')
-            for glyphName in srcFont.glyphOrder:
-                if glyphName not in srcFont or glyphName not in dstFont:
+            for glyphName in self.defaultFont.glyphOrder:
+                if glyphName not in self.defaultFont or glyphName not in dstFont:
                     continue
-                if dstFont[glyphName].unicodes != srcFont[glyphName].unicodes:
+                if dstFont[glyphName].unicodes != self.defaultFont[glyphName].unicodes:
                     print(f'\t\tcopying unicodes in {glyphName}...')
                     if not preflight:
-                        dstFont[glyphName].unicodes = srcFont[glyphName].unicodes
+                        dstFont[glyphName].unicodes = self.defaultFont[glyphName].unicodes
 
             if not preflight:
                 print(f'\tsaving font...')
@@ -584,16 +648,7 @@ class xProject:
     def copyGlyphOrderFromDefault(self, parametric=True, tuning=True, reference=True, preflight=False, trim=False):
         '''Copy glyph order from the default source to all other sources.'''
 
-        ufoPaths = []
-        if parametric:
-            ufoPaths += self.sourcesPaths
-        if tuning:
-            ufoPaths += self.tuningSourcesPaths
-        if reference:
-            ufoPaths += self.referenceSourcesPaths.values().values()
-
-        srcFont = OpenFont(self.defaultSourcePath, showInterface=False)
-        glyphOrder = srcFont.templateGlyphOrder # srcFont.glyphOrder
+        ufoPaths = self.collectSources(parametric=parametric, tuning=tuning, reference=reference)
 
         print(f'copying glyph order from the default to all other sources...')
         for dstPath in ufoPaths:
@@ -601,7 +656,7 @@ class xProject:
                 continue
             dstFont = OpenFont(dstPath, showInterface=False)
             print(f'\tcopying default glyph order to {os.path.split(dstPath)[-1]}...')
-            dstFont.templateGlyphOrder = glyphOrder
+            dstFont.templateGlyphOrder = self.defaultFont.templateGlyphOrder
 
             if trim:
                 for g in dstFont:
@@ -616,75 +671,7 @@ class xProject:
 
         print('...done!\n')
 
-    def buildCompositeGlyphs(self, glyphNames,  parametric=True, tuning=False, reference=False, preflight=False):
-        '''Build composite glyphs from glyph constructions.'''
-
-        ufoPaths = []
-        if parametric:
-            ufoPaths += self.sourcesPaths
-        if tuning:
-            ufoPaths += self.tuningSourcesPaths
-        if reference:
-            ufoPaths += self.referenceSourcesPaths.values()
-
-        print('building composite glyphs:\n')
-
-        for ufoPath in ufoPaths:
-            f = OpenFont(ufoPath, showInterface=False)
-            print(f'\tbuilding glyphs in {os.path.split(ufoPath)[-1]}...')
-            buildAccentedGlyphs(f, glyphNames, self.glyphConstructionsRaw, clear=True, verbose=True, indentLevel=2, autoUnicodes=False)
-            if not preflight:
-                print(f'\tsaving {os.path.split(ufoPath)[-1]}...')
-                f.save()
-            f.close()
-            print()
-
-        print('...done!\n')
-
-    def splitSources(self, srcName, dstName, glyphNames, preflight=True):
-        '''Split new parametric sources from existing sources.'''
-        print('splitting parametric sources...\n')
-
-        for srcPath in self.sourcesPaths:
-            srcFileName = os.path.split(srcPath)[-1]
-            if srcName in srcFileName:
-                # get source font
-                srcFont = OpenFont(srcPath, showInterface=False)
-                # make dest font
-                dstFileName = srcFileName.replace(srcName, dstName)
-                print(f'\tcreating {dstFileName} from {srcFileName}...')
-                # duplicate default as dstName
-                print(f'\t\tduplicating default as {dstFileName}...')
-                dstPath = os.path.join(self.sourcesFolder, dstFileName)
-                if os.path.exists(dstPath):
-                    shutil.rmtree(dstPath)
-                shutil.copytree(self.defaultSourcePath, dstPath)
-                dstFont = OpenFont(dstPath, showInterface=False)
-                # copy glyphNames from srcName to dstName
-                print('\t\tcopying source glyphs to new font...')
-                for glyphName in glyphNames:
-                    if glyphName not in srcFont:
-                        continue
-                    srcGlyph = srcFont[glyphName]
-                    # print(f'\t\t\tcopying {glyphName} from {srcFileName} to {dstFileName}...')
-                    dstFont.insertGlyph(srcGlyph, name=glyphName)
-                # copy glyphNames from default to srcName
-                print('\t\tcopying default glyphs to source font...')
-                for glyphName in glyphNames:
-                    if glyphName not in self.defaultFont:
-                        continue
-                    defaultGlyph = self.defaultFont[glyphName]
-                    # print(f'\t\t\tcopying {glyphName} from default to {srcFileName}...')
-                    srcFont.insertGlyph(defaultGlyph, name=glyphName)
-                # save fonts
-                if not preflight:
-                    print(f'\t\tsaving fonts...')
-                    srcFont.close(save=True)
-                    dstFont.close(save=True)
-
-                print()
-
-        print('...done!\n')
+    # tuning
 
     def createTuningSources(self, sparse=False):
         '''Initialize tuning sources for all blended locations.'''
@@ -721,10 +708,11 @@ class xProject:
         if self.verbose:
             print('...done!\n')
 
-    def calculateTuningSources(self, glyphNames, referenceSource, levels=[1, 2, 3], tuneBaseGlyphs=True):
+    def calculateTuningSources(self, glyphNames, levels=[1, 2, 3], tuneBaseGlyphs=True, locations=[]):
         '''Calculate tuning sources for glyphs based on reference default source.'''
 
-        referenceFont = OpenFont(referenceSource, showInterface=False)
+        if not locations:
+            locations = self.tuningSources.keys()
 
         operator = UFOOperator()
         operator.read(self.designspacePath)
@@ -743,25 +731,23 @@ class xProject:
             baseGlyphs = set(baseGlyphs)
             glyphNames = list(baseGlyphs) + glyphNames
 
-        for glyphName in glyphNames:
+        # TO-DO: reverse loop order? iterate through tuning sources 1st, then glyph names 2nd (faster?)
 
+        for glyphName in glyphNames:
             if glyphName not in self.defaultFont:
                 print(f'glyph /{glyphName} not in default font, skipping...\n')
                 continue
-            glyphDefault   = self.defaultFont[glyphName]
+            glyphDefault = self.defaultFont[glyphName]
 
-            if glyphName not in referenceFont:
-                print(f'glyph /{glyphName} not in reference font, skipping...\n')
-                continue
-            glyphReference = referenceFont[glyphName]
-
-            matchingPoints = getMatchingPoints(glyphDefault, glyphReference)
             totalDelta = 0
 
             if self.verbose:
                 print(f'calculating tuning sources for /{glyphName}...\n')
 
             for styleName, ufoPath in self.tuningSources.items():
+                if styleName not in locations:
+                    continue
+
                 styleNameParts = styleName.split('_')
                 if len(styleNameParts) not in levels:
                     continue
@@ -778,7 +764,7 @@ class xProject:
                 blendedReference = referenceSources[styleName][glyphName]
 
                 # make tuning glyph
-                tuningGlyph = makeTuningGlyph(blendedGlyph, blendedReference, glyphDefault, matchingPoints)
+                tuningGlyph = makeTuningGlyph(blendedGlyph, blendedReference, glyphDefault) # matchingPoints
 
                 deltaValues = calculateDeltaValues(glyphDefault, tuningGlyph)
                 if self.verbose:
@@ -815,44 +801,80 @@ class xProject:
         if self.verbose:
             print('\n...done!\n')
 
-    def makeParentParametricAxis(self, parentAxisTag, parametricAxes, parentDefaultTag):
+    # tweaking
 
-        parentAxisName = self.getAxisName(parentAxisTag)
-        parentDefaultName = self.getAxisName(parentDefaultTag)
-
-        defaultValue = parametricAxes[parentDefaultName]['default']
-        minValues = []
-        maxValues = []
-        for axisTag, axis in parametricAxes.items():
-            axisShift = defaultValue - axis['default']
-            minValue  = axis['minimum'] + axisShift
-            maxValue  = axis['maximum'] + axisShift
-            minValues.append(minValue)
-            maxValues.append(maxValue)
-
-        parentAxis = {
-            'name'    : parentAxisName,
-            'default' : defaultValue,
-            'minimum' : min(minValues),
-            'maximum' : max(maxValues),
-        }
-
-        mappingValues = set(minValues + maxValues)
-        mappings = {}
-        for mappingValue in sorted(mappingValues):
-            mappings[mappingValue] = {}
-            for axisTag, axis in parametricAxes.items():
-                axisName = self.getAxisName(axisTag)
-                axisShift = defaultValue - axis['default']
-                value = mappingValue - axisShift
-                mappings[mappingValue][axisName] = value
-
-        return parentAxis, mappings
-
-    def sparsifySources(self, parametric=True, tuning=True, reference=True):
+    def tweakReferenceSource(self, styleName, parameters, glyphNames=None):
         pass
 
+    def tweakReferenceSources(self, tweaks, glyphNames=None, preflight=True):
+
+        # convert blended locations to parametric
+        tweakParameters = {}
+        for styleName, blendedLocation in tweaks.items():
+            for part in styleName.split('_'):
+                name, value = part[:4], part[4:]
+                blendedLocation[name] = int(value)
+            # get parametric location
+            parametersAll = getEffectiveLocation(self.designspacePath, blendedLocation)
+            # filter out child parameters
+            parametersChildren = {}
+            for parentParameter, parentValue in blendedLocation.items():
+                for param in self.measurements['font'].keys():
+                    if self.measurements['font'][param]['parent'] == parentParameter:
+                        if param in parametersAll:
+                            parametersChildren[param] = int(parametersAll[param])
+            tweakParameters[styleName] = parametersChildren
+
+        # tweak reference sources
+        operator = UFOOperator()
+        operator.read(self.designspacePath)
+        operator.loadFonts()
+
+        print(f'parametrically tweaking reference sources...')
+
+        for styleName in tweakParameters.keys():
+            print(f'\ttweaking {styleName}...')
+            # open reference source
+            referenceSourceName = f'Amstelvar-{self.subFamily}_{styleName}'
+            referenceSourcePath = self.referenceSourcesPaths.get(referenceSourceName)
+            referenceSource = OpenFont(referenceSourcePath, showInterface=False)
+            # get current blend parameters for this style
+            parameters = self.blendedSources[styleName]
+            # apply tweaks to blend parameters
+            for k, v in tweakParameters[styleName].items():
+                print(f'\t\t{k}: {parameters[k]} -> {v}')
+                parameters[k] = v
+            # instantiate glyphs from parameters
+            for glyphName in glyphNames:
+                print(f'\t\tinstantiating {glyphName}...')
+                g = instantiateGlyph(operator, glyphName, parameters)
+                referenceSource[glyphName] = RGlyph(g)
+            # close and save reference source
+            if not preflight:
+                print(f'\t\tsaving...')
+                referenceSource.close(save=True)
+            else:
+                referenceSource.openInterface()
+
+        print('...done!\n')
+
     # designspace
+
+    def getAxisName(self, tag):
+        name = tag
+        if self.useLongAxisNames:
+            if tag in self.measurements['font']:
+                name = self.measurements['font'][tag]['description']
+            elif tag in self.parametricAxesNames:
+                name = self.parametricAxesNames[tag]
+            elif tag in self.blendedAxes.keys():
+                name = self.blendedAxes[tag]['name']
+        return name
+
+    def getAxisTag(self, name):
+        for tag in self.measurements['font']:
+            if name == self.measurements['font'][tag].get('description'):
+                return tag
 
     def getParametricAxesFromSourceNames(self, customAxes={}):
 
@@ -895,14 +917,39 @@ class xProject:
 
         return parametricAxesAsDict
 
-    def getAxisName(self, tag):
-        name = tag
-        if self.useLongAxisNames:
-            if tag in self.measurements['font']:
-                name = self.measurements['font'][tag]['description']
-            elif tag in self.parametricAxesNames:
-                name = self.parametricAxesNames[tag]
-        return name
+    def makeParentParametricAxis(self, parentAxisTag, parametricAxes, parentDefaultTag):
+
+        parentAxisName = self.getAxisName(parentAxisTag)
+        parentDefaultName = self.getAxisName(parentDefaultTag)
+
+        defaultValue = parametricAxes[parentDefaultName]['default']
+        minValues = []
+        maxValues = []
+        for axisTag, axis in parametricAxes.items():
+            axisShift = defaultValue - axis['default']
+            minValue  = axis['minimum'] + axisShift
+            maxValue  = axis['maximum'] + axisShift
+            minValues.append(minValue)
+            maxValues.append(maxValue)
+
+        parentAxis = {
+            'name'    : parentAxisName,
+            'default' : defaultValue,
+            'minimum' : min(minValues),
+            'maximum' : max(maxValues),
+        }
+
+        mappingValues = set(minValues + maxValues)
+        mappings = {}
+        for mappingValue in sorted(mappingValues):
+            mappings[mappingValue] = {}
+            for axisTag, axis in parametricAxes.items():
+                axisName = self.getAxisName(axisTag)
+                axisShift = defaultValue - axis['default']
+                value = mappingValue - axisShift
+                mappings[mappingValue][axisName] = value
+
+        return parentAxis, mappings
 
     def addParametricAxes(self, customAxes={}):
         '''Add parametric axes to the designspace.'''
@@ -1043,6 +1090,16 @@ class xProject:
         if self.verbose:
             print('\tadding instances...')
 
+        # add the default source as an instance
+        I = InstanceDescriptor()
+        I.familyName = familyName_
+        I.styleName = I.name = self.defaultName
+        I.designLocation = self.defaultLocation
+        I.filename = os.path.join('instances', f"{familyName_.replace(' ', '-')}_{self.defaultName}.ufo")
+        # if self.verbose:
+        #     print(f'\t\tadding {I.styleName}...')
+        self.designspace.addInstance(I)
+
         for styleName in self.blendedSources.keys():
             # add only opsz/wght/wdth as instances
             if not ('opsz' in styleName or 'wght' in styleName or 'wdth' in styleName):
@@ -1058,7 +1115,8 @@ class xProject:
             I.styleName = I.name = styleName.replace('_', ' ')
             I.designLocation = L
             I.filename = os.path.join('instances', f"{familyName_.replace(' ', '-')}_{styleName}.ufo")
-
+            # if self.verbose:
+            #     print(f'\t\tadding {I.styleName}...')
             self.designspace.addInstance(I)
 
     # building
@@ -1454,14 +1512,6 @@ class xProject:
 
             B.save(blendsFolder, pdfFileName)
 
-        # if not familyName:
-        #     familyName = self.familyName
-
-        # pdfPath = os.path.join(self.proofsFolder, 'PDF', 'blending', f'blending-preview_{familyName}.pdf')
-        # print(f'saving {pdfPath}...', end=' ')
-        # B.save(pdfPath)
-        # print(f'done!\n')
-
     def proofTuning(self, glyphNames, referenceSource, levels=[1], proofsFolder=None):
         '''Build PDF proofs of tuning sources.'''
 
@@ -1482,6 +1532,10 @@ class xProject:
 
             pdfFileName = os.path.splitext(os.path.split(self.designspacePath)[-1])[0]
             T.save(tuningProofsFolder, pdfFileName)
+
+
+
+
 
 
 

@@ -1,9 +1,14 @@
+from importlib import reload
+import xTools4.modules.glyphutils
+reload(xTools4.modules.glyphutils)
+
 import os
 from random import random
 from datetime import datetime
 from functools import cached_property
 import drawBot as DB
 import uharfbuzz as hb
+from mojo.roboFont import RFont, RGlyph
 from defcon.objects.glyph import Glyph
 from defcon.objects.font import Font
 from fontTools.ttLib import TTFont
@@ -329,11 +334,11 @@ class BlendsPreview:
 
                     # decompose composite glyphs
                     if self.defaultFont[glyphName].components:
-                        tempFont = Font()
-                        tempFont.insertGlyph(g2, name=glyphName)
+                        tempFont = RFont(showInterface=False)
+                        tempFont.insertGlyph(RGlyph(g2), name=glyphName)
                         for comp in g2.components:
                             baseGlyph = instantiateGlyph(self.operator, comp.baseGlyph, parametricLocation)
-                            tempFont.insertGlyph(baseGlyph, name=comp.baseGlyph)
+                            tempFont.insertGlyph(RGlyph(baseGlyph), name=comp.baseGlyph)
                         g2 = decomposeGlyph(tempFont[glyphName])
 
                     # get var distance
