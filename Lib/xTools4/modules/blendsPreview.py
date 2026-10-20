@@ -161,9 +161,7 @@ class BlendsPreview:
 
     @property
     def blendedAxes(self):
-        # allAxes = [axis.name for axis in self.operator.doc.axes]
-        # return list(set(allAxes).difference(set(self.parametricAxes)))
-        return ['Optical size', 'Weight', 'Width']
+        return ['opsz', 'wght', 'wdth']
 
     def getColors(self, level=1):
         colors = {
